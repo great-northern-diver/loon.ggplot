@@ -1,0 +1,29 @@
+Package: loon.ggplot
+Type: Package
+Title: An add on package to loon that converts ggplot2 plots to interactive loon plots
+Version: 0.1.0
+Authors@R: c(
+  person('Zehao', 'Xu', email = 'z267xu@uwaterloo.ca', role = c('aut', 'cre')),
+  person('R. Wayne', 'Oldford', email = 'rwoldford@uwaterloo.ca', role = c('aut'))
+  )
+Description: Interactive loon plots from ggplots.
+License: GPL-2
+Depends:
+    R (>= 3.4.0),
+    loon,
+    tcltk,
+    methods,
+    ggplot2
+Imports:
+    magrittr,
+    dplyr,
+    stats,
+    utils,
+    grDevices,
+    tools
+Suggests:
+    grid,
+    testthat
+LazyData: true
+RoxygenNote: 5.0.1
+Encoding: UTF-8
