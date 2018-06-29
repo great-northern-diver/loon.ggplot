@@ -231,6 +231,7 @@ loon.ggplot <- function(ggplotObject, ... ){
       l_configure(loonPlot, panX=panX, panY=panY, deltaX= deltaX,
                   deltaY=deltaY, zoomX = zoomX, zoomY = zoomY)
     }
+
     loonPlot
   })
 
