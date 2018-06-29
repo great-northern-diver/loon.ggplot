@@ -8,7 +8,10 @@
 #' @return a loon widget
 #'
 #'
-#' @import ggplot2 loon tcltk stats methods
+#' @import ggplot2 loon tcltk methods
+#' @importFrom stats quantile
+#' @importFrom utils packageVersion
+#'
 #'
 #' @export
 #'
@@ -45,11 +48,17 @@ loon.ggplot <- function(ggplotObject, ... ){
   # ggplot_build
   buildggplotObject <-  ggBuild2Loon(ggplotObject)
 
-  # layout
-  ggLayout <- buildggplotObject$layout$layout
+  # different ggplot2 versions have different names
+  if(is_devtools_ggplot2()){
+    ggLayout <- buildggplotObject$layout$layout
+    # panel_params
+    ggplotPanel_params <- buildggplotObject$layout$panel_params
+  } else {
+    ggLayout <- buildggplotObject$layout$panel_layout
+    # panel_params
+    ggplotPanel_params <- buildggplotObject$layout$panel_ranges
+  }
 
-  # panel_params
-  ggplotPanel_params <- buildggplotObject$layout$panel_params
 
   # number of panels
   panelNum <- dim(ggLayout)[1]
@@ -160,9 +169,11 @@ loon.ggplot <- function(ggplotObject, ... ){
 
         loon_layers <- sapply(1:len_layers, function(j){
           if( ! j %in% pointsLayerId ){
-            loonLayer(widget = loonPlot, layerGeom = ggplotObject$layers[[j]],
+            loonLayer(widget = loonPlot,
+                      layerGeom = ggplotObject$layers[[j]],
                       data =  buildggplotObject$data[[j]][buildggplotObject$data[[j]]$PANEL == i, ],
-                      ggplotPanel_params = ggplotPanel_params[[i]], theta = theta
+                      ggplotPanel_params = ggplotPanel_params[[i]],
+                      theta = theta
             )
           }
         })
@@ -388,4 +399,9 @@ abline2xy <- function(xrange, yrange, slope, intercept){
     }
   }
   list(x = x, y = y)
+}
+
+# too many names changing after version 2.2.1
+is_devtools_ggplot2 <- function() {
+  packageVersion("ggplot2") > "2.2.1"
 }

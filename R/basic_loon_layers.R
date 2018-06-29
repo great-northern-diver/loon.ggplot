@@ -134,9 +134,9 @@ loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, t
   } else {
     x <- list()
     y <- list()
-    fillColor <- c()
-    linesColor <- c()
-    linesWidth <- c()
+    fColor <- c()
+    lColor <- c()
+    lWidth <- c()
     for(i in 1:length(uniGroup)){
       if(isCoordPolar) {
         coordPolarxy <- cartesianxy2Polarxy(layerGeom, theta, data[data$group == uniGroup[i], ], ggplotPanel_params)
@@ -146,18 +146,19 @@ loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, t
         x[[i]] <-  data$x[data$group == uniGroup[i]]
         y[[i]] <-  data$y[data$group == uniGroup[i]]
       }
-      fillColor[i] <- fillColor[data$group == uniGroup[i]][1]
-      linesColor[i] <- linesColor[data$group == uniGroup[i]][1]
-      linesWidth[i] <- linesWidth[data$group == uniGroup[i]][1]
+      fColor[i] <- fillColor[data$group == uniGroup[i]][1]
+      lColor[i] <- linesColor[data$group == uniGroup[i]][1]
+      lWidth[i] <- linesWidth[data$group == uniGroup[i]][1]
     }
     l_layer_polygons(
       widget, x = x, y = y,
-      color = fillColor, linecolor = linesColor,
-      linewidth = linesWidth,
+      color = fColor, linecolor = lColor,
+      linewidth = lWidth,
       parent = parent
     )
   }
 }
+
 
 
 

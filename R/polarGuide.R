@@ -1,20 +1,26 @@
 
 
 coordPolarGuides <- function(widget, ggplotPanel_params, theta){
+
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
+
   # theta labels
   theta.major <- ggplotPanel_params$theta.major
   theta.labels <- ggplotPanel_params$theta.labels
+
   # radius labels
   r.major <- ggplotPanel_params$r.major
   r.labels <- ggplotPanel_params$r.labels
+
   # drawing lines
   theta.minor <- ggplotPanel_params$theta.minor
+
   # drawing ovals
-  if(max(r.major) < max(r.range) ) {
-    r.minor <- c(r.major, max(r.major) + diff(r.major)[1])
-  }else r.minor <- r.major
+  if(length(r.major) >= 1) {
+      r.minor <- c(r.major, max(r.range) + diff(r.range)/8)
+  } else r.minor <- c(min(r.range), max(r.range) + diff(r.range)/8)
+
   radius <- (r.minor - r.range[1])/ diff(r.range)
   textRadius <- (r.major - r.range[1])/ diff(r.range)
   maxRadius <- max(radius)
