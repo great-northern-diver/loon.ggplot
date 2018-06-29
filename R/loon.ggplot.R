@@ -200,9 +200,11 @@ loon.ggplot <- function(ggplotObject, ... ){
 
         loon_layers <- sapply(1:len_layers, function(j){
 
-          loonLayer(widget = loonPlot, layerGeom = ggplotObject$layers[[j]],
+          loonLayer(widget = loonPlot,
+                    layerGeom = ggplotObject$layers[[j]],
                     data =  buildggplotObject$data[[j]][buildggplotObject$data[[j]]$PANEL == i, ],
-                    ggplotPanel_params = ggplotPanel_params[[i]], theta = theta)
+                    ggplotPanel_params = ggplotPanel_params[[i]],
+                    theta = theta)
         })
       }
     } else loonPlot <- l_plot(parent = tt, title = title,
