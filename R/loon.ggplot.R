@@ -244,11 +244,61 @@ loon.ggplot <- function(ggplotObject, ... ){
 
     loonPlot
   })
-
   class(p) <- c("l_ggplot", "loon")
+  names(p) <- paste0("panel", c(1:panelNum))
   p
 
 }
+#'@export
+names.l_ggplot <- function(x) {attr(x, "names")}
+
+#' @export
+l_cget.l_ggplot <- function(target, state) {
+
+  plotNames <- names(target)
+  plots <- lapply(plotNames,
+                  function(plotName) {
+                    target[[plotName]]
+
+                  })
+  values <- lapply(plots, l_cget, state)
+
+  values
+
+}
+
+
+#' @export
+l_configure.l_ggplot <- function(target, ...) {
+
+  args <- list(...)
+  states <- names(args)
+  if (is.null(states) || any("" %in% states))
+    stop("configuration needs key=value pairs")
+
+  plotNames <- names(target)
+  plots <- lapply(plotNames,
+                  function(plotName) {
+                    target[[plotName]]
+
+                  })
+  for (state in states) {
+
+    switch(
+      state,
+      linkingGroup = lapply(plots, l_configure,
+                            linkingGroup = args$linkingGroup, sync = "pull"),
+      selected = stop("not implemented yet")
+      # stop("state ", state, " not known")
+    )
+    lapply(plots, function(plot){
+      plot[state] <- args[[state]]
+    })
+  }
+
+  invisible()
+}
+
 
 # 1. l_layer_lines does not work well on "dash" (l_layer_line is fine)
 # 2. arrow for every l_layer_line and l_layer_lines need to be added
