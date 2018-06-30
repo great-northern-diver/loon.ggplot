@@ -4,83 +4,87 @@ ggBuild2Loon <- function(ggplotObject){
   len_layers <- length(ggplotObject$layers)
   ggBuild <- ggplot2::ggplot_build(ggplotObject)
   input <- ggplotObject$data
-  n <- dim(input)[1]
+
+  # different ggplot2 versions have different names
+  if(is_devtools_ggplot2()){
+    ggLayout <- ggBuild$layout$layout
+    # panel_params
+    ggplotPanel_params <- ggBuild$layout$panel_params
+  } else {
+    ggLayout <- ggBuild$layout$panel_layout
+    # panel_params
+    ggplotPanel_params <- ggBuild$layout$panel_ranges
+    message(
+      "devtools version ggplot2 is highly recommanded in `loon.ggplot`\n",
+      "install it with: `devtools::install_github('tidyverse/ggplot2')`\n",
+      "before you start, make sure package `rlang` is installed"
+    )
+  }
 
   # if not, no input data in ggplot()
   if(is.data.frame(input)){
-    # itemLabel
-    label <- row.names(input)
-    colNames <- colnames(input)
+
+    # length of layer is 0?
     if(len_layers != 0){
-      # match point itemlabel
+
       layerNames <- sapply(1:len_layers, function(j) {
         className <- class(ggplotObject$layers[[j]]$geom)
         className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
       })
 
       pointsLayerId <- which(sapply(layerNames, function(l){"GeomPoint" %in% l}) == TRUE)
-
+      # point layer?
       if( length(pointsLayerId) != 0 ){
 
-        if (is_devtools_ggplot2()) {
-          mapX <- try(as.character(ggplotObject$mapping$x[2]), silent = TRUE)
-          mapY <- try(as.character(ggplotObject$mapping$y[2]), silent = TRUE)
-        } else {
-          message(
-            "devtools version ggplot2 is highly recommanded in `loon.ggplot`\n",
-            "install it with: `devtools::install_github('tidyverse/ggplot2')`\n",
-            "before you start, make sure package `rlang` is installed"
-          )
-          mapX <- try(paste(as.character(ggplotObject$mapping$x), collapse = ""), silent = TRUE)
-          mapY <- try(paste(as.character(ggplotObject$mapping$y), collapse = ""), silent = TRUE)
+        multiFacets <- FALSE
+        # is multi facets?
+        if(dim(ggLayout)[2] == 6) {
+          multiFacets <- TRUE
+          panelMatch <- which( grepl(colnames(ggLayout)[4], colnames(input)) == TRUE )
+          panelLevels <- levels(as.factor(input[,   panelMatch]))
         }
 
-        if (length(mapX)!=0 & length(mapY)!=0) {
+        label <- row.names(input)
+        lenPointsLayer <- length(pointsLayerId)
+        # start loop
+        for(i in 1:lenPointsLayer){
 
-          if (mapX %in% colnames(input)) {xx <- input[,   mapX]
-          } else if( grepl("[()]", mapX)){
-            str <- sapply(colNames, function(i) grepl(i, mapX))
-            xx <- input[,   which(str== T) ]
-          } else {
-            xx <- NA
-          }
+          buildData  <- ggBuild$data[[pointsLayerId[i]]]
+          numOfObsi <- dim(buildData)[1]
 
-          if (mapY %in% colnames(input)) {yy <- input[,   mapY]
-          } else if( grepl("[()]", mapY) ){
-            str <- sapply(colNames, function(i) grepl(i, mapY))
-            yy <- input[,   which(str== T) ]
-          } else {
-            yy <- NA
-          }
-
-          if (any(!is.na(xx)) & any(!is.na(yy))) {
-
-            input_xy <- data.frame(x = xx ,
-                                   y = yy)
-
-            for(i in 1:length(pointsLayerId)){
-
-              buildData  <- ggBuild$data[[pointsLayerId[i]]]
-              if (dim(buildData)[1] == dim(input)[1]) {
-                itemLabel <- c()
-                for(j in 1:dim(buildData)[1]){
-                  id <- which(input_xy[,1] %in% buildData[j,]$x== T & input_xy[,2] %in% buildData[j,]$y == T)[1]
-                  if(is.na(id)){
-                    itemLabel[j] <- NA
-                  } else {
-                    itemLabel[j] <- label[id]
-                    input_xy[id,1] <- NA
-                    input_xy[id,2] <- NA
-                  }
-                }
-                ggBuild$data[[pointsLayerId[i]]]$label <- itemLabel
-              }
+          ggBuild$data[[pointsLayerId[i]]]$label <- if (numOfObsi == dim(input)[1]) {
+            if (!multiFacets) {
+              label
+            } else {
+              panelValues <- as.character(input[, panelMatch])
+              labelOrder <- unlist(lapply(panelLevels, function(j){
+                which(panelValues %in% j)
+              }))
+              label[labelOrder]
             }
-
+          } else {
+            # the ggplot input data is not the geom_point data
+            # in other words, geom_point() layer add new dataset
+            if (lenPointsLayer == 1) {
+              paste0("item", c(1:numOfObsi))
+            } else {
+              paste0("item", c(1:numOfObsi), "pointsLayer", i)
+            }
           }
+
         }
+        # end loop
       }
     }
   }
-  ggBuild
+  list(ggBuild = ggBuild,
+       ggLayout = ggLayout,
+       ggplotPanel_params = ggplotPanel_params
+       )
+}
+
+
+# too many names changing after version 2.2.1
+is_devtools_ggplot2 <- function() {
+  packageVersion("ggplot2") > "2.2.1"
 }
