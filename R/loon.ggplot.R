@@ -47,23 +47,15 @@ loon.ggplot <- function(ggplotObject, ... ){
 
   # ggplot_build
   buildggplotObject <-  ggBuild2Loon(ggplotObject)
-
-  # different ggplot2 versions have different names
-  if(is_devtools_ggplot2()){
-    ggLayout <- buildggplotObject$layout$layout
-    # panel_params
-    ggplotPanel_params <- buildggplotObject$layout$panel_params
-  } else {
-    ggLayout <- buildggplotObject$layout$panel_layout
-    # panel_params
-    ggplotPanel_params <- buildggplotObject$layout$panel_ranges
-  }
-
+  ggBuild <- buildggplotObject$ggBuild
+  ggLayout <- buildggplotObject$ggLayout
+  ggplotPanel_params <- buildggplotObject$ggplotPanel_params
 
   # number of panels
   panelNum <- dim(ggLayout)[1]
 
   tt <- tktoplevel()
+  tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
 
   # length layers
   len_layers <- length(ggplotObject$layers)
@@ -124,7 +116,7 @@ loon.ggplot <- function(ggplotObject, ... ){
 
         # combine points layers
         pointData <- lapply(pointsLayerId, function(l){
-          Layerl <- buildggplotObject$data[[l]]
+          Layerl <- ggBuild$data[[l]]
           data <- Layerl[Layerl$PANEL == i, ]
           x <- data$x
           y <- data$y
@@ -140,7 +132,8 @@ loon.ggplot <- function(ggplotObject, ... ){
           size <- as_loon_size( data$size , "points" )
 
           if (is.null(label)) {
-            label <- paste0("item", seq_len(length(x)) - 1)
+            label <- paste0("item", seq_len(length(x)) - 1, "panel", i)
+            warnings("item lable may not match")
           }
 
           data.frame(x = x, y = y, label = label, color = color, glyph = glyph, size = size)
@@ -159,19 +152,30 @@ loon.ggplot <- function(ggplotObject, ... ){
           y <- pointData$y
         }
 
-        loonPlot <- l_plot(parent = tt, x = x, y = y, size = pointData$size,
-                           title = title, color = as.character( pointData$color),
+        # linkingKey
+        itemLabel <- linkingKey <- as.character(pointData$label)
+
+        loonPlot <- l_plot(parent = tt,
+                           x = x, y = y,
+                           size = pointData$size,
+                           title = title,
+                           color = as.character( pointData$color),
                            glyph = as.character( pointData$glyph),
-                           xlabel = ggLabels$xlabel, ylabel = ggLabels$ylabel,
-                           itemLabel = as.character(pointData$label),
-                           showGuides = showGuides, showScales = showScales,
-                           showLabels = TRUE, showItemLabels = TRUE, swapAxes = swapAxes, ...)
+                           xlabel = ggLabels$xlabel,
+                           ylabel = ggLabels$ylabel,
+                           itemLabel = itemLabel,
+                           showGuides = showGuides,
+                           showScales = showScales,
+                           showLabels = TRUE,
+                           showItemLabels = TRUE,
+                           swapAxes = swapAxes,
+                           linkingKey = linkingKey, ...)
 
         loon_layers <- sapply(1:len_layers, function(j){
           if( ! j %in% pointsLayerId ){
             loonLayer(widget = loonPlot,
                       layerGeom = ggplotObject$layers[[j]],
-                      data =  buildggplotObject$data[[j]][buildggplotObject$data[[j]]$PANEL == i, ],
+                      data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == i, ],
                       ggplotPanel_params = ggplotPanel_params[[i]],
                       theta = theta
             )
@@ -192,26 +196,32 @@ loon.ggplot <- function(ggplotObject, ... ){
           }
         }
       } else {
-        loonPlot <- l_plot(parent = tt, title = title,
-                           xlabel = ggLabels$xlabel, ylabel = ggLabels$ylabel,
+        loonPlot <- l_plot(parent = tt,
+                           title = title,
+                           xlabel = ggLabels$xlabel,
+                           ylabel = ggLabels$ylabel,
                            showGuides = showGuides,
                            showScales = showScales,
-                           showLabels = TRUE, swapAxes = swapAxes, ...)
+                           showLabels = TRUE,
+                           swapAxes = swapAxes, ...)
 
         loon_layers <- sapply(1:len_layers, function(j){
 
           loonLayer(widget = loonPlot,
                     layerGeom = ggplotObject$layers[[j]],
-                    data =  buildggplotObject$data[[j]][buildggplotObject$data[[j]]$PANEL == i, ],
+                    data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == i, ],
                     ggplotPanel_params = ggplotPanel_params[[i]],
                     theta = theta)
         })
       }
-    } else loonPlot <- l_plot(parent = tt, title = title,
-                              xlabel = ggLabels$xlabel, ylabel = ggLabels$ylabel,
+    } else loonPlot <- l_plot(parent = tt,
+                              title = title,
+                              xlabel = ggLabels$xlabel,
+                              ylabel = ggLabels$ylabel,
                               showGuides = showGuides,
                               showScales = showScales,
-                              showLabels = TRUE, swapAxes = swapAxes, ...)
+                              showLabels = TRUE,
+                              swapAxes = swapAxes, ...)
 
 
     tkgrid(loonPlot, row = ggLayout[i,]$ROW,
@@ -402,9 +412,4 @@ abline2xy <- function(xrange, yrange, slope, intercept){
     }
   }
   list(x = x, y = y)
-}
-
-# too many names changing after version 2.2.1
-is_devtools_ggplot2 <- function() {
-  packageVersion("ggplot2") > "2.2.1"
 }
