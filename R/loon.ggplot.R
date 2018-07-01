@@ -40,7 +40,6 @@ loon.ggplot <- function(ggplotObject, ... ){
 
   # lables
   ggLabels <- list(
-    title  = if( is.null(ggplotObject$labels$title) ) "" else ggplotObject$labels$title ,
     xlabel = if( is.null(ggplotObject$labels$x) ) ""  else ggplotObject$labels$x ,
     ylabel = if( is.null(ggplotObject$labels$y) ) ""  else ggplotObject$labels$y
   )
@@ -55,7 +54,11 @@ loon.ggplot <- function(ggplotObject, ... ){
   panelNum <- dim(ggLayout)[1]
 
   tt <- tktoplevel()
-  tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
+  if (is.null(ggplotObject$labels$title)) {
+    tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
+  } else {
+    tktitle(tt) <- ggplotObject$labels$title
+  }
 
   # length layers
   len_layers <- length(ggplotObject$layers)
@@ -69,10 +72,11 @@ loon.ggplot <- function(ggplotObject, ... ){
   p <- lapply(seq_len(panelNum), function(i){
 
     # subtitle
-    if(dim(ggLayout)[2] == 6){
-      if(ggLabels$title == "") title <- as.character(ggLayout[i, 4]) else
-        title <- paste(c(ggLabels$title, ":", as.character(ggLayout[i, 4]) ), collapse = "")
-    }else title <- ggLabels$title
+    dim2ggLayout <- dim(ggLayout)[2]
+    subtitle <- if (dim2ggLayout >= 6) {
+      numOfSubtitles <- dim2ggLayout - 5
+      paste(sapply(ggLayout[i, 3 + c(1:numOfSubtitles)], as.character), collapse = " " )
+    } else ""
 
     # is polar coord?
     isCoordPolar <- is.CoordPolar(ggplotPanel_params[[i]])
@@ -158,7 +162,7 @@ loon.ggplot <- function(ggplotObject, ... ){
         loonPlot <- l_plot(parent = tt,
                            x = x, y = y,
                            size = pointData$size,
-                           title = title,
+                           title = subtitle,
                            color = as.character( pointData$color),
                            glyph = as.character( pointData$glyph),
                            xlabel = ggLabels$xlabel,
@@ -197,7 +201,7 @@ loon.ggplot <- function(ggplotObject, ... ){
         }
       } else {
         loonPlot <- l_plot(parent = tt,
-                           title = title,
+                           title = subtitle,
                            xlabel = ggLabels$xlabel,
                            ylabel = ggLabels$ylabel,
                            showGuides = showGuides,
@@ -215,7 +219,7 @@ loon.ggplot <- function(ggplotObject, ... ){
         })
       }
     } else loonPlot <- l_plot(parent = tt,
-                              title = title,
+                              title = subtitle,
                               xlabel = ggLabels$xlabel,
                               ylabel = ggLabels$ylabel,
                               showGuides = showGuides,
