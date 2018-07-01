@@ -84,7 +84,7 @@ ggBuild2Loon <- function(ggplotObject){
 }
 
 
-# too many names changing after version 2.2.1
+# many names are changed after version 2.2.1
 is_devtools_ggplot2 <- function() {
   packageVersion("ggplot2") > "2.2.1"
 }
