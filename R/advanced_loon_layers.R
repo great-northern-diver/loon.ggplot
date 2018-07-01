@@ -146,7 +146,10 @@ loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, t
 
 loonLayer.GeomLinerange <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
 
-  linerangeGroup <- l_layer_group(widget, "linerange")
+  if (parent == "root") {
+    linerangeGroup <- l_layer_group(widget, "linerange")
+    parent <- linerangeGroup
+  }
 
   n <- dim(data)[1]
   data$xend <- NA
@@ -157,7 +160,7 @@ loonLayer.GeomLinerange <- function(widget, layerGeom, data, ggplotPanel_params,
     data[i, ]$yend <- data[i, ]$ymax
   }
   loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, theta,
-                        parent = if(parent == "root") linerangeGroup else parent)
+                        parent = parent)
 }
 
 
@@ -253,8 +256,11 @@ loonLayer.GeomErrorbarh <- function(widget, layerGeom, data, ggplotPanel_params,
 loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
 
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
-  # lines group
-  pathGroup <- l_layer_group(widget, "path")
+  # path group
+  if (parent == "root") {
+    pathGroup <- l_layer_group(widget, "path")
+    parent <- pathGroup
+  }
 
   uniGroup <- unique(data$group)
   lapply(1:length(uniGroup), function(i){
@@ -277,7 +283,7 @@ loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, thet
       l_layer_line(
         widget, x = x, y = y, linewidth = linesWidth[1],
         color = linesColor[1], dash = linesDash[[1]],
-        parent = if(parent == "root") pathGroup else parent
+        parent = parent
       )
     } else {  # a line with different colors(gradual colors)
       n <- dim(groupData)[1]
@@ -289,7 +295,7 @@ loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, thet
         if(j == 1) newdata <- new else newdata <- rbind(newdata, new)
       }
       loonLayer.GeomPoint(widget, layerGeom, newdata, ggplotPanel_params, theta,
-                          parent = if(parent == "root") pathGroup else parent)
+                          parent = parent)
     }
   })
 }
