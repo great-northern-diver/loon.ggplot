@@ -122,8 +122,8 @@ loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, t
       x <- coordPolarxy$x
       y <- coordPolarxy$y
     } else {
-      x = data$x
-      y = data$y
+      x <- data$x
+      y <- data$y
     }
     l_layer_polygon(
       widget, x = x, y = y,
