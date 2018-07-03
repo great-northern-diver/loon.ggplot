@@ -309,9 +309,11 @@ loonLayer.GeomRibbon <- function(widget, layerGeom, data, ggplotPanel_params, th
   uniGroup <- unique(data$group)
   newdata <- do.call(rbind, lapply(1:length(uniGroup), function(i){
     d <- data[data$group == uniGroup[i], ]
-    nd <- rbind(d, d)
-    nd$x <- c(d$x, rev(d$x) )
-    nd$y <- c(d$ymin, rev(d$ymax) )
+    n <- dim(d)[1]
+    seqLength <- 20
+    nd <- rbind(d, d[rep(n, seqLength), ], d)
+    nd$x <- c(d$x, rep(d$x[n], seqLength), rev(d$x))
+    nd$y <- c(d$ymin, seq(d$ymin[n], d$ymax[n], length.out = seqLength), rev(d$ymax))
     nd
   }))
   loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, theta,
@@ -326,9 +328,12 @@ loonLayer.GeomSmooth <- function(widget, layerGeom, data, ggplotPanel_params, th
 
   if(!is.null(data$se)){
     # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
-    newdata <- rbind(data, data)
-    newdata$x <- c(data$x, rev(data$x) )
-    newdata$y <- c(data$ymin, rev(data$ymax) )
+    n <- dim(data)[1]
+    # arbitrary choice
+    seqLength <- 20
+    newdata <- rbind(data, data[rep(n, seqLength),], data)
+    newdata$x <- c(data$x, rep(data$x[n], seqLength), rev(data$x))
+    newdata$y <- c(data$ymin, seq(data$ymin[n], data$ymax[n], length.out = seqLength), rev(data$ymax))
     newdata$colour <- NA
     loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, theta,
                           parent = if(parent == "root") smoothGroup else parent)
