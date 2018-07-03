@@ -8,13 +8,13 @@ cartesianxy2Polarxy.default <- function(layerGeom = NULL, theta, data, ggplotPan
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   if(theta == "x"){
-    theta <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
-    x <- sin(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
-    y <- cos(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
+    x <- sin(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    y <- cos(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
   } else if(theta == "y"){
-    theta <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
-    y <- sin(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
+    y <- sin(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
     y <- NA}
@@ -37,9 +37,9 @@ cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, theta, data, ggplotP
     y <- rep(c(data$ymin, data$ymax), each = seqLen)
     xSeq <- seq(data$xmin, data$xmax, length.out = seqLen)
     x <- c(xSeq, rev(xSeq))
-    theta <- 2 * pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
-    x <- sin(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
-    y <- cos(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2 * pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
+    x <- sin(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    y <- cos(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
   } else if(theta == "y"){
     # is infinite?
     if(is.infinite(data$xmin) ) data$xmin <- r.range[1]
@@ -49,9 +49,9 @@ cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, theta, data, ggplotP
     x <- rep(c(data$xmin, data$xmax), each = seqLen)
     ySeq <- seq(data$ymin, data$ymax, length.out = seqLen)
     y <- c(ySeq, rev(ySeq))
-    theta <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
-    y <- sin(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
+    y <- sin(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
     y <- NA }
@@ -67,13 +67,13 @@ cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, theta, data, ggplotP
   if(theta == "x"){
     x <- rep(data$xintercept, 2)
     y <- r.range
-    theta <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
-    x <- sin(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
-    y <- cos(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
+    x <- sin(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    y <- cos(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
   } else if(theta == "y"){
-    theta <- seq(0, 2*pi, length.out = 50)
-    y <- sin(theta) * (data$xintercept - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (data$xintercept - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- seq(0, 2*pi, length.out = 50)
+    y <- sin(angle) * (data$xintercept - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (data$xintercept - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
     y <- NA}
@@ -86,15 +86,15 @@ cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, theta, data, ggplotP
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   if(theta == "x"){
-    theta <- seq(0, 2*pi, length.out = 50)
-    y <- sin(theta) * (data$yintercept - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (data$yintercept - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- seq(0, 2*pi, length.out = 50)
+    y <- sin(angle) * (data$yintercept - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (data$yintercept - r.range[1]) / (r.range[2] - r.range[1])
   } else if(theta == "y"){
     y <- rep(data$yintercept, 2)
     x <- r.range
-    theta <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
-    y <- sin(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
+    y <- sin(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
     y <- NA}
@@ -131,13 +131,13 @@ cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, theta, data, ggplo
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   if(theta == "x"){
-    theta <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
-    x <- sin(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
-    y <- cos(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
+    x <- sin(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    y <- cos(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
   } else if(theta == "y"){
-    theta <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
-    y <- sin(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
+    y <- sin(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
     y <- NA}
@@ -161,13 +161,13 @@ cartesianxy2Polarxy.GeomPath <- function(layerGeom = NULL, theta, data, ggplotPa
   x <- unlist(x)
   y <- unlist(y)
   if(theta == "x"){
-    theta <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
-    x <- sin(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
-    y <- cos(theta) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
+    x <- sin(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
+    y <- cos(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
   } else if(theta == "y"){
-    theta <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
-    y <- sin(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
-    x <- cos(theta) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    angle <- 2*pi * (y - theta.range[1]) / (theta.range[2] - theta.range[1])
+    y <- sin(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
+    x <- cos(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
     y <- NA
