@@ -4,10 +4,12 @@
 \alias{loon.ggplot}
 \title{Create a loon plot from a ggplot2 object}
 \usage{
-loon.ggplot(ggplotObject, ...)
+loon.ggplot(ggplotObject, ggGuides = FALSE, ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
+
+\item{ggGuides}{if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.}
 
 \item{...}{named arguments to modify loon plot states}
 }
