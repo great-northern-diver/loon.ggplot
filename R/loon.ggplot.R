@@ -3,6 +3,7 @@
 #' @description Interactive loon plots from ggplots
 #'
 #' @param ggplotObject a ggplot object
+#' @param ggGuides if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.
 #' @param ... named arguments to modify loon plot states
 #'
 #' @return a loon widget
@@ -11,7 +12,7 @@
 #' @import ggplot2 loon tcltk methods
 #' @importFrom stats quantile
 #' @importFrom utils packageVersion
-#'
+#' @importFrom grDevices extendrange
 #'
 #' @export
 #'
@@ -23,20 +24,10 @@
 #'  p
 #'  g <- loon.ggplot(p)
 #'
-#'  df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
-#'  xgrid <- with(df, seq(min(x), max(x), length = 50))
-#'  interp <- data.frame(
-#'    x = xgrid,
-#'    y = approx(df$x, df$y, xout = xgrid)$y,
-#'    colour = approx(df$x, df$colour, xout = xgrid)$y)
-#'
-#'  p <- ggplot(interp, aes(x, y, colour = colour)) +
-#'    geom_line(size = 2) +
-#'    geom_point(data = df, size = 5)
-#'  p
-#'  g <- loon.ggplot(p)
+#'  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
+#'  g <- loon.ggplot(p, ggGuides = TRUE)
 
-loon.ggplot <- function(ggplotObject, ... ){
+loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
 
   # lables
   ggLabels <- list(
@@ -66,8 +57,6 @@ loon.ggplot <- function(ggplotObject, ... ){
   # some default setting
   zoomX <- zoomY <- 5/6
   swapAxes <- FALSE
-  showGuides <- TRUE
-  showScales <- TRUE
 
   p <- lapply(seq_len(panelNum), function(i){
 
@@ -88,6 +77,7 @@ loon.ggplot <- function(ggplotObject, ... ){
       if(theta == "y")  swapAxes <- TRUE
       showGuides <- FALSE
       showScales <- FALSE
+
     } else {
 
       # swap or not
@@ -95,18 +85,39 @@ loon.ggplot <- function(ggplotObject, ... ){
           which( names(ggplotPanel_params[[i]]) %in% "x.range"  == T ) ) swapAxes <- TRUE
 
       # set panX, panY, deltaX, deltaY
-      if(swapAxes) {
-        panY <- ggplotPanel_params[[i]]$x.range[1]
-        panX <- ggplotPanel_params[[i]]$y.range[1]
-        deltaY <- diff(ggplotPanel_params[[i]]$x.range) * zoomX
-        deltaX <- diff(ggplotPanel_params[[i]]$y.range) * zoomY
-      } else {
-        panX <- ggplotPanel_params[[i]]$x.range[1]
-        panY <- ggplotPanel_params[[i]]$y.range[1]
-        deltaX <- diff(ggplotPanel_params[[i]]$x.range) * zoomX
-        deltaY <- diff(ggplotPanel_params[[i]]$y.range) * zoomY
-      }
+      if (ggGuides) {
 
+        showGuides <- FALSE
+        showScales <- FALSE
+        x.range <- if (swapAxes) {
+          grDevices::extendrange(ggplotPanel_params[[i]]$y.range)
+        } else {
+          grDevices::extendrange(ggplotPanel_params[[i]]$x.range)
+        }
+        y.range <- if (swapAxes) {
+          grDevices::extendrange(ggplotPanel_params[[i]]$x.range)
+        } else {
+          grDevices::extendrange(ggplotPanel_params[[i]]$y.range)
+        }
+      } else {
+
+        showGuides <- TRUE
+        showScales <- TRUE
+        x.range <- if (swapAxes) {
+          ggplotPanel_params[[i]]$y.range
+        } else {
+          ggplotPanel_params[[i]]$x.range
+        }
+        y.range <- if (swapAxes) {
+          ggplotPanel_params[[i]]$x.range
+        } else {
+          ggplotPanel_params[[i]]$y.range
+        }
+      }
+      panY <- y.range[1]
+      panX <- x.range[1]
+      deltaY <- diff(y.range) * zoomX
+      deltaX <- diff(x.range) * zoomY
     }
     if (len_layers != 0) {
       layerNames <- sapply(1:len_layers, function(j) {
@@ -146,7 +157,8 @@ loon.ggplot <- function(ggplotObject, ... ){
         pointData <- do.call(rbind, pointData)
 
         if(isCoordPolar) {
-          coordPolarxy <- cartesianxy2Polarxy(NULL, theta = theta,
+          coordPolarxy <- cartesianxy2Polarxy(NULL,
+                                              theta = theta,
                                               data = pointData,
                                               ggplotPanel_params = ggplotPanel_params[[i]])
           x <- coordPolarxy$x
@@ -160,7 +172,8 @@ loon.ggplot <- function(ggplotObject, ... ){
         itemLabel <- linkingKey <- as.character(pointData$label)
 
         loonPlot <- l_plot(parent = tt,
-                           x = x, y = y,
+                           x = x,
+                           y = y,
                            size = pointData$size,
                            title = subtitle,
                            color = as.character( pointData$color),
@@ -233,17 +246,29 @@ loon.ggplot <- function(ggplotObject, ... ){
     tkgrid.columnconfigure(tt, ggLayout[i,]$COL, weight=1)
     tkgrid.rowconfigure(tt, ggLayout[i,]$ROW, weight=1)
 
-    # draw specific guides for coord polar
+    # draw specific guides
     if(isCoordPolar){
-      polarGuides <- coordPolarGuides(loonPlot, ggplotPanel_params[[i]], theta)
+      polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[i]], swapAxes)
       # lower to bottom
       children <- l_layer_getChildren(loonPlot)
       # the length of children is at least two
       sapply(1:(length(children) - 1), function(l){l_layer_lower(loonPlot, polarGuides)})
       l_scaleto_world(loonPlot)
     } else {
-      l_configure(loonPlot, panX=panX, panY=panY, deltaX= deltaX,
-                  deltaY=deltaY, zoomX = zoomX, zoomY = zoomY)
+      if (ggGuides) {
+        cartesianGuides <- cartesianGuides(loonPlot, ggplotPanel_params[[i]], swapAxes)
+        # lower to bottom
+        children <- l_layer_getChildren(loonPlot)
+        # the length of children is at least two
+        sapply(1:(length(children) - 1), function(l){l_layer_lower(loonPlot, cartesianGuides)})
+      }
+      l_configure(loonPlot,
+                  panX=panX,
+                  panY=panY,
+                  deltaX= deltaX,
+                  deltaY=deltaY,
+                  zoomX = zoomX,
+                  zoomY = zoomY)
     }
 
     loonPlot
