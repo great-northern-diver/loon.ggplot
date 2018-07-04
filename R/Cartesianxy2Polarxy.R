@@ -1,8 +1,8 @@
-cartesianxy2Polarxy <- function(layerGeom, theta, data, ggplotPanel_params, ...){
-  UseMethod("cartesianxy2Polarxy", layerGeom$geom)
+Cartesianxy2Polarxy <- function(layerGeom, theta, data, ggplotPanel_params, ...){
+  UseMethod("Cartesianxy2Polarxy", layerGeom$geom)
 }
 
-cartesianxy2Polarxy.default <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.default <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
   x <- data$x
   y <- data$y
   theta.range <- ggplotPanel_params$theta.range
@@ -23,7 +23,7 @@ cartesianxy2Polarxy.default <- function(layerGeom = NULL, theta, data, ggplotPan
 
 
 
-cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, theta, data, ggplotPanel_params){
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   # arbitrary choice
@@ -61,7 +61,7 @@ cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, theta, data, ggplotP
 
 
 
-cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   if(theta == "x"){
@@ -82,7 +82,7 @@ cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, theta, data, ggplotP
 
 
 
-cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   if(theta == "x"){
@@ -103,7 +103,7 @@ cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, theta, data, ggplotP
 
 
 
-cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   intercept <- data$intercept
@@ -120,12 +120,12 @@ cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, theta, data, ggplot
     x <- NA
     y <- NA
   }
-  cartesianxy2Polarxy.GeomPath(NULL, theta, data = data.frame(x = x, y = y), ggplotPanel_params)
+  Cartesianxy2Polarxy.GeomPath(NULL, theta, data = data.frame(x = x, y = y), ggplotPanel_params)
 }
 
 
 
-cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
   x <- c(data$x, data$xend)
   y <- c(data$y, data$yend)
   theta.range <- ggplotPanel_params$theta.range
@@ -146,7 +146,7 @@ cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, theta, data, ggplo
 
 
 
-cartesianxy2Polarxy.GeomPath <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomPath <- function(layerGeom = NULL, theta, data, ggplotPanel_params){
   n <- dim(data)[1]
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range

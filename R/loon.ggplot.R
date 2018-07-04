@@ -157,7 +157,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         pointData <- do.call(rbind, pointData)
 
         if(isCoordPolar) {
-          coordPolarxy <- cartesianxy2Polarxy(NULL,
+          coordPolarxy <- Cartesianxy2Polarxy(NULL,
                                               theta = theta,
                                               data = pointData,
                                               ggplotPanel_params = ggplotPanel_params[[i]])
@@ -256,11 +256,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
       l_scaleto_world(loonPlot)
     } else {
       if (ggGuides) {
-        cartesianGuides <- cartesianGuides(loonPlot, ggplotPanel_params[[i]], swapAxes)
+        CartesianGuides <- CartesianGuides(loonPlot, ggplotPanel_params[[i]], swapAxes)
         # lower to bottom
         children <- l_layer_getChildren(loonPlot)
         # the length of children is at least two
-        sapply(1:(length(children) - 1), function(l){l_layer_lower(loonPlot, cartesianGuides)})
+        sapply(1:(length(children) - 1), function(l){l_layer_lower(loonPlot, CartesianGuides)})
       }
       l_configure(loonPlot,
                   panX=panX,

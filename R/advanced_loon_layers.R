@@ -273,7 +273,7 @@ loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, thet
     # a single line with a single color
     if(len_uni_col == 1){
       if(isCoordPolar){
-        coordPolarxy <- cartesianxy2Polarxy.GeomPath(NULL, theta, groupData, ggplotPanel_params)
+        coordPolarxy <- Cartesianxy2Polarxy.GeomPath(NULL, theta, groupData, ggplotPanel_params)
         x <- coordPolarxy$x
         y <- coordPolarxy$y
       } else {

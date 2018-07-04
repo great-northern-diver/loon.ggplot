@@ -1,5 +1,5 @@
 
-cartesianGuides <- function(widget, ggplotPanel_params, swapAxes){
+CartesianGuides <- function(widget, ggplotPanel_params, swapAxes){
 
 
   if (swapAxes) {
