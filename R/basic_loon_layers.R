@@ -379,9 +379,47 @@ loonLayer.GeomCurve <- function(widget, layerGeom, data, ggplotPanel_params, the
 
 
 
-# TODO
 loonLayer.GeomHex <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
-  NULL
+
+  # ranges
+  x.range <- ggplotPanel_params$x.range
+  y.range <- ggplotPanel_params$y.range
+  # can n be one?
+  n <- dim(data)[1]
+  if (n == 1) {
+    warnings("one hexagon is not allowed")
+  } else {
+    unique_y <- unique(data$y)
+    # hex width
+    hexWidth <- min(unlist(lapply(unique_y, function(j) {
+      id <- which(data$y == j)
+      diff(data$x[id])
+    })))
+    # scale data
+    scale.hex_radius <- hexWidth/ (diff(x.range) * sqrt(3))
+    scale.x <- (data$x - x.range[1]) / diff(x.range)
+    scale.y <- (data$y - y.range[1]) / diff(y.range)
+
+    hex_x <- lapply(seq_len(n), function(i) {
+      x.north <- x.south <- scale.x[i]
+      x.northeast <- x.southeast <- scale.x[i] + sqrt(3) * scale.hex_radius / 2
+      x.northwest <- x.southwest <- scale.x[i] - sqrt(3) * scale.hex_radius / 2
+      c(x.north, x.northeast, x.southeast, x.south, x.southwest, x.northwest) * diff(x.range) + x.range[1]
+    })
+
+    hex_y <- lapply(seq_len(n), function(i) {
+      y.north <- scale.y[i] + scale.hex_radius
+      y.northeast <- y.northwest <- scale.y[i] + scale.hex_radius / 2
+      y.southeast <- y.southwest <- scale.y[i] - scale.hex_radius / 2
+      y.south <- scale.y[i] - scale.hex_radius
+      c(y.north, y.northeast, y.southeast, y.south, y.southwest, y.northwest) * diff(y.range) + y.range[1]
+    })
+    fillColor <- hex6to12(data$fill)
+    linesColor <- hex6to12(data$colour)
+    linesWidth <- as_loon_size(data$size, "lines")
+    l_layer_polygons(widget, hex_x, hex_y, color = fillColor, linecolor = linesColor,
+                     linewidth = linesWidth, parent = parent)
+  }
 }
 
 
