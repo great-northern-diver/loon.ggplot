@@ -27,6 +27,21 @@ ggBuild2Loon <- function(ggplotObject){
     # length of layer is 0?
     if(len_layers != 0){
 
+      # any infinite value?
+      for (i in 1:len_layers) {
+        buildData  <- ggBuild$data[[i]]
+        if (!is.null(buildData$x)) {
+          x.range <- ggplotPanel_params[[i]]$x.range
+          ggBuild$data[[i]]$x[is.infinite(buildData$x) & buildData$x < 0] <- x.range[1]
+          ggBuild$data[[i]]$x[is.infinite(buildData$x) & buildData$x > 0] <- x.range[2]
+        }
+        if (!is.null(buildData$y)) {
+          y.range <- ggplotPanel_params[[i]]$y.range
+          ggBuild$data[[i]]$y[is.infinite(buildData$y) & buildData$y < 0] <- y.range[1]
+          ggBuild$data[[i]]$y[is.infinite(buildData$y) & buildData$y > 0] <- y.range[2]
+        }
+      }
+
       layerNames <- sapply(1:len_layers, function(j) {
         className <- class(ggplotObject$layers[[j]]$geom)
         className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
