@@ -27,17 +27,7 @@ Interactive loon plots from ggplots
  p
  g <- loon.ggplot(p)
 
- df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
- xgrid <- with(df, seq(min(x), max(x), length = 50))
- interp <- data.frame(
-   x = xgrid,
-   y = approx(df$x, df$y, xout = xgrid)$y,
-   colour = approx(df$x, df$colour, xout = xgrid)$y)
-
- p <- ggplot(interp, aes(x, y, colour = colour)) +
-   geom_line(size = 2) +
-   geom_point(data = df, size = 5)
- p
- g <- loon.ggplot(p)
+ p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
+ g <- loon.ggplot(p, ggGuides = TRUE)
 }
 
