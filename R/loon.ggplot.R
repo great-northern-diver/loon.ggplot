@@ -329,14 +329,14 @@ l_configure.l_ggplot <- function(target, ...) {
 }
 
 
-# 1. l_layer_lines does not work well on "dash" (l_layer_line is fine)
-# 2. arrow for every l_layer_line and l_layer_lines need to be added
+# 1. l_layer_lines does not work well on "dash" (l_layer_line is fine) *
+# 2. arrow for every l_layer_line and l_layer_lines need to be added *
 # 3. legend
 # 4. transparent color (maybe impossible to do) *
 # 5. specfic TODOs (before some loonLayer functions)
 # 6. ggplot_build: need to rebuild for some specific data (eg: ts data) *
 # 7. geom_histogram: transform to l_hist() or just leave it as l_plot() adding l_layer_rectangles()
-# 8. bar labels
+# 8. bar labels *
 
 ########################################### helper function ###########################################
 hex6to12 <- function(col){
