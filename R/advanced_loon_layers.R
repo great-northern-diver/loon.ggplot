@@ -1,6 +1,5 @@
 ########################################### advanced layers ###########################################
 
-# TODO quantiles
 loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
   n <- dim(data)[1]
   uniGroup <- unique(data$group)
@@ -21,31 +20,23 @@ loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, th
                         parent = if(parent == "root") violinGroup else parent)
 
   if (!is.null(layerGeom$geom_params$draw_quantiles)) {
-
     quantiles <- layerGeom$geom_params$draw_quantiles
     len_quantiles <- length(quantiles)
-    groupDiff <- rep( sapply(uniGroup, function(i){
-      max(data[data$group==i, ]$y) - min(data[data$group==i, ]$y)
-    }), each = len_quantiles )
+
     linesData <- do.call(rbind, lapply(uniGroup, function(i){
       groupiData <- data[data$group==i, ]
-      # cumulative area
-      # cumulativeArea <- c(0, sapply(2:length(groupiData$y), function(i) {
-      #   x <- groupiData$y[1:i]
-      #   f1 <- approxfun(x, groupiData$x[1:i] + groupiData$violinwidth[1:i]/2)
-      #   integrate(f1, min(x), max(x))$value
-      # }))
-      # quantileX <- quantile(cumulativeArea, probs = quantiles,
-      #                       type = 1)
-      # groupiData[which(cumulativeArea %in% quantileX), ]
-
-      # groupiX <- groupiData$x + groupiData$violinwidth/2
-      # newseq <- seq(min(groupiX), max(groupiX), length.out = length(groupiX))
-      # quantileX <- quantile(newseq, probs = quantiles, type = 1)
-      # groupiData[which(newseq %in% quantileX), ]
-      quantileX <- quantile(groupiData$y, probs = quantiles, type = 1)
-      groupiData[which(groupiData$y %in% quantileX), ]
+      xx <- groupiData$x + groupiData$violinwidth - unique((groupiData$xmin + groupiData$xmax)/2)[1]
+      f <- approxfun(groupiData$y, xx, yleft = 0, yright = 0)
+      cumulativeArea <- sapply(groupiData$y, function(j){
+        integrate(f, min(groupiData$y), j)$value
+      })
+      id <- sapply(quantiles, function(j) {
+        abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+        which(abs_quantile_area == min(abs_quantile_area))
+      })
+      groupiData[id, ]
     }))
+
     linesData$xend <- linesData$x + linesData$violinwidth
     linesData$yend <- linesData$y
     loonLayer.GeomSegment(widget, layerGeom, linesData, ggplotPanel_params, theta,
