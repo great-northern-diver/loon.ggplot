@@ -69,11 +69,10 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
 
     # is polar coord?
     isCoordPolar <- is.CoordPolar(ggplotPanel_params[[i]])
+    # theta can be NULL (if not coordPolar), "x" or "y"
+    theta <- ggplotObject$coordinates$theta
 
     if(isCoordPolar){
-
-      # theta can be NULL (if not coordPolar), "x" or "y"
-      theta <- ggplotObject$coordinates$theta
       if(theta == "y")  swapAxes <- TRUE
       showGuides <- FALSE
       showScales <- FALSE
