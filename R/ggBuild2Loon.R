@@ -1,6 +1,7 @@
 # adding labels to ggplot_build points layer
 
 ggBuild2Loon <- function(ggplotObject){
+
   len_layers <- length(ggplotObject$layers)
   ggBuild <- ggplot2::ggplot_build(ggplotObject)
   input <- ggplotObject$data
@@ -23,22 +24,26 @@ ggBuild2Loon <- function(ggplotObject){
 
   # if not, no input data in ggplot()
   if(is.data.frame(input)){
-
     # length of layer is 0?
     if(len_layers != 0){
-
       # any infinite value?
       for (i in 1:len_layers) {
         buildData  <- ggBuild$data[[i]]
-        if (!is.null(buildData$x)) {
-          x.range <- ggplotPanel_params[[i]]$x.range
-          ggBuild$data[[i]]$x[is.infinite(buildData$x) & buildData$x < 0] <- x.range[1]
-          ggBuild$data[[i]]$x[is.infinite(buildData$x) & buildData$x > 0] <- x.range[2]
-        }
-        if (!is.null(buildData$y)) {
-          y.range <- ggplotPanel_params[[i]]$y.range
-          ggBuild$data[[i]]$y[is.infinite(buildData$y) & buildData$y < 0] <- y.range[1]
-          ggBuild$data[[i]]$y[is.infinite(buildData$y) & buildData$y > 0] <- y.range[2]
+        unique_panel <- as.numeric(unique(buildData$PANEL))
+        for(j in 1:length(unique_panel)){
+          isPanel.j <- buildData$PANEL == j
+          if (!is.null(buildData$x)) {
+            x.range <- ggplotPanel_params[[j]]$x.range
+            buildData_x_panel_j <- buildData$x[isPanel.j]
+            ggBuild$data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) & buildData_x_panel_j < 0] <- x.range[1]
+            ggBuild$data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) & buildData_x_panel_j > 0] <- x.range[2]
+          }
+          if (!is.null(buildData$y)) {
+            y.range <- ggplotPanel_params[[j]]$y.range
+            buildData_y_panel_j <- buildData$y[isPanel.j]
+            ggBuild$data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) & buildData_y_panel_j < 0] <- y.range[1]
+            ggBuild$data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) & buildData_y_panel_j > 0] <- y.range[2]
+          }
         }
       }
 
@@ -56,7 +61,11 @@ ggBuild2Loon <- function(ggplotObject){
         if(dim(ggLayout)[2] == 6) {
           multiFacets <- TRUE
           panelMatch <- which( grepl(colnames(ggLayout)[4], colnames(input)) == TRUE )
-          panelLevels <- levels(as.factor(input[,   panelMatch]))
+          factors <- input[,   panelMatch]
+          if (is.list(factors)) {
+            factors <- unlist(factors)
+          }
+          panelLevels <- levels(as.factor(factors))
         }
 
         label <- row.names(input)
@@ -71,7 +80,7 @@ ggBuild2Loon <- function(ggplotObject){
             if (!multiFacets) {
               label
             } else {
-              panelValues <- as.character(input[, panelMatch])
+              panelValues <- as.character(factors)
               labelOrder <- unlist(lapply(panelLevels, function(j){
                 which(panelValues %in% j)
               }))
