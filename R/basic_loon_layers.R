@@ -88,13 +88,15 @@ loonLayer.GeomRect <- function(widget, layerGeom, data, ggplotPanel_params, thet
         else if(!is.na(data[i,]$ymin) & is.na(data[i,]$ymax)) c(data[i,]$ymin  , 2 * data[i,]$y - data[i,]$ymin)
         else{
           c(if(is.infinite(data[i,]$ymin)) yrange[1] else data[i,]$ymin,
-            if(is.infinite(data[i,]$ymax)) yrange[2] else data[i,]$ymax)}
+            if(is.infinite(data[i,]$ymax)) yrange[2] else data[i,]$ymax)
+        }
         x[[i]] <- if(is.na(data[i,]$xmin) & is.na(data[i,]$xmax)) rep(data[i,]$x, 2)
         else if(is.na(data[i,]$xmin) & !is.na(data[i,]$xmax)) c(2 * data[i,]$x - data[i,]$xmax  , data[i,]$xmax)
         else if(!is.na(data[i,]$xmin) & is.na(data[i,]$xmax)) c(data[i,]$xmin  , 2 * data[i,]$x - data[i,]$xmin)
         else{
           c(if(is.infinite(data[i,]$xmin)) xrange[1] else data[i,]$xmin,
-            if(is.infinite(data[i,]$xmax)) xrange[2] else data[i,]$xmax)}
+            if(is.infinite(data[i,]$xmax)) xrange[2] else data[i,]$xmax)
+        }
       }
       l_layer_rectangles(
         widget, x = x, y = y,
@@ -460,3 +462,5 @@ loonLayer.GeomDotplot <- function(widget, layerGeom, data, ggplotPanel_params, t
     })
   }
 }
+
+# TODO GeomDl
