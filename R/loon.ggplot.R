@@ -71,35 +71,22 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
     isCoordPolar <- is.CoordPolar(ggplotPanel_params[[i]])
     # theta can be NULL (if not coordPolar), "x" or "y"
     theta <- ggplotObject$coordinates$theta
-
     if(isCoordPolar){
       if(theta == "y")  swapAxes <- TRUE
       showGuides <- FALSE
       showScales <- FALSE
-
     } else {
-
+      # if not polar coord
       # swap or not
       if( which( names(ggplotPanel_params[[i]]) %in% "y.range"  == T ) <
           which( names(ggplotPanel_params[[i]]) %in% "x.range"  == T ) ) swapAxes <- TRUE
-
-      # set panX, panY, deltaX, deltaY
+      # show ggGuides or not
       if (ggGuides) {
-
         showGuides <- FALSE
         showScales <- FALSE
-        x.range <- if (swapAxes) {
-          grDevices::extendrange(ggplotPanel_params[[i]]$y.range)
-        } else {
-          grDevices::extendrange(ggplotPanel_params[[i]]$x.range)
-        }
-        y.range <- if (swapAxes) {
-          grDevices::extendrange(ggplotPanel_params[[i]]$x.range)
-        } else {
-          grDevices::extendrange(ggplotPanel_params[[i]]$y.range)
-        }
-      } else {
 
+      } else {
+        # set panX, panY, deltaX, deltaY
         showGuides <- TRUE
         showScales <- TRUE
         x.range <- if (swapAxes) {
@@ -112,12 +99,13 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         } else {
           ggplotPanel_params[[i]]$y.range
         }
+        panY <- y.range[1]
+        panX <- x.range[1]
+        deltaY <- diff(y.range) * zoomX
+        deltaX <- diff(x.range) * zoomY
       }
-      panY <- y.range[1]
-      panX <- x.range[1]
-      deltaY <- diff(y.range) * zoomX
-      deltaX <- diff(x.range) * zoomY
     }
+
     if (len_layers != 0) {
       layerNames <- sapply(1:len_layers, function(j) {
         className <- class(ggplotObject$layers[[j]]$geom)
@@ -260,14 +248,16 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         children <- l_layer_getChildren(loonPlot)
         # the length of children is at least two
         sapply(1:(length(children) - 1), function(l){l_layer_lower(loonPlot, CartesianGuides)})
+        l_scaleto_world(loonPlot)
+      } else {
+        l_configure(loonPlot,
+                    panX=panX,
+                    panY=panY,
+                    deltaX= deltaX,
+                    deltaY=deltaY,
+                    zoomX = zoomX,
+                    zoomY = zoomY)
       }
-      l_configure(loonPlot,
-                  panX=panX,
-                  panY=panY,
-                  deltaX= deltaX,
-                  deltaY=deltaY,
-                  zoomX = zoomX,
-                  zoomY = zoomY)
     }
 
     loonPlot
