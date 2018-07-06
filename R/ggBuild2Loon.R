@@ -52,47 +52,82 @@ ggBuild2Loon <- function(ggplotObject){
         className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
       })
 
-      pointsLayerId <- which(sapply(layerNames, function(l){"GeomPoint" %in% l}) == TRUE)
+      pointsLayerId <- which(sapply(layerNames, function(j){"GeomPoint" %in% j}) == TRUE)
       # point layer?
-      if( length(pointsLayerId) != 0 ){
-
+      if (length(pointsLayerId) != 0) {
         multiFacets <- FALSE
+        dim2ggLayout <- dim(ggLayout)[2]
         # is multi facets?
-        if(dim(ggLayout)[2] == 6) {
+        if(dim2ggLayout >= 6) {
           multiFacets <- TRUE
-          panelMatch <- which( grepl(colnames(ggLayout)[4], colnames(input)) == TRUE )
-          factors <- input[,   panelMatch]
-          if (is.list(factors)) {
-            factors <- unlist(factors)
-          }
-          panelLevels <- levels(as.factor(factors))
         }
-
+        # label
         label <- row.names(input)
         lenPointsLayer <- length(pointsLayerId)
         # start loop
         for(i in 1:lenPointsLayer){
-
           buildData  <- ggBuild$data[[pointsLayerId[i]]]
-          numOfObsi <- dim(buildData)[1]
-
-          ggBuild$data[[pointsLayerId[i]]]$label <- if (numOfObsi == dim(input)[1]) {
+          numOfObservation <- dim(buildData)[1]
+          ggBuild$data[[pointsLayerId[i]]]$label <- if (numOfObservation == dim(input)[1]) {
             if (!multiFacets) {
               label
             } else {
-              panelValues <- as.character(factors)
-              labelOrder <- unlist(lapply(panelLevels, function(j){
-                which(panelValues %in% j)
-              }))
-              label[labelOrder]
+              panelMatch <- sapply(seq_len(dim2ggLayout-5), function (j) {
+                which( grepl(colnames(ggLayout)[j+3], colnames(input)) == TRUE)
+              })
+              panelMatch.len <- length(panelMatch)
+              panelLevels <- list()
+              factors <- list()
+              panelLevels.len <- c()
+              for (j in 1:panelMatch.len) {
+                factors[[j]] <- as.factor(unlist(input[,   panelMatch[j]]))
+                panelLevels[[j]] <- levels(factors[[j]])
+                panelLevels.len[j] <- length(panelLevels[[j]])
+              }
+              if(panelMatch.len == 1){
+                panelValues <- as.character(factors[[1]])
+                # label order
+                labelOrder <- unlist(lapply(panelLevels[[1]], function(j){
+                  which(panelValues %in% j)
+                }))
+                label[labelOrder]
+              } else {
+                deepth <- times(panelLevels.len)
+                numOfLoop <- deepth[1]
+                deepth <- deepth[-1]
+                # label order
+                labelOrder <- unlist(lapply(seq_len(numOfLoop), function(j){
+                  id <- c()
+                  divider <- j
+                  for (k in 1: (panelMatch.len - 1)) {
+                    # last list index
+                    id[k] <- ceiling(divider / deepth[k])
+                    divider <- divider %% deepth[k]
+
+                  }
+                  last.id <- j %% deepth[length(deepth)]
+                  if (last.id == 0) {last.id <- deepth[length(deepth)]}
+                  id <- c(id, last.id)
+                  factors_index <- lapply(seq_len(length(id)), function(k){
+                    fact <- panelLevels[[k]][id[k]]
+                    which(factors[[k]] %in% fact == TRUE)
+                  })
+                  common_index <- factors_index[[1]]
+                  for (k in 1:(length(factors_index) - 1)) {
+                    common_index <- intersect(common_index, factors_index[[k+1]])
+                  }
+                  common_index
+                }))
+                label[labelOrder]
+              }
             }
           } else {
             # the ggplot input data is not the geom_point data
             # in other words, geom_point() layer add new dataset
             if (lenPointsLayer == 1) {
-              paste0("item", c(1:numOfObsi))
+              paste0("item", c(1:numOfObservation))
             } else {
-              paste0("item", c(1:numOfObsi), "pointsLayer", i)
+              paste0("item", c(1:numOfObservation), "pointsLayer", i)
             }
           }
 
@@ -112,3 +147,17 @@ ggBuild2Loon <- function(ggplotObject){
 is_devtools_ggplot2 <- function() {
   packageVersion("ggplot2") > "2.2.1"
 }
+
+times <- function(vec) {
+  rev_vec <- rev(vec)
+  output <- c()
+  for(i in 1: length(rev_vec) ){
+    if (i == 1) {
+      output[i] <- rev_vec[i]
+    } else {
+      output[i] <- output[i - 1] * rev_vec[i]
+    }
+  }
+  rev(output)
+}
+
