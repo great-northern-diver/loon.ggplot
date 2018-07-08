@@ -1,12 +1,12 @@
 ########################################### basic layers ###########################################
-loonLayer <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent){
+loonLayer <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent){
   UseMethod("loonLayer", layerGeom$geom)
 }
 
-loonLayer.GeomPoint <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomPoint <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   if(isCoordPolar){
-    coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data, ggplotPanel_params)
+    coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanel_params)
     x <- coordPolarxy$x
     y <- coordPolarxy$y
   } else {
@@ -33,7 +33,7 @@ loonLayer.GeomPoint <- function(widget, layerGeom, data, ggplotPanel_params, the
 
 
 
-loonLayer.GeomRect <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomRect <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   n <- dim(data)[1]
   fillColor <- hex6to12(data$fill)
@@ -43,7 +43,7 @@ loonLayer.GeomRect <- function(widget, layerGeom, data, ggplotPanel_params, thet
   yrange <- ggplotPanel_params$y.range
   if(n == 1){
     if(isCoordPolar){
-      coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, theta, data, ggplotPanel_params)
+      coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, coordinates, data, ggplotPanel_params)
       x <- coordPolarxy$x
       y <- coordPolarxy$y
       l_layer_polygon(
@@ -70,7 +70,7 @@ loonLayer.GeomRect <- function(widget, layerGeom, data, ggplotPanel_params, thet
     y <- list()
     if(isCoordPolar){
       for(i in 1: n) {
-        coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, theta, data[i, ], ggplotPanel_params)
+        coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, coordinates, data[i, ], ggplotPanel_params)
         x[[i]] <- coordPolarxy$x
         y[[i]] <- coordPolarxy$y
       }
@@ -111,7 +111,7 @@ loonLayer.GeomRect <- function(widget, layerGeom, data, ggplotPanel_params, thet
 
 
 
-loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   uniGroup <- unique(data$group)
   fillColor <- hex6to12(data$fill)
@@ -120,7 +120,7 @@ loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, t
 
   if(length(uniGroup) == 1){
     if(isCoordPolar) {
-      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data, ggplotPanel_params)
+      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanel_params)
       x <- coordPolarxy$x
       y <- coordPolarxy$y
     } else {
@@ -141,7 +141,7 @@ loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, t
     lWidth <- c()
     for(i in 1:length(uniGroup)){
       if(isCoordPolar) {
-        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data[data$group == uniGroup[i], ], ggplotPanel_params)
+        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data[data$group == uniGroup[i], ], ggplotPanel_params)
         x[[i]] <- coordPolarxy$x
         y[[i]] <- coordPolarxy$y
       } else {
@@ -165,14 +165,14 @@ loonLayer.GeomPolygon <- function(widget, layerGeom, data, ggplotPanel_params, t
 
 
 # TODO overlap
-loonLayer.GeomText <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomText <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   textsSize <- as_loon_size(data$size, "texts")
   textsColor <- hex6to12(data$colour)
   textAnchor <- as_loon_hvjust(hjust = data$hjust, vjust = data$vjust)
 
   if(isCoordPolar){
-    coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data, ggplotPanel_params)
+    coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanel_params)
     x <- coordPolarxy$x
     y <- coordPolarxy$y
   } else {
@@ -196,13 +196,13 @@ loonLayer.GeomText <- function(widget, layerGeom, data, ggplotPanel_params, thet
 
 
 # TODO draws a rectangle behind the text
-loonLayer.GeomLabel <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomLabel <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   loonLayer.GeomText(widget, layerGeom, data, ggplotPanel_params, parent)
 }
 
 
 
-loonLayer.GeomVline <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomVline <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   n <- dim(data)[1]
   linesWidth <- as_loon_size(data$size, "lines")
@@ -212,7 +212,7 @@ loonLayer.GeomVline <- function(widget, layerGeom, data, ggplotPanel_params, the
   if(n == 1){
     linesDash <- as_loon_dash(data$linetype)
     if(isCoordPolar){
-      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data, ggplotPanel_params)
+      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanel_params)
       x <- coordPolarxy$x
       y <- coordPolarxy$y
     } else {
@@ -228,7 +228,7 @@ loonLayer.GeomVline <- function(widget, layerGeom, data, ggplotPanel_params, the
     y <- list()
     for(i in 1:n){
       if(isCoordPolar){
-        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data[i, ], ggplotPanel_params)
+        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data[i, ], ggplotPanel_params)
         x[[i]] <- coordPolarxy$x
         y[[i]] <- coordPolarxy$y
       } else {
@@ -243,7 +243,7 @@ loonLayer.GeomVline <- function(widget, layerGeom, data, ggplotPanel_params, the
 
 
 
-loonLayer.GeomHline <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomHline <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   n <- dim(data)[1]
   linesWidth <- as_loon_size(data$size, "lines")
@@ -254,7 +254,7 @@ loonLayer.GeomHline <- function(widget, layerGeom, data, ggplotPanel_params, the
   if(n == 1){
     linesDash <- as_loon_dash(data$linetype)
     if(isCoordPolar){
-      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data, ggplotPanel_params)
+      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanel_params)
       x <- coordPolarxy$x
       y <- coordPolarxy$y
     } else {
@@ -269,7 +269,7 @@ loonLayer.GeomHline <- function(widget, layerGeom, data, ggplotPanel_params, the
     y <- list()
     for(i in 1:n){
       if(isCoordPolar){
-        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data[i, ], ggplotPanel_params)
+        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data[i, ], ggplotPanel_params)
         x[[i]] <- coordPolarxy$x
         y[[i]] <- coordPolarxy$y
       } else {
@@ -284,7 +284,7 @@ loonLayer.GeomHline <- function(widget, layerGeom, data, ggplotPanel_params, the
 
 
 
-loonLayer.GeomAbline <- function(widget, layerGeom, data, ggplotPanel_params, theta,  parent = "root"){
+loonLayer.GeomAbline <- function(widget, layerGeom, data, ggplotPanel_params, coordinates,  parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   n <- dim(data)[1]
   linesWidth <- as_loon_size(data$size, "lines")
@@ -295,7 +295,7 @@ loonLayer.GeomAbline <- function(widget, layerGeom, data, ggplotPanel_params, th
 
   if(n == 1){
     if(isCoordPolar){
-      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data,
+      coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data,
                                           ggplotPanel_params)
       x <- coordPolarxy$x
       y <- coordPolarxy$y
@@ -312,7 +312,7 @@ loonLayer.GeomAbline <- function(widget, layerGeom, data, ggplotPanel_params, th
     y <- list()
     if(isCoordPolar){
       for(i in 1:n){
-        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, theta, data[i,],
+        coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data[i,],
                                             ggplotPanel_params)
         x[[i]] <- coordPolarxy$x
         y[[i]] <- coordPolarxy$y
@@ -332,7 +332,7 @@ loonLayer.GeomAbline <- function(widget, layerGeom, data, ggplotPanel_params, th
 
 
 # given start and end to draw a straight line
-loonLayer.GeomSegment <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomSegment <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   n <- dim(data)[1]
   linesWidth <- as_loon_size(data$size, "lines")
@@ -341,7 +341,7 @@ loonLayer.GeomSegment <- function(widget, layerGeom, data, ggplotPanel_params, t
 
   if(n == 1){
     if(isCoordPolar) {
-      coordPolarxy <- Cartesianxy2Polarxy.GeomSegment(NULL, theta, data, ggplotPanel_params)
+      coordPolarxy <- Cartesianxy2Polarxy.GeomSegment(NULL, coordinates, data, ggplotPanel_params)
       x <- coordPolarxy$x
       y <- coordPolarxy$y
     } else {
@@ -357,7 +357,7 @@ loonLayer.GeomSegment <- function(widget, layerGeom, data, ggplotPanel_params, t
     y <- list()
     for(i in 1:n){
       if(isCoordPolar){
-        coordPolarxy <- Cartesianxy2Polarxy.GeomSegment(NULL, theta, data[i, ], ggplotPanel_params)
+        coordPolarxy <- Cartesianxy2Polarxy.GeomSegment(NULL, coordinates, data[i, ], ggplotPanel_params)
         x[[i]] <- coordPolarxy$x
         y[[i]] <- coordPolarxy$y
       } else {
@@ -375,13 +375,13 @@ loonLayer.GeomSegment <- function(widget, layerGeom, data, ggplotPanel_params, t
 
 
 # TODO
-loonLayer.GeomCurve <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomCurve <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   NULL
 }
 
 
 
-loonLayer.GeomHex <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomHex <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
 
   # ranges
   x.range <- ggplotPanel_params$x.range
@@ -426,7 +426,7 @@ loonLayer.GeomHex <- function(widget, layerGeom, data, ggplotPanel_params, theta
 
 
 
-loonLayer.GeomDotplot <- function(widget, layerGeom, data, ggplotPanel_params, theta, parent = "root"){
+loonLayer.GeomDotplot <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   uniGroup <- unique(data$group)
   fillColor <- hex6to12(data$fill)
   lineColor <- hex6to12(data$colour)
@@ -462,5 +462,3 @@ loonLayer.GeomDotplot <- function(widget, layerGeom, data, ggplotPanel_params, t
     })
   }
 }
-
-# TODO GeomDl
