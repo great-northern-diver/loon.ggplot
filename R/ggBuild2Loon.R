@@ -3,7 +3,7 @@
 ggBuild2Loon <- function(ggplotObject){
 
   len_layers <- length(ggplotObject$layers)
-  ggBuild <- ggplot2::ggplot_build(ggplotObject)
+  ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggplotObject))
   input <- ggplotObject$data
 
   # different ggplot2 versions have different names
@@ -47,7 +47,7 @@ ggBuild2Loon <- function(ggplotObject){
         }
       }
 
-      layerNames <- sapply(1:len_layers, function(j) {
+      layerNames <- lapply(1:len_layers, function(j) {
         className <- class(ggplotObject$layers[[j]]$geom)
         className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
       })
@@ -73,7 +73,7 @@ ggBuild2Loon <- function(ggplotObject){
               label
             } else {
               panelMatch <- sapply(seq_len(dim2ggLayout-5), function (j) {
-                which( grepl(colnames(ggLayout)[j+3], colnames(input)) == TRUE)
+                which( str_detect(colnames(ggLayout)[j+3], colnames(input)) == TRUE)
               })
               panelMatch.len <- length(panelMatch)
               panelLevels <- list()
@@ -129,6 +129,7 @@ ggBuild2Loon <- function(ggplotObject){
             } else {
               paste0("item", c(1:numOfObservation), "pointsLayer", i)
             }
+            warnings("item label may not match")
           }
 
         }
