@@ -285,8 +285,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
                              swapAxes = swapAxes,
                              linkingKey = linkingKey, ...)
         } else {
-          # set match id
-          match_id <- integer(0)
+
           # loon plot
           loonPlot <- l_plot(parent = tt,
                              title = subtitle,
@@ -301,7 +300,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
       }
       # adding layers
       loon_layers <- sapply(1:len_layers, function(j){
-        if( ! j %in% match_id){
+        if(! j %in% match_id){
           loonLayer(widget = loonPlot,
                     layerGeom = ggplotObject$layers[[j]],
                     data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == i, ],

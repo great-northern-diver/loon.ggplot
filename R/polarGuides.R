@@ -13,7 +13,7 @@ polarGuides <- function(widget, ggplotPanel_params, swapAxes){
   r.labels <- ggplotPanel_params$r.labels
 
   # drawing lines
-  theta.minor <- ggplotPanel_params$theta.minor
+  theta.minor <- if(is.null(ggplotPanel_params$theta.minor)) theta.major else ggplotPanel_params$theta.minor
 
   # drawing ovals
   if(length(r.major) >= 1) {
