@@ -1,22 +1,32 @@
 ########################################### advanced layers ###########################################
 
 loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
-  n <- dim(data)[1]
   uniGroup <- unique(data$group)
   revdata <- data
-  revdata$y <- unlist( lapply(uniGroup, function(i){
-    rev(data$y[revdata$group == i])
-  }))
-  revdata$violinwidth <- unlist( lapply(uniGroup, function(i){
-    rev(data$violinwidth[revdata$group == i])
-  }))
-  revdata$x <- revdata$x + revdata$violinwidth/2
-  data$x <- data$x - data$violinwidth/2
-  newdata <- rbind(data, revdata)
+  seqLength <- 20
+  newdata <- data.frame()
+  for (i in 1:length(uniGroup)) {
+    group_i_data <- data[data$group == uniGroup[i], ]
+    group_i_revdata <- revdata[revdata$group == uniGroup[i], ]
+    n <- dim(group_i_data)[1]
+    # set rev y
+    group_i_revdata$y <- rev(group_i_revdata$y)
+    group_i_revdata$violinwidth <- rev(group_i_revdata$violinwidth)
+    # set x for both data set
+    group_i_revdata$x <- group_i_revdata.x <- group_i_revdata$x + group_i_revdata$violinwidth/2
+    group_i_data$x <- group_i_data.x <- group_i_data$x - group_i_data$violinwidth/2
+    # extend group_i_data and group_i_revdata
+    group_i_data <- group_i_data[c(seq_len(n), rep(n, seqLength)), ]
+    group_i_revdata <- group_i_revdata[c(seq_len(n), rep(n, seqLength)), ]
+    group_i_data$x <- c(group_i_data.x, seq(group_i_data.x[n], group_i_revdata.x[1], length.out = seqLength))
+    group_i_revdata$x <- c(group_i_revdata.x, seq(group_i_revdata.x[n], group_i_data.x[1], length.out = seqLength))
+    group_i_newdata <- rbind(group_i_data, group_i_revdata)
+    newdata <- rbind(newdata, group_i_newdata)
+  }
 
   violinGroup <- l_layer_group(widget, "violin")
 
-  loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params,
+  loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
                         parent = if(parent == "root") violinGroup else parent)
 
   if (!is.null(layerGeom$geom_params$draw_quantiles)) {
@@ -24,19 +34,19 @@ loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, co
     len_quantiles <- length(quantiles)
 
     linesData <- do.call(rbind, lapply(uniGroup, function(i){
-      groupiData <- data[data$group==i, ]
-      xx <- groupiData$x + groupiData$violinwidth - unique((groupiData$xmin + groupiData$xmax)/2)[1]
-      f <- approxfun(groupiData$y, xx, yleft = 0, yright = 0)
-      cumulativeArea <- sapply(groupiData$y, function(j){
-        integrate(f, min(groupiData$y), j)$value
+      group_i_data <- data[data$group==i, ]
+      xx <- group_i_data$violinwidth/2
+      f <- approxfun(group_i_data$y, xx, yleft = 0, yright = 0)
+      cumulativeArea <- sapply(group_i_data$y, function(j){
+        integrate(f, min(group_i_data$y), j)$value
       })
       id <- sapply(quantiles, function(j) {
         abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
         which(abs_quantile_area == min(abs_quantile_area))
       })
-      groupiData[id, ]
+      group_i_data[id, ]
     }))
-
+    linesData$x <- linesData$x - linesData$violinwidth/2
     linesData$xend <- linesData$x + linesData$violinwidth
     linesData$yend <- linesData$y
     loonLayer.GeomSegment(widget, layerGeom, linesData, ggplotPanel_params, coordinates,
