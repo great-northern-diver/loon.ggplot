@@ -10,7 +10,7 @@
 #'
 #'
 #' @import ggplot2 loon tcltk methods
-#' @importFrom stats quantile
+#' @importFrom stats quantile approxfun integrate
 #' @importFrom utils packageVersion
 #' @importFrom grDevices extendrange
 #' @importFrom stringr str_detect
