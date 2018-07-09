@@ -131,8 +131,10 @@ Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, coordinates, data, 
 
 
 Cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
-  x <- c(data$x, data$xend)
-  y <- c(data$y, data$yend)
+  # arbitrary choice
+  seqLen <- 50
+  x <- seq(data$x, data$xend, length.out = seqLen)
+  y <- seq(data$y, data$yend, length.out = seqLen)
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   theta <- coordinates$theta
