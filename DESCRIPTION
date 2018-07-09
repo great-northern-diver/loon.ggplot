@@ -15,14 +15,16 @@ Depends:
     methods,
     ggplot2
 Imports:
-    magrittr,
-    dplyr,
     stats,
     utils,
     grDevices,
-    tools
-Suggests:
+    stringr,
     grid,
+    gridExtra
+Suggests:
+    magrittr,
+    dplyr,
+    tools,
     testthat
 LazyData: true
 RoxygenNote: 5.0.1
