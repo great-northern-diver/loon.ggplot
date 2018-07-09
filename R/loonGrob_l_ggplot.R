@@ -2,6 +2,11 @@
 #'
 #' Grid grobs are useful to create publication quality graphics.
 #'
+#' @param target loon target. \code{S3} method, see \link{loonGrob}
+#' @param name name of loon grob
+#' @param gp graphical parameter settings of loon grob
+#' @param vp viewport of loon grob
+#'
 #' @return a grid grob
 #'
 #' @import grid
