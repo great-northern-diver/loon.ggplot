@@ -6,6 +6,15 @@
 \usage{
 \method{loonGrob}{l_ggplot}(target, name = NULL, gp = NULL, vp = NULL)
 }
+\arguments{
+\item{target}{loon target. \code{S3} method, see \link{loonGrob}}
+
+\item{name}{name of loon grob}
+
+\item{gp}{graphical parameter settings of loon grob}
+
+\item{vp}{viewport of loon grob}
+}
 \value{
 a grid grob
 }
