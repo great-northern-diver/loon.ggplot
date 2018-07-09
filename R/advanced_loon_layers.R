@@ -2,12 +2,11 @@
 
 loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
   uniGroup <- unique(data$group)
-  revdata <- data
   seqLength <- 20
   newdata <- data.frame()
-  for (i in 1:length(uniGroup)) {
-    group_i_data <- data[data$group == uniGroup[i], ]
-    group_i_revdata <- revdata[revdata$group == uniGroup[i], ]
+  for (i in uniGroup) {
+    group_i_data <- data[data$group == i, ]
+    group_i_revdata <- group_i_data
     n <- dim(group_i_data)[1]
     # set rev y
     group_i_revdata$y <- rev(group_i_revdata$y)
@@ -330,11 +329,26 @@ loonLayer.GeomSmooth <- function(widget, layerGeom, data, ggplotPanel_params, co
   if(!is.null(data$se)){
     # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
     n <- dim(data)[1]
-    # arbitrary choice
+    uniGroup <- unique(data$group)
     seqLength <- 20
-    newdata <- rbind(data, data[rep(n, seqLength),], data)
-    newdata$x <- c(data$x, rep(data$x[n], seqLength), rev(data$x))
-    newdata$y <- c(data$ymin, seq(data$ymin[n], data$ymax[n], length.out = seqLength), rev(data$ymax))
+    newdata <- data.frame()
+    for (i in uniGroup) {
+      group_i_data <- data[data$group == i, ]
+      n <- dim(group_i_data)[1]
+      # set rev data x
+      group_i_revdata <- group_i_data
+      group_i_revdata$x <- rev(group_i_revdata$x)
+      # set y for both
+      group_i_data$y <- group_i_data.y <- group_i_data$ymin
+      group_i_revdata$y <- group_i_revdata.y <- rev(group_i_revdata$ymax)
+      # extend data and rev data
+      group_i_data <- group_i_data[c(seq_len(n), rep(n, seqLength)), ]
+      group_i_revdata <- group_i_revdata[c(seq_len(n), rep(n, seqLength)), ]
+      group_i_data$y <- c(group_i_data.y, seq(group_i_data.y[n], group_i_revdata.y[1], length.out = seqLength))
+      group_i_revdata$y <- c(group_i_revdata.y, seq(group_i_revdata.y[n], group_i_data.y[1], length.out = seqLength))
+      group_i_newdata <- rbind(group_i_data, group_i_revdata)
+      newdata <- rbind(newdata, group_i_newdata)
+    }
     newdata$colour <- NA
     loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
                           parent = if(parent == "root") smoothGroup else parent)
