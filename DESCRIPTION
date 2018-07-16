@@ -22,8 +22,8 @@ Imports:
     grid,
     gridExtra
 Suggests:
-    magrittr,
     dplyr,
+    magrittr,
     tools,
     testthat
 LazyData: true
