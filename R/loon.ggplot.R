@@ -128,8 +128,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
       histogramLayerId <- which(sapply(seq_len(length(layerNames)), function(j){
         # it could be bar plot
         is.histogram_condition1 <- all(c("GeomBar", "GeomRect") %in% layerNames[[j]])
-        # stat class of geom_bar is StatCount
-        is.histogram_condition2 <- "StatBin" %in% class(ggplotObject$layers[[j]]$stat)
+        is.histogram_condition2 <- dim(ggBuild$data[[j]])[2] >= 17
         is.histogram_condition1 & is.histogram_condition2
       }) == TRUE)
 
@@ -138,13 +137,12 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         # multiple histograms?
         if (length(histogramLayerId) != 1) {warnings("only the first histogram layer is drawn as l_hist\n",
                                                      "the rest will be added as l_layer_rectangles")}
-
         # set match id
         match_id <- histogramLayerId[1]
+        histogram_params <- ggplotObject$layers[[match_id]]$stat_params
         # set binwidth
         hist_data <- ggBuild$data[[match_id]]
-        binwidth_vec <- hist_data[hist_data$PANEL == i, ]$xmax - hist_data[hist_data$PANEL == i, ]$xmin
-        binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
+        binwidth <- (hist_data[hist_data$PANEL == i, ]$xmax - hist_data[hist_data$PANEL == i, ]$xmin)[1] + 1e-8
         # mapping variable
         mapping <- as.character(ggplotObject$mapping$x)[2]
         # column names and row names
@@ -175,58 +173,17 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
           }
         }
         hist_values <- hist_x[isPanel_i.hist_x]
-        # histogram start value, end value
-        start_value <- min(hist_data[hist_data$PANEL == i, ]$xmin, na.rm = TRUE)
-        end_value <- max(hist_data[hist_data$PANEL == i, ]$xmax, na.rm = TRUE)
-        # any x y limit?
-        x.limits <- ggBuild$layout$panel_scales_x[[match_id]]$limits
-        y.limits <- ggBuild$layout$panel_scales_y[[match_id]]$limits
-        in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
-
-        if (!is.null(x.limits)) {
-          if(is.na(x.limits[1])) x.limits[1] <- ggplotPanel_params[[i]]$x.range[1]
-          if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[i]]$x.range[2]
-          in_x.limits <- hist_values > x.limits[1] & hist_values < x.limits[2]
-        }
-
-        if (!is.null(y.limits)) {
-          if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanel_params[[i]]$y.range[1])
-          if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[i]]$y.range[2]
-          # need to be fixed
-          bins <- 0
-          while ((start_value + bins * binwidth) <= end_value) {
-
-            bin_id <- if (bins == 0) {
-              which((start_value + bins * binwidth <= hist_values &
-                       start_value + (bins + 1) * binwidth >= hist_values) == TRUE)
-            } else {
-              which((start_value + bins * binwidth < hist_values &
-                       start_value + (bins + 1) * binwidth >= hist_values) == TRUE)
-            }
-            bin_height <- length(bin_id)
-            if (bin_height != 0) {
-              if(bin_height < y.limits[1] | bin_height > y.limits[2]) {
-                in_y.limits[bin_id] <- FALSE
-              }
-            }
-            bins <- bins + 1
-          }
-        }
-        in_limits <- in_x.limits & in_y.limits
-        # hist_values should be in the x y limits
-        hist_values <- hist_values[in_limits]
-
-        # reset the minimum "hist_values" to be the start value
-        hist_values[which(hist_values == min(hist_values))[1]] <- start_value
+        # reset the first "hist_values" to be the minimum
+        hist_values[which(hist_values == min(hist_values))[1]] <- min(hist_data[hist_data$PANEL == i, ]$xmin)
 
         color <- hex6to12(hist_data$fill[1])
         colorStackingOrder <- "selected"
         # set stack color
         if (!is.null(ggplotObject$labels$fill)) {
           # fill color bin?
-          if (ggplotObject$labels$fill != "fill") {
+          if ( ggplotObject$labels$fill != "fill") {
             color_var <- unlist(ggplotObject$data[, which(stringr::str_detect(ggplotObject$labels$fill, column_names) == TRUE)])
-            panel_i.color_var <- color_var[isPanel_i.hist_x][in_limits]
+            panel_i.color_var <- color_var[isPanel_i.hist_x]
             fill_color <- hex6to12(unique(hist_data$fill))
             levels <- rev(levels(as.factor(color_var)))
             if (length(fill_color) == length(levels)) {
@@ -242,22 +199,16 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         # show outline color or not
         showOutlines <- if (any(!hex6to12(hist_data$colour) %in% "" )) TRUE else FALSE
         # set linkingKey
-        linkingKey <- row_names[isPanel_i.hist_x][in_limits]
+        linkingKey <- row_names[isPanel_i.hist_x]
         # set yshows
-        yshows <- "frequency"
-        if (!is.null(ggplotObject$layers[[match_id]]$mapping$y)) {
-          if(any(str_detect(as.character(ggplotObject$layers[[match_id]]$mapping$y), "density"))) yshows <- "density"
-        }
-        if (!is.null(ggplotObject$mapping$y)) {
-          if(any(str_detect(as.character(ggplotObject$mapping$y), "density"))) yshows <- "density"
-        }
+        yshows <- if(is.null(ggplotObject$layers[[match_id]]$mapping)) "frequency" else "density"
         # loon histogram
         l_setColorList_ggplot2()
         loonPlot <- l_hist(parent = tt,
                            x = hist_values,
                            color = color,
                            title = subtitle,
-                           binwidth = binwidth + 1e-6, # need more thoughts
+                           binwidth = binwidth,
                            xlabel = ggLabels$xlabel,
                            ylabel = ggLabels$ylabel,
                            showGuides = showGuides,
