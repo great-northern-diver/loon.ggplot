@@ -194,7 +194,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         if (!is.null(y.limits)) {
           if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanel_params[[i]]$y.range[1])
           if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[i]]$y.range[2]
-
           bins <- 0
           while ((start_value + bins * binwidth) <= end_value) {
 
@@ -247,11 +246,12 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         linkingKey <- row_names[isPanel_i.hist_x][in_limits]
         # set yshows
         yshows <- "frequency"
-        if (!is.null(ggplotObject$layers[[match_id]]$mapping$y)) {
-          if(any(str_detect(as.character(ggplotObject$layers[[match_id]]$mapping$y), "density"))) yshows <- "density"
-        }
+
         if (!is.na(mapping.y)) {
           if(any(str_detect(as.character(mapping.y), "density"))) yshows <- "density"
+          if (!is.null(ggplotObject$mapping$y)) {
+            if(any(str_detect(as.character(ggplotObject$mapping$y), "density"))) yshows <- "density"
+          }
         }
         # loon histogram
         l_setColorList_ggplot2()
