@@ -379,6 +379,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
           )
         }
       })
+
       # recover the points or histogram layer to the original position
       if(length(match_id) != len_layers & length(match_id) != 0) {
         otherLayerId <- (1:len_layers)[-match_id]
@@ -391,6 +392,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
           })
         }
       }
+
       # special case
       if (length(boxplotLayerId) != 0 & length(pointsLayerId) == 0) {
         # hidden points layer
@@ -400,6 +402,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         l_layer_raise(loonPlot, "model")
         })
       }
+
     } else loonPlot <- l_plot(parent = tt,
                               title = subtitle,
                               xlabel = ggLabels$xlabel,
