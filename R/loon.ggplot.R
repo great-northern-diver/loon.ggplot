@@ -25,11 +25,11 @@
 #'  # set linkingGroup
 #'  p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
 #'  p1
-#'  g1 <- loon.ggplot(p1, linkingGroup = "mpg")
+#'  g1 <- loon.ggplot(p1, linkingGroup = "mtcars")
 #'  # loon histogram
 #'  p2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
 #'  p2
-#'  g2 <- loon.ggplot(p2, linkingGroup = "mpg")
+#'  g2 <- loon.ggplot(p2, linkingGroup = "mtcars")
 #'
 #'  # show ggGuides
 #'  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
@@ -152,8 +152,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         hist_data <- ggBuild$data[[match_id]]
         binwidth_vec <- hist_data[hist_data$PANEL == i, ]$xmax - hist_data[hist_data$PANEL == i, ]$xmin
         binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
-        # histogram x, cannot do any math on mapping variable, e.g. mapping^2/3
-        hist_x <- as.numeric(unlist(ggplotObject$data[, which(str_detect(mapping.x, column_names) == TRUE)]))
+        hist_x <- as.numeric(with(ggplotObject$data, eval(parse(text = mapping.x))))
         # one facet
         if (dim2ggLayout == 5) {
           isPanel_i.hist_x <- rep(TRUE, length(hist_x))
@@ -311,10 +310,10 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
             pointsData$itemLabel <- pointsData$linkingKey <- as.character(pointsData$label)
 
           } else {
-            pointsData <- data.frame(x = unlist(ggplotObject$data[, which(str_detect(mapping.x, column_names) == TRUE)]),
-                                     y = unlist(ggplotObject$data[, which(str_detect(mapping.y, column_names) == TRUE)]))
-            pointsData$x <- as.numeric(pointsData$x)
+            pointsData <- data.frame(x = with(ggplotObject$data, eval(parse(text = mapping.x))),
+                                     y = with(ggplotObject$data, eval(parse(text = mapping.y))))
             # in case
+            pointsData$x <- as.numeric(pointsData$x)
             pointsData$y <- as.numeric(pointsData$y)
             # some default settings, need more thought
             pointsData$size <- 3
