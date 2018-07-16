@@ -25,11 +25,11 @@
 #'  # set linkingGroup
 #'  p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
 #'  p1
-#'  g1 <- loon.ggplot(p1, linkingGroup = "mpg")
+#'  g1 <- loon.ggplot(p1, linkingGroup = "mtcars")
 #'  # loon histogram
 #'  p2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
 #'  p2
-#'  g2 <- loon.ggplot(p2, linkingGroup = "mpg")
+#'  g2 <- loon.ggplot(p2, linkingGroup = "mtcars")
 #'
 #'  # show ggGuides
 #'  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
@@ -40,7 +40,8 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
 
   # lables
   ggLabels <- list(
-    xlabel = if( is.null(ggplotObject$labels$x) ) ""  else ggplotObject$labels$x ,
+    title = if( is.null(ggplotObject$labels$title) ) NULL  else ggplotObject$labels$title,
+    xlabel = if( is.null(ggplotObject$labels$x) ) ""  else ggplotObject$labels$x,
     ylabel = if( is.null(ggplotObject$labels$y) ) ""  else ggplotObject$labels$y
   )
 
@@ -54,11 +55,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
   panelNum <- dim(ggLayout)[1]
 
   tt <- tktoplevel()
-  if (is.null(ggplotObject$labels$title)) {
-    tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
-  } else {
-    tktitle(tt) <- ggplotObject$labels$title
-  }
+  tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
 
   # length layers
   len_layers <- length(ggplotObject$layers)
@@ -67,13 +64,20 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
   zoomX <- zoomY <- 5/6
   swapAxes <- FALSE
 
+  # mapping variable
+  mapping.x <- as.character(ggplotObject$mapping$x)[2]
+  mapping.y <- as.character(ggplotObject$mapping$y)[2]
+  # column names and row names
+  row_names <- row.names(ggplotObject$data)
+  column_names <- colnames(ggplotObject$data)
+
   p <- lapply(seq_len(panelNum), function(i){
 
     # subtitle
     dim2ggLayout <- dim(ggLayout)[2]
     subtitle <- if (dim2ggLayout >= 6) {
       numOfSubtitles <- dim2ggLayout - 5
-      paste(sapply(ggLayout[i, 3 + c(1:numOfSubtitles)], as.character), collapse = " " )
+      paste0(c(ggLabels$title, sapply(ggLayout[i, 3 + c(1:numOfSubtitles)], as.character)), collapse = "\n")
     } else ""
 
     # is polar coord?
@@ -132,6 +136,9 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         is.histogram_condition1 & is.histogram_condition2
       }) == TRUE)
 
+      # boxlayer id
+      boxplotLayerId <- which(sapply(layerNames, function(j){"GeomBoxplot" %in% j}) == TRUE)
+
       # histogram layer takes priority
       if (length(histogramLayerId) != 0) {
         # multiple histograms?
@@ -142,6 +149,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         histogram_params <- ggplotObject$layers[[match_id]]$stat_params
         # set binwidth
         hist_data <- ggBuild$data[[match_id]]
+<<<<<<< HEAD
         binwidth <- (hist_data[hist_data$PANEL == i, ]$xmax - hist_data[hist_data$PANEL == i, ]$xmin)[1] + 1e-8
         # mapping variable
         mapping <- as.character(ggplotObject$mapping$x)[2]
@@ -150,6 +158,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         column_names <- colnames(ggplotObject$data)
         # histogram x, cannot do any math on mapping variable, e.g. mapping^2/3
         hist_x <- unlist(ggplotObject$data[, which(str_detect(mapping, column_names) == TRUE)])
+=======
+        binwidth_vec <- hist_data[hist_data$PANEL == i, ]$xmax - hist_data[hist_data$PANEL == i, ]$xmin
+        binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
+        hist_x <- as.numeric(with(ggplotObject$data, eval(parse(text = mapping.x))))
+>>>>>>> upstream/master
         # one facet
         if (dim2ggLayout == 5) {
           isPanel_i.hist_x <- rep(TRUE, length(hist_x))
@@ -173,8 +186,53 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
           }
         }
         hist_values <- hist_x[isPanel_i.hist_x]
+<<<<<<< HEAD
         # reset the first "hist_values" to be the minimum
         hist_values[which(hist_values == min(hist_values))[1]] <- min(hist_data[hist_data$PANEL == i, ]$xmin)
+=======
+        # histogram start value, end value
+        start_value <- min(hist_data[hist_data$PANEL == i, ]$xmin, na.rm = TRUE)
+        end_value <- max(hist_data[hist_data$PANEL == i, ]$xmax, na.rm = TRUE)
+        # any x y limit?
+        x.limits <- ggBuild$layout$panel_scales_x[[match_id]]$limits
+        y.limits <- ggBuild$layout$panel_scales_y[[match_id]]$limits
+        in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
+
+        if (!is.null(x.limits)) {
+          if(is.na(x.limits[1])) x.limits[1] <- ggplotPanel_params[[i]]$x.range[1]
+          if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[i]]$x.range[2]
+          in_x.limits <- hist_values > x.limits[1] & hist_values < x.limits[2]
+        }
+
+        if (!is.null(y.limits)) {
+          if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanel_params[[i]]$y.range[1])
+          if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[i]]$y.range[2]
+          bins <- 0
+          while ((start_value + bins * binwidth) <= end_value) {
+
+            bin_id <- if (bins == 0) {
+              which((start_value + bins * binwidth <= hist_values &
+                       start_value + (bins + 1) * binwidth >= hist_values) == TRUE)
+            } else {
+              which((start_value + bins * binwidth < hist_values &
+                       start_value + (bins + 1) * binwidth >= hist_values) == TRUE)
+            }
+            bin_height <- length(bin_id)
+            if (bin_height != 0) {
+              if(bin_height < y.limits[1] | bin_height > y.limits[2]) {
+                in_y.limits[bin_id] <- FALSE
+              }
+            }
+            bins <- bins + 1
+          }
+        }
+        in_limits <- in_x.limits & in_y.limits
+        # hist_values should be in the x y limits
+        hist_values <- hist_values[in_limits]
+
+        # reset the minimum "hist_values" to be the start value
+        hist_values[which(hist_values == min(hist_values))[1]] <- start_value
+>>>>>>> upstream/master
 
         color <- hex6to12(hist_data$fill[1])
         colorStackingOrder <- "selected"
@@ -201,7 +259,18 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
         # set linkingKey
         linkingKey <- row_names[isPanel_i.hist_x]
         # set yshows
+<<<<<<< HEAD
         yshows <- if(is.null(ggplotObject$layers[[match_id]]$mapping)) "frequency" else "density"
+=======
+        yshows <- "frequency"
+
+        if (!is.na(mapping.y)) {
+          if(any(str_detect(as.character(mapping.y), "density"))) yshows <- "density"
+          if (!is.null(ggplotObject$mapping$y)) {
+            if(any(str_detect(as.character(ggplotObject$mapping$y), "density"))) yshows <- "density"
+          }
+        }
+>>>>>>> upstream/master
         # loon histogram
         l_setColorList_ggplot2()
         loonPlot <- l_hist(parent = tt,
@@ -221,69 +290,88 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
                            showStackedColors = TRUE, ...)
 
       } else {
-        # match id
         match_id <- pointsLayerId
-        # then is the scatterplot
-        if (length(match_id) != 0) {
-          # combine points layers
-          pointData <- lapply(match_id, function(l){
-            Layerl <- ggBuild$data[[l]]
-            data <- Layerl[Layerl$PANEL == i, ]
-            x <- data$x
-            y <- data$y
-            label <- data$label
-            color <- sapply(1:dim(data)[1], function(j){
-              if(data$shape[j] %in% 21:24 ){
-                hex6to12(data$fill[j])
-              }else {
-                hex6to12(data$colour[j])
+        boxplot_points_layerId <- c(boxplotLayerId, pointsLayerId)
+
+        # scatterplot
+        if (length(boxplot_points_layerId) != 0) {
+
+          if(length(pointsLayerId) !=0 ) {
+            # combine points layers
+            pointsData <- lapply(pointsLayerId, function(l){
+              Layerl <- ggBuild$data[[l]]
+              data <- Layerl[Layerl$PANEL == i, ]
+              x <- data$x
+              y <- data$y
+              label <- data$label
+              color <- sapply(1:dim(data)[1], function(j){
+                if(data$shape[j] %in% 21:24 ){
+                  hex6to12(data$fill[j])
+                }else {
+                  hex6to12(data$colour[j])
+                }
+              } )
+              glyph <- pch_to_glyph(data$shape, data$alpha)
+              size <- as_loon_size( data$size , "points" )
+
+              if (is.null(label)) {
+                label <- paste0("item", seq_len(length(x)) - 1, "panel", i)
+                warnings("item lable may not match")
               }
-            } )
-            glyph <- pch_to_glyph(data$shape, data$alpha)
-            size <- as_loon_size( data$size , "points" )
 
-            if (is.null(label)) {
-              label <- paste0("item", seq_len(length(x)) - 1, "panel", i)
-              warnings("item lable may not match")
-            }
+              data.frame(x = x, y = y, label = label, color = color, glyph = glyph, size = size)
+            })
 
-            data.frame(x = x, y = y, label = label, color = color, glyph = glyph, size = size)
-          })
+            pointsData <- do.call(rbind, pointsData)
+            pointsData$color <- as.character( pointsData$color)
+            pointsData$glyph <- as.character( pointsData$glyph)
+            # linkingKey
+            pointsData$itemLabel <- pointsData$linkingKey <- as.character(pointsData$label)
 
-          pointData <- do.call(rbind, pointData)
+          } else {
+            pointsData <- data.frame(x = with(ggplotObject$data, eval(parse(text = mapping.x))),
+                                     y = with(ggplotObject$data, eval(parse(text = mapping.y))))
+            # in case
+            pointsData$x <- as.numeric(pointsData$x)
+            pointsData$y <- as.numeric(pointsData$y)
+            # some default settings, need more thought
+            pointsData$size <- 3
+            pointsData$color <- "black"
+            pointsData$glyph <- "circle"
+            # linkingKey
+            pointsData$itemLabel <- pointsData$linkingKey <- row_names
+          }
 
           if(isCoordPolar) {
             coordPolarxy <- Cartesianxy2Polarxy(NULL,
                                                 coordinates = ggplotObject$coordinates,
-                                                data = pointData,
+                                                data = pointsData,
                                                 ggplotPanel_params = ggplotPanel_params[[i]])
             x <- coordPolarxy$x
             y <- coordPolarxy$y
           } else {
-            x <- pointData$x
-            y <- pointData$y
+            x <- pointsData$x
+            y <- pointsData$y
           }
-
-          # linkingKey
-          itemLabel <- linkingKey <- as.character(pointData$label)
 
           # loon scatter plot
           loonPlot <- l_plot(parent = tt,
                              x = x,
                              y = y,
-                             size = pointData$size,
                              title = subtitle,
-                             color = as.character( pointData$color),
-                             glyph = as.character( pointData$glyph),
-                             xlabel = ggLabels$xlabel,
-                             ylabel = ggLabels$ylabel,
-                             itemLabel = itemLabel,
+                             size = pointsData$size,
+                             color = pointsData$color,
+                             glyph = pointsData$glyph,
+                             itemLabel = pointsData$itemLabel,
+                             linkingKey = pointsData$linkingKey,
                              showGuides = showGuides,
                              showScales = showScales,
+                             xlabel = ggLabels$xlabel,
+                             ylabel = ggLabels$ylabel,
                              showLabels = TRUE,
                              showItemLabels = TRUE,
-                             swapAxes = swapAxes,
-                             linkingKey = linkingKey, ...)
+                             swapAxes = swapAxes, ...)
+
         } else {
 
           # loon plot
@@ -309,6 +397,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
           )
         }
       })
+
       # recover the points or histogram layer to the original position
       if(length(match_id) != len_layers & length(match_id) != 0) {
         otherLayerId <- (1:len_layers)[-match_id]
@@ -321,6 +410,17 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, ... ){
           })
         }
       }
+
+      # special case
+      if (length(boxplotLayerId) != 0 & length(pointsLayerId) == 0) {
+        # hidden points layer
+        l_layer_hide(loonPlot, "model")
+        # move the hidden layer on the top
+        modelLayerup <- sapply(seq_len(len_layers), function(j){
+        l_layer_raise(loonPlot, "model")
+        })
+      }
+
     } else loonPlot <- l_plot(parent = tt,
                               title = subtitle,
                               xlabel = ggLabels$xlabel,

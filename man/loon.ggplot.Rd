@@ -27,11 +27,11 @@ Interactive loon plots from ggplots
  # set linkingGroup
  p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
  p1
- g1 <- loon.ggplot(p1, linkingGroup = "mpg")
+ g1 <- loon.ggplot(p1, linkingGroup = "mtcars")
  # loon histogram
  p2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
  p2
- g2 <- loon.ggplot(p2, linkingGroup = "mpg")
+ g2 <- loon.ggplot(p2, linkingGroup = "mtcars")
 
  # show ggGuides
  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()

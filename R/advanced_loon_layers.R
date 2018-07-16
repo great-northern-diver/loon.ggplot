@@ -102,43 +102,49 @@ loonLayer.GeomRug <- function(widget, layerGeom, data, ggplotPanel_params, coord
 
 
 loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+
   n <- dim(data)[1]
-  # rectangulars
-  rectData <- data
-  rectData$ymin <- data$lower
-  rectData$ymax <- data$upper
+  boxplotsGroup <- l_layer_group(widget, "boxplots")
+  for (i in 1:n) {
+    boxplotGroup <- l_layer_group(widget,
+                                  label = paste0("boxplot", i, collapse = ""),
+                                  parent = boxplotsGroup)
+    # rectangulars
+    rectData <- data[i, ]
+    rectData$ymin <- data[i, ]$lower
+    rectData$ymax <- data[i, ]$upper
+    loonLayer.GeomRect(widget, layerGeom, rectData, ggplotPanel_params, coordinates,
+                       parent = if(parent == "root") boxplotGroup else parent)
 
-  boxplotGroup <- l_layer_group(widget, "boxplot")
+    # lines lower 25%
+    linesData <- data[rep(i, 3), ]
+    linesData$y <- linesData$ymin
+    linesData$yend <- linesData$lower
+    linesData$xend <- linesData$x
 
-  loonLayer.GeomRect(widget, layerGeom, rectData, ggplotPanel_params, coordinates,
-                     parent = if(parent == "root") boxplotGroup else parent)
+    # upper 75%
+    linesData[2, ]$y <- linesData[1, ]$upper
+    linesData[2, ]$yend <- linesData[1, ]$ymax
 
-  # lines
-  linesData <- data[rep(1:n, 3), ]
-  linesData$y <- linesData$ymin
-  linesData$yend <- linesData$lower
-  linesData$xend <- linesData$x
-  for(i in 1:n){
-    linesData[n + i, ]$y <- data[i, ]$upper
-    linesData[n + i, ]$yend <- data[i, ]$ymax
-    linesData[2*n + i, ]$y <- linesData[2*n + i, ]$yend <- data[i, ]$middle
-    linesData[2*n + i, ]$x <- data[i, ]$xmin
-    linesData[2*n + i, ]$xend <- data[i, ]$xmax
-    linesData[2*n + i, ]$size <- 1.5 * data[i, ]$size
-  }
-  loonLayer.GeomSegment(widget, layerGeom, linesData, ggplotPanel_params, coordinates,
-                        parent = if(parent == "root") boxplotGroup else parent)
+    # 50%
+    linesData[3, ]$y <- linesData[3, ]$yend <- linesData[1, ]$middle
+    linesData[3, ]$x <- linesData[1, ]$xmin
+    linesData[3, ]$xend <- linesData[1, ]$xmax
+    linesData[3, ]$size <- 1.5 * linesData[1, ]$size
+    loonLayer.GeomSegment(widget, layerGeom, linesData, ggplotPanel_params, coordinates,
+                          parent = if(parent == "root") boxplotGroup else parent)
 
-  # points
-  if(!is.null(data$outliers)){
-    pointsData <- data[ rep(1:n, sapply(data$outliers, length)), ]
-    pointsData$y <- unlist(data$outliers)
-    if( !is.null(layerGeom$geom_params$outlier.colour) ) pointsData$colour <- layerGeom$geom_params$outlier.colour
-    if( !is.null(layerGeom$geom_params$outlier.fill)) pointsData$fill <- layerGeom$geom_params$outlier.fill
-    pointsData$shape <- layerGeom$geom_params$outlier.shape
-    pointsData$size <- layerGeom$geom_params$outlier.size
-    loonLayer.GeomPoint(widget, layerGeom, pointsData, ggplotPanel_params, coordinates,
-                        parent = if(parent == "root") boxplotGroup else parent)
+    # points layer
+    if (length(data[i, ]$outliers[[1]]) != 0) {
+      pointsData <- data[rep(i, length(data[i,]$outliers[[1]])), ]
+      pointsData$y <- unlist(data[i, ]$outliers)
+      if( !is.null(layerGeom$geom_params$outlier.colour) ) pointsData$colour <- layerGeom$geom_params$outlier.colour
+      if( !is.null(layerGeom$geom_params$outlier.fill)) pointsData$fill <- layerGeom$geom_params$outlier.fill
+      pointsData$shape <- layerGeom$geom_params$outlier.shape
+      pointsData$size <- layerGeom$geom_params$outlier.size
+      loonLayer.GeomPoint(widget, layerGeom, pointsData, ggplotPanel_params, coordinates,
+                          parent = if(parent == "root") boxplotGroup else parent)
+    }
   }
 }
 

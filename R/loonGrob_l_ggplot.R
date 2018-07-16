@@ -1,6 +1,6 @@
-#' Create a grid grob from a loon widget handle
+#' @title Create a grid grob from a loon widget handle
 #'
-#' Grid grobs are useful to create publication quality graphics.
+#' @description Grid grobs are useful to create publication quality graphics.
 #'
 #' @param target loon target. \code{S3} method, see \link{loonGrob}
 #' @param name name of loon grob
