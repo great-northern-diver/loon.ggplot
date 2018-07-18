@@ -211,7 +211,7 @@ test_that("example works", {
   )
   pp <- ggplot(df,aes(x = Time,y = Acres,fill=WUClass)) +
     geom_area( position = 'stack') +
-    geom_area( position = 'stack', colour="black", show_guide=FALSE)
+    geom_area( position = 'stack', colour="black", show.legend=FALSE)
   g <- loon.ggplot(pp)
   expect_equal(class(g), c("l_ggplot", "loon"))
 
@@ -223,7 +223,7 @@ test_that("example works", {
 
   # example 24
   pp <- ggplot(diamonds, aes(depth, colour = cut)) +
-    geom_density() +
+    geom_density(na.rm = TRUE) +
     xlim(55, 70)
   g <- loon.ggplot(pp)
   expect_equal(class(g), c("l_ggplot", "loon"))
@@ -304,7 +304,7 @@ test_that("example works", {
 
   # example 37
   d <- ggplot(diamonds, aes(x, y)) + xlim(4, 10) + ylim(4, 10)
-  pp <- d + geom_bin2d()
+  pp <- d + geom_bin2d(na.rm = TRUE)
   g <- loon.ggplot(pp)
   expect_equal(class(g), c("l_ggplot", "loon"))
 
