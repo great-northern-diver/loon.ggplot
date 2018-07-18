@@ -1,6 +1,6 @@
 # adding labels to ggplot_build points layer
 
-ggBuild2Loon <- function(ggplotObject){
+ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
 
   len_layers <- length(ggplotObject$layers)
   ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggplotObject))
@@ -62,7 +62,7 @@ ggBuild2Loon <- function(ggplotObject){
           multiFacets <- TRUE
         }
         # label
-        label <- row.names(input)
+        # label <- row.names(input)
         lenPointsLayer <- length(pointsLayerId)
         # start loop
         for(i in 1:lenPointsLayer){
@@ -70,7 +70,7 @@ ggBuild2Loon <- function(ggplotObject){
           numOfObservation <- dim(buildData)[1]
           ggBuild$data[[pointsLayerId[i]]]$label <- if (numOfObservation == dim(input)[1]) {
             if (!multiFacets) {
-              label
+              linkingKey
             } else {
               panelMatch <- sapply(seq_len(dim2ggLayout-5), function (j) {
                 which( str_detect(colnames(ggLayout)[j+3], colnames(input)) == TRUE)
@@ -87,16 +87,16 @@ ggBuild2Loon <- function(ggplotObject){
               if(panelMatch.len == 1){
                 panelValues <- as.character(factors[[1]])
                 # label order
-                labelOrder <- unlist(lapply(panelLevels[[1]], function(j){
+                linkingKey_order <- unlist(lapply(panelLevels[[1]], function(j){
                   which(panelValues %in% j)
                 }))
-                label[labelOrder]
+                linkingKey[linkingKey_order]
               } else {
                 deepth <- times(panelLevels.len)
                 numOfLoop <- deepth[1]
                 deepth <- deepth[-1]
                 # label order
-                labelOrder <- unlist(lapply(seq_len(numOfLoop), function(j){
+                linkingKey_order <- unlist(lapply(seq_len(numOfLoop), function(j){
                   id <- c()
                   divider <- j
                   for (k in 1: (panelMatch.len - 1)) {
@@ -118,18 +118,19 @@ ggBuild2Loon <- function(ggplotObject){
                   }
                   common_index
                 }))
-                label[labelOrder]
+                linkingKey[linkingKey_order]
               }
             }
           } else {
             # the ggplot input data is not the geom_point data
-            # in other words, geom_point() layer add new dataset
+            # in other words, new dataset is added in geom_point
+            warning("item label may not match")
             if (lenPointsLayer == 1) {
-              paste0("item", c(1:numOfObservation))
+              paste0("item", seq_len(numOfObservation) - 1)
             } else {
-              paste0("item", c(1:numOfObservation), "pointsLayer", i)
+              paste0("item", seq_len(numOfObservation) - 1, "pointsLayer", i)
             }
-            warnings("item label may not match")
+
           }
 
         }
