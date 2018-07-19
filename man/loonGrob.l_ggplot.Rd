@@ -27,4 +27,3 @@ g <- loon.ggplot(p)
 library(grid)
 grid.newpage(); grid.draw(loonGrob(g))
 }
-
