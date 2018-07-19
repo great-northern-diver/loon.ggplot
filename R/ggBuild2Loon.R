@@ -35,35 +35,45 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
           if (!is.null(buildData$x)) {
             x.range <- ggplotPanel_params[[j]]$x.range
             buildData_x_panel_j <- buildData$x[isPanel.j]
-            ggBuild$data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) & buildData_x_panel_j < 0] <- x.range[1]
-            ggBuild$data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) & buildData_x_panel_j > 0] <- x.range[2]
+            ggBuild$data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) &
+                                             buildData_x_panel_j < 0] <- x.range[1]
+            ggBuild$data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) &
+                                             buildData_x_panel_j > 0] <- x.range[2]
           }
           if (!is.null(buildData$y)) {
             y.range <- ggplotPanel_params[[j]]$y.range
             buildData_y_panel_j <- buildData$y[isPanel.j]
-            ggBuild$data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) & buildData_y_panel_j < 0] <- y.range[1]
-            ggBuild$data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) & buildData_y_panel_j > 0] <- y.range[2]
+            ggBuild$data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) &
+                                             buildData_y_panel_j < 0] <- y.range[1]
+            ggBuild$data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) &
+                                             buildData_y_panel_j > 0] <- y.range[2]
           }
         }
       }
 
-      layerNames <- lapply(1:len_layers, function(j) {
-        className <- class(ggplotObject$layers[[j]]$geom)
-        className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
-      })
+      layerNames <- lapply(1:len_layers,
+                           function(j) {
+                             className <- class(ggplotObject$layers[[j]]$geom)
+                             className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
+                           })
 
-      pointsLayerId <- which(sapply(layerNames, function(j){"GeomPoint" %in% j}) == TRUE)
-      # point layer?
+      pointsLayerId <- which(sapply(layerNames,
+                                    function(layerName){
+                                      "GeomPoint" %in% layerName
+                                      }
+                                    ) == TRUE)
+
+      # do we have a point layer?
       if (length(pointsLayerId) != 0) {
         multiFacets <- FALSE
         dim2ggLayout <- dim(ggLayout)[2]
-        # is multi facets?
+        # is multi facets?  ggplot has a second dimension of at least 6
         if(dim2ggLayout >= 6) {
           multiFacets <- TRUE
         }
-        # label
-        # label <- row.names(input)
+
         lenPointsLayer <- length(pointsLayerId)
+
         # start loop
         for(i in 1:lenPointsLayer){
           buildData  <- ggBuild$data[[pointsLayerId[i]]]
@@ -72,9 +82,11 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
             if (!multiFacets) {
               linkingKey
             } else {
-              panelMatch <- sapply(seq_len(dim2ggLayout-5), function (j) {
-                which( str_detect(colnames(ggLayout)[j+3], colnames(input)) == TRUE)
-              })
+              panelMatch <- sapply(seq_len(dim2ggLayout-5),
+                                   function (j) {
+                                     which(str_detect(colnames(ggLayout)[j+3],
+                                                      colnames(input)) == TRUE)
+                                   })
               panelMatch.len <- length(panelMatch)
               panelLevels <- list()
               factors <- list()
@@ -87,37 +99,41 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
               if(panelMatch.len == 1){
                 panelValues <- as.character(factors[[1]])
                 # label order
-                linkingKey_order <- unlist(lapply(panelLevels[[1]], function(j){
-                  which(panelValues %in% j)
-                }))
+                linkingKey_order <- unlist(
+                  lapply(panelLevels[[1]],
+                         function(panelLevel){
+                           which(panelValues %in% panelLevel)
+                         }))
                 linkingKey[linkingKey_order]
               } else {
                 deepth <- times(panelLevels.len)
                 numOfLoop <- deepth[1]
                 deepth <- deepth[-1]
                 # label order
-                linkingKey_order <- unlist(lapply(seq_len(numOfLoop), function(j){
-                  id <- c()
-                  divider <- j
-                  for (k in 1: (panelMatch.len - 1)) {
-                    # last list index
-                    id[k] <- ceiling(divider / deepth[k])
-                    divider <- divider %% deepth[k]
-
-                  }
-                  last.id <- j %% deepth[length(deepth)]
-                  if (last.id == 0) {last.id <- deepth[length(deepth)]}
-                  id <- c(id, last.id)
-                  factors_index <- lapply(seq_len(length(id)), function(k){
-                    fact <- panelLevels[[k]][id[k]]
-                    which(factors[[k]] %in% fact == TRUE)
-                  })
-                  common_index <- factors_index[[1]]
-                  for (k in 1:(length(factors_index) - 1)) {
-                    common_index <- intersect(common_index, factors_index[[k+1]])
-                  }
-                  common_index
-                }))
+                linkingKey_order <- unlist(
+                  lapply(seq_len(numOfLoop),
+                         function(j){
+                           id <- c()
+                           divider <- j
+                           for (k in 1:(panelMatch.len - 1)) {
+                             # last list index
+                             id[k] <- ceiling(divider / depth[k])
+                             divider <- divider %% depth[k]
+                           }
+                           last.id <- j %% depth[length(depth)]
+                           if (last.id == 0) {last.id <- depth[length(depth)]}
+                           id <- c(id, last.id)
+                           factors_index <- lapply(seq_len(length(id)),
+                                                   function(k){
+                                                     fact <- panelLevels[[k]][id[k]]
+                                                     which(factors[[k]] %in% fact == TRUE)
+                                                   })
+                           common_index <- factors_index[[1]]
+                           for (k in 1:(length(factors_index) - 1)) {
+                             common_index <- intersect(common_index, factors_index[[k+1]])
+                           }
+                           common_index
+                         }))
                 linkingKey[linkingKey_order]
               }
             }
@@ -141,7 +157,7 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
   list(ggBuild = ggBuild,
        ggLayout = ggLayout,
        ggplotPanel_params = ggplotPanel_params
-       )
+  )
 }
 
 
