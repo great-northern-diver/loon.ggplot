@@ -19,9 +19,6 @@
 #'
 #' @examples
 #'
-#'  library(ggplot2)
-#'  library(loon)
-#'
 #'  # set linkingGroup
 #'  p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
 #'  p1
