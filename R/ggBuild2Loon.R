@@ -21,6 +21,10 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
       "before you start, make sure package `rlang` is installed"
     )
   }
+  # the parttern of ggLayout
+  # PANEL, ROW, COL, ..., SCALE_X, SCALE_Y. In general, it is 3
+  ggLayout_start_pos <- max(which(colnames(ggLayout) == "COL"),
+                            which(colnames(ggLayout) == "ROW"))
 
   # if not, no input data in ggplot()
   if(is.data.frame(input)){
@@ -66,9 +70,9 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
       # do we have a point layer?
       if (length(pointsLayerId) != 0) {
         multiFacets <- FALSE
-        dim2ggLayout <- dim(ggLayout)[2]
-        # is multi facets?  ggplot has a second dimension of at least 6
-        if(dim2ggLayout >= 6) {
+        wrap.num <- wrap_num(ggLayout)
+        # is multiple facets?
+        if(wrap.num > 0) {
           multiFacets <- TRUE
         }
 
@@ -78,76 +82,78 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
         for(i in 1:lenPointsLayer){
           buildData  <- ggBuild$data[[pointsLayerId[i]]]
           numOfObservation <- dim(buildData)[1]
-          ggBuild$data[[pointsLayerId[i]]]$label <- if (numOfObservation == dim(input)[1]) {
-            if (!multiFacets) {
-              linkingKey
-            } else {
-              panelMatch <- sapply(seq_len(dim2ggLayout-5),
-                                   function (j) {
-                                     which(str_detect(colnames(ggLayout)[j+3],
-                                                      colnames(input)) == TRUE)
-                                   })
-              panelMatch.len <- length(panelMatch)
-              panelLevels <- list()
-              factors <- list()
-              panelLevels.len <- c()
-              for (j in 1:panelMatch.len) {
-                factors[[j]] <- as.factor(unlist(input[,   panelMatch[j]]))
-                panelLevels[[j]] <- levels(factors[[j]])
-                panelLevels.len[j] <- length(panelLevels[[j]])
-              }
-              if(panelMatch.len == 1){
-                panelValues <- as.character(factors[[1]])
-                # label order
-                linkingKey_order <- unlist(
-                  lapply(panelLevels[[1]],
-                         function(panelLevel){
-                           which(panelValues %in% panelLevel)
-                         }))
-                linkingKey[linkingKey_order]
+          ggBuild$data[[pointsLayerId[i]]]$label <-
+            if (numOfObservation == dim(input)[1]) {
+              if (!multiFacets) {
+                # one facet linkingKey
+                linkingKey
               } else {
-                deepth <- times(panelLevels.len)
-                numOfLoop <- deepth[1]
-                deepth <- deepth[-1]
-                # label order
-                linkingKey_order <- unlist(
-                  lapply(seq_len(numOfLoop),
-                         function(j){
-                           id <- c()
-                           divider <- j
-                           for (k in 1:(panelMatch.len - 1)) {
-                             # last list index
-                             id[k] <- ceiling(divider / depth[k])
-                             divider <- divider %% depth[k]
-                           }
-                           last.id <- j %% depth[length(depth)]
-                           if (last.id == 0) {last.id <- depth[length(depth)]}
-                           id <- c(id, last.id)
-                           factors_index <- lapply(seq_len(length(id)),
-                                                   function(k){
-                                                     fact <- panelLevels[[k]][id[k]]
-                                                     which(factors[[k]] %in% fact == TRUE)
-                                                   })
-                           common_index <- factors_index[[1]]
-                           for (k in 1:(length(factors_index) - 1)) {
-                             common_index <- intersect(common_index, factors_index[[k+1]])
-                           }
-                           common_index
-                         }))
-                linkingKey[linkingKey_order]
+                panelMatch <- sapply(seq_len(wrap.num),
+                                     function (j) {
+                                       which(str_detect(colnames(ggLayout)[j + ggLayout_start_pos],
+                                                        colnames(input)) == TRUE)
+                                     })
+                panelMatch.len <- length(panelMatch)
+                panelLevels <- list()
+                factors <- list()
+                panelLevels.len <- c()
+                for (j in 1:panelMatch.len) {
+                  factors[[j]] <- as.factor(unlist(input[,   panelMatch[j]]))
+                  panelLevels[[j]] <- levels(factors[[j]])
+                  panelLevels.len[j] <- length(panelLevels[[j]])
+                }
+                if(panelMatch.len == 1){
+                  panelValues <- as.character(factors[[1]])
+                  # label order
+                  linkingKey_order <- unlist(
+                    lapply(panelLevels[[1]],
+                           function(panelLevel){
+                             which(panelValues %in% panelLevel)
+                           }))
+                  linkingKey[linkingKey_order]
+                } else {
+                  depth <- cum_multiply(panelLevels.len)
+                  numOfLoop <- depth[1]
+                  depth <- depth[-1]
+                  # label order
+                  linkingKey_order <- unlist(
+                    lapply(seq_len(numOfLoop),
+                           function(j){
+                             id <- c()
+                             divider <- j
+                             for (k in 1:(panelMatch.len - 1)) {
+                               # last list index
+                               id[k] <- ceiling(divider / depth[k])
+                               divider <- divider %% depth[k]
+                             }
+                             last.id <- j %% depth[length(depth)]
+                             if (last.id == 0) {last.id <- depth[length(depth)]}
+                             id <- c(id, last.id)
+                             factors_index <- lapply(seq_len(length(id)),
+                                                     function(k){
+                                                       fact <- panelLevels[[k]][id[k]]
+                                                       which(factors[[k]] %in% fact == TRUE)
+                                                     })
+                             common_index <- factors_index[[1]]
+                             for (k in 1:(length(factors_index) - 1)) {
+                               common_index <- intersect(common_index, factors_index[[k+1]])
+                             }
+                             common_index
+                           }))
+                  linkingKey[linkingKey_order]
+                }
               }
-            }
-          } else {
-            # the ggplot input data is not the geom_point data
-            # in other words, new dataset is added in geom_point
-            warning("item label may not match")
-            if (lenPointsLayer == 1) {
-              paste0("item", seq_len(numOfObservation) - 1)
             } else {
-              paste0("item", seq_len(numOfObservation) - 1, "pointsLayer", i)
-            }
+              # the ggplot input data is not the geom_point data
+              # in other words, new dataset is added in geom_point
+              warning("item label may not match")
+              if (lenPointsLayer == 1) {
+                paste0("item", seq_len(numOfObservation) - 1)
+              } else {
+                paste0("item", seq_len(numOfObservation) - 1, "pointsLayer", i)
+              }
 
-          }
+            }
 
         }
         # end loop
@@ -166,7 +172,7 @@ is_devtools_ggplot2 <- function() {
   packageVersion("ggplot2") > "2.2.1"
 }
 
-times <- function(vec) {
+cum_multiply <- function(vec) {
   rev_vec <- rev(vec)
   output <- c()
   for(i in 1: length(rev_vec) ){
@@ -178,4 +184,10 @@ times <- function(vec) {
   }
   rev(output)
 }
+
+wrap_num <- function(ggLayout){
+  dim2ggLayout <- dim(ggLayout)[2]
+  dim2ggLayout - 5
+}
+
 
