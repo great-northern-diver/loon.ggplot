@@ -15,15 +15,16 @@ loonLayer.GeomPoint <- function(widget, layerGeom, data, ggplotPanel_params, coo
   }
   lineColor <- hex6to12(data$colour)
   pointsColor <- if(!is.null(data$shape) ){
-    sapply(1:dim(data)[1], function(j){
-      if(data$shape[j] %in% 21:24){
-        hex6to12(data$fill[j])
-      } else if (data$shape[j] %in% c(0, 1, 2, 5)) {
-        ""
-      }
-      else {
-        hex6to12(data$colour[j]) }
-    } )
+    sapply(1:dim(data)[1],
+           function(j){
+             if(data$shape[j] %in% 21:24){
+               hex6to12(data$fill[j])
+             } else if (data$shape[j] %in% c(0, 1, 2, 5)) {
+               ""
+             }
+             else {
+               hex6to12(data$colour[j]) }
+           } )
   } else hex6to12(data$colour)
   pointsSize <- as_loon_size( data$size, "points" )
 
@@ -579,29 +580,33 @@ loonLayer.GeomHex <- function(widget, layerGeom, data, ggplotPanel_params, coord
   } else {
     unique_y <- unique(data$y)
     # hex width
-    hexWidth <- min(unlist(lapply(unique_y, function(j) {
-      id <- which(data$y == j)
-      diff(data$x[id])
-    })))
+    hexWidth <- min(unlist(lapply(unique_y,
+                                  function(j) {
+                                    id <- which(data$y == j)
+                                    diff(data$x[id])
+                                  })
+    ))
     # scale data
     scale.hex_radius <- hexWidth/ (diff(x.range) * sqrt(3))
     scale.x <- (data$x - x.range[1]) / diff(x.range)
     scale.y <- (data$y - y.range[1]) / diff(y.range)
 
-    hex_x <- lapply(seq_len(n), function(i) {
-      x.north <- x.south <- scale.x[i]
-      x.northeast <- x.southeast <- scale.x[i] + sqrt(3) * scale.hex_radius / 2
-      x.northwest <- x.southwest <- scale.x[i] - sqrt(3) * scale.hex_radius / 2
-      c(x.north, x.northeast, x.southeast, x.south, x.southwest, x.northwest) * diff(x.range) + x.range[1]
-    })
+    hex_x <- lapply(seq_len(n),
+                    function(i) {
+                      x.north <- x.south <- scale.x[i]
+                      x.northeast <- x.southeast <- scale.x[i] + sqrt(3) * scale.hex_radius / 2
+                      x.northwest <- x.southwest <- scale.x[i] - sqrt(3) * scale.hex_radius / 2
+                      c(x.north, x.northeast, x.southeast, x.south, x.southwest, x.northwest) * diff(x.range) + x.range[1]
+                    })
 
-    hex_y <- lapply(seq_len(n), function(i) {
-      y.north <- scale.y[i] + scale.hex_radius
-      y.northeast <- y.northwest <- scale.y[i] + scale.hex_radius / 2
-      y.southeast <- y.southwest <- scale.y[i] - scale.hex_radius / 2
-      y.south <- scale.y[i] - scale.hex_radius
-      c(y.north, y.northeast, y.southeast, y.south, y.southwest, y.northwest) * diff(y.range) + y.range[1]
-    })
+    hex_y <- lapply(seq_len(n),
+                    function(i) {
+                      y.north <- scale.y[i] + scale.hex_radius
+                      y.northeast <- y.northwest <- scale.y[i] + scale.hex_radius / 2
+                      y.southeast <- y.southwest <- scale.y[i] - scale.hex_radius / 2
+                      y.south <- scale.y[i] - scale.hex_radius
+                      c(y.north, y.northeast, y.southeast, y.south, y.southwest, y.northwest) * diff(y.range) + y.range[1]
+                    })
     fillColor <- hex6to12(data$fill)
     linesColor <- hex6to12(data$colour)
     linesWidth <- as_loon_size(data$size, "lines")
@@ -620,31 +625,34 @@ loonLayer.GeomDotplot <- function(widget, layerGeom, data, ggplotPanel_params, c
   stackRatio <- layerGeom$geom_params$stackratio
   countId <- data$countidx
   n <- dim(data)[1]
-  stackPos <- sapply(1:n, function(i) {
-    if(i == 1) data$stackpos[i] else {
-      data$stackpos[i - countId[i] + 1] + (countId[i] - 1) * stackRatio
-    }
-  })
+  stackPos <- sapply(1:n,
+                     function(i) {
+                       if(i == 1) data$stackpos[i] else {
+                         data$stackpos[i - countId[i] + 1] + (countId[i] - 1) * stackRatio
+                       }
+                     })
 
   dotsGroup <- l_layer_group(widget, "dots")
   radius <- data$binwidth[1]/2
   if(layerGeom$geom_params$binaxis == "y"){
-    lapply(1:n, function(i){
-      xradius <- diff(ggplotPanel_params$x.range)/diff(ggplotPanel_params$y.range)*radius
-      l_layer_oval(widget, parent = dotsGroup,
-                   x = c(data$x[i] + stackPos[i] * 2 * xradius - xradius,
-                         data$x[i] + stackPos[i] * 2 * xradius + xradius),
-                   y = c(data$y[i] - radius, data$y[i] + radius),color =  fillColor[i],
-                   linecolor = lineColor[i])
-    })
+    lapply(1:n,
+           function(i){
+             xradius <- diff(ggplotPanel_params$x.range)/diff(ggplotPanel_params$y.range)*radius
+             l_layer_oval(widget, parent = dotsGroup,
+                          x = c(data$x[i] + stackPos[i] * 2 * xradius - xradius,
+                                data$x[i] + stackPos[i] * 2 * xradius + xradius),
+                          y = c(data$y[i] - radius, data$y[i] + radius),color =  fillColor[i],
+                          linecolor = lineColor[i])
+           })
   } else  {
     yradius <- diff(ggplotPanel_params$y.range)/diff(ggplotPanel_params$x.range)*radius
-    lapply(1:n, function(i){
-      l_layer_oval(widget, parent = dotsGroup,
-                   x = c(data$x[i] - radius, data$x[i] + radius),
-                   y = c(data$y[i] - yradius + stackPos[i] * 2 * yradius,
-                         data$y[i] + yradius + stackPos[i] * 2 * yradius),color =  fillColor[i],
-                   linecolor = lineColor[i])
-    })
+    lapply(1:n,
+           function(i){
+             l_layer_oval(widget, parent = dotsGroup,
+                          x = c(data$x[i] - radius, data$x[i] + radius),
+                          y = c(data$y[i] - yradius + stackPos[i] * 2 * yradius,
+                                data$y[i] + yradius + stackPos[i] * 2 * yradius),color =  fillColor[i],
+                          linecolor = lineColor[i])
+           })
   }
 }

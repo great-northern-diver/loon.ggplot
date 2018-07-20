@@ -32,19 +32,23 @@ loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, co
     quantiles <- layerGeom$geom_params$draw_quantiles
     len_quantiles <- length(quantiles)
 
-    linesData <- do.call(rbind, lapply(uniGroup, function(i){
-      group_i_data <- data[data$group==i, ]
-      xx <- group_i_data$violinwidth/2
-      f <- approxfun(group_i_data$y, xx, yleft = 0, yright = 0)
-      cumulativeArea <- sapply(group_i_data$y, function(j){
-        integrate(f, min(group_i_data$y), j)$value
-      })
-      id <- sapply(quantiles, function(j) {
-        abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
-        which(abs_quantile_area == min(abs_quantile_area))
-      })
-      group_i_data[id, ]
-    }))
+    linesData <- do.call(rbind, lapply(uniGroup,
+                                       function(i){
+                                         group_i_data <- data[data$group==i, ]
+                                         xx <- group_i_data$violinwidth/2
+                                         f <- approxfun(group_i_data$y, xx, yleft = 0, yright = 0)
+                                         cumulativeArea <- sapply(group_i_data$y,
+                                                                  function(j){
+                                                                    integrate(f, min(group_i_data$y), j)$value
+                                                                  })
+                                         id <- sapply(quantiles,
+                                                      function(j) {
+                                                        abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+                                                        which(abs_quantile_area == min(abs_quantile_area))
+                                                      })
+                                         group_i_data[id, ]
+                                       })
+                         )
     linesData$x <- linesData$x - linesData$violinwidth/2
     linesData$xend <- linesData$x + linesData$violinwidth
     linesData$yend <- linesData$y
@@ -269,41 +273,42 @@ loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, coor
   }
 
   uniGroup <- unique(data$group)
-  lapply(1:length(uniGroup), function(i){
-    groupData <- data[data$group == uniGroup[i], ]
-    linesColor <- hex6to12(groupData$colour)
-    len_uni_col <- length(unique(groupData$colour))
+  lapply(1:length(uniGroup),
+         function(i){
+           groupData <- data[data$group == uniGroup[i], ]
+           linesColor <- hex6to12(groupData$colour)
+           len_uni_col <- length(unique(groupData$colour))
 
-    linesWidth <- as_loon_size(groupData$size, "lines")
-    linesDash <- as_loon_dash(groupData$linetype)
-    # a single line with a single color
-    if(len_uni_col == 1){
-      if(isCoordPolar){
-        coordPolarxy <- Cartesianxy2Polarxy.GeomPath(NULL, coordinates, groupData, ggplotPanel_params)
-        x <- coordPolarxy$x
-        y <- coordPolarxy$y
-      } else {
-        x <- groupData$x
-        y <- groupData$y
-      }
-      l_layer_line(
-        widget, x = x, y = y, linewidth = linesWidth[1],
-        color = linesColor[1], dash = linesDash[[1]],
-        parent = parent
-      )
-    } else {  # a line with different colors(gradual colors)
-      n <- dim(groupData)[1]
-      len <- ceiling( 1000/(n-1) )
-      for( j in 1: (n - 1) ){
-        new <- groupData[rep(j,len), ]
-        new$x <- seq( groupData[j,]$x, groupData[j+1,]$x, length.out = len)
-        new$y <- seq( groupData[j,]$y, groupData[j+1,]$y, length.out = len)
-        if(j == 1) newdata <- new else newdata <- rbind(newdata, new)
-      }
-      loonLayer.GeomPoint(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
-                          parent = parent)
-    }
-  })
+           linesWidth <- as_loon_size(groupData$size, "lines")
+           linesDash <- as_loon_dash(groupData$linetype)
+           # a single line with a single color
+           if(len_uni_col == 1){
+             if(isCoordPolar){
+               coordPolarxy <- Cartesianxy2Polarxy.GeomPath(NULL, coordinates, groupData, ggplotPanel_params)
+               x <- coordPolarxy$x
+               y <- coordPolarxy$y
+             } else {
+               x <- groupData$x
+               y <- groupData$y
+             }
+             l_layer_line(
+               widget, x = x, y = y, linewidth = linesWidth[1],
+               color = linesColor[1], dash = linesDash[[1]],
+               parent = parent
+             )
+           } else {  # a line with different colors(gradual colors)
+             n <- dim(groupData)[1]
+             len <- ceiling( 1000/(n-1) )
+             for( j in 1: (n - 1) ){
+               new <- groupData[rep(j,len), ]
+               new$x <- seq( groupData[j,]$x, groupData[j+1,]$x, length.out = len)
+               new$y <- seq( groupData[j,]$y, groupData[j+1,]$y, length.out = len)
+               if(j == 1) newdata <- new else newdata <- rbind(newdata, new)
+             }
+             loonLayer.GeomPoint(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+                                 parent = parent)
+           }
+         })
 }
 
 
@@ -313,15 +318,17 @@ loonLayer.GeomRibbon <- function(widget, layerGeom, data, ggplotPanel_params, co
   ribbonGroup <- l_layer_group(widget, "ribbon")
 
   uniGroup <- unique(data$group)
-  newdata <- do.call(rbind, lapply(1:length(uniGroup), function(i){
-    d <- data[data$group == uniGroup[i], ]
-    n <- dim(d)[1]
-    seqLength <- 20
-    nd <- rbind(d, d[rep(n, seqLength), ], d)
-    nd$x <- c(d$x, rep(d$x[n], seqLength), rev(d$x))
-    nd$y <- c(d$ymin, seq(d$ymin[n], d$ymax[n], length.out = seqLength), rev(d$ymax))
-    nd
-  }))
+  newdata <- do.call(rbind, lapply(1:length(uniGroup),
+                                   function(i){
+                                     d <- data[data$group == uniGroup[i], ]
+                                     n <- dim(d)[1]
+                                     seqLength <- 20
+                                     nd <- rbind(d, d[rep(n, seqLength), ], d)
+                                     nd$x <- c(d$x, rep(d$x[n], seqLength), rev(d$x))
+                                     nd$y <- c(d$ymin, seq(d$ymin[n], d$ymax[n], length.out = seqLength), rev(d$ymax))
+                                     nd
+                                   })
+  )
   loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
                         parent = if(parent == "root") ribbonGroup else parent)
 }
@@ -371,26 +378,28 @@ loonLayer.GeomStep <- function(widget, layerGeom, data, ggplotPanel_params, coor
 
   direction <- layerGeom$geom_params$direction
   uniGroup <- unique(data$group)
-  newdata <- do.call(rbind, lapply(1:length(uniGroup), function(i){
-    d <- data[data$group == uniGroup[i], ]
-    # n must be larger than 2 (line)
-    n <- dim(d)[1]
-    # stepNewAddedMatrix is the new matrix which would be added on d
-    stepNewAddedMatrix <- d[-n, ]
-    newOrder <- c(1:n, (1:(n-1) + 0.5))
-    if(direction == "hv"){
-      for(j in 1: (n-1)){
-        stepNewAddedMatrix[j, ]$x <- d[j+1, ]$x
-        stepNewAddedMatrix[j, ]$y <- d[j, ]$y
-      }
-    }else{
-      for(j in 1: (n-1)){
-        stepNewAddedMatrix[j, ]$x <- d[j, ]$x
-        stepNewAddedMatrix[j, ]$y <- d[j+1, ]$y
-      }
-    }
-    rbind(d, stepNewAddedMatrix)[order(newOrder) ,]
-  }))
+  newdata <- do.call(rbind, lapply(1:length(uniGroup),
+                                   function(i){
+                                     d <- data[data$group == uniGroup[i], ]
+                                     # n must be larger than 2 (line)
+                                     n <- dim(d)[1]
+                                     # stepNewAddedMatrix is the new matrix which would be added on d
+                                     stepNewAddedMatrix <- d[-n, ]
+                                     newOrder <- c(1:n, (1:(n-1) + 0.5))
+                                     if(direction == "hv"){
+                                       for(j in 1: (n-1)){
+                                         stepNewAddedMatrix[j, ]$x <- d[j+1, ]$x
+                                         stepNewAddedMatrix[j, ]$y <- d[j, ]$y
+                                       }
+                                     }else{
+                                       for(j in 1: (n-1)){
+                                         stepNewAddedMatrix[j, ]$x <- d[j, ]$x
+                                         stepNewAddedMatrix[j, ]$y <- d[j+1, ]$y
+                                       }
+                                     }
+                                     rbind(d, stepNewAddedMatrix)[order(newOrder) ,]
+                                   })
+  )
 
   loonLayer.GeomPath(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
                      parent = if(parent == "root") stepGroup else parent)

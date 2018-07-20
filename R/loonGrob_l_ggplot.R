@@ -36,13 +36,15 @@ loonGrob.l_ggplot <- function(target, name = NULL, gp = NULL, vp = NULL) {
   } else {
     names <- names(widget)
     namesSplit <- strsplit(names, split = "")
-    ggLayout <- t(sapply(namesSplit, function(i){
-      xpos <- which(i %in% "x" == TRUE)
-      ypos <- which(i %in% "y" == TRUE)
-      len_str <- length(i)
-      c(as.numeric(paste0(i[(xpos + 1) : (ypos - 1)], collapse = "")),
-        as.numeric(paste0(i[(ypos + 1) : (len_str)], collapse = "")))
-    }))
+    ggLayout <- t(sapply(namesSplit,
+                         function(i){
+                           xpos <- which(i %in% "x" == TRUE)
+                           ypos <- which(i %in% "y" == TRUE)
+                           len_str <- length(i)
+                           c(as.numeric(paste0(i[(xpos + 1) : (ypos - 1)], collapse = "")),
+                             as.numeric(paste0(i[(ypos + 1) : (len_str)], collapse = "")))
+                         })
+    )
     # colnames(ggLayout) <- c("ROW", "COL")
     rownames <- seq_len(len_widget)
     layoutDim <- apply(ggLayout, 2, max)
@@ -75,28 +77,30 @@ loonGrob.l_ggplot <- function(target, name = NULL, gp = NULL, vp = NULL) {
     ylabel <- paste0(unique(ylabel_original), collapse = " ")
 
     # loon grobs
-    lgrob <- lapply(seq_len(len_widget), function(i) {
-      widgeti <- widget[[i]]
-      l_configure(widgeti,
-                  xlabel = "",
-                  ylabel = "",
-                  # minimumMargins = c(20, 20, 20, 20),
-                  scalesMargins = c(15, 10, 0, 0),
-                  labelMargins = c(15, 10, 35, 0)
-      )
-      loonGrob(widgeti)
-    })
+    lgrob <- lapply(seq_len(len_widget),
+                    function(i) {
+                      widgeti <- widget[[i]]
+                      l_configure(widgeti,
+                                  xlabel = "",
+                                  ylabel = "",
+                                  # minimumMargins = c(20, 20, 20, 20),
+                                  scalesMargins = c(15, 10, 0, 0),
+                                  labelMargins = c(15, 10, 35, 0)
+                      )
+                      loonGrob(widgeti)
+                    })
     # recover loon plot
-    recover <- lapply(seq_len(len_widget), function(i){
-      widgeti <- widget[[i]]
-      l_configure(widgeti,
-                  xlabel = xlabel_original[i],
-                  ylabel = ylabel_original[i],
-                  # minimumMargins = minimumMargins_original[[i]],
-                  scalesMargins = scalesMargins_original[[i]],
-                  labelMargins = labelMargins_original[[i]]
-      )
-    })
+    recover <- lapply(seq_len(len_widget),
+                      function(i){
+                        widgeti <- widget[[i]]
+                        l_configure(widgeti,
+                                    xlabel = xlabel_original[i],
+                                    ylabel = ylabel_original[i],
+                                    # minimumMargins = minimumMargins_original[[i]],
+                                    scalesMargins = scalesMargins_original[[i]],
+                                    labelMargins = labelMargins_original[[i]]
+                        )
+                      })
     # draw loon grobs
     gTree(
       children = gList(

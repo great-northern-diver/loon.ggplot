@@ -61,25 +61,29 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes){
                                  parent = guidesGroup)
   # lines
   xlinesGroup <- l_layer_group(widget, "x guide lines", parent = guidesGroup)
-  xlinesLayer <- lapply(x.minor_source, function(i){
-    l_layer_line(widget, x = rep(i, 2), y = y.range, color = widget['guidelines'], parent = xlinesGroup)
-  })
+  xlinesLayer <- lapply(x.minor_source,
+                        function(i){
+                          l_layer_line(widget, x = rep(i, 2), y = y.range, color = widget['guidelines'], parent = xlinesGroup)
+                        })
 
   ylinesGroup <- l_layer_group(widget, "y guide lines", parent = guidesGroup)
-  ylinesLayer <- lapply(y.minor_source, function(i){
-    l_layer_line(widget, x = x.range, y = rep(i,2), color = widget['guidelines'], parent = ylinesGroup)
-  })
+  ylinesLayer <- lapply(y.minor_source,
+                        function(i){
+                          l_layer_line(widget, x = x.range, y = rep(i,2), color = widget['guidelines'], parent = ylinesGroup)
+                        })
   # labels
   xlabelGroup <- l_layer_group(widget, "x labels", parent = guidesGroup)
-  xlinesLayer <- lapply(seq_len(length(x.major_source)), function(i){
-    l_layer_text(widget, x = x.major_source[i], y = extend.yrange[1], color = widget['foreground'], parent = xlabelGroup,
-                 text = x.labels[i], size = 9, anchor = "s")
-  })
+  xlinesLayer <- lapply(seq_len(length(x.major_source)),
+                        function(i){
+                          l_layer_text(widget, x = x.major_source[i], y = extend.yrange[1], color = widget['foreground'], parent = xlabelGroup,
+                                       text = x.labels[i], size = 9, anchor = "s")
+                        })
   ylabelGroup <- l_layer_group(widget, "y labels", parent = guidesGroup)
-  ylinesLayer <- lapply(seq_len(length(y.major_source)), function(i){
-    l_layer_text(widget, x = extend.xrange[1], y = y.major_source[i], color = widget['foreground'], parent = ylabelGroup,
-                 text = y.labels[i], size = 9, anchor = "w")
-  })
+  ylinesLayer <- lapply(seq_len(length(y.major_source)),
+                        function(i){
+                          l_layer_text(widget, x = extend.xrange[1], y = y.major_source[i], color = widget['foreground'], parent = ylabelGroup,
+                                       text = y.labels[i], size = 9, anchor = "w")
+                        })
 
   guidesGroup
 }
