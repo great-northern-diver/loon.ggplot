@@ -464,7 +464,6 @@ loonLayer.GeomCurve <- function(widget,
                                 ggplotObject,
                                 special,
                                 parent = "root"){
-
   # curve group
   if (parent == "root") {
     curveGroup <- l_layer_group(widget, "curve")
