@@ -1,6 +1,12 @@
 ########################################### advanced layers ###########################################
 
-loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomViolin <- function(widget,
+                                 layerGeom,
+                                 data,
+                                 ggplotPanel_params,
+                                 ggplotObject,
+                                 special,
+                                 parent = "root"){
   uniGroup <- unique(data$group)
   seqLength <- 20
   newdata <- data.frame()
@@ -25,7 +31,12 @@ loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, co
 
   violinGroup <- l_layer_group(widget, "violin")
 
-  loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+  loonLayer.GeomPolygon(widget,
+                        layerGeom,
+                        newdata,
+                        ggplotPanel_params,
+                        ggplotObject,
+                        special,
                         parent = if(parent == "root") violinGroup else parent)
 
   if (!is.null(layerGeom$geom_params$draw_quantiles)) {
@@ -52,14 +63,26 @@ loonLayer.GeomViolin <- function(widget, layerGeom, data, ggplotPanel_params, co
     linesData$x <- linesData$x - linesData$violinwidth/2
     linesData$xend <- linesData$x + linesData$violinwidth
     linesData$yend <- linesData$y
-    loonLayer.GeomSegment(widget, layerGeom, linesData, ggplotPanel_params, coordinates,
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          linesData,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") violinGroup else parent)
   }
 }
 
 
 
-loonLayer.GeomRug <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomRug <- function(widget,
+                              layerGeom,
+                              data,
+                              ggplotPanel_params,
+                              ggplotObject,
+                              special,
+                              parent = "root"){
+
   sides <- layerGeom$geom_params$sides
   xranges <- ggplotPanel_params$x.range
   yranges <- ggplotPanel_params$y.range
@@ -70,28 +93,48 @@ loonLayer.GeomRug <- function(widget, layerGeom, data, ggplotPanel_params, coord
     data$xend <- data$x
     data$y <- yranges[2]
     data$yend <- yranges[2] - diff(yranges)/30
-    loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, coordinates,
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") rugGroup else parent)
   }
   bottomSides <- function(data, xranges, yranges){
     data$xend <- data$x
     data$y <- yranges[1]
     data$yend <- yranges[1] + diff(yranges)/30
-    loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, coordinates,
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") rugGroup else parent)
   }
   leftSides <- function(data, xranges, yranges){
     data$yend <- data$y
     data$x <- xranges[1]
     data$xend <- xranges[1] + diff(xranges)/30
-    loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, coordinates,
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") rugGroup else parent)
   }
   rightSides <- function(data, xranges, yranges){
     data$yend <- data$y
     data$x <- xranges[2]
     data$xend <- xranges[2] - diff(xranges)/30
-    loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, coordinates,
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") rugGroup else parent)
   }
   allSides <- c("t", "r", "b", "l")
@@ -105,7 +148,13 @@ loonLayer.GeomRug <- function(widget, layerGeom, data, ggplotPanel_params, coord
 
 
 
-loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomBoxplot <- function(widget,
+                                  layerGeom,
+                                  data,
+                                  ggplotPanel_params,
+                                  ggplotObject,
+                                  special,
+                                  parent = "root"){
 
   n <- dim(data)[1]
   boxplotsGroup <- l_layer_group(widget, "boxplots")
@@ -117,7 +166,12 @@ loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, c
     rectData <- data[i, ]
     rectData$ymin <- data[i, ]$lower
     rectData$ymax <- data[i, ]$upper
-    loonLayer.GeomRect(widget, layerGeom, rectData, ggplotPanel_params, coordinates,
+    loonLayer.GeomRect(widget,
+                       layerGeom,
+                       rectData,
+                       ggplotPanel_params,
+                       ggplotObject,
+                       special,
                        parent = if(parent == "root") boxplotGroup else parent)
 
     # lines lower 25%
@@ -135,7 +189,12 @@ loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, c
     linesData[3, ]$x <- linesData[1, ]$xmin
     linesData[3, ]$xend <- linesData[1, ]$xmax
     linesData[3, ]$size <- 1.5 * linesData[1, ]$size
-    loonLayer.GeomSegment(widget, layerGeom, linesData, ggplotPanel_params, coordinates,
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          linesData,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") boxplotGroup else parent)
 
     # points layer
@@ -146,7 +205,12 @@ loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, c
       if( !is.null(layerGeom$geom_params$outlier.fill)) pointsData$fill <- layerGeom$geom_params$outlier.fill
       pointsData$shape <- layerGeom$geom_params$outlier.shape
       pointsData$size <- layerGeom$geom_params$outlier.size
-      loonLayer.GeomPoint(widget, layerGeom, pointsData, ggplotPanel_params, coordinates,
+      loonLayer.GeomPoint(widget,
+                          layerGeom,
+                          pointsData,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") boxplotGroup else parent)
     }
   }
@@ -154,7 +218,13 @@ loonLayer.GeomBoxplot <- function(widget, layerGeom, data, ggplotPanel_params, c
 
 
 
-loonLayer.GeomLinerange <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomLinerange <- function(widget,
+                                    layerGeom,
+                                    data,
+                                    ggplotPanel_params,
+                                    ggplotObject,
+                                    special,
+                                    parent = "root"){
 
   if (parent == "root") {
     linerangeGroup <- l_layer_group(widget, "linerange")
@@ -169,29 +239,61 @@ loonLayer.GeomLinerange <- function(widget, layerGeom, data, ggplotPanel_params,
     data[i, ]$y <- data[i, ]$ymin
     data[i, ]$yend <- data[i, ]$ymax
   }
-  loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomSegment(widget,
+                        layerGeom,
+                        data,
+                        ggplotPanel_params,
+                        ggplotObject,
+                        special,
                         parent = parent)
 }
 
 
 
-loonLayer.GeomPointrange <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomPointrange <- function(widget,
+                                     layerGeom,
+                                     data,
+                                     ggplotPanel_params,
+                                     ggplotObject,
+                                     special,
+                                     parent = "root"){
 
   pointrangeGroup <- l_layer_group(widget, "pointrange")
 
-  loonLayer.GeomLinerange(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomLinerange(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") pointrangeGroup else parent)
-  loonLayer.GeomPoint(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomPoint(widget,
+                      layerGeom,
+                      data,
+                      ggplotPanel_params,
+                      ggplotObject,
+                      special,
                       parent = if(parent == "root") pointrangeGroup else parent)
 }
 
 
 
-loonLayer.GeomCrossbar <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomCrossbar <- function(widget,
+                                   layerGeom,
+                                   data,
+                                   ggplotPanel_params,
+                                   ggplotObject,
+                                   special,
+                                   parent = "root"){
 
   crossbarGroup <- l_layer_group(widget, "crossbar")
 
-  loonLayer.GeomRect(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomRect(widget,
+                     layerGeom,
+                     data,
+                     ggplotPanel_params,
+                     ggplotObject,
+                     special,
                      parent = if(parent == "root")  crossbarGroup else parent)
   n <- dim(data)[1]
   data$size <- 3 * data$size
@@ -202,17 +304,33 @@ loonLayer.GeomCrossbar <- function(widget, layerGeom, data, ggplotPanel_params, 
     data[i, ]$xend <- data[i, ]$xmax
     data[i, ]$yend <- data[i, ]$y
   }
-  loonLayer.GeomSegment(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomSegment(widget,
+                        layerGeom,
+                        data,
+                        ggplotPanel_params,
+                        ggplotObject,
+                        special,
                         parent = if(parent == "root")  crossbarGroup else parent)
 }
 
 
 
-loonLayer.GeomErrorbar <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomErrorbar <- function(widget,
+                                   layerGeom,
+                                   data,
+                                   ggplotPanel_params,
+                                   ggplotObject,
+                                   special,
+                                   parent = "root"){
 
   errorbarGroup <- l_layer_group(widget, "errorbar")
 
-  loonLayer.GeomLinerange(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomLinerange(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root")  errorbarGroup else parent)
   n <- dim(data)[1]
   newdata <- data[rep(1:n, each = 2), ]
@@ -227,13 +345,24 @@ loonLayer.GeomErrorbar <- function(widget, layerGeom, data, ggplotPanel_params, 
       newdata[i,]$y <- newdata[i,]$yend <- newdata[i,]$ymax
     }
   }
-  loonLayer.GeomSegment(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+  loonLayer.GeomSegment(widget,
+                        layerGeom,
+                        newdata,
+                        ggplotPanel_params,
+                        ggplotObject,
+                        special,
                         parent = if(parent == "root")  errorbarGroup else parent)
 }
 
 
 
-loonLayer.GeomErrorbarh <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomErrorbarh <- function(widget,
+                                    layerGeom,
+                                    data,
+                                    ggplotPanel_params,
+                                    ggplotObject,
+                                    special,
+                                    parent = "root"){
 
   errorbarhGroup <- l_layer_group(widget, "errorbarh")
 
@@ -256,14 +385,25 @@ loonLayer.GeomErrorbarh <- function(widget, layerGeom, data, ggplotPanel_params,
       newdata[i,]$yend <- newdata[i,]$ymax
     }
   }
-  loonLayer.GeomSegment(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+  loonLayer.GeomSegment(widget,
+                        layerGeom,
+                        newdata,
+                        ggplotPanel_params,
+                        ggplotObject,
+                        special,
                         parent = if(parent == "root")  errorbarhGroup else parent)
 }
 
 
 
 # colorful line (line built with points)
-loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomPath <- function(widget,
+                               layerGeom,
+                               data,
+                               ggplotPanel_params,
+                               ggplotObject,
+                               special,
+                               parent = "root"){
 
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   # path group
@@ -272,6 +412,7 @@ loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, coor
     parent <- pathGroup
   }
 
+  coordinates <- ggplotObject$coordinates
   uniGroup <- unique(data$group)
   lapply(1:length(uniGroup),
          function(i){
@@ -305,15 +446,131 @@ loonLayer.GeomPath <- function(widget, layerGeom, data, ggplotPanel_params, coor
                new$y <- seq( groupData[j,]$y, groupData[j+1,]$y, length.out = len)
                if(j == 1) newdata <- new else newdata <- rbind(newdata, new)
              }
-             loonLayer.GeomPoint(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+             loonLayer.GeomPoint(widget,
+                                 layerGeom,
+                                 newdata,
+                                 ggplotPanel_params,
+                                 ggplotObject,
+                                 special,
                                  parent = parent)
            }
          })
 }
 
+loonLayer.GeomCurve <- function(widget,
+                                layerGeom,
+                                data,
+                                ggplotPanel_params,
+                                ggplotObject,
+                                special,
+                                parent = "root"){
 
+  # curve group
+  if (parent == "root") {
+    curveGroup <- l_layer_group(widget, "curve")
+    parent <- curveGroup
+  }
 
-loonLayer.GeomRibbon <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+  # avoid duplicated rows
+  data <- data[!duplicated(data), ]
+  n <- dim(data)[1]
+  isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+  size <- data$size
+  colour <- data$colour
+  linetype <- data$linetype
+
+  coordinates <- ggplotObject$coordinates
+
+  which_curve <- special[["curve"]]$which_curve
+  curveLayerId <- special[["curve"]]$curveLayerId
+
+  # use "grid" to get the control coordinates
+  answer <- utils::menu(c("y", "n"), title="Do you want to draw the ggplot?")
+
+  if(answer == 1) {
+    answer <- TRUE
+    if (which_curve == curveLayerId[1]) {
+      grid.draw(ggplotObject)
+      grid.force()
+    }
+    gridList <- grid.ls(print = FALSE)
+    gridList.name <- gridList$name
+    xspline.name <- gridList.name[which(str_detect(gridList.name, "curve") == TRUE)]
+    xspline.len <- length(xspline.name)
+
+    for(i in seq_len(n)){
+      if (n == 1) {
+        xy <- lapply(xsplinePoints(grid.get("xspline", grep=TRUE)),
+                     function(coord){
+                       as.numeric(coord)
+                     })
+      } else {
+        xy <- lapply(xsplinePoints(grid.get("xspline", grep=TRUE))[[i]],
+                     function(coord){
+                       as.numeric(coord)
+                     })
+      }
+      x.start <- data[i, ]$x
+      x.end <- data[i, ]$xend
+      y.start <- data[i, ]$y
+      y.end <- data[i, ]$yend
+      # mapping to ggplot coordinates
+      xy_x.diff <- xy$x[length(xy$x)] - xy$x[1]
+      xy_y.diff <- xy$y[length(xy$y)] - xy$y[1]
+      if(xy_x.diff == 0){
+        xy_x.diff <- 1e-16
+      }
+      if(xy_y.diff == 0){
+        xy_y.diff <- 1e-16
+      }
+      x <- (x.end - x.start) / (xy_x.diff) * (xy$x - xy$x[1]) + x.start
+      y <- (y.end - y.start) / (xy_y.diff) * (xy$y - xy$y[1]) + y.start
+      if (i == 1) {
+        newdata <- data.frame(x = x, y = y, group = rep(i, length(x)))
+        newdata$size <- size[i]
+        newdata$colour <- colour[i]
+        newdata$linetype <- linetype[i]
+      } else {
+        nd <- data.frame(x = x, y = y, group = rep(i, length(x)))
+        nd$size <- size[i]
+        nd$colour <- colour[i]
+        nd$linetype <- linetype[i]
+        newdata <- rbind(newdata, nd)
+      }
+    }
+    # grid remove
+    grid.remove(xspline.name[1])
+
+    loonLayer.GeomPath(widget,
+                       layerGeom,
+                       newdata,
+                       ggplotPanel_params,
+                       special,
+                       ggplotObject,
+                       parent)
+
+  } else {
+    answer <- FALSE
+    message("Segment will be drawn instead of curve")
+    loonLayer.GeomSegment(widget,
+                          layerGeom,
+                          data,
+                          ggplotPanel_params,
+                          special,
+                          ggplotObject,
+                          parent)
+  }
+
+  c("draw curve" = answer)
+}
+
+loonLayer.GeomRibbon <- function(widget,
+                                 layerGeom,
+                                 data,
+                                 ggplotPanel_params,
+                                 ggplotObject,
+                                 special,
+                                 parent = "root"){
 
   ribbonGroup <- l_layer_group(widget, "ribbon")
 
@@ -329,13 +586,24 @@ loonLayer.GeomRibbon <- function(widget, layerGeom, data, ggplotPanel_params, co
                                      nd
                                    })
   )
-  loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+  loonLayer.GeomPolygon(widget,
+                        layerGeom,
+                        newdata,
+                        ggplotPanel_params,
+                        ggplotObject,
+                        special,
                         parent = if(parent == "root") ribbonGroup else parent)
 }
 
 
 
-loonLayer.GeomSmooth <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomSmooth <- function(widget,
+                                 layerGeom,
+                                 data,
+                                 ggplotPanel_params,
+                                 ggplotObject,
+                                 special,
+                                 parent = "root"){
 
   smoothGroup <- l_layer_group(widget, "smooth")
 
@@ -363,16 +631,32 @@ loonLayer.GeomSmooth <- function(widget, layerGeom, data, ggplotPanel_params, co
       newdata <- rbind(newdata, group_i_newdata)
     }
     newdata$colour <- NA
-    loonLayer.GeomPolygon(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+    loonLayer.GeomPolygon(widget,
+                          layerGeom,
+                          newdata,
+                          ggplotPanel_params,
+                          ggplotObject,
+                          special,
                           parent = if(parent == "root") smoothGroup else parent)
   }
-  loonLayer.GeomPath(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomPath(widget,
+                     layerGeom,
+                     data,
+                     ggplotPanel_params,
+                     ggplotObject,
+                     special,
                      parent = if(parent == "root") smoothGroup else parent)
 }
 
 
 
-loonLayer.GeomStep <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomStep <- function(widget,
+                               layerGeom,
+                               data,
+                               ggplotPanel_params,
+                               ggplotObject,
+                               special,
+                               parent = "root"){
 
   stepGroup <- l_layer_group(widget, "step")
 
@@ -401,16 +685,31 @@ loonLayer.GeomStep <- function(widget, layerGeom, data, ggplotPanel_params, coor
                                    })
   )
 
-  loonLayer.GeomPath(widget, layerGeom, newdata, ggplotPanel_params, coordinates,
+  loonLayer.GeomPath(widget,
+                     layerGeom, newdata,
+                     ggplotPanel_params,
+                     ggplotObject,
+                     special,
                      parent = if(parent == "root") stepGroup else parent)
 }
 
 
 
-loonLayer.GeomRaster <- function(widget, layerGeom, data, ggplotPanel_params, coordinates, parent = "root"){
+loonLayer.GeomRaster <- function(widget,
+                                 layerGeom,
+                                 data,
+                                 ggplotPanel_params,
+                                 ggplotObject,
+                                 special,
+                                 parent = "root"){
 
   rasterGroup <- l_layer_group(widget, "raster")
 
-  loonLayer.GeomRect(widget, layerGeom, data, ggplotPanel_params, coordinates,
+  loonLayer.GeomRect(widget,
+                     layerGeom,
+                     data,
+                     ggplotPanel_params,
+                     ggplotObject,
+                     special,
                      parent = if(parent == "root") rasterGroup else parent)
 }
