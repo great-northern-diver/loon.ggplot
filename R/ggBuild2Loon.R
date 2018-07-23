@@ -143,18 +143,7 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
                   linkingKey[linkingKey_order]
                 }
               }
-            } else {
-              # the ggplot input data is not the geom_point data
-              # in other words, new dataset is added in geom_point
-              warning("item label may not match")
-              if (lenPointsLayer == 1) {
-                paste0("item", seq_len(numOfObservation) - 1)
-              } else {
-                paste0("item", seq_len(numOfObservation) - 1, "pointsLayer", i)
-              }
-
             }
-
         }
         # end loop
       }
@@ -184,10 +173,3 @@ cum_multiply <- function(vec) {
   }
   rev(output)
 }
-
-wrap_num <- function(ggLayout){
-  dim2ggLayout <- dim(ggLayout)[2]
-  dim2ggLayout - 5
-}
-
-
