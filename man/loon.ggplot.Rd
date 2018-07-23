@@ -4,12 +4,15 @@
 \alias{loon.ggplot}
 \title{Create a loon plot from a ggplot2 object}
 \usage{
-loon.ggplot(ggplotObject, ggGuides = FALSE, ...)
+loon.ggplot(ggplotObject, ggGuides = FALSE, activeLayer = list(l_plot =
+  c(1), l_hist = c(1)), ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
 
 \item{ggGuides}{if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.}
+
+\item{activeLayer}{to determine which layer is active. See details}
 
 \item{...}{named arguments to modify loon plot states}
 }
@@ -19,13 +22,24 @@ a loon widget
 \description{
 Interactive loon plots from ggplots
 }
+\details{
+\code{activeLayer} is to help to set model. \code{ggplot} object can be transformed to model \code{l_plot()} or model \code{l_hist()}
+(points and histograms cannot be active at the same time in \code{loon} so far). If point layers and histogram layers
+both exist in \code{ggplot}, \code{activeLayer} can help you to set the model (l_plot() or l_hist(), one of these two); if multiple point
+layers exist in \code{ggplot}, \code{activeLayer} can set which point layer is the model layer (selectable). Notice, more than
+one point layers can be selectable at the same time, if so, the points configuration will be merged.
+
+\code{activeLayer} is a list and the order is very important: \code{list(l_plot = c(1,3,5),l_hist = c(1)} means if point layers exist,
+the first, third and fifth point layer will be merged and \code{l_plot()} will be chosen as the model; if no point layers exist,
+but histogram layers exist,  then \code{l_hist()} will be used to construct the \code{loon} plot; if neither of point layers and histogram
+layers exists, \code{l_plot()} will be created as the model.
+}
 \examples{
 
  # set linkingGroup
  p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
  p1
  g1 <- loon.ggplot(p1, linkingGroup = "mtcars")
- # loon histogram
  p2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
  p2
  g2 <- loon.ggplot(p2, linkingGroup = "mtcars")
@@ -33,4 +47,41 @@ Interactive loon plots from ggplots
  # show ggGuides
  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
  g <- loon.ggplot(p, ggGuides = TRUE)
+
+ # which one is active?
+ ## l_hist and l_plot, which one should be the priority?
+ den <- density(mtcars$mpg)
+ pp <- ggplot(mtcars, aes(x = mpg)) +
+   geom_histogram(mapping = aes(y = ..density..)) +
+   geom_point(data = data.frame(x = den$x, y = den$y), mapping = aes(x, y))
+ pp
+ ## check difference
+ suppressWarnings(g <- loon.ggplot(pp))
+ g <- loon.ggplot(pp,
+                  activeLayer = list(
+                    l_hist = c(1),
+                    l_plot = c(1))
+                  )
+
+\dontrun{
+## the priority of points layer
+df <- data.frame(
+  x = rnorm(120, c(0, 2, 4)),
+  y = rnorm(120, c(1, 2, 1)),
+  z = letters[1:3]
+)
+df2 <- dplyr::select(df, -z)
+pp <- ggplot(df, aes(x, y)) +
+ geom_point(data = df2, colour = "grey70") +
+ geom_point(aes(colour = z)) +
+ facet_wrap(~z)
+
+### check difference
+suppressWarnings(g <- loon.ggplot(pp))
+g <- loon.ggplot(pp,
+                 activeLayer = list(
+                   l_plot = 2)
+                 )
 }
+}
+

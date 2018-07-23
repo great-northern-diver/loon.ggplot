@@ -25,3 +25,4 @@ g <- mtcars \%>\%
    gg_pipe(ggplot(aes(mpg, wt, colour = cyl)) + geom_point()) \%>\%
    loon.ggplot()
 }
+
