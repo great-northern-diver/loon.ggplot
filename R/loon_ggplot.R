@@ -55,8 +55,8 @@
 #'  suppressWarnings(g <- loon.ggplot(pp))
 #'  g <- loon.ggplot(pp,
 #'                   activeLayer = list(
-#'                     l_hist = c(1),
-#'                     l_plot = c(1))
+#'                     l_hist = 1,
+#'                     l_plot = 1)
 #'                   )
 #'
 #' \dontrun{
@@ -82,7 +82,8 @@
 
 
 loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
-                        activeLayer = list(l_plot = c(1), l_hist = c(1)), ...){
+                        activeLayer = list(l_plot = c(1),
+                                           l_hist = c(1)), ...){
 
   args <- list(...)
   dataFrame <- ggplotObject$data
@@ -221,6 +222,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                   }
                   activeLayer_names <- names(activeLayer)
                   len.activeLayer_names  <- length(activeLayer_names)
+
                   # set layer as model layer
                   for(j in seq_len(len.activeLayer_names + 1)){
                     if(j == (len.activeLayer_names + 1)) {
@@ -273,20 +275,24 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                        integer(0)
                                      }
                   )
+
                   # boxplot has a hidden scatterplot model layer
                   boxplot_points_layerId <- c(boxplotLayerId, match_id)
 
-                  # TODO [2] should be replaced
                   if (is.data.frame(dataFrame) & !"waiver" %in% class(data)) {
-                    mapping.x <- as.character(ggplotObject$mapping$x)[2]
-                    mapping.y <- as.character(ggplotObject$mapping$y)[2]
+                    mapping.x <- as.character(ggplotObject$mapping$x)
+                    mapping.x <- mapping.x[-which("~" %in% mapping.x)]
+                    mapping.y <- as.character(ggplotObject$mapping$y)
+                    mapping.y <- mapping.y[-which("~" %in% mapping.y)]
                     column_names <- colnames(dataFrame)
                   } else {
                     if(length(match_id) != 0) {
                       dataFrame <- ggplotObject$layers[[match_id]]$data
                       linkingKey <- loonLinkingKey(dataFrame, args)
-                      mapping.x <- as.character(ggplotObject$layers[[match_id]]$mapping$x)[2]
-                      mapping.y <- as.character(ggplotObject$layers[[match_id]]$mapping$y)[2]
+                      mapping.x <- as.character(ggplotObject$layers[[match_id]]$mapping$x)
+                      mapping.x <- mapping.x[-which("~" %in% mapping.x)]
+                      mapping.y <- as.character(ggplotObject$layers[[match_id]]$mapping$y)
+                      mapping.y <- mapping.y[-which("~" %in% mapping.y)]
                       column_names <- colnames(dataFrame)
                     }
                   }
@@ -396,8 +402,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                     linkingKey <- linkingKey[isPanel_i.hist_x][in_limits]
                     # set yshows
                     yshows <- "frequency"
-
-                    if (!is.na(mapping.y)) {
+                    if (length(mapping.y) != 0) {
                       if(any(str_detect(as.character(mapping.y), "density"))) yshows <- "density"
                     }
                     if (!is.null(ggplotObject$layers[[match_id]]$mapping$y)) {

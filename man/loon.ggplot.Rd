@@ -59,8 +59,8 @@ layers exists, \code{l_plot()} will be created as the model.
  suppressWarnings(g <- loon.ggplot(pp))
  g <- loon.ggplot(pp,
                   activeLayer = list(
-                    l_hist = c(1),
-                    l_plot = c(1))
+                    l_hist = 1,
+                    l_plot = 1)
                   )
 
 \dontrun{
