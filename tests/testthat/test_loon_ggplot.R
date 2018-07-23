@@ -378,4 +378,18 @@ test_that("example works", {
   g <- loon.ggplot(p)
   expect_equal(class(g), c("l_ggplot", "loon"))
 
+  # example 47
+  pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density..))
+  g <- loon.ggplot(pp)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 48
+  h <- ggplot(data = SAheart, mapping = aes(x = adiposity)) +
+    geom_histogram(mapping = aes(y = ..density..),
+                   bins = 10, fill = "steelblue",
+                   col = "black", alpha = 0.5) +
+    geom_density(mapping = aes(y = ..density..),
+                 fill = "grey", alpha = 0.5)
+  g <- loon.ggplot(h)
+  expect_equal(class(g), c("l_ggplot", "loon"))
 })
