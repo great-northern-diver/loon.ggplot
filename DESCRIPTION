@@ -1,6 +1,7 @@
 Package: loon.ggplot
 Type: Package
-Title: An add on package to loon that converts ggplot2 plots to interactive loon plots
+Title: An add on package to loon that converts ggplot2 plots to interactive loon
+    plots
 Version: 0.1.0
 Authors@R: c(
   person('Zehao', 'Xu', email = 'z267xu@uwaterloo.ca', role = c('aut', 'cre')),
@@ -27,5 +28,5 @@ Suggests:
     tools,
     testthat
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1
 Encoding: UTF-8
