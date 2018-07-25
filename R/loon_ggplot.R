@@ -107,6 +107,9 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
   ggLayout <- buildggplotObject$ggLayout
   ggplotPanel_params <- buildggplotObject$ggplotPanel_params
 
+  # theme
+  theme <- ggplotObject$theme
+
   # number of panels
   panelNum <- dim(ggLayout)[1]
 
@@ -576,7 +579,8 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                           showGuides = showGuides,
                                           showScales = showScales,
                                           showLabels = TRUE,
-                                          swapAxes = swapAxes)
+                                          swapAxes = swapAxes,
+                                          background = background.color)
 
                 tkgrid(loonPlot, row = ggLayout[i,]$ROW,
                        column=ggLayout[i,]$COL, sticky="nesw")
@@ -585,25 +589,25 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
 
                 # draw specific guides
                 if (isCoordPolar) {
-
                   if ("l_hist" %in% class(loonPlot)) {
-                    warning("l_hist only works properly with Cartesian coordinates")
+                    warning("l_hist only works with Cartesian coordinates")
                   } else {
-                    polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[i]], swapAxes)
-                    # lower to bottom
-                    children <- l_layer_getChildren(loonPlot)
-                    # the length of children is at least two
-                    sapply(1:(length(children) - 1),
-                           function(l){
-                             l_layer_lower(loonPlot, polarGuides)
-                           })
+                    if (ggGuides) {
+                      polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[i]], swapAxes, theme)
+                      # lower to bottom
+                      children <- l_layer_getChildren(loonPlot)
+                      # the length of children is at least two
+                      sapply(1:(length(children) - 1),
+                             function(l){
+                               l_layer_lower(loonPlot, polarGuides)
+                             })
+                    } else message("Is it hard to underatand this graphics? Try \"ggGuides = TRUE\"!")
+
                     l_scaleto_world(loonPlot)
                   }
-
                 } else {
-
                   if (ggGuides) {
-                    CartesianGuides <- CartesianGuides(loonPlot, ggplotPanel_params[[i]], swapAxes)
+                    CartesianGuides <- CartesianGuides(loonPlot, ggplotPanel_params[[i]], swapAxes, theme)
                     # lower to bottom
                     children <- l_layer_getChildren(loonPlot)
                     # the length of children is at least two
@@ -613,7 +617,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                            })
                     l_scaleto_world(loonPlot)
                   } else {
-
                     l_configure(loonPlot,
                                 panX=panX,
                                 panY=panY,
@@ -623,6 +626,28 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                 zoomY = zoomY)
                   }
                 }
+                # set background, foreground, guides color
+                background.color <- if (is.null(theme$plot.background$colour)) {
+                  loonPlot['background']
+                } else hex6to12(theme$plot.background$colour)
+
+                text.color <- if (is.null(theme$text$colour)) {
+                  loonPlot['foreground']
+                } else hex6to12(theme$text$colour)
+
+                panel.background_fill <- if(is.null(theme$panel.background$fill))  {
+                  loonPlot['guidesBackground']
+                } else hex6to12(theme$panel.background$fill)
+
+                panel.guideline_color <- if(is.null(theme$panel.grid$colour)) {
+                  loonPlot['guidelines']
+                } else hex6to12(theme$panel.grid$colour)
+
+                l_configure(loonPlot,
+                            background = background.color,
+                            foreground = text.color,
+                            guidesBackground = panel.background_fill,
+                            guidelines = panel.guideline_color)
 
                 loonPlot
               })
