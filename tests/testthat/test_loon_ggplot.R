@@ -271,10 +271,10 @@ test_that("example works", {
   expect_equal(class(loon.ggplot(pp)), c("l_ggplot", "loon"))
 
   # example 31
-  skip_on_cran()
-  pp <- ggplot(faithfuld, aes(waiting, eruptions)) +
-    geom_raster(aes(fill = density))
-  expect_equal(class(loon.ggplot(pp)), c("l_ggplot", "loon"))
+  # skip_on_cran()
+  # pp <- ggplot(faithfuld, aes(waiting, eruptions)) +
+  #   geom_raster(aes(fill = density))
+  # expect_equal(class(loon.ggplot(pp)), c("l_ggplot", "loon"))
 
   # example 32
   pp <- ggplot(mtcars, aes(x = mpg)) + geom_dotplot(binwidth = 1.5)
@@ -285,10 +285,10 @@ test_that("example works", {
   pp <- p + geom_boxplot()
   expect_equal(class(loon.ggplot(pp, ggGuides = TRUE)), c("l_ggplot", "loon"))
 
-  # example 34
-  pp <- ggplot(diamonds, aes(carat, price)) +
-    geom_boxplot(aes(group = cut_width(carat, 0.25)), outlier.alpha = 0.1)
-  expect_equal(class(loon.ggplot(pp)), c("l_ggplot", "loon"))
+  # # example 34
+  # pp <- ggplot(diamonds, aes(carat, price)) +
+  #   geom_boxplot(aes(group = cut_width(carat, 0.25)), outlier.alpha = 0.1)
+  # expect_equal(class(loon.ggplot(pp)), c("l_ggplot", "loon"))
 
   # example 35
   p <- ggplot(mtcars, aes(factor(cyl), mpg))
@@ -391,5 +391,100 @@ test_that("example works", {
     geom_density(mapping = aes(y = ..density..),
                  fill = "grey", alpha = 0.5)
   g <- loon.ggplot(h)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 49 theme
+  p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
+                                       colour = factor(gear))) + facet_wrap(~am)
+  g <- loon.ggplot(p, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 50
+  p1 <- p + theme_gray() # the default
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # exmaple 51
+  p1 <- p + theme_bw()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # exmaple 52
+  p1 <- p + theme_linedraw()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 53
+  p1 <- p + theme_light()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 54
+  p1 <- p + theme_dark()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # exmaple 55
+  p1 <- p + theme_minimal()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 56
+  p1 <- p + theme_classic()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 57
+  p1 <- p + theme_void()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 58 theme polar cood
+  p <- ggplot(mtcars) +
+    geom_point(aes(x = wt, y = mpg,
+                   colour = factor(gear))) +
+    facet_wrap(~am) +
+    coord_polar()
+  g <- loon.ggplot(p, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 59
+  p1 <- p + theme_gray() # the default
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # exmaple 60
+  p1 <- p + theme_bw()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # exmaple 61
+  p1 <- p + theme_linedraw()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 62
+  p1 <- p + theme_light()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 63
+  p1 <- p + theme_dark()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # exmaple 64
+  p1 <- p + theme_minimal()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 65
+  p1 <- p + theme_classic()
+  g <- loon.ggplot(p1, ggGuides = T)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 66
+  p1 <- p + theme_void()
+  g <- loon.ggplot(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "loon"))
 })
