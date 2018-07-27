@@ -22,7 +22,7 @@
 #'
 #'
 #'
-#' @import ggplot2 loon tcltk methods
+#' @import ggplot2 loon tcltk methods grid
 #' @importFrom stats quantile approxfun integrate setNames
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange
@@ -31,14 +31,8 @@
 #' @export
 #'
 #' @examples
-#'
-#'  # set linkingGroup
-#'  p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
-#'  p1
-#'  g1 <- loon.ggplot(p1, linkingGroup = "mtcars")
-#'  p2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
-#'  p2
-#'  g2 <- loon.ggplot(p2, linkingGroup = "mtcars")
+#'  p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+#'  g <- loon.ggplot(p)
 #'
 #'  # show ggGuides
 #'  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
@@ -250,7 +244,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                        } else {
                                          l_plot_activeLayerId <- activeLayer[['l_plot']]
                                          if(max(l_plot_activeLayerId) > length(pointsLayerId)) {
-                                           warning("the l_plot max layer id cannot be larger than the number of points layer id")
+                                           warning("the l_plot max layer id cannot be larger than the number of points layer id\n")
                                            l_plot_activeLayerId <- 1
                                          }
                                          pointsLayerId[l_plot_activeLayerId]
@@ -267,14 +261,14 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                                    "the rest will be added as l_layer_rectangles")
                                          }
                                          if(max(l_hist_activeLayerId) > length(histogramLayerId)) {
-                                           warning("the l_hist max layer id cannot be larger than the number of histogram layer id")
+                                           warning("the l_hist max layer id cannot be larger than the number of histogram layer id\n")
                                            l_plot_activeLayerId <- 1
                                          }
                                          histogramLayerId[l_hist_activeLayerId]
                                        }
                                      },
                                      {
-                                       warning("The name of activeLayer can only be l_plot or l_hist, else none would be active")
+                                       warning("The name of activeLayer can only be l_plot or l_hist, else none would be active\n")
                                        integer(0)
                                      }
                   )
@@ -334,7 +328,8 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                     }
                     hist_values <- hist_x[isPanel_i.hist_x]
                     # histogram start value, end value
-                    start_value <- min(hist_data[hist_data$PANEL == i, ]$xmin, na.rm = TRUE)
+                    start_value <- min(hist_data[hist_data$PANEL == i, ]$xmin[hist_data[hist_data$PANEL == i, ]$ymax != 0],
+                                       na.rm = TRUE)
                     end_value <- max(hist_data[hist_data$PANEL == i, ]$xmax, na.rm = TRUE)
                     # any x y limit?
                     x.limits <- ggBuild$layout$panel_scales_x[[match_id]]$limits
@@ -455,7 +450,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
 
                                                       if (is.null(label)) {
                                                         label <- paste0("item", seq_len(length(x)) - 1, "panel", i)
-                                                        warning("item lable may not match")
+                                                        warning("item lable may not match\n")
                                                       }
 
                                                       data.frame(x = x, y = y, label = label, color = color, glyph = glyph, size = size)
@@ -537,14 +532,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                           }
                                         })
 
-                  # do we need to draw ggplot with curve layer
-                  if (length(curveLayerId) > 0) {
-                    if(any(vapply(curveLayerId,
-                               function(j) {
-                                 loon_layers[[j]]
-                               }, logical(1)))) grid.draw(ggplotObject)
-                  }
-
                   # recover the points or histogram layer to the original position
                   if(length(match_id) != len_layers & length(match_id) != 0) {
                     otherLayerId <- (1:len_layers)[-match_id]
@@ -590,7 +577,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                 # draw specific guides
                 if (isCoordPolar) {
                   if ("l_hist" %in% class(loonPlot)) {
-                    warning("l_hist only works with Cartesian coordinates")
+                    warning("l_hist only works with Cartesian coordinates\n")
                   } else {
                     if (ggGuides) {
                       polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[i]], swapAxes, theme)
@@ -601,7 +588,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                              function(l){
                                l_layer_lower(loonPlot, polarGuides)
                              })
-                    } else message("Is it hard to underatand this graphics? Try \"ggGuides = TRUE\"!")
+                    } else message("Is it hard to underatand this graphics? Try \"ggGuides = TRUE\"!\n")
 
                     l_scaleto_world(loonPlot)
                   }
