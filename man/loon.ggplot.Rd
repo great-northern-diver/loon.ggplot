@@ -35,14 +35,8 @@ but histogram layers exist,  then \code{l_hist()} will be used to construct the 
 layers exists, \code{l_plot()} will be created as the model.
 }
 \examples{
-
- # set linkingGroup
- p1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()+ facet_wrap(~gear)
- p1
- g1 <- loon.ggplot(p1, linkingGroup = "mtcars")
- p2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
- p2
- g2 <- loon.ggplot(p2, linkingGroup = "mtcars")
+ p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+ g <- loon.ggplot(p)
 
  # show ggGuides
  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
