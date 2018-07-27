@@ -538,7 +538,7 @@ loonLayer.GeomCurve <- function(widget,
       }
     }
     # grid remove
-    grid.remove(xspline.name[1])
+    grid.remove(xspline.name[1], redraw = FALSE)
 
     loonLayer.GeomPath(widget,
                        layerGeom,
