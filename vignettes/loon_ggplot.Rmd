@@ -14,47 +14,279 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+setwd("C:/Users/Zehao/Documents/GitHub/loon.ggplot/vignettes")
 ```
 
 
 ## Introduction
 
-loon.ggplot is a R package to transform a [ggplot](http://ggplot.yhathq.com/) graphic into a interactive [loon](http://waddella.github.io/loon/) plot
+`loon.ggplot` is a R package to transform [`ggplot`](http://ggplot.yhathq.com/) graphics into a interactive [`loon`](http://waddella.github.io/loon/) plot.
 
-## Styles
+## 1. Basic uasge
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r message=FALSE}
+library(loon.ggplot)
+g1 <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+lp1 <- loon.ggplot(g1)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+`loon` provides `loonGrob` to transform `loon` graphics to `grid` `grob`s, then to capture the static display.
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+```{r fig.width=7, fig.show='hold'}
+library(grid)
+library(gridExtra)
+grid.arrange(loonGrob(lp1), g1, ncol = 2, top = "loon plot vs ggplot")
 ```
 
-Also a quote using `>`:
+The points can be selected in `loon` plot
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```{r}
+cyl4 <- which((mtcars$cyl == 4) == TRUE)
+lp1$x1y1['selected'][cyl4] <- TRUE
+```
+
+```{r echo = F}
+grid.loon(lp1)
+```
+
+Also, more interesting actions can be achieved, like changing color, size, glyph types and etc. In this vignette, we just use 'selected' to highlight and show difference. Please take a look at [`loon` display](http://waddella.github.io/loon/learn_R_display_plot.html) for more details (Notice, the output of `loon.ggplot` is a list and each element is the corresponding `loon` plot).
+
+### 1.1.Coordiantes and `ggGuides`
+
+Let us look at the following example
+```{r }
+library(ElemStatLearn)
+g1.1 <- ggplot(SAheart, aes(obesity, adiposity)) + geom_point() + geom_smooth() +
+  coord_polar(theta = "y")
+g1.1
+```
+
+The graphics are projected on the polar coordinates system with respect to "adiposity" (It is a pretty weird plot but does demonstrate how coordinate systems are abstracted out as part of the grammar.)
+
+```{r fig.width=3}
+lp1.1 <- loon.ggplot(g1.1)
+grid.loon(lp1.1)
+```
+
+However, this `loon` plot is a bit confusing without any guidance. As the shown help message,  how about trying to set argument "ggGuides = TRUE"?
+```{r fig.width=3.5, fig.height= 3.5}
+lp1.1_ggGuides <- loon.ggplot(g1.1, ggGuides = TRUE)
+grid.loon(lp1.1_ggGuides)
+```
+
+`ggGuides` will return a `ggplot` object coordinates system (polar or Cartesian). It is extremely helpful under polar coordinates system, since this system is very difficult to interpret without any guiding.
+
+### 1.2.Which one is active?
+
+```{r fig.width=3}
+den <- density(mtcars$mpg)
+g1.2.1 <- ggplot(mtcars, aes(x = mpg)) +
+  geom_histogram(mapping = aes(y = ..density..)) +
+  geom_point(data = data.frame(x = den$x, y = den$y), mapping = aes(x, y))
+g1.2.1
+```
+
+```{r fig.width=7, fig.show='hold'}
+## check difference
+suppressWarnings(
+  # warnings occure, why?
+  lp1.2.1 <- loon.ggplot(g1.2.1, 
+                        activeLayer = list(
+                          l_plot = 1,
+                          l_hist = 1))
+)
+lp1.2.2 <- loon.ggplot(g1.2.1,
+                      activeLayer = list(
+                        l_hist = 1,
+                        l_plot = 1)
+)
+grid.arrange(loonGrob(lp1.2.1), loonGrob(lp1.2.2), ncol = 2, top = "lp1.2.1 vs lp1.2.2")
+```
+
+It seems no big difference between these two plots. Let us select the data larger than 20.
+
+```{r}
+lp1.2.1$x1y1['selected'][den$x > 20] <- TRUE
+lp1.2.2$x1y1['selected'][mtcars$mpg > 20] <- TRUE
+```
+
+```{r fig.width=7, fig.show='hold'}
+grid.arrange(loonGrob(lp1.2.1), loonGrob(lp1.2.2), ncol = 2, top = "lp1.2.1 vs lp1.2.2")
+```
+
+`activeLayer` is helping to set the active model. `p3.1` gives the layer list with order  `list(l_plot = 1, l_hist = 1)` which indicates that if any point layers (`geom_point`) exist, `l_plot` will be activated; `p3.2` gives the order `l_hist = 1` in front of `l_plot = 1`, which indicates if histogram layer (`geom_hist`) exists, `l_hist` will be activated. What if we have multiple point layers?
+
+```{r fig.width=4}
+df <- data.frame(
+  x = rnorm(120, c(0, 2, 4)),
+  y = rnorm(120, c(1, 2, 1)),
+  z = letters[1:3]
+)
+df2 <- dplyr::select(df, -z)
+g1.2.2 <- ggplot(df, aes(x, y)) +
+  geom_point(data = df2, colour = "grey70") +
+  geom_point(aes(colour = z)) +
+  facet_wrap(~z)
+g1.2.2
+```
+
+```{r warning=FALSE}
+suppressWarnings(
+  # warnings occure, why?
+  lp1.2.3 <- loon.ggplot(g1.2.2, 
+                         activeLayer = list(
+                           l_plot = 1
+                         ))
+)
+lp1.2.4 <- loon.ggplot(g1.2.2,
+                       activeLayer = list(
+                         l_plot = 2)
+)
+suppressWarnings(
+  # warnings occure, why?
+  lp1.2.5 <- loon.ggplot(g1.2.2,
+                         activeLayer = list(
+                           l_plot = c(1,2))
+  )
+)
+```
+
+`lp1.2.4` has more statistical meanings than the other two. Let us select the points in three facets
+```{r fig.width=8, fig.height=8, fig.show='hold'}
+# lp1.2.3
+sel_lp1.2.3 <- lapply(lp1.2.3, 
+                      function(loon_plot){
+                        loon_plot['selected'] <- TRUE
+                      })
+# lp1.2.4
+sel_lp1.2.4 <- lapply(lp1.2.4, 
+                      function(loon_plot){
+                        loon_plot['selected'] <- TRUE
+                      })
+# lp1.2.5
+sel_lp1.2.5 <- lapply(lp1.2.5, 
+                      function(loon_plot){
+                        loon_plot['selected'] <- TRUE
+                      })
+grid.arrange(
+  textGrob(
+    c("Check","the", "big" ,"difference!"), 
+    x = c(0.2, 0.4, 0.6, 0.8),
+    y = c(0.8, 0.6, 0.4, 0.2),
+    gp = gpar(col = "grey80", fontsize = 18),
+    rot = c(30, 60, 30, 60)
+  ),
+  loonGrob(lp1.2.3), 
+  loonGrob(lp1.2.4),
+  loonGrob(lp1.2.5), 
+  ncol = 2, 
+  nrow = 2,
+  top = "lp1.2.3 vs lp1.2.4 vs lp1.2.5")
+```
+
+In this example, the active points should be the colorful ones; the grey points are background and should **not** be activated. In `ggplot` object, the first layer is the grey point layer, thus we need to set `activeLayer` as `list(l_plot = 2)`. That is why `lp1.2.4` is more appropriate than the rest.
+
+Also, you can reset the `ggplot` model as
+
+```{r, eval = F}
+g1.2.2 <- ggplot(df, aes(x, y)) +
+  geom_point(aes(colour = z)) +
+  geom_point(data = df2, colour = "grey70") +
+  facet_wrap(~z) 
+```     
+
+Then, `lp1.2.3` would be better and no warnings occur (why?).
+
+In conclusion, `activeLayer` is defined by two orders: the order of `l_plot` and `l_hist` determines which model will be used; the order in `l_plot` or `l_hist` determines which layer is the active layer.
+
+### 1.3.`linkingGroup` and `linkingKey`
+
+`loon` has a powerful interactive system, `linkingKey` and `linkingGroup`, so that some of their $n$ dimensional states can be synchronized. Displays are linked if their share the same `linkingGroup`; the $n$ dimensional `linkingKey` state controls which elements get synchronized between the linked displays. More details are shown in  [`loon` linking](http://waddella.github.io/loon/learn_R_linking.html).
+
+```{r, fig.width=7, fig.show='hold'}
+g1.3.1 <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()
+g1.3.2 <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
+grid.arrange(g1.3.1, g1.3.2, ncol = 2)
+```
+
+```{r fig.width=7, fig.show='hold'}
+lp1.3.1 <- loon.ggplot(g1.3.1, linkingGroup = "mtcars")
+lp1.3.2 <- loon.ggplot(g1.3.2, linkingGroup = "mtcars")
+lp1.3.1$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
+# or
+# lp1.3.2$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
+grid.arrange(loonGrob(lp1.3.1), loonGrob(lp1.3.2), ncol = 2)
+```
+
+### 1.4.Handle `geom_curve`
+
+```{r, eval=FALSE}
+df <- data.frame(x = 1:3, y = 1:3)
+df2 <- data.frame(x = c(1,3), y = c(1,3), 
+                  xend = c(2,2), yend = c(2,2))
+g1.4 <- ggplot(df, aes(x, y)) + 
+  geom_point() +
+  geom_curve(aes(x = x ,y = y, 
+                 xend = xend, yend = yend),
+             data = df2,
+             color = c("red", "blue"))
+loon.ggplot(g1.4)
+```
+
+Most `geom` layers in `ggplot` object are straight forward except `geom_curve`. Control points of `geom_curve` are from `curve grob` in `grid` and these points can only be achieved at the drawing time. Thus, "askYesorNo" option is generated, if `ggplot` graphics are drawn, curves would be shown in `loon` (or curves are replaced by segments).
+
+## 2.Pipe ggplot model via `gg_pipe`
+
+One convenient programming style is that of pipes as developed in the package `magrittr`. 
+
+```{r message=FALSE}
+library(magrittr)
+library(tidyverse)
+SAheart %>%
+  mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
+  filter(age < 50) %>%
+  ggplot(aes(x = ltob, y = lsbp)) +
+  geom_point() +
+  facet_wrap(~chd) -> gg
+# the plot will be drawn at the end
+lp1.2 <- loon.ggplot(gg)
+```
+
+However, if we pipe `ggplot` as following, error will occur
+
+```{r, eval=FALSE}
+## Error occures 
+SAheart %>%
+  mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
+  filter(age < 50) %>%
+  ggplot(aes(x = ltob, y = lsbp)) +
+  geom_point() +
+  facet_wrap(~chd) %>% 
+  loon.ggplot()
+```
+
+The reason is the precedence of signal "+" and "%>%". "%>%" takes the priority, thus 
+
+       facet_wrap(~chd) %>% loon.ggplot()
+would run in front of  
+
+       ggplot(aes(x = ltob, y = lsbp)) +
+         geom_point() +
+         facet_wrap(~chd).
+
+In `loon.ggplot`, `gg_pipe` packs the `ggplot` object and forces it to pass through in order.
+
+```{r fig.width=6}
+## Works
+SAheart %>%
+  mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
+  filter(age < 50) %>%
+  gg_pipe( 
+    ggplot(aes(x = ltob, y = lsbp)) +
+      geom_point() +
+      facet_wrap(~chd) 
+  ) %>% 
+  loon.ggplot() %>%
+  grid.loon()
+```
+
