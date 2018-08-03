@@ -569,6 +569,10 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                                           swapAxes = swapAxes,
                                           background = background.color)
 
+                # resize loon plot
+                tkconfigure(paste(loonPlot,'.canvas',sep=''),
+                            width=850/max(ggLayout$ROW),
+                            height= 700/max(ggLayout$COL))
                 tkgrid(loonPlot, row = ggLayout[i,]$ROW,
                        column=ggLayout[i,]$COL, sticky="nesw")
                 tkgrid.columnconfigure(tt, ggLayout[i,]$COL, weight=1)
@@ -638,11 +642,13 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
 
                 loonPlot
               })
+
   class(p) <- c("l_ggplot", "loon")
   names(p) <- sapply(seq_len(panelNum),
                      function(j){
                        paste0(c("x", "y"), ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)], collapse = "")
                      })
+
 
   if (length(args) != 0) {
     # args remove linkingKey and linkingGroup (if they have)
