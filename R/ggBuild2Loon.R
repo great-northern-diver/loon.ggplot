@@ -22,7 +22,7 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
     )
   }
   # the parttern of ggLayout
-  # PANEL, ROW, COL, ..., SCALE_X, SCALE_Y. In general, it is 3
+  # PANEL, ROW, COL, ..., SCALE_X, SCALE_Y. It is 3 so far
   ggLayout_start_pos <- max(which(colnames(ggLayout) == "COL"),
                             which(colnames(ggLayout) == "ROW"))
 
@@ -88,6 +88,8 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
                 # one facet linkingKey
                 linkingKey
               } else {
+                # multiple facet linkingKey
+                # which variable is used to separate facet
                 panelMatch <- sapply(seq_len(wrap.num),
                                      function (j) {
                                        which(str_detect(colnames(ggLayout)[j + ggLayout_start_pos],
@@ -97,12 +99,15 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
                 panelLevels <- list()
                 factors <- list()
                 panelLevels.len <- c()
+                # determine the factors and levels of those variables used for separating
                 for (j in 1:panelMatch.len) {
                   factors[[j]] <- as.factor(unlist(input[,   panelMatch[j]]))
                   panelLevels[[j]] <- levels(factors[[j]])
                   panelLevels.len[j] <- length(panelLevels[[j]])
                 }
+                # if we just have one variable used for separating
                 if(panelMatch.len == 1){
+                  # factors
                   panelValues <- as.character(factors[[1]])
                   # label order
                   linkingKey_order <- unlist(
@@ -112,10 +117,20 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
                            }))
                   linkingKey[linkingKey_order]
                 } else {
+                  ################ cum_multiply
+                  # suppose we have two variables used for separating, first variable has 6 factors, second has 3
+                  # First: I II III IV V VI
+                  # Second: A B C
+                  # The first group is determind by IA (match these two factors), then the second is determined by IB, ..., the last is VIC.
+                  # In other word, ggplot_build reorder the data set by
+                  # IA, IA, ... IA, IB,..., IB, ..., VIC
+                  # thus we have to do the loop from 1 to 18(3 * 6)
+
+                  # give the number of loop and the depth in each loop
                   depth <- cum_multiply(panelLevels.len)
                   numOfLoop <- depth[1]
                   depth <- depth[-1]
-                  # label order
+                  # find label order
                   linkingKey_order <- unlist(
                     lapply(seq_len(numOfLoop),
                            function(j){
@@ -139,7 +154,9 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
                                common_index <- intersect(common_index, factors_index[[k+1]])
                              }
                              common_index
-                           }))
+                           }
+                    )
+                  )
                   linkingKey[linkingKey_order]
                 }
               }
