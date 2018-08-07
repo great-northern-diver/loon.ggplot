@@ -4,15 +4,15 @@
 \alias{loon.ggplot}
 \title{Create a loon plot from a ggplot2 object}
 \usage{
-loon.ggplot(ggplotObject, ggGuides = FALSE, activeLayer = list(l_plot =
-  c(1), l_hist = c(1)), ...)
+loon.ggplot(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
+  ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
 
 \item{ggGuides}{if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.}
 
-\item{activeLayer}{to determine which layer is active. See details}
+\item{active_geomLayers}{to determine which geom layer is active.}
 
 \item{...}{named arguments to modify loon plot states}
 }
@@ -21,18 +21,6 @@ a loon widget
 }
 \description{
 Interactive loon plots from ggplots
-}
-\details{
-\code{activeLayer} is to help to set model. \code{ggplot} object can be transformed to model \code{l_plot()} or model \code{l_hist()}
-(points and histograms cannot be active at the same time in \code{loon} so far). If point layers and histogram layers
-both exist in \code{ggplot}, \code{activeLayer} can help you to set the model (l_plot() or l_hist(), one of these two); if multiple point
-layers exist in \code{ggplot}, \code{activeLayer} can set which point layer is the model layer (selectable). Notice, more than
-one point layers can be selectable at the same time, if so, the points configuration will be merged.
-
-\code{activeLayer} is a list and the order is very important: \code{list(l_plot = c(1,3,5),l_hist = c(1)} means if point layers exist,
-the first, third and fifth point layer will be merged and \code{l_plot()} will be chosen as the model; if no point layers exist,
-but histogram layers exist,  then \code{l_hist()} will be used to construct the \code{loon} plot; if neither of point layers and histogram
-layers exists, \code{l_plot()} will be created as the model.
 }
 \examples{
  p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
@@ -50,12 +38,8 @@ layers exists, \code{l_plot()} will be created as the model.
    geom_point(data = data.frame(x = den$x, y = den$y), mapping = aes(x, y))
  pp
  ## check difference
- suppressWarnings(g <- loon.ggplot(pp))
- g <- loon.ggplot(pp,
-                  activeLayer = list(
-                    l_hist = 1,
-                    l_plot = 1)
-                  )
+ g <- loon.ggplot(pp)
+ suppressWarnings(g <- loon.ggplot(pp, active_geomLayers = 2))
 
 \dontrun{
 ## the priority of points layer
@@ -72,10 +56,7 @@ pp <- ggplot(df, aes(x, y)) +
 
 ### check difference
 suppressWarnings(g <- loon.ggplot(pp))
-g <- loon.ggplot(pp,
-                 activeLayer = list(
-                   l_plot = 2)
-                 )
+g <- loon.ggplot(pp, active_geomLayers = 2)
 }
 }
 

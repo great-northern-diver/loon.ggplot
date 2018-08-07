@@ -487,4 +487,34 @@ test_that("example works", {
   p1 <- p + theme_void()
   g <- loon.ggplot(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 67
+  df <- data.frame(
+    x = rnorm(120, c(0, 2, 4)),
+    y = rnorm(120, c(1, 2, 1)),
+    z = letters[1:3]
+  )
+  df2 <- dplyr::select(df, -z)
+  pp <- ggplot(df, aes(x, y)) +
+   geom_point(data = df2, colour = "grey70") +
+   geom_point(aes(colour = z)) +
+   facet_wrap(~z, scales = "free")
+  g <- loon.ggplot(pp, active_geomLayers = 2)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 68
+  pp <- ggplot(df, aes(x, y)) +
+    geom_point(data = df2, colour = "grey70") +
+    geom_point(aes(colour = z)) +
+    facet_wrap(~z, scales = "free_x")
+  g <- loon.ggplot(pp, active_geomLayers = 1)
+  expect_equal(class(g), c("l_ggplot", "loon"))
+
+  # example 69
+  pp <- ggplot(df, aes(x, y)) +
+    geom_point(data = df2, colour = "grey70") +
+    geom_point(aes(colour = z)) +
+    facet_wrap(~z, scales = "free_y")
+  g <- loon.ggplot(pp, active_geomLayers = c(1,2))
+  expect_equal(class(g), c("l_ggplot", "loon"))
 })

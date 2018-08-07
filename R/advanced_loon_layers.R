@@ -471,7 +471,7 @@ loonLayer.GeomCurve <- function(widget,
   }
 
   # avoid duplicated rows
-  data <- data[!duplicated(data), ]
+  # data <- data[!duplicated(data), ]
   n <- dim(data)[1]
   isCoordPolar <- is.CoordPolar(ggplotPanel_params)
   size <- data$size
@@ -481,14 +481,14 @@ loonLayer.GeomCurve <- function(widget,
   coordinates <- ggplotObject$coordinates
 
   which_curve <- special[["curve"]]$which_curve
-  curveLayerId <- special[["curve"]]$curveLayerId
+  curveLayers <- special[["curve"]]$curveLayers
 
   # use "grid" to get the control coordinates
   answer <- utils::menu(c("y", "n"), title="Do you want to draw the ggplot?")
 
   if(answer == 1) {
     answer <- TRUE
-    if (which_curve == curveLayerId[1]) {
+    if (which_curve == curveLayers[1]) {
       grid.draw(ggplotObject)
       grid.force()
     }

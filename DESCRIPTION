@@ -28,7 +28,9 @@ Suggests:
     tools,
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    ElemStatLearn,
+    tidyverse
 LazyData: true
 RoxygenNote: 5.0.1
 Encoding: UTF-8
