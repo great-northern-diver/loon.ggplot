@@ -28,7 +28,7 @@ gg_pipe <- function(data, ggplotObject){
   if (any(str_detect(dep, "ggplot"))) {
     ggplot_id <- which(str_detect(dep, "ggplot") == TRUE)
     if (length(ggplot_id) > 1) {
-      stop("only one ggplot model is required")
+      stop("only one ggplot model can be handled")
     } else {
       dep1 <- dep[ggplot_id]
       # construct a new ggplot character with input data

@@ -167,7 +167,7 @@ sel_lp1.2.2.3 <- lapply(lp1.2.2.3,
                       })
 grid.arrange(
   textGrob(
-    c("Check","the", "big" ,"difference!"), 
+    c("What","is", "your" ,"conclusion?"), 
     x = c(0.2, 0.4, 0.6, 0.8),
     y = c(0.8, 0.6, 0.4, 0.2),
     gp = gpar(col = "grey80", fontsize = 18),

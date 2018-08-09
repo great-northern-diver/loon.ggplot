@@ -297,7 +297,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                     loonPlot
                   })
 
-  class(plots) <- c("l_ggplot", "loon")
+  class(plots) <- c("l_ggplot", "l_compound", "loon")
   names(plots) <- sapply(seq_len(panelNum),
                          function(j){
                            paste0(c("x", "y"), ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)], collapse = "")

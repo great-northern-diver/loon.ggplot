@@ -2,10 +2,12 @@
 
 S3method(l_cget,l_ggplot)
 S3method(l_configure,l_ggplot)
-S3method(loonGrob,l_ggplot)
 S3method(names,l_ggplot)
 export(gg_pipe)
 export(loon.ggplot)
+export(loonGrob_getLocations.l_ggplot)
+export(loonGrob_getPlots.l_ggplot)
+export(loonGrob_recoverLoonWidgets.l_ggplot)
 import(ggplot2)
 import(grid)
 import(loon)
