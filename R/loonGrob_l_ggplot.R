@@ -2,6 +2,10 @@
 #'
 #' @description Grid grobs are useful to create publication quality graphics.
 #' @param target loon target. \code{S3} method, see \link{loonGrob}
+#' @param name a character identifier for the grob. Used to find the grob on the display list and/or as a child of another grob.
+#' @param gp A gpar object, typically the output from a call to the function gpar. This is basically a list of graphical parameter settings.
+#' @param vp a \link{viewport} object (or NULL).
+#'
 #' @return a grid grob
 #'
 #' @import grid
@@ -14,73 +18,36 @@
 #' library(grid)
 #' grid.newpage(); grid.draw(loonGrob(g))
 
-
 #' @export
-loonGrob_getPlots.l_ggplot <- function(target){
-  # throw errors if not loon widget
-  lapply(target,
-         function(tar){
-           l_throwErrorIfNotLoonWidget(tar)
-         }
-  )
-  widget <- target
-  len_widget <- length(widget)
-  if(len_widget == 1) {
-    new_widget <- widget
-    recover.args <- NULL
-  } else {
-    # set xlabel ylabel, ...
-    xlabels <- lapply(widget,
-                      function(w){
-                        w['xlabel']
-                      }
-    )
-    ylabels <- lapply(widget,
-                      function(w){
-                        w['ylabel']
-                      }
-    )
-    labelMargins <- lapply(widget,
-                           function(w){
-                             w['labelMargins']
-                           }
-    )
-    scalesMargins <- lapply(widget,
-                            function(w){
-                              w['scalesMargins']
-                            }
-    )
-    new_widget <- lapply(widget,
-                         function(w){
-                           w['xlabel'] <- ""
-                           w['ylabel'] <- ""
-                           w['scalesMargins'] <- c(15, 10, 0, 0)
-                           w['labelMargins'] <- c(15, 20, 35, 0)
-                           w
-                         }
-    )
-    class(new_widget) <- class(widget)
-    recover.args <- list(xlabels = xlabels,
-                        ylabels = ylabels,
-                        labelMargins = labelMargins,
-                        scalesMargins = scalesMargins
-    )
-  }
-  list(
-    widget = new_widget,
-    recover.args = recover.args
-  )
+loonGrob_layoutType.l_ggplot <- function(target) {
+  "arrangeGrobArgs"
 }
 
 #' @export
-loonGrob_getLocations.l_ggplot <- function(target){
-
+l_get_arrangeGrobArgs.l_ggplot <- function(target){
   widget <- target
   len_widget <- length(widget)
-  # layout_matrix
-  if(len_widget == 1) {
-    layout_matrix <- matrix(1, ncol = 1, nrow = 1)
-    xlabel <- ylabel <- NULL
+
+  # loon grobs
+  lgrobs <- lapply(widget,
+                   function(w) {
+                     loonGrob(w)
+                   }
+  )
+  # label
+  xlabel <- paste0(unique(sapply(widget, function(w)w['xlabel'])), collapse = " ")
+  ylabel <- paste0(unique(sapply(widget, function(w)w['ylabel'])), collapse = " ")
+  title_subtitle <- unique(sapply(widget, function(w)w['title']))
+  if(all(str_detect(title_subtitle, "[%+%]"))) {
+    title <- unique(sapply(strsplit(title_subtitle, split = "%+%", fixed = TRUE), function(char) char[1]))
+    subtitle <- sapply(strsplit(title_subtitle, split = "%+%", fixed = TRUE), function(char) char[-1])
+  } else {
+    title <- NA
+    subtitle <- title_subtitle
+  }
+
+  if (len_widget == 1) {
+    layout_matrix <- matrix(1, nrow = 1, ncol = 1)
   } else {
     names <- names(widget)
     namesSplit <- strsplit(names, split = "")
@@ -94,65 +61,23 @@ loonGrob_getLocations.l_ggplot <- function(target){
                          })
     )
     # colnames(ggLayout) <- c("ROW", "COL")
-    rownames <- seq_len(len_widget)
+    values <- seq_len(len_widget)
     layoutDim <- apply(ggLayout, 2, max)
     # layout matrix
     layout_matrix <- matrix(rep(NA, layoutDim[1] * layoutDim[2]), nrow = layoutDim[1])
     for(i in 1:len_widget) {
       ggLayouti <- ggLayout[i, ]
       # set layout matrix
-      layout_matrix[ggLayouti[1], ggLayouti[2]] <- rownames[i]
+      layout_matrix[ggLayouti[1], ggLayouti[2]] <- values[i]
     }
-    xlabels <- lapply(widget,
-                      function(w){
-                        w['xlabel']
-                      }
-    )
-    ylabels <- lapply(widget,
-                      function(w){
-                        w['ylabel']
-                      }
-    )
-    xlabel <- paste0(unique(xlabels), collapse = " ")
-    ylabel <- paste0(unique(ylabels), collapse = " ")
   }
 
-  arrangeGrob.args <- list(
-    name =  "l_ggplot",
-    layout_matrix = layout_matrix,
-    bottom = xlabel,
-    left = ylabel
-  )
-
   list(
-    arrangeGrob.args = arrangeGrob.args
+    grobs = lgrobs,
+    layout_matrix = layout_matrix,
+    left = if (ylabel == "") NA else ylabel,
+    bottom = if (xlabel == "") NA else xlabel,
+    top = grid::textGrob(title, x = 0, hjust = 0),
+    name = "l_ggplot"
   )
-}
-
-#' @export
-loonGrob_recoverLoonWidgets.l_ggplot <- function(widget, recover.args){
-
-  if(!is.null(recover.args)) {
-    len_widget <- length(widget)
-    # xlabels
-    xlabels <- recover.args$xlabels
-    # ylabels
-    ylabels <- recover.args$ylabels
-    # scalesMargins
-    scalesMargins <- recover.args$scalesMargins
-    # labelMargins
-    labelMargins <- recover.args$labelMargins
-
-    lapply(seq_len(len_widget),
-           function(i){
-             widgeti <- widget[[i]]
-             l_configure(widgeti,
-                         xlabel = xlabels[[i]],
-                         ylabel = ylabels[[i]],
-                         labelMargins = labelMargins[[i]],
-                         scalesMargins = scalesMargins[[i]])
-           }
-    )
-  } else NULL
-
 }
