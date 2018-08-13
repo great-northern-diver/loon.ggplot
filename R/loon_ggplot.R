@@ -5,6 +5,9 @@
 #' @param ggplotObject a ggplot object
 #' @param ggGuides if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.
 #' @param active_geomLayers to determine which geom layer is active.
+#' @param span the span of canvas
+#' @param canvasHeight the height of canvas
+#' @param canvasWidth the width of canvas
 #' @param ... named arguments to modify loon plot states
 #'
 #' @return a loon widget
@@ -56,23 +59,35 @@
 #' }
 
 
-loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
-                        active_geomLayers = integer(0), ...){
+loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
+                        span = 5, canvasHeight = 850, canvasWidth = 700, ...){
   # check arguments
   args <- list(...)
   if (is.null(args[['linkingGroup']])) {
     args[['linkingGroup']] <- "none"
   }
+  if (is.null(args[['scalesMargins']])) {
+    args[['scalesMargins']] <- c(30, 50, 0, 0)
+  }
+  if (is.null(args[['minimumMargins']])) {
+    args[['minimumMargins']] <- c(20, 20, 10, 10)
+  }
+  if (!is.null(args[['showLabels']])) {
+    warning("showLabels are forbidden")
+  }
+  zoomX <- if (is.null(args[['zoomX']])) {
+    5/6
+  } else {
+    args[['zoomX']]
+  }
+  zoomY <- if (is.null(args[['zoomY']])) {
+    5/6
+  } else {
+    args[['zoomY']]
+  }
 
   dataFrame <- ggplotObject$data
   linkingKey <- loonLinkingKey(dataFrame, args)
-
-  # labels
-  ggLabels <- list(
-    title = if( is.null(ggplotObject$labels$title) ) NULL  else ggplotObject$labels$title,
-    xlabel = if( is.null(ggplotObject$labels$x) ) ""  else ggplotObject$labels$x,
-    ylabel = if( is.null(ggplotObject$labels$y) ) ""  else ggplotObject$labels$y
-  )
 
   # ggplot_build
   buildggplotObject <-  ggBuild2Loon(ggplotObject, linkingKey)
@@ -86,15 +101,28 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
   # number of panels
   panelNum <- dim(ggLayout)[1]
 
-  tt <- tktoplevel()
+  tt <- tktoplevel(background = "white")
   tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
+
+  column <- max(ggLayout$COL)
+  row <- max(ggLayout$ROW)
+  row.span <- span * row
+  column.span <- span * column
+
+  # labels
+  title <- ggplotObject$labels$title
+  ylabel <- ggplotObject$labels$y
+  xlabel <- ggplotObject$labels$x
+  start.xpos <- if(!is.null(ylabel)) 1 else 0
+  start.ypos <- start.subtitlepos <- if(!is.null(title)) 1 else 0
+  newspan <- span
 
   # length layers
   len_layers <- length(ggplotObject$layers)
 
-  # some default setting
-  zoomX <- zoomY <- 5/6
   swapAxes <- FALSE
+  # show labels are forbidden
+  showLabels <- FALSE
 
   # the parttern of ggLayout
   # PANEL, ROW, COL, ..., SCALE_X, SCALE_Y. In general, it is 3
@@ -111,13 +139,30 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                   function(i){
                     # subtitle
                     # if wrap number is larger than 0, multiple facets are displayed
-                    wrap.num <- wrap_num(ggLayout)
-                    subtitle <- if (wrap.num > 0) {
-                      numOfSubtitles <- wrap.num
-                      paste0(c(ggLabels$title, sapply(ggLayout[i, ggLayout_start_pos + c(1:numOfSubtitles)],
-                                                      as.character)),
-                             collapse = "\n")
-                    } else ""
+
+                    numOfSubtitles <- wrap_num(ggLayout)
+                    subtitle <- if (numOfSubtitles > 0) {
+                      if(numOfSubtitles == 1) {
+                        sapply(ggLayout[i, ggLayout_start_pos + 1], as.character)
+                      } else {
+                        paste(sapply(ggLayout[i, ggLayout_start_pos + c(1:numOfSubtitles)],
+                                     as.character), collapse = "\n")
+                      }
+                    } else NULL
+
+                    if(!is.null(subtitle)) {
+                      sub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                                                   text= subtitle, background = "grey90"))
+                      tkgrid(sub,
+                             row = (ggLayout[i,]$ROW - 1) * span + start.ypos,
+                             column = (ggLayout[i,]$COL - 1) * span + start.xpos,
+                             rowspan = numOfSubtitles,
+                             columnspan = span,
+                             sticky="nesw")
+                      start.subtitlepos <<- start.ypos + numOfSubtitles
+                      newspan <- span - numOfSubtitles
+                      if(newspan <= 0) stop("pick a larger span")
+                    }
 
                     # is polar coord?
                     isCoordPolar <- is.CoordPolar(ggplotPanel_params[[i]])
@@ -194,31 +239,35 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                       if (active_model == "l_hist" & length(active_geomLayers) != 0) {
                         loonPlot <- loonHistogram(ggBuild = ggBuild, ggLayout_start_pos = ggLayout_start_pos,
                                                   ggLayout = ggLayout, ggplotPanel_params = ggplotPanel_params,
-                                                  ggplotObject = ggplotObject, ggLabels = ggLabels,
-                                                  active_geomLayers = active_geomLayers, panelIndex = i, column_names = column_names,
-                                                  dataFrame = dataFrame, mapping.x = mapping.x, mapping.y = mapping.y,
-                                                  wrap.num = wrap.num, toplevel = tt, subtitle = subtitle, showGuides = showGuides,
-                                                  showScales = showScales, swapAxes = swapAxes, linkingKey = linkingKey, args = args)
+                                                  ggplotObject = ggplotObject, active_geomLayers = active_geomLayers,
+                                                  panelIndex = i, column_names = column_names, dataFrame = dataFrame,
+                                                  mapping.x = mapping.x, mapping.y = mapping.y,  numOfSubtitles = numOfSubtitles,
+                                                  toplevel = tt, showGuides = showGuides,
+                                                  showScales = showScales, swapAxes = swapAxes, linkingKey = linkingKey,
+                                                  args = args, showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
+                                                  subtitle = subtitle, title = title)
 
 
                       } else if(active_model == "l_plot" & length(boxplot_point_layers) != 0) {
                         loonPlot <- loonScatter(ggBuild = ggBuild, ggplotObject = ggplotObject,
-                                                ggplotPanel_params = ggplotPanel_params, ggLabels = ggLabels,
+                                                ggplotPanel_params = ggplotPanel_params,
                                                 panelIndex = i, mapping.x = mapping.x, mapping.y = mapping.y,
                                                 dataFrame = dataFrame, active_geomLayers = active_geomLayers,
-                                                isCoordPolar = isCoordPolar, toplevel = tt, subtitle = subtitle,
+                                                isCoordPolar = isCoordPolar, toplevel = tt,
                                                 showGuides = showGuides, showScales = showScales,
-                                                swapAxes = swapAxes, linkingKey = linkingKey, args = args)
+                                                swapAxes = swapAxes, linkingKey = linkingKey, args = args,
+                                                showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
+                                                subtitle = subtitle, title = title)
 
                       } else {
                         loonPlot <- l_plot(parent = tt,
-                                           title = subtitle,
-                                           xlabel = ggLabels$xlabel,
-                                           ylabel = ggLabels$ylabel,
                                            showGuides = showGuides,
                                            showScales = showScales,
-                                           showLabels = TRUE,
-                                           swapAxes = swapAxes)
+                                           showLabels = showLabels,
+                                           swapAxes = swapAxes,
+                                           xlabel = xlabel,
+                                           ylabel = ylabel,
+                                           title = paste(c(title, subtitle), collapse = "%+%"))
 
                       }
                       # adding layers
@@ -262,25 +311,26 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                       }
 
                     } else loonPlot <- l_plot(parent = tt,
-                                              title = subtitle,
-                                              xlabel = ggLabels$xlabel,
-                                              ylabel = ggLabels$ylabel,
                                               showGuides = showGuides,
                                               showScales = showScales,
-                                              showLabels = TRUE,
-                                              swapAxes = swapAxes)
+                                              showLabels = showLabels,
+                                              swapAxes = swapAxes,
+                                              xlabel = xlabel,
+                                              ylabel = ylabel,
+                                              title = paste(c(title, subtitle), collapse = "%+%"))
 
                     # resize loon plot
                     tkconfigure(paste(loonPlot,'.canvas',sep=''),
-                                width=850/max(ggLayout$COL),
-                                height= 700/max(ggLayout$ROW))
+                                width = canvasHeight/column,
+                                height = canvasWidth/row)
                     # tk pack
-                    tkgrid(loonPlot, row = ggLayout[i,]$ROW,
-                           column=ggLayout[i,]$COL, sticky="nesw")
-                    tkgrid.columnconfigure(tt, ggLayout[i,]$COL, weight=1)
-                    tkgrid.rowconfigure(tt, ggLayout[i,]$ROW, weight=1)
+                    tkgrid(loonPlot,
+                           row = (ggLayout[i,]$ROW - 1) * span + start.subtitlepos,
+                           column= (ggLayout[i,]$COL - 1) * span + start.xpos,
+                           rowspan = newspan,
+                           columnspan = span,
+                           sticky="nesw")
                     # loonPlot_configure does not produce anything but just configure the loon plot
-
                     loonPlot_configure <- loonPlot_configure(isCoordPolar = isCoordPolar,
                                                              loonPlot = loonPlot,
                                                              ggGuides = ggGuides,
@@ -302,9 +352,51 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE,
                          function(j){
                            paste0(c("x", "y"), ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)], collapse = "")
                          })
+  # tk column row configure
+  for (j in 0:(column.span + start.xpos)) {
+    tkgrid.columnconfigure(tt, j, weight=1)
+  }
+  for(j in 0:(row.span + start.ypos)) {
+    tkgrid.rowconfigure(tt, j, weight=1)
+  }
+
+  # pack xlabel and ylabel
+  if(!is.null(xlabel)){
+    xlab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                             text= xlabel, background = "white"))
+    tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
+           rowspan = 1, columnspan = column.span,
+           sticky="nesw")
+  }
+  # TODO ylabel how to rotate?
+  if(!is.null(ylabel)){
+    ylab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                             text= paste(c( strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
+                             background = "white")
+    )
+    tkgrid(ylab, row = start.ypos, column = 0,
+           rowspan = row.span, columnspan = 1,
+           sticky="nesw")
+  }
+  if(!is.null(title)) {
+    titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
+    tit <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                            text= title, background = "white"))
+    tkconfigure(tit, font = titleFont)
+    tkgrid(tit, row = 0, column = start.xpos,
+           rowspan = 1, columnspan = column.span,
+           sticky="w")
+  }
 
   # synchronize binding
   scalesSynchronize(plots, scales_free_x, scales_free_y)
+
+  # forbidden showLabels
+  lapply(plots, function(p) {
+    tcl(p, 'systembind', 'state', 'add',
+        c('showLabels'),
+        undoStateChanges)
+  })
 
   # set args
   if (length(args) != 0) {
@@ -662,3 +754,8 @@ activeInfo <- function(importantLayers, active_geomLayers, len_layers){
        active_geomLayers = active_geomLayers)
 }
 
+# undo states
+undoStateChanges <- function(W) {
+  warning("showLabels can not be changed for loon.ggplot.")
+  l_configure(W, showLabels=FALSE)
+}

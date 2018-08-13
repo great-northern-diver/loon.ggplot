@@ -1,17 +1,18 @@
-loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_params, ggplotObject, ggLabels,
-                          active_geomLayers, panelIndex, column_names, dataFrame, mapping.x, mapping.y, wrap.num,
-                          toplevel, subtitle, showGuides, showScales, swapAxes, linkingKey, args){
+loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_params, ggplotObject,
+                          active_geomLayers, panelIndex, column_names, dataFrame, mapping.x, mapping.y, numOfSubtitles,
+                          toplevel, showGuides, showScales, swapAxes, linkingKey, args, showLabels,
+                          xlabel, ylabel, subtitle, title){
   # set binwidth
   hist_data <- ggBuild$data[[active_geomLayers]]
   binwidth_vec <- hist_data[hist_data$PANEL == panelIndex, ]$xmax - hist_data[hist_data$PANEL == panelIndex, ]$xmin
   binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
   hist_x <- as.numeric(with(dataFrame, eval(parse(text = mapping.x))))
   # one facet
-  if (wrap.num == 0) {
+  if (numOfSubtitles == 0) {
     isPanel_i.hist_x <- rep(TRUE, length(hist_x))
   } else {
     # multiple facets
-    panel_i.list <- lapply((1:wrap.num + ggLayout_start_pos),
+    panel_i.list <- lapply((1:numOfSubtitles + ggLayout_start_pos),
                            function(j) {
                              c(names(ggLayout[panelIndex, ])[j], as.character(ggLayout[panelIndex, j]))
                            })
@@ -116,10 +117,8 @@ loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_par
   l_hist(parent = toplevel,
          x = hist_values,
          color = color,
-         title = subtitle,
          binwidth = binwidth + 1e-6, # need more thoughts
-         xlabel = ggLabels$xlabel,
-         ylabel = ggLabels$ylabel,
+         showLabels = showLabels,
          showGuides = showGuides,
          showScales = showScales,
          showOutlines = showOutlines,
@@ -128,7 +127,10 @@ loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_par
          yshows = yshows,
          linkingKey = linkingKey,
          showStackedColors = TRUE,
-         linkingGroup = args$linkingGroup)
+         linkingGroup = args$linkingGroup,
+         xlabel = xlabel,
+         ylabel = ylabel,
+         title = paste(c(title, subtitle), collapse = "%+%"))
 }
 
 

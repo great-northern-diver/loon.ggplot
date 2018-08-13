@@ -1,7 +1,6 @@
-loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, ggLabels,
-                        panelIndex, mapping.x, mapping.y, dataFrame,
-                        active_geomLayers, isCoordPolar, toplevel, subtitle,
-                        showGuides, showScales, swapAxes, linkingKey, args){
+loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping.x, mapping.y, dataFrame,
+                        active_geomLayers, isCoordPolar, toplevel, showGuides, showScales, swapAxes, linkingKey,
+                        args, showLabels, xlabel, ylabel, subtitle, title){
   if(length(active_geomLayers) !=0) {
     # combine points data
     combined.pointsData <- lapply(active_geomLayers,
@@ -66,7 +65,6 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, ggLabels,
   l_plot(parent = toplevel,
          x = x,
          y = y,
-         title = subtitle,
          size = combined.pointsData$size,
          color = combined.pointsData$color,
          glyph = combined.pointsData$glyph,
@@ -74,10 +72,11 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, ggLabels,
          linkingKey = combined.pointsData$linkingKey,
          showGuides = showGuides,
          showScales = showScales,
-         xlabel = ggLabels$xlabel,
-         ylabel = ggLabels$ylabel,
-         showLabels = TRUE,
+         showLabels = showLabels,
          showItemLabels = TRUE,
          swapAxes = swapAxes,
-         linkingGroup = args$linkingGroup)
+         linkingGroup = args$linkingGroup,
+         xlabel = xlabel,
+         ylabel = ylabel,
+         title = paste(c(title, subtitle), collapse = "%+%"))
 }
