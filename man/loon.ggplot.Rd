@@ -5,7 +5,7 @@
 \title{Create a loon plot from a ggplot2 object}
 \usage{
 loon.ggplot(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
-  ...)
+  span = 5, canvasHeight = 850, canvasWidth = 700, ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
@@ -13,6 +13,12 @@ loon.ggplot(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
 \item{ggGuides}{if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.}
 
 \item{active_geomLayers}{to determine which geom layer is active.}
+
+\item{span}{the span of canvas}
+
+\item{canvasHeight}{the height of canvas}
+
+\item{canvasWidth}{the width of canvas}
 
 \item{...}{named arguments to modify loon plot states}
 }
