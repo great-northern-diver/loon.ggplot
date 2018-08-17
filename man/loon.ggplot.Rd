@@ -12,7 +12,8 @@ loon.ggplot(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
 
 \item{ggGuides}{if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.}
 
-\item{active_geomLayers}{to determine which geom layer is active.}
+\item{active_geomLayers}{to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
+(Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)}
 
 \item{span}{the span of canvas}
 
@@ -63,6 +64,7 @@ pp <- ggplot(df, aes(x, y)) +
 ### check difference
 suppressWarnings(g <- loon.ggplot(pp))
 g <- loon.ggplot(pp, active_geomLayers = 2)
+suppressWarnings(g <- loon.ggplot(pp, active_geomLayers = c(1,2)))
 }
 }
 
