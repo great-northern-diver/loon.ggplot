@@ -4,7 +4,8 @@
 #'
 #' @param ggplotObject a ggplot object
 #' @param ggGuides if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.
-#' @param active_geomLayers to determine which geom layer is active.
+#' @param active_geomLayers to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
+#' (Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)
 #' @param span the span of canvas
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
@@ -56,6 +57,7 @@
 #' ### check difference
 #' suppressWarnings(g <- loon.ggplot(pp))
 #' g <- loon.ggplot(pp, active_geomLayers = 2)
+#' suppressWarnings(g <- loon.ggplot(pp, active_geomLayers = c(1,2)))
 #' }
 
 
@@ -69,11 +71,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   if (is.null(args[['scalesMargins']])) {
     args[['scalesMargins']] <- c(30, 50, 0, 0)
   }
+  if (is.null(args[['labelMargins']])) {
+    args[['labelMargins']] <- c(30, 60, 60, 0)
+  }
   if (is.null(args[['minimumMargins']])) {
     args[['minimumMargins']] <- c(20, 20, 10, 10)
-  }
-  if (!is.null(args[['showLabels']])) {
-    warning("showLabels are forbidden")
   }
   zoomX <- if (is.null(args[['zoomX']])) {
     5/6
@@ -98,9 +100,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   # theme
   theme <- ggplotObject$theme
 
-  # number of panels
-  panelNum <- dim(ggLayout)[1]
-
   tt <- tktoplevel(background = "white")
   tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
 
@@ -113,16 +112,24 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   title <- ggplotObject$labels$title
   ylabel <- ggplotObject$labels$y
   xlabel <- ggplotObject$labels$x
-  start.xpos <- if(!is.null(ylabel)) 1 else 0
-  start.ypos <- start.subtitlepos <- if(!is.null(title)) 1 else 0
   newspan <- span
+  # number of panels
+  panelNum <- dim(ggLayout)[1]
+
+  if (panelNum == 1) {
+    start.xpos <- 0
+    start.ypos <- start.subtitlepos <- 0
+    showLabels <- TRUE
+  } else {
+    start.xpos <- if(!is.null(ylabel)) 1 else 0
+    start.ypos <- start.subtitlepos <- if(!is.null(title)) 1 else 0
+    showLabels <- FALSE
+  }
 
   # length layers
   len_layers <- length(ggplotObject$layers)
 
   swapAxes <- FALSE
-  # show labels are forbidden
-  showLabels <- FALSE
 
   # the parttern of ggLayout
   # PANEL, ROW, COL, ..., SCALE_X, SCALE_Y. In general, it is 3
@@ -152,7 +159,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
 
                     if(!is.null(subtitle)) {
                       sub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
-                                                   text= subtitle, background = "grey90"))
+                                              text= subtitle, background = "grey90"))
                       tkgrid(sub,
                              row = (ggLayout[i,]$ROW - 1) * span + start.ypos,
                              column = (ggLayout[i,]$COL - 1) * span + start.xpos,
@@ -169,14 +176,14 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
 
                     if(isCoordPolar){
                       # theta can be only "x" or "y"
-                      if(ggplotObject$coordinates$theta == "y")  swapAxes <- TRUE
+                      if(ggplotObject$coordinates$theta == "y")  swapAxes <<- TRUE
                       showGuides <- FALSE
                       showScales <- FALSE
                     } else {
                       # if not polar coord
                       # swap or not
                       if( which( names(ggplotPanel_params[[i]]) %in% "y.range"  == T ) <
-                          which( names(ggplotPanel_params[[i]]) %in% "x.range"  == T ) ) swapAxes <- TRUE
+                          which( names(ggplotPanel_params[[i]]) %in% "x.range"  == T ) ) swapAxes <<- TRUE
                       # show ggGuides or not
                       if (ggGuides) {
                         showGuides <- FALSE
@@ -360,8 +367,17 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
     tkgrid.rowconfigure(tt, j, weight=1)
   }
 
+  # synchronize binding
+  scalesSynchronize(plots, scales_free_x, scales_free_y)
+
+  if(swapAxes) {
+    label <- ylabel
+    ylabel <- xlabel
+    xlabel <- label
+  }
+
   # pack xlabel and ylabel
-  if(!is.null(xlabel)){
+  if(!is.null(xlabel) & panelNum > 1){
     xlab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                              text= xlabel, background = "white"))
     tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
@@ -369,7 +385,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
            sticky="nesw")
   }
   # TODO ylabel how to rotate?
-  if(!is.null(ylabel)){
+  if(!is.null(ylabel) & panelNum > 1){
     ylab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                              text= paste(c( strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
                              background = "white")
@@ -378,7 +394,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
            rowspan = row.span, columnspan = 1,
            sticky="nesw")
   }
-  if(!is.null(title)) {
+  if(!is.null(title) & panelNum > 1) {
     titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                             text= title, background = "white"))
@@ -387,16 +403,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
            rowspan = 1, columnspan = column.span,
            sticky="w")
   }
-
-  # synchronize binding
-  scalesSynchronize(plots, scales_free_x, scales_free_y)
-
-  # forbidden showLabels
-  lapply(plots, function(p) {
-    tcl(p, 'systembind', 'state', 'add',
-        c('showLabels'),
-        undoStateChanges)
-  })
 
   # set args
   if (length(args) != 0) {
@@ -752,10 +758,4 @@ activeInfo <- function(importantLayers, active_geomLayers, len_layers){
   }
   list(active_model = active_model,
        active_geomLayers = active_geomLayers)
-}
-
-# undo states
-undoStateChanges <- function(W) {
-  warning("showLabels can not be changed for loon.ggplot.")
-  l_configure(W, showLabels=FALSE)
 }
