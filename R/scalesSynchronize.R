@@ -10,24 +10,26 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
         zoomX <- W['zoomX']; zoomY <- W['zoomY']
         panX <- W['panX']; panY <- W['panY']
         deltaX <- W['deltaX']; deltaY <- W['deltaY']
+        swapAxes <- W['swapAxes']
 
-        lapply(plots, function(p) {
-          l_configure(p, zoomX = zoomX, panX = panX, deltaX = deltaX)
-        })
-        lapply(plots, function(p) {
-          l_configure(p, zoomY=zoomY, panY=panY, deltaY=deltaY)
-        })
+        lapply(plots,
+               function(p) {
+                 l_configure(p, swapAxes = swapAxes,
+                             zoomX = zoomX, panX = panX, deltaX = deltaX,
+                             zoomY = zoomY, panY = panY, deltaY = deltaY)
+               }
+        )
         busy <<- FALSE
         tcl('update', 'idletasks')
-
       }
     }
 
     lapply(plots, function(p) {
       tcl(p, 'systembind', 'state', 'add',
-          c('zoomX', 'panX', 'zoomY', 'panY', 'deltaX', 'deltaY'),
+          c('zoomX', 'panX', 'zoomY', 'panY', 'deltaX', 'deltaY', 'swapAxes'),
           synchronizeBindings)
     })
+
   } else if (scales_free_x & !scales_free_y) {
     # y scales are fixed, x scales are free
     synchronizeBindings <- function(W) {
@@ -37,10 +39,13 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
         zoomY <- W['zoomY']
         panY <- W['panY']
         deltaY <- W['deltaY']
+        swapAxes <- W['swapAxes']
 
-        lapply(plots, function(p) {
-          l_configure(p, zoomY=zoomY, panY=panY, deltaY=deltaY)
-        })
+        lapply(plots,
+               function(p) {
+                 l_configure(p, zoomY=zoomY, panY=panY, deltaY=deltaY, swapAxes = swapAxes)
+               }
+        )
         busy <<- FALSE
         tcl('update', 'idletasks')
 
@@ -49,7 +54,7 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
 
     lapply(plots, function(p) {
       tcl(p, 'systembind', 'state', 'add',
-          c('zoomY', 'panY', 'deltaY'),
+          c('zoomY', 'panY', 'deltaY', 'swapAxes'),
           synchronizeBindings)
     })
 
@@ -62,10 +67,13 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
         zoomX <- W['zoomX']
         panX <- W['panX']
         deltaX <- W['deltaX']
+        swapAxes <- W['swapAxes']
 
-        lapply(plots, function(p) {
-          l_configure(p, zoomX=zoomX, panX=panX, deltaX=deltaX)
-        })
+        lapply(plots,
+               function(p) {
+                 l_configure(p, zoomX=zoomX, panX=panX, deltaX=deltaX, swapAxes = swapAxes)
+               }
+        )
         busy <<- FALSE
         tcl('update', 'idletasks')
 
@@ -74,7 +82,7 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
 
     lapply(plots, function(p) {
       tcl(p, 'systembind', 'state', 'add',
-          c('zoomX', 'panX', 'deltaX'),
+          c('zoomX', 'panX', 'deltaX', 'swapAxes'),
           synchronizeBindings)
     })
   } else {
