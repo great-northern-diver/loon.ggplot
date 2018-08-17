@@ -3,6 +3,7 @@
 S3method(l_cget,l_ggplot)
 S3method(l_configure,l_ggplot)
 S3method(names,l_ggplot)
+export(active_geomLayers)
 export(gg_pipe)
 export(l_get_arrangeGrobArgs.l_ggplot)
 export(loon.ggplot)
