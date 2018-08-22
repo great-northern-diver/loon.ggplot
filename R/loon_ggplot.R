@@ -3,7 +3,7 @@
 #' @description Interactive loon plots from ggplots
 #'
 #' @param ggplotObject a ggplot object
-#' @param ggGuides if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.
+#' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
 #' @param active_geomLayers to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
 #' (Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)
 #' @param span the span of canvas
@@ -97,6 +97,51 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   ggLayout <- buildggplotObject$ggLayout
   ggplotPanel_params <- buildggplotObject$ggplotPanel_params
 
+  # labels
+  title <- ggplotObject$labels$title
+  ylabel <- ggplotObject$labels$y
+  xlabel <- ggplotObject$labels$x
+  newspan <- span
+  # number of panels
+  panelNum <- dim(ggLayout)[1]
+
+  if(panelNum > 1){
+    # two ways to separate facets, facet_wrap or facet_grid
+    is_facet_wrap <- if(is.null(ggBuild$layout$facet_params$cols) & is.null(ggBuild$layout$facet_params$rows)) TRUE else FALSE
+    is_facet_grid <- !is_facet_wrap
+    if(is_facet_wrap) {
+      byCOLS <- TRUE
+      byROWS <- FALSE
+    } else if(is_facet_grid) {
+      # layout multiple facets by rows or by cols
+      layoutByROWS <- names(ggBuild$layout$facet_params$rows)
+      layoutByCOLS <- names(ggBuild$layout$facet_params$cols)
+      # by columns or by rows?
+      byCOLS <- if(length(layoutByCOLS) > 0) TRUE else FALSE
+      byROWS <- if(length(layoutByROWS) > 0) TRUE else FALSE
+    } else {
+      byCOLS <- FALSE
+      byROWS <- FALSE
+    }
+
+    start.xpos <- if(!is.null(ylabel)) 1 else 0
+    start.ypos <- start.subtitlepos <- if(!is.null(title)){
+      if(is_facet_grid & byCOLS) 2 else 1
+    } else {
+      if(is_facet_grid & byCOLS) 1 else 0
+    }
+    showLabels <- FALSE
+  } else {
+    is_facet_wrap <- FALSE
+    is_facet_grid <- FALSE
+
+    start.xpos <- 0
+    start.ypos <- start.subtitlepos <- 0
+    showLabels <- TRUE
+  }
+  colSubtitles <- c()
+  rowSubtitles <- c()
+
   # theme
   theme <- ggplotObject$theme
 
@@ -107,24 +152,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   row <- max(ggLayout$ROW)
   row.span <- span * row
   column.span <- span * column
-
-  # labels
-  title <- ggplotObject$labels$title
-  ylabel <- ggplotObject$labels$y
-  xlabel <- ggplotObject$labels$x
-  newspan <- span
-  # number of panels
-  panelNum <- dim(ggLayout)[1]
-
-  if (panelNum == 1) {
-    start.xpos <- 0
-    start.ypos <- start.subtitlepos <- 0
-    showLabels <- TRUE
-  } else {
-    start.xpos <- if(!is.null(ylabel)) 1 else 0
-    start.ypos <- start.subtitlepos <- if(!is.null(title)) 1 else 0
-    showLabels <- FALSE
-  }
 
   # length layers
   len_layers <- length(ggplotObject$layers)
@@ -146,20 +173,19 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                   function(i){
                     # subtitle
                     # if wrap number is larger than 0, multiple facets are displayed
-
                     numOfSubtitles <- wrap_num(ggLayout)
-                    subtitle <- if (numOfSubtitles > 0) {
-                      if(numOfSubtitles == 1) {
-                        sapply(ggLayout[i, ggLayout_start_pos + 1], as.character)
-                      } else {
-                        paste(sapply(ggLayout[i, ggLayout_start_pos + c(1:numOfSubtitles)],
-                                     as.character), collapse = "\n")
-                      }
-                    } else NULL
+                    getSubtitle <- getSubtitle(layoutByROWS, layoutByCOLS,
+                                               ggLayout = ggLayout, ggLayout_start_pos = ggLayout_start_pos,
+                                               numOfSubtitles = numOfSubtitles, byROWS = byROWS, byCOLS = byCOLS,
+                                               panelNum = i, is_facet_wrap = is_facet_wrap, is_facet_grid = is_facet_grid)
+                    colSubtitle <- getSubtitle$colSubtitle
+                    rowSubtitle <- getSubtitle$rowSubtitle
+                    colSubtitles <<- c(colSubtitles, colSubtitle)
+                    rowSubtitles <<- c(rowSubtitles, rowSubtitle)
 
-                    if(!is.null(subtitle)) {
+                    if(!is.null(colSubtitle) & is_facet_wrap) {
                       sub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
-                                              text= subtitle, background = "grey90"))
+                                              text= colSubtitle, background = "grey90"))
                       tkgrid(sub,
                              row = (ggLayout[i,]$ROW - 1) * span + start.ypos,
                              column = (ggLayout[i,]$COL - 1) * span + start.xpos,
@@ -224,7 +250,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                       # boxplot has a hidden scatterplot model layer
                       boxplot_point_layers <- c(boxplotLayers, active_geomLayers)
 
-
                       if (is.data.frame(dataFrame) & !"waiver" %in% class(dataFrame)) {
                         mapping.x <- as.character(ggplotObject$mapping$x)
                         mapping.x <- mapping.x[-which("~" %in% mapping.x)]
@@ -242,7 +267,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                           column_names <- colnames(dataFrame)
                         }
                       }
-
                       if (active_model == "l_hist" & length(active_geomLayers) != 0) {
                         loonPlot <- loonHistogram(ggBuild = ggBuild, ggLayout_start_pos = ggLayout_start_pos,
                                                   ggLayout = ggLayout, ggplotPanel_params = ggplotPanel_params,
@@ -252,7 +276,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                                   toplevel = tt, showGuides = showGuides,
                                                   showScales = showScales, swapAxes = swapAxes, linkingKey = linkingKey,
                                                   args = args, showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
-                                                  subtitle = subtitle, title = title)
+                                                  subtitle = colSubtitle, title = title)
 
 
                       } else if(active_model == "l_plot" & length(boxplot_point_layers) != 0) {
@@ -264,7 +288,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                                 showGuides = showGuides, showScales = showScales,
                                                 swapAxes = swapAxes, linkingKey = linkingKey, args = args,
                                                 showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
-                                                subtitle = subtitle, title = title)
+                                                subtitle = colSubtitle, title = title)
 
                       } else {
                         loonPlot <- l_plot(parent = tt,
@@ -274,7 +298,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                            swapAxes = swapAxes,
                                            xlabel = xlabel,
                                            ylabel = ylabel,
-                                           title = paste(c(title, subtitle), collapse = "%+%"))
+                                           title = paste(c(title, colSubtitle), collapse = "%+%"))
 
                       }
                       # adding layers
@@ -324,7 +348,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                               swapAxes = swapAxes,
                                               xlabel = xlabel,
                                               ylabel = ylabel,
-                                              title = paste(c(title, subtitle), collapse = "%+%"))
+                                              title = paste(c(title, colSubtitle), collapse = "%+%"))
 
                     # resize loon plot
                     tkconfigure(paste(loonPlot,'.canvas',sep=''),
@@ -377,7 +401,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   }
 
   # pack xlabel and ylabel
-  if(!is.null(xlabel) & panelNum > 1){
+  if(!is.null(xlabel) & any(is_facet_wrap, is_facet_grid)){
     xlab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                              text= xlabel, background = "white"))
     tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
@@ -385,7 +409,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
            sticky="nesw")
   }
   # TODO ylabel how to rotate?
-  if(!is.null(ylabel) & panelNum > 1){
+  if(!is.null(ylabel) & any(is_facet_wrap, is_facet_grid)){
     ylab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                              text= paste(c( strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
                              background = "white")
@@ -394,7 +418,32 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
            rowspan = row.span, columnspan = 1,
            sticky="nesw")
   }
-  if(!is.null(title) & panelNum > 1) {
+
+  # is_facet_grid; subtitle by row?
+  if(!is.null(rowSubtitles) & is_facet_grid) {
+    rowSubtitles <- unique(rowSubtitles)
+    for(i in 1:length(rowSubtitles)){
+      rowSub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                                 text= rowSubtitles[i], background = "grey90"))
+      tkgrid(rowSub, row = start.ypos + (i - 1)* span,
+             column = start.xpos + column.span,
+             rowspan = span, columnspan = 1,
+             sticky="nesw")
+    }
+  }
+  # is_facet_grid; subtitle by col?
+  if(!is.null(colSubtitles) & is_facet_grid) {
+    colSubtitles <- unique(colSubtitles)
+    for(i in 1:length(colSubtitles)){
+      colSub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                                 text= colSubtitles[i], background = "grey90"))
+      tkgrid(colSub, row = start.ypos - 1,
+             column = start.xpos + (i - 1) * span,
+             rowspan = 1, columnspan = span,
+             sticky="nesw")
+    }
+  }
+  if(!is.null(title) & any(is_facet_wrap, is_facet_grid)) {
     titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                             text= title, background = "white"))
@@ -403,7 +452,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
            rowspan = 1, columnspan = column.span,
            sticky="w")
   }
-
   # set args
   if (length(args) != 0) {
     # args remove linkingKey and linkingGroup (if they have)
@@ -758,4 +806,34 @@ activeInfo <- function(importantLayers, active_geomLayers, len_layers){
   }
   list(active_model = active_model,
        active_geomLayers = active_geomLayers)
+}
+
+getSubtitle <- function(layoutByROWS, layoutByCOLS, ggLayout, ggLayout_start_pos, numOfSubtitles,
+                        byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid){
+  if(is_facet_wrap) {
+    colSubtitle <- if (numOfSubtitles > 0) {
+      paste(sapply(ggLayout[panelNum, ggLayout_start_pos + c(1:numOfSubtitles)], as.character),
+            collapse = "\n")
+    } else NULL
+    rowSubtitle <- NULL
+  } else if(is_facet_grid) {
+    if(byROWS & !byCOLS) {
+      rowSubtitle <- paste(sapply(ggLayout[panelNum, layoutByROWS], as.character), collapse = "\n")
+      colSubtitle <- NULL
+    } else if(!byROWS & byCOLS){
+      rowSubtitle <- NULL
+      colSubtitle <- paste(sapply(ggLayout[panelNum, layoutByCOLS], as.character), collapse = "\n")
+    } else if(byROWS & byCOLS){
+      rowSubtitle <- paste(sapply(ggLayout[panelNum, layoutByROWS], as.character), collapse = "\n")
+      colSubtitle <- paste(sapply(ggLayout[panelNum, layoutByCOLS], as.character), collapse = "\n")
+    } else {
+      rowSubtitle <- NULL
+      colSubtitle <- NULL
+    }
+  } else {
+    rowSubtitle <- NULL
+    colSubtitle <- NULL
+  }
+  list(colSubtitle = colSubtitle,
+       rowSubtitle = rowSubtitle)
 }

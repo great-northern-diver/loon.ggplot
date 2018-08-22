@@ -9,21 +9,31 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                     data <- Layer.k[Layer.k$PANEL == panelIndex, ]
                                     x <- data$x
                                     y <- data$y
-                                    label <- data$label
-                                    color <- sapply(1:dim(data)[1],
-                                                    function(j){
-                                                      if(data$shape[j] %in% 21:24 ){
-                                                        hex6to12(data$fill[j])
-                                                      }else {
-                                                        hex6to12(data$colour[j])
-                                                      }
-                                                    })
-                                    glyph <- pch_to_glyph(data$shape, data$alpha)
-                                    size <- as_loon_size( data$size , "points" )
+                                    if(length(x) == 0 & length(y) == 0){
+                                      label <- NULL
+                                      color <- NULL
+                                      glyph <- NULL
+                                      size <- NULL
+                                    } else {
+                                      label <- data$label
+                                      color <- sapply(1:dim(data)[1],
+                                                      function(j){
+                                                        if(data$shape[j] %in% 21:24 ){
+                                                          hex6to12(data$fill[j])
+                                                        }else {
+                                                          hex6to12(data$colour[j])
+                                                        }
+                                                      })
+                                      glyph <- pch_to_glyph(data$shape, data$alpha)
+                                      size <- as_loon_size( data$size , "points" )
+                                    }
+
 
                                     if (is.null(label)) {
-                                      label <- paste0("item", seq_len(length(x)) - 1, "panel", panelIndex)
-                                      warning("item label may not match\n")
+                                      if(length(x) != 0 & length(y) != 0) {
+                                        label <- paste0("item", seq_len(length(x)) - 1, "panel", panelIndex)
+                                        warning("item label may not match\n")
+                                      }
                                     }
 
                                     data.frame(x = x, y = y, label = label, color = color, glyph = glyph, size = size)
@@ -38,45 +48,64 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
   } else {
     combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
                                       y = with(dataFrame, eval(parse(text = mapping.y))))
-    # in case
-    combined.pointsData$x <- as.numeric(combined.pointsData$x)
-    combined.pointsData$y <- as.numeric(combined.pointsData$y)
     # some default settings, need more thought
-    combined.pointsData$size <- 3
-    combined.pointsData$color <- "black"
-    combined.pointsData$glyph <- "circle"
-    # linkingKey
-    combined.pointsData$itemLabel <- combined.pointsData$linkingKey <- linkingKey
+    if(length(combined.pointsData$x) > 0 & length(combined.pointsData$y) > 0) {
+      combined.pointsData$x <- as.numeric(combined.pointsData$x)
+      combined.pointsData$y <- as.numeric(combined.pointsData$y)
+      combined.pointsData$size <- 3
+      combined.pointsData$color <- "black"
+      combined.pointsData$glyph <- "circle"
+      # linkingKey
+      combined.pointsData$itemLabel <- combined.pointsData$linkingKey <- linkingKey
+    }
   }
 
-  if(isCoordPolar) {
-    coordPolarxy <- Cartesianxy2Polarxy(NULL,
-                                        coordinates = ggplotObject$coordinates,
-                                        data = combined.pointsData,
-                                        ggplotPanel_params = ggplotPanel_params[[panelIndex]])
-    x <- coordPolarxy$x
-    y <- coordPolarxy$y
+  if(dim(combined.pointsData)[1] > 0) {
+    # TODO a loon bug cannot handle a single point
+    if(dim(combined.pointsData)[1] == 1) {
+      combined.pointsData <- combined.pointsData[rep(1,2), ]
+      combined.pointsData[1, ]$linkingKey <- combined.pointsData[1, ]$itemLabel <- dim(do.call(rbind, ggBuild$data))[1] + panelIndex
+    }
+    if(isCoordPolar) {
+      coordPolarxy <- Cartesianxy2Polarxy(NULL,
+                                          coordinates = ggplotObject$coordinates,
+                                          data = combined.pointsData,
+                                          ggplotPanel_params = ggplotPanel_params[[panelIndex]])
+      x <- coordPolarxy$x
+      y <- coordPolarxy$y
+    } else {
+      x <- combined.pointsData$x
+      y <- combined.pointsData$y
+    }
+    # loon scatter plot
+    l_plot(parent = toplevel,
+           x = x,
+           y = y,
+           size = combined.pointsData$size,
+           color = combined.pointsData$color,
+           glyph = combined.pointsData$glyph,
+           itemLabel = combined.pointsData$itemLabel,
+           linkingKey = combined.pointsData$linkingKey,
+           showGuides = showGuides,
+           showScales = showScales,
+           showLabels = showLabels,
+           showItemLabels = TRUE,
+           swapAxes = swapAxes,
+           linkingGroup = args$linkingGroup,
+           xlabel = xlabel,
+           ylabel = ylabel,
+           title = paste(c(title, subtitle), collapse = "%+%"))
   } else {
-    x <- combined.pointsData$x
-    y <- combined.pointsData$y
+    l_plot(parent = toplevel,
+           showGuides = showGuides,
+           showScales = showScales,
+           showLabels = showLabels,
+           showItemLabels = TRUE,
+           swapAxes = swapAxes,
+           linkingGroup = args$linkingGroup,
+           xlabel = xlabel,
+           ylabel = ylabel,
+           title = paste(c(title, subtitle), collapse = "%+%"))
   }
 
-  # loon scatter plot
-  l_plot(parent = toplevel,
-         x = x,
-         y = y,
-         size = combined.pointsData$size,
-         color = combined.pointsData$color,
-         glyph = combined.pointsData$glyph,
-         itemLabel = combined.pointsData$itemLabel,
-         linkingKey = combined.pointsData$linkingKey,
-         showGuides = showGuides,
-         showScales = showScales,
-         showLabels = showLabels,
-         showItemLabels = TRUE,
-         swapAxes = swapAxes,
-         linkingGroup = args$linkingGroup,
-         xlabel = xlabel,
-         ylabel = ylabel,
-         title = paste(c(title, subtitle), collapse = "%+%"))
 }
