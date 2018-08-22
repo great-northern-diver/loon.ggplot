@@ -358,8 +358,6 @@ test_that("example works", {
 
   # example 45
   data(Oats, package = "MEMSS")
-  tp1.oats <- xyplot(yield ~ nitro | Variety + Block, data = Oats, type = "o")
-  tp1.oats
   pg.oats <- ggplot(Oats, aes(nitro, yield)) +
     geom_line() +
     geom_point() +
@@ -516,5 +514,22 @@ test_that("example works", {
     geom_point(aes(colour = z)) +
     facet_wrap(~z, scales = "free_y")
   g <- loon.ggplot(pp, active_geomLayers = c(1,2))
+  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+
+  # example 70
+  p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo")
+  # Use vars() to supply variables from the dataset:
+  p1 <- p + facet_grid(rows = vars(drv))
+  g <- loon.ggplot(p1)
+  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+
+  # example 71
+  p2 <- p + facet_grid(cols = vars(cyl))
+  g <- loon.ggplot(p2)
+  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+
+  # example 72
+  p3 <- p + facet_grid(vars(drv), vars(cyl))
+  g <- loon.ggplot(p3)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 })
