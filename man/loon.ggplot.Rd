@@ -10,7 +10,7 @@ loon.ggplot(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
 \arguments{
 \item{ggplotObject}{a ggplot object}
 
-\item{ggGuides}{if \code{TRUE}, loon plot will generate a ggplot guide layer. Default is FALSE.}
+\item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
 
 \item{active_geomLayers}{to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
 (Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)}
