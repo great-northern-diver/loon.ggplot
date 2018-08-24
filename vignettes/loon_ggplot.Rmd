@@ -47,7 +47,7 @@ The points can be selected in `loon` plot
 
 ```{r selected loonplot, fig.width = 5, fig.height = 4}
 cyl4 <- which((mtcars$cyl == 4) == TRUE)
-lp_scatter$x1y1['selected'][cyl4] <- TRUE
+lp_scatter$plots$x1y1['selected'][cyl4] <- TRUE
 grid.loon(lp_scatter)
 ```
 
@@ -93,10 +93,10 @@ g_hist_point
 ```{r loonplot but with different active layers, fig.width = 7.5, fig.height = 3.5}
 library(gridExtra)
 ## check difference
-lp_hist_point_active1 <- loon.ggplot(g_hist_point, active_geomLayers = 1)
+lp_hist_point_active1 <- loon.ggplot(g_hist_point, activeGeomLayers = 1)
 
 suppressWarnings(
-  lp_hist_point_active2 <- loon.ggplot(g_hist_point, active_geomLayers = 2)
+  lp_hist_point_active2 <- loon.ggplot(g_hist_point, activeGeomLayers = 2)
 )
 
 grid.arrange(loonGrob(lp_hist_point_active1), loonGrob(lp_hist_point_active2), ncol = 2, top = "lp_hist_point_active1 and lp_hist_point_active2")
@@ -106,24 +106,24 @@ It seems no big difference between these two plots except the **warnings**. That
 
 Let us select the data larger than 20.
 ```{r selected loonplot with different active layers, fig.width = 7.5, fig.height = 3.5}
-lp_hist_point_active1$x1y1['selected'][mtcars$mpg > 20] <- TRUE
-lp_hist_point_active2$x1y1['selected'][mtcars$mpg > 20] <- TRUE
+lp_hist_point_active1$plots$x1y1['selected'][mtcars$mpg > 20] <- TRUE
+lp_hist_point_active2$plots$x1y1['selected'][mtcars$mpg > 20] <- TRUE
 grid.arrange(loonGrob(lp_hist_point_active1), loonGrob(lp_hist_point_active2), ncol = 2, top = "lp_hist_point_active1 and lp_hist_point_active2")
 ```
 
-`active_geomLayers` is helping to set which geom layer is active. The geom layers in `p1.2.1` are `geom_histogram()`, `geom_point()` and `geom_density()`. `active_geomLayers = 1` indicates `geom_histogram()` will be active. In `loon`, only `geom_histogram()`and `geom_point()` can be active so far, meanwhile, they cannot be active at the same time.
+`activeGeomLayers` is helping to set which geom layer is active. The geom layers in `p1.2.1` are `geom_histogram()`, `geom_point()` and `geom_density()`. `activeGeomLayers = 1` indicates `geom_histogram()` will be active. In `loon`, only `geom_histogram()`and `geom_point()` can be active so far, meanwhile, they cannot be active at the same time.
 
 ```{r show errors, eval=FALSE}
 # Error
-loon.ggplot(g_hist_point, active_geomLayers = 3)
-# Error in activeInfo(importantLayers, active_geomLayers, len_layers) : This layer cannot be active
-loon.ggplot(g_hist_point, active_geomLayers = c(1,2))
-# Error in activeInfo(importantLayers, active_geomLayers, len_layers) : histogram layer and point layer cannot be active at the same time
+loon.ggplot(g_hist_point, activeGeomLayers = 3)
+# Error in activeInfo(importantLayers, activeGeomLayers, len_layers) : This layer cannot be active
+loon.ggplot(g_hist_point, activeGeomLayers = c(1,2))
+# Error in activeInfo(importantLayers, activeGeomLayers, len_layers) : histogram layer and point layer cannot be active at the same time
 ```
 
-`loon.ggplot` also provides a function called `active_geomLayers` to return the index of layers which can be active
-```{r active_geomLayers}
-active_geomLayers(g_hist_point)
+`loon.ggplot` also provides a function called `activeGeomLayers` to return the index of layers which can be active
+```{r activeGeomLayers}
+activeGeomLayers(g_hist_point)
 ```
 It means that the first layer `geom_histogram` or the second layer `geom_point` can be active.
 
@@ -145,12 +145,12 @@ g_three_scatterplots
 
 ```{r selected loonplot with several point layers, warning=FALSE}
 suppressWarnings(
-  lp_three_scatterplots_active1 <- loon.ggplot(g_three_scatterplots, active_geomLayers = 1)
+  lp_three_scatterplots_active1 <- loon.ggplot(g_three_scatterplots, activeGeomLayers = 1)
 )
-lp_three_scatterplots_active2 <- loon.ggplot(g_three_scatterplots, active_geomLayers = 2)
+lp_three_scatterplots_active2 <- loon.ggplot(g_three_scatterplots, activeGeomLayers = 2)
 
 suppressWarnings(
-  lp_three_scatterplots_active12 <- loon.ggplot(g_three_scatterplots, active_geomLayers = c(1,2))
+  lp_three_scatterplots_active12 <- loon.ggplot(g_three_scatterplots, activeGeomLayers = c(1,2))
 )
 ```
 
@@ -187,7 +187,7 @@ grid.arrange(
   top = "lp_three_scatterplots_active1 and lp_three_scatterplots_active2 and lp_three_scatterplots_active12")
 ```
 
-In this example, the active points should be the colorful ones; the grey points are background and should **not** be activated. In `ggplot` object, the first layer is the grey point layer, thus we need to set `active_geomLayers` as **2**. That is why `lp_three_scatterplots_active2` is more appropriate than the rest (no warnings).
+In this example, the active points should be the colorful ones; the grey points are background and should **not** be activated. In `ggplot` object, the first layer is the grey point layer, thus we need to set `activeGeomLayers` as **2**. That is why `lp_three_scatterplots_active2` is more appropriate than the rest (no warnings).
 
 Also, you can reset the `ggplot` model as
 
@@ -213,9 +213,9 @@ grid.arrange(g_linking_scatter, g_linking_hist, ncol = 2)
 ```{r selected loonplot with linkingGroup and linkingKey, fig.width=7, fig.height=3.5, fig.show='hold'}
 lp_linking_scatter <- loon.ggplot(g_linking_scatter, linkingGroup = "mtcars")
 lp_linking_hist <- loon.ggplot(g_linking_hist, linkingGroup = "mtcars")
-lp_linking_scatter$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
+lp_linking_scatter$plots$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
 # or
-# lp_linking_hist$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
+# lp_linking_hist$plots$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
 grid.arrange(loonGrob(lp_linking_scatter), loonGrob(lp_linking_hist), ncol = 2)
 ```
 

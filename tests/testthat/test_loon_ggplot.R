@@ -48,7 +48,7 @@ test_that("example works", {
   # example 5
   p <- ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class)
   g <- loon.ggplot(p)
-  expect_equal(length(g), 7)
+  expect_equal(length(g$plots), 7)
 
   # example 6
   df <- data.frame(
@@ -115,7 +115,7 @@ test_that("example works", {
     facet_wrap(~cut, nrow = 1)
 
   g <- loon.ggplot(p)
-  expect_equal(length(g), 5)
+  expect_equal(length(g$plots), 5)
 
   # example 11
   mi_counties <- map_data("county", "michigan") %>%
@@ -497,7 +497,7 @@ test_that("example works", {
    geom_point(data = df2, colour = "grey70") +
    geom_point(aes(colour = z)) +
    facet_wrap(~z, scales = "free")
-  g <- loon.ggplot(pp, active_geomLayers = 2)
+  g <- loon.ggplot(pp, activeGeomLayers = 2)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 68
@@ -505,7 +505,7 @@ test_that("example works", {
     geom_point(data = df2, colour = "grey70") +
     geom_point(aes(colour = z)) +
     facet_wrap(~z, scales = "free_x")
-  g <- loon.ggplot(pp, active_geomLayers = 1)
+  g <- loon.ggplot(pp, activeGeomLayers = 1)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 69
@@ -513,7 +513,7 @@ test_that("example works", {
     geom_point(data = df2, colour = "grey70") +
     geom_point(aes(colour = z)) +
     facet_wrap(~z, scales = "free_y")
-  g <- loon.ggplot(pp, active_geomLayers = c(1,2))
+  g <- loon.ggplot(pp, activeGeomLayers = c(1,2))
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 70

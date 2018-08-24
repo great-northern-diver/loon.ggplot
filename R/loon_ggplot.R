@@ -4,14 +4,13 @@
 #'
 #' @param ggplotObject a ggplot object
 #' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
-#' @param active_geomLayers to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
+#' @param activeGeomLayers to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
 #' (Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)
+#' @param tkLabels logical (default \code{TRUE}) to show tk packing labels or not
 #' @param span the span of canvas
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
 #' @param ... named arguments to modify loon plot states
-#'
-#' @return a loon widget
 #'
 #'
 #' @import ggplot2 loon tcltk methods grid
@@ -39,7 +38,7 @@
 #'  pp
 #'  ## check difference
 #'  g <- loon.ggplot(pp)
-#'  suppressWarnings(g <- loon.ggplot(pp, active_geomLayers = 2))
+#'  suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = 2))
 #'
 #' \dontrun{
 #' ## the priority of points layer
@@ -56,25 +55,25 @@
 #'
 #' ### check difference
 #' suppressWarnings(g <- loon.ggplot(pp))
-#' g <- loon.ggplot(pp, active_geomLayers = 2)
-#' suppressWarnings(g <- loon.ggplot(pp, active_geomLayers = c(1,2)))
+#' g <- loon.ggplot(pp, activeGeomLayers = 2)
+#' suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = c(1,2)))
 #' }
 
 
-loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = integer(0),
+loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integer(0), tkLabels = TRUE,
                         span = 5, canvasHeight = 850, canvasWidth = 700, ...){
   # check arguments
   args <- list(...)
   if (is.null(args[['linkingGroup']])) {
     args[['linkingGroup']] <- "none"
   }
-  if (is.null(args[['scalesMargins']])) {
+  if (is.null(args[['scalesMargins']]) & tkLabels) {
     args[['scalesMargins']] <- c(30, 50, 0, 0)
   }
-  if (is.null(args[['labelMargins']])) {
+  if (is.null(args[['labelMargins']]) & tkLabels) {
     args[['labelMargins']] <- c(30, 60, 60, 0)
   }
-  if (is.null(args[['minimumMargins']])) {
+  if (is.null(args[['minimumMargins']]) & tkLabels) {
     args[['minimumMargins']] <- c(20, 20, 10, 10)
   }
   zoomX <- if (is.null(args[['zoomX']])) {
@@ -105,10 +104,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   # number of panels
   panelNum <- dim(ggLayout)[1]
 
-  if(panelNum > 1){
+
+  if (tkLabels) {
     # two ways to separate facets, facet_wrap or facet_grid
-    is_facet_wrap <- if(is.null(ggBuild$layout$facet_params$cols) & is.null(ggBuild$layout$facet_params$rows)) TRUE else FALSE
-    is_facet_grid <- !is_facet_wrap
+    is_facet_wrap <- !is.null(ggBuild$layout$facet_params$facets)
+    is_facet_grid <- !is.null(ggBuild$layout$facet_params$cols) & !is.null(ggBuild$layout$facet_params$rows)
     if(is_facet_wrap) {
       byCOLS <- TRUE
       byROWS <- FALSE
@@ -134,9 +134,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   } else {
     is_facet_wrap <- FALSE
     is_facet_grid <- FALSE
+    byCOLS <- FALSE
+    byROWS <- FALSE
 
     start.xpos <- 0
-    start.ypos <- start.subtitlepos <- 0
+    start.ypos <- start.subtitlepos <- if(!is.null(title)) 1 else 0
     showLabels <- TRUE
   }
   colSubtitles <- c()
@@ -177,13 +179,14 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                     getSubtitle <- getSubtitle(layoutByROWS, layoutByCOLS,
                                                ggLayout = ggLayout, ggLayout_start_pos = ggLayout_start_pos,
                                                numOfSubtitles = numOfSubtitles, byROWS = byROWS, byCOLS = byCOLS,
-                                               panelNum = i, is_facet_wrap = is_facet_wrap, is_facet_grid = is_facet_grid)
+                                               panelNum = i, is_facet_wrap = is_facet_wrap, is_facet_grid = is_facet_grid,
+                                               tkLabels = tkLabels)
                     colSubtitle <- getSubtitle$colSubtitle
                     rowSubtitle <- getSubtitle$rowSubtitle
                     colSubtitles <<- c(colSubtitles, colSubtitle)
                     rowSubtitles <<- c(rowSubtitles, rowSubtitle)
 
-                    if(!is.null(colSubtitle) & is_facet_wrap) {
+                    if(!is.null(colSubtitle) & !is_facet_grid & tkLabels) {
                       sub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                                               text= colSubtitle, background = "grey90"))
                       tkgrid(sub,
@@ -236,6 +239,8 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                       }
                     }
 
+                    loonTitle <- paste(c(colSubtitle, rowSubtitle), collapse = "\n")
+
                     if (len_layers != 0) {
                       importantLayers <- importantLayers(len_layers, ggplotObject)
 
@@ -243,12 +248,12 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                       curveLayers <- importantLayers$curveLayers
 
                       # set active geom layer and active model
-                      activeInfo <- activeInfo(importantLayers, active_geomLayers, len_layers)
-                      active_geomLayers <- activeInfo$active_geomLayers
-                      active_model <- activeInfo$active_model
+                      activeInfo <- activeInfo(importantLayers, activeGeomLayers, len_layers)
+                      activeGeomLayers <- activeInfo$activeGeomLayers
+                      activeModel <- activeInfo$activeModel
 
                       # boxplot has a hidden scatterplot model layer
-                      boxplot_point_layers <- c(boxplotLayers, active_geomLayers)
+                      boxplot_point_layers <- c(boxplotLayers, activeGeomLayers)
 
                       if (is.data.frame(dataFrame) & !"waiver" %in% class(dataFrame)) {
                         mapping.x <- as.character(ggplotObject$mapping$x)
@@ -257,38 +262,39 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                         mapping.y <- mapping.y[-which("~" %in% mapping.y)]
                         column_names <- colnames(dataFrame)
                       } else {
-                        if(length(active_geomLayers) != 0) {
-                          dataFrame <- ggplotObject$layers[[active_geomLayers]]$data
+                        if(length(activeGeomLayers) != 0) {
+                          dataFrame <- ggplotObject$layers[[activeGeomLayers]]$data
                           linkingKey <- loonLinkingKey(dataFrame, args)
-                          mapping.x <- as.character(ggplotObject$layers[[active_geomLayers]]$mapping$x)
+                          mapping.x <- as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$x)
                           mapping.x <- mapping.x[-which("~" %in% mapping.x)]
-                          mapping.y <- as.character(ggplotObject$layers[[active_geomLayers]]$mapping$y)
+                          mapping.y <- as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y)
                           mapping.y <- mapping.y[-which("~" %in% mapping.y)]
                           column_names <- colnames(dataFrame)
                         }
                       }
-                      if (active_model == "l_hist" & length(active_geomLayers) != 0) {
+
+                      if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
                         loonPlot <- loonHistogram(ggBuild = ggBuild, ggLayout_start_pos = ggLayout_start_pos,
                                                   ggLayout = ggLayout, ggplotPanel_params = ggplotPanel_params,
-                                                  ggplotObject = ggplotObject, active_geomLayers = active_geomLayers,
+                                                  ggplotObject = ggplotObject, activeGeomLayers = activeGeomLayers,
                                                   panelIndex = i, column_names = column_names, dataFrame = dataFrame,
                                                   mapping.x = mapping.x, mapping.y = mapping.y,  numOfSubtitles = numOfSubtitles,
                                                   toplevel = tt, showGuides = showGuides,
                                                   showScales = showScales, swapAxes = swapAxes, linkingKey = linkingKey,
                                                   args = args, showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
-                                                  subtitle = colSubtitle, title = title)
+                                                  loonTitle = loonTitle)
 
 
-                      } else if(active_model == "l_plot" & length(boxplot_point_layers) != 0) {
+                      } else if(activeModel == "l_plot" & length(boxplot_point_layers) != 0) {
                         loonPlot <- loonScatter(ggBuild = ggBuild, ggplotObject = ggplotObject,
                                                 ggplotPanel_params = ggplotPanel_params,
                                                 panelIndex = i, mapping.x = mapping.x, mapping.y = mapping.y,
-                                                dataFrame = dataFrame, active_geomLayers = active_geomLayers,
+                                                dataFrame = dataFrame, activeGeomLayers = activeGeomLayers,
                                                 isCoordPolar = isCoordPolar, toplevel = tt,
                                                 showGuides = showGuides, showScales = showScales,
                                                 swapAxes = swapAxes, linkingKey = linkingKey, args = args,
                                                 showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
-                                                subtitle = colSubtitle, title = title)
+                                                loonTitle = loonTitle)
 
                       } else {
                         loonPlot <- l_plot(parent = tt,
@@ -296,15 +302,15 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                            showScales = showScales,
                                            showLabels = showLabels,
                                            swapAxes = swapAxes,
-                                           xlabel = xlabel,
-                                           ylabel = ylabel,
-                                           title = paste(c(title, colSubtitle), collapse = "%+%"))
+                                           xlabel = if(is.null(xlabel)) "" else xlabel,
+                                           ylabel = if(is.null(ylabel)) "" else ylabel,
+                                           title = loonTitle)
 
                       }
                       # adding layers
                       loon_layers <- lapply(seq_len(len_layers),
                                             function(j){
-                                              if(! j %in% active_geomLayers){
+                                              if(! j %in% activeGeomLayers){
                                                 loonLayer(widget = loonPlot,
                                                           layerGeom = ggplotObject$layers[[j]],
                                                           data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == i, ],
@@ -314,13 +320,14 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                                                                       curveLayers = curveLayers))
                                                 )
                                               }
-                                            })
+                                            }
+                      )
 
                       # recover the points or histogram layer to the original position
-                      if(length(active_geomLayers) != len_layers & length(active_geomLayers) != 0) {
-                        otherLayerId <- (1:len_layers)[-active_geomLayers]
+                      if(length(activeGeomLayers) != len_layers & length(activeGeomLayers) != 0) {
+                        otherLayerId <- (1:len_layers)[-activeGeomLayers]
                         minOtherLayerId <- min(otherLayerId)
-                        max_hist_points_layerId <- max(active_geomLayers)
+                        max_hist_points_layerId <- max(activeGeomLayers)
 
                         if(max_hist_points_layerId > minOtherLayerId){
                           modelLayerup <- sapply(seq_len(length(which(otherLayerId < max_hist_points_layerId) == T)),
@@ -331,7 +338,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                       }
 
                       # special case
-                      if (length(boxplotLayers) != 0 & active_model == "l_plot" & length(active_geomLayers) == 0) {
+                      if (length(boxplotLayers) != 0 & activeModel == "l_plot" & length(activeGeomLayers) == 0) {
                         # hidden points layer
                         l_layer_hide(loonPlot, "model")
                         # move the hidden layer on the top
@@ -346,9 +353,9 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                                               showScales = showScales,
                                               showLabels = showLabels,
                                               swapAxes = swapAxes,
-                                              xlabel = xlabel,
-                                              ylabel = ylabel,
-                                              title = paste(c(title, colSubtitle), collapse = "%+%"))
+                                              xlabel = if(is.null(xlabel)) "" else xlabel,
+                                              ylabel = if(is.null(ylabel)) "" else ylabel,
+                                              title = loonTitle)
 
                     # resize loon plot
                     tkconfigure(paste(loonPlot,'.canvas',sep=''),
@@ -378,7 +385,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
                     loonPlot
                   })
 
-  class(plots) <- c("l_ggplot", "l_compound", "loon")
   names(plots) <- sapply(seq_len(panelNum),
                          function(j){
                            paste0(c("x", "y"), ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)], collapse = "")
@@ -401,15 +407,14 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   }
 
   # pack xlabel and ylabel
-  if(!is.null(xlabel) & any(is_facet_wrap, is_facet_grid)){
+  if(!is.null(xlabel) & tkLabels){
     xlab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                              text= xlabel, background = "white"))
     tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
            rowspan = 1, columnspan = column.span,
            sticky="nesw")
   }
-  # TODO ylabel how to rotate?
-  if(!is.null(ylabel) & any(is_facet_wrap, is_facet_grid)){
+  if(!is.null(ylabel) & tkLabels){
     ylab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                              text= paste(c( strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
                              background = "white")
@@ -420,11 +425,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
   }
 
   # is_facet_grid; subtitle by row?
-  if(!is.null(rowSubtitles) & is_facet_grid) {
-    rowSubtitles <- unique(rowSubtitles)
-    for(i in 1:length(rowSubtitles)){
+  if(!is.null(rowSubtitles) & is_facet_grid & tkLabels) {
+    uniqueRowSubtitles <- unique(rowSubtitles)
+    for(i in 1:length(uniqueRowSubtitles)){
       rowSub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
-                                 text= rowSubtitles[i], background = "grey90"))
+                                 text= uniqueRowSubtitles[i], background = "grey90"))
       tkgrid(rowSub, row = start.ypos + (i - 1)* span,
              column = start.xpos + column.span,
              rowspan = span, columnspan = 1,
@@ -432,18 +437,19 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
     }
   }
   # is_facet_grid; subtitle by col?
-  if(!is.null(colSubtitles) & is_facet_grid) {
-    colSubtitles <- unique(colSubtitles)
-    for(i in 1:length(colSubtitles)){
+  if(!is.null(colSubtitles) & is_facet_grid & tkLabels) {
+    uniqueColSubtitles <- unique(colSubtitles)
+    for(i in 1:length(uniqueColSubtitles)){
       colSub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
-                                 text= colSubtitles[i], background = "grey90"))
+                                 text= uniqueColSubtitles[i], background = "grey90"))
       tkgrid(colSub, row = start.ypos - 1,
              column = start.xpos + (i - 1) * span,
              rowspan = 1, columnspan = span,
              sticky="nesw")
     }
   }
-  if(!is.null(title) & any(is_facet_wrap, is_facet_grid)) {
+  # title is always packed up with tk label
+  if(!is.null(title)) {
     titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                             text= title, background = "white"))
@@ -468,7 +474,22 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, active_geomLayers = inte
     }
   }
 
-  plots
+  gp <- list(
+    plots = plots,
+    facet = list(
+      is_facet_wrap = is_facet_wrap,
+      is_facet_grid = is_facet_grid,
+      byCOLS = byCOLS,
+      byROWS = byROWS
+    ),
+    titles = list(
+      title = title,
+      colSubtitles = colSubtitles,
+      rowSubtitles = rowSubtitles
+    )
+  )
+  class(gp) <- c("l_ggplot", "l_compound", "loon")
+  return(gp)
 }
 #'@export
 names.l_ggplot <- function(x) {attr(x, "names")}
@@ -476,11 +497,11 @@ names.l_ggplot <- function(x) {attr(x, "names")}
 #' @export
 l_cget.l_ggplot <- function(target, state) {
 
-  plotNames <- names(target)
+  widget <- target$plots
+  plotNames <- names(widget)
   plots <- lapply(plotNames,
                   function(plotName) {
-                    target[[plotName]]
-
+                    widget[[plotName]]
                   })
   values <- lapply(plots, l_cget, state)
 
@@ -494,10 +515,11 @@ l_configure.l_ggplot <- function(target, ...) {
 
   args <- list(...)
   states <- names(args)
+  widget <- target$plots
   if (is.null(states) || any("" %in% states))
     stop("configuration needs key=value pairs")
 
-  l_configure_l_ggplot(target, args)
+  l_configure_l_ggplot(widget, args)
 }
 
 # helper function for l_configure.l_ggplot
@@ -762,55 +784,55 @@ importantLayers <- function(len_layers, ggplotObject){
        curveLayers = curveLayers)
 }
 
-activeInfo <- function(importantLayers, active_geomLayers, len_layers){
+activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
 
   pointLayers <- importantLayers$pointLayers
   histogramLayers <- importantLayers$histogramLayers
   boxplotLayers <- importantLayers$boxplotLayers
 
   point_hist_layers <- c(pointLayers, histogramLayers)
-  if (length(active_geomLayers) == 0) {
+  if (length(activeGeomLayers) == 0) {
     if(length(point_hist_layers) != 0) {
-      active_geomLayers <- min(point_hist_layers)
-      active_model <- if(active_geomLayers %in% pointLayers) "l_plot" else "l_hist"
+      activeGeomLayers <- min(point_hist_layers)
+      activeModel <- if(activeGeomLayers %in% pointLayers) "l_plot" else "l_hist"
     } else {
-      active_model <- "l_plot"
+      activeModel <- "l_plot"
     }
   } else {
-    if(max(active_geomLayers) > len_layers)
-      stop("the active_geomLayers is out of bound")
-    canBeActive <- active_geomLayers %in% c(point_hist_layers, boxplotLayers)
+    if(max(activeGeomLayers) > len_layers)
+      stop("the activeGeomLayers is out of bound")
+    canBeActive <- activeGeomLayers %in% c(point_hist_layers, boxplotLayers)
     if(all(canBeActive)) {
-      if(all(active_geomLayers %in% pointLayers)) { # all point layers?
-        active_model <- "l_plot"
-      } else if(all(active_geomLayers %in% histogramLayers)) { # all histogram layers?
-        active_model <- "l_hist"
-        if (length(active_geomLayers) > 1) {
+      if(all(activeGeomLayers %in% pointLayers)) { # all point layers?
+        activeModel <- "l_plot"
+      } else if(all(activeGeomLayers %in% histogramLayers)) { # all histogram layers?
+        activeModel <- "l_hist"
+        if (length(activeGeomLayers) > 1) {
           # multiple histograms?
           message("only one histogram layer is drawn as active (model) layer\n",
                   "the rest will be added as l_layer_rectangles")
-          active_geomLayers <- active_geomLayers[1]
+          activeGeomLayers <- activeGeomLayers[1]
         }
-      } else if(any(active_geomLayers %in% pointLayers) & any(active_geomLayers %in% histogramLayers)) {
+      } else if(any(activeGeomLayers %in% pointLayers) & any(activeGeomLayers %in% histogramLayers)) {
         stop("histogram layer and point layer cannot be active at the same time")
-      } else if(any(active_geomLayers %in% boxplotLayers) & any(active_geomLayers %in% histogramLayers)){
+      } else if(any(activeGeomLayers %in% boxplotLayers) & any(activeGeomLayers %in% histogramLayers)){
         stop("histogram layer and boxplot layer cannot be active at the same time")
       } else {
         # boxplot Layer?
-        active_geomLayers <- integer(0)
-        active_model <- "l_plot"
+        activeGeomLayers <- integer(0)
+        activeModel <- "l_plot"
       }
     } else {
-      stop(paste(c("This layer cannot be active"), collapse = " "))
+      stop("This layer cannot be active")
     }
   }
-  list(active_model = active_model,
-       active_geomLayers = active_geomLayers)
+  list(activeModel = activeModel,
+       activeGeomLayers = activeGeomLayers)
 }
 
 getSubtitle <- function(layoutByROWS, layoutByCOLS, ggLayout, ggLayout_start_pos, numOfSubtitles,
-                        byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid){
-  if(is_facet_wrap) {
+                        byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid, tkLabels){
+  if(is_facet_wrap | !tkLabels) {
     colSubtitle <- if (numOfSubtitles > 0) {
       paste(sapply(ggLayout[panelNum, ggLayout_start_pos + c(1:numOfSubtitles)], as.character),
             collapse = "\n")
