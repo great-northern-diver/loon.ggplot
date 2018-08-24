@@ -1,9 +1,9 @@
 #' @title active geom layers
-#' @description `active_geomLayers` will return the geom layer index which can be active
+#' @description `activeGeomLayers` will return the geom layer index which can be active
 #' @param ggplotObject a ggplot object
-#' @details `loon.ggplot` has an argument called `active_geomLayers`. It is a vector to determine which geom layers can be active.
+#' @details `loon.ggplot` has an argument called `activeGeomLayers`. It is a vector to determine which geom layers can be active.
 #' The default setting is `integer(0)`, however, `loon.ggplot` will automatically search the first `geom_histogram` or `geom_point` layer
-#' to make it active. `active_geomLayers` is more like a guide and give you an idea which one can be set as active.
+#' to make it active. `activeGeomLayers` is more like a guide and give you an idea which one can be set as active.
 #'
 #' @seealso \code{\link{loon.ggplot}}
 #'
@@ -18,8 +18,8 @@
 #' p1 <- ggplot(data = df, aes(x, y, colour = colour)) +
 #'   geom_line(interp, mapping = aes(x, y, colour = colour), size = 2) +
 #'   geom_point(size = 5)
-#' agL <- active_geomLayers(p1)
-#' loon.ggplot(p1, active_geomLayers = agL$geom_point)
+#' agL <- activeGeomLayers(p1)
+#' loon.ggplot(p1, activeGeomLayers = agL$geom_point)
 #'
 #'
 #' p2 <- ggplot(economics) +
@@ -35,12 +35,12 @@
 #'   geom_line(aes(date, unemploy)) +
 #'   scale_fill_manual(values = c("blue", "red"))
 #' # none can be active
-#' active_geomLayers(p2)
+#' activeGeomLayers(p2)
 #' #transparency is not allowed in tcltk
-#' loon.ggplot(p2, ggGuides = TRUE, active_geomLayers = integer(0))
+#' loon.ggplot(p2, ggGuides = TRUE, activeGeomLayers = integer(0))
 #'
 #' @export
-active_geomLayers <- function(ggplotObject){
+activeGeomLayers <- function(ggplotObject){
   len_layers <- length(ggplotObject$layers)
   importantLayers <- importantLayers(len_layers, ggplotObject)
 
