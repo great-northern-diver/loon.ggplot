@@ -1,9 +1,9 @@
 loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping.x, mapping.y, dataFrame,
-                        active_geomLayers, isCoordPolar, toplevel, showGuides, showScales, swapAxes, linkingKey,
-                        args, showLabels, xlabel, ylabel, subtitle, title){
-  if(length(active_geomLayers) !=0) {
+                        activeGeomLayers, isCoordPolar, toplevel, showGuides, showScales, swapAxes, linkingKey,
+                        args, showLabels, xlabel, ylabel, loonTitle){
+  if(length(activeGeomLayers) !=0) {
     # combine points data
-    combined.pointsData <- lapply(active_geomLayers,
+    combined.pointsData <- lapply(activeGeomLayers,
                                   function(k){
                                     Layer.k <- ggBuild$data[[k]]
                                     data <- Layer.k[Layer.k$PANEL == panelIndex, ]
@@ -92,9 +92,9 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
            showItemLabels = TRUE,
            swapAxes = swapAxes,
            linkingGroup = args$linkingGroup,
-           xlabel = xlabel,
-           ylabel = ylabel,
-           title = paste(c(title, subtitle), collapse = "%+%"))
+           xlabel = if(is.null(xlabel)) "" else xlabel,
+           ylabel = if(is.null(ylabel)) "" else ylabel,
+           title = loonTitle)
   } else {
     l_plot(parent = toplevel,
            showGuides = showGuides,
@@ -103,9 +103,9 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
            showItemLabels = TRUE,
            swapAxes = swapAxes,
            linkingGroup = args$linkingGroup,
-           xlabel = xlabel,
-           ylabel = ylabel,
-           title = paste(c(title, subtitle), collapse = "%+%"))
+           xlabel = if(is.null(xlabel)) "" else xlabel,
+           ylabel = if(is.null(ylabel)) "" else ylabel,
+           title = loonTitle)
   }
 
 }
