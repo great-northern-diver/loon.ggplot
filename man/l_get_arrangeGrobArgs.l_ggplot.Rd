@@ -4,7 +4,7 @@
 \alias{l_get_arrangeGrobArgs.l_ggplot}
 \title{get arrangeGrob arguments}
 \usage{
-l_get_arrangeGrobArgs.l_ggplot(target)
+\method{l_get_arrangeGrobArgs}{l_ggplot}(target)
 }
 \arguments{
 \item{target}{`l_ggplot` loon target.}

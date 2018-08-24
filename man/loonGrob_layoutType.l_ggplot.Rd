@@ -4,7 +4,7 @@
 \alias{loonGrob_layoutType.l_ggplot}
 \title{loonGrob layoutType}
 \usage{
-loonGrob_layoutType.l_ggplot(target)
+\method{loonGrob_layoutType}{l_ggplot}(target)
 }
 \arguments{
 \item{target}{`l_ggplot` loon target.}
