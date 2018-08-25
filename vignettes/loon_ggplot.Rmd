@@ -10,6 +10,8 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
+library(knitr)
+library(grid)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -23,32 +25,35 @@ knitr::opts_chunk$set(
 
 ## 1. Basic usage
 
-```{r basic uasge, message=FALSE}
+```{r basic uasge, message=FALSE, eval = FALSE, echo = TRUE}
 library(loon.ggplot)
 g_scatter <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
-lp_scatter <- loon.ggplot(g_scatter)
-```
-
-*ggplot*
-```{r basic show ggplot, fig.width = 4, fig.height = 4}
-g_scatter
 ```
 
 *loon plot*
 
 `loon` provides `loonGrob` to transform `loon` graphics to `grid` `grob`s, then to capture the static display.
 
-```{r basic show loonplot, fig.width = 5, fig.height = 4}
-library(grid)
+```{r basic show loonplot, fig.width = 5, fig.height = 4, eval = FALSE, echo = TRUE}
+lp_scatter <- loon.ggplot(g_scatter)
+grid.newpage()
 grid.loon(lp_scatter)
+```
+
+```{r png basic show loonplot, eval = TRUE, echo = FALSE, fig.width = 5, fig.height = 4, fig.cap = "basic show loonplot"}
+include_graphics("img/loon_ggplot/lp_scatter.png")
 ```
 
 The points can be selected in `loon` plot
 
-```{r selected loonplot, fig.width = 5, fig.height = 4}
+```{r selected loonplot, fig.width = 5, fig.height = 4, eval = FALSE, echo = TRUE}
 cyl4 <- which((mtcars$cyl == 4) == TRUE)
 lp_scatter$plots$x1y1['selected'][cyl4] <- TRUE
 grid.loon(lp_scatter)
+```
+
+```{r png selected loonplot, eval = TRUE, echo = FALSE, fig.width = 5, fig.height = 4, fig.cap = "selected loonplot"}
+include_graphics("img/loon_ggplot/lp_scatter_selected.png")
 ```
 
 Also, more interesting actions can be achieved, like changing color, size, glyph types and etc. In this vignette, we just use 'selected' to highlight and show difference. Please take a look at [`loon` display](http://waddella.github.io/loon/learn_R_display_plot.html) for more details (Notice, the output of `loon.ggplot` is a list and each element is the corresponding `loon` plot).
@@ -56,41 +61,47 @@ Also, more interesting actions can be achieved, like changing color, size, glyph
 ### 1.1.Coordinates and `ggGuides`
 
 Let us look at the following example
-```{r ggplot with polar coordinates, fig.width = 4, fig.height = 4, message=FALSE}
+```{r ggplot with polar coordinates, fig.width = 4, fig.height = 4, message=FALSE, eval = FALSE, echo = TRUE}
 library(ElemStatLearn)
 g_polar <- ggplot(SAheart, aes(obesity, adiposity)) + geom_point() + geom_smooth() +
   coord_polar(theta = "y")
-g_polar
 ```
 
 The graphics are projected on the polar coordinates system with respect to "adiposity" (It is a pretty weird plot but does demonstrate how coordinate systems are abstracted out as part of the grammar.)
 
-```{r loonplot with polar coordinates, fig.width = 3.8, fig.height = 4}
+```{r loonplot with polar coordinates, fig.width = 3.8, fig.height = 4, eval = FALSE, echo = TRUE}
 lp_polar <- loon.ggplot(g_polar)
 grid.loon(lp_polar)
 ```
 
+```{r png loonplot with polar coordinates, eval = TRUE, echo = FALSE, fig.width = 3.8, fig.height = 4, fig.cap = "loonplot with polar coordinates"}
+include_graphics("img/loon_ggplot/lp_polar_noGuides.png")
+```
+
 However, this `loon` plot is a bit confusing without any guidance. As the shown help message,  how about trying to set argument "ggGuides = TRUE"?
-```{r loonplot with ggGuides, fig.width = 4.5, fig.height = 4.5}
+```{r loonplot with ggGuides, fig.width = 4.5, fig.height = 4.5, eval = FALSE, echo = TRUE}
 lp_polar_ggGuides <- loon.ggplot(g_polar, ggGuides = TRUE)
 grid.loon(lp_polar_ggGuides)
+```
+
+```{r png loonplot with ggGuides, fig.width = 4.5, fig.height = 4.5, eval = TRUE, echo = FALSE, fig.cap = "loonplot with ggGuides"}
+include_graphics("img/loon_ggplot/lp_polar_withGuides.png")
 ```
 
 `ggGuides` will return a `ggplot` object coordinates system (polar or Cartesian). It is extremely helpful under polar coordinates system, since this system is very difficult to interpret without any guiding.
 
 ### 1.2.Which one is active?
 
-```{r ggplot histogram and density line, fig.width = 3.5, fig.height = 3, message=FALSE}
+```{r ggplot histogram and density line, fig.width = 3.5, fig.height = 3, message=FALSE, eval = FALSE, echo = TRUE}
 g_hist_point <- ggplot(mtcars, aes(x = mpg, y = ..density..)) +
   geom_histogram() +
   geom_point(data = data.frame(x = mtcars$mpg, y = 0), 
              mapping = aes(x, y), 
             color = "steelblue", size = 3) +
   geom_density()
-g_hist_point
 ```
 
-```{r loonplot but with different active layers, fig.width = 7.5, fig.height = 3.5}
+```{r loonplot but with different active layers, fig.width = 7.5, fig.height = 3.5, eval = FALSE, echo = TRUE}
 library(gridExtra)
 ## check difference
 lp_hist_point_active1 <- loon.ggplot(g_hist_point, activeGeomLayers = 1)
@@ -102,18 +113,26 @@ suppressWarnings(
 grid.arrange(loonGrob(lp_hist_point_active1), loonGrob(lp_hist_point_active2), ncol = 2, top = "lp_hist_point_active1 and lp_hist_point_active2")
 ```
 
+```{r png loonplot but with different active layers, fig.width = 7.5, fig.height = 3.5, eval = TRUE, echo = FALSE, fig.cap = "loonplot but with different active layers"}
+include_graphics("img/loon_ggplot/loonplot_with_different_activeLayers.png")
+```
+
 It seems no big difference between these two plots except the **warnings**. That is because, in `loon.ggplot`, the `linkingKey`(will be introduced in **1.3**) is set by the *plot data* (in `p1.2.1`, it is "mtcars"), if the data to be displayed in active geom layer is inherited from the *plot data*, `linkingKey` would be set correctly and no warnings; if not, the displayed data will override the *plot data* and `linkingKey` will be reset, in this situation, the `linkingKey` may not be linked correctly and warnings will occur.  
 
 Let us select the data larger than 20.
-```{r selected loonplot with different active layers, fig.width = 7.5, fig.height = 3.5}
+```{r selected loonplot with different active layers, fig.width = 7.5, fig.height = 3.5, eval = FALSE, echo = TRUE}
 lp_hist_point_active1$plots$x1y1['selected'][mtcars$mpg > 20] <- TRUE
 lp_hist_point_active2$plots$x1y1['selected'][mtcars$mpg > 20] <- TRUE
 grid.arrange(loonGrob(lp_hist_point_active1), loonGrob(lp_hist_point_active2), ncol = 2, top = "lp_hist_point_active1 and lp_hist_point_active2")
 ```
+```{r png selected loonplot with different active layers, fig.width = 7.5, fig.height = 3.5, eval = TRUE, echo = FALSE, fig.cap = "selected loonplot with different active layers"}
+include_graphics("img/loon_ggplot/loonplot_with_different_activeLayers_selected.png")
+```
+
 
 `activeGeomLayers` is helping to set which geom layer is active. The geom layers in `p1.2.1` are `geom_histogram()`, `geom_point()` and `geom_density()`. `activeGeomLayers = 1` indicates `geom_histogram()` will be active. In `loon`, only `geom_histogram()`and `geom_point()` can be active so far, meanwhile, they cannot be active at the same time.
 
-```{r show errors, eval=FALSE}
+```{r show errors, eval = FALSE, echo = TRUE}
 # Error
 loon.ggplot(g_hist_point, activeGeomLayers = 3)
 # Error in activeInfo(importantLayers, activeGeomLayers, len_layers) : This layer cannot be active
@@ -122,14 +141,13 @@ loon.ggplot(g_hist_point, activeGeomLayers = c(1,2))
 ```
 
 `loon.ggplot` also provides a function called `activeGeomLayers` to return the index of layers which can be active
-```{r activeGeomLayers}
+```{r activeGeomLayers, eval = FALSE, echo = TRUE}
 activeGeomLayers(g_hist_point)
 ```
-It means that the first layer `geom_histogram` or the second layer `geom_point` can be active.
 
 What if we have multiple point layers?
 
-```{r ggplot with several point layers, fig.width = 5, fig.height = 3.5}
+```{r ggplot with several point layers, fig.width = 5, fig.height = 3.5, eval = FALSE, echo = TRUE}
 df <- data.frame(
   x = rnorm(120, c(0, 2, 4)),
   y = rnorm(120, c(1, 2, 1)),
@@ -140,10 +158,9 @@ g_three_scatterplots <- ggplot(df, aes(x, y)) +
   geom_point(data = df2, colour = "grey70") +
   geom_point(aes(colour = z)) +
   facet_wrap(~z)
-g_three_scatterplots
 ```
 
-```{r selected loonplot with several point layers, warning=FALSE}
+```{r selected loonplot with several point layers, eval = FALSE, echo = TRUE}
 suppressWarnings(
   lp_three_scatterplots_active1 <- loon.ggplot(g_three_scatterplots, activeGeomLayers = 1)
 )
@@ -152,10 +169,27 @@ lp_three_scatterplots_active2 <- loon.ggplot(g_three_scatterplots, activeGeomLay
 suppressWarnings(
   lp_three_scatterplots_active12 <- loon.ggplot(g_three_scatterplots, activeGeomLayers = c(1,2))
 )
+grid.arrange(
+  textGrob(
+    c("What","is", "the" ,"difference?"), 
+    x = c(0.2, 0.4, 0.6, 0.8),
+    y = c(0.8, 0.6, 0.4, 0.2),
+    gp = gpar(col = "grey80", fontsize = 18),
+    rot = c(30, 60, 30, 60)
+  ),
+  loonGrob(lp_three_scatterplots_active1), 
+  loonGrob(lp_three_scatterplots_active2),
+  loonGrob(lp_three_scatterplots_active12), 
+  ncol = 2, 
+  nrow = 2,
+  top = "plot1 vs plot2 vs plot3")
+```
+```{r png loonplot with several point layers layout, fig.width=7.5, fig.height=7, fig.show='hold', eval = TRUE, echo = FALSE, fig.cap="loonplot with several point layers layout"}
+include_graphics("img/loon_ggplot/loonplot_with_several_point_layers_layout.png")
 ```
 
 `lp_three_scatterplots_active2` has more statistical meanings than the other two. Let us select the points in three facets
-```{r selected loonplot with several point layers layout, fig.width=7.5, fig.height=7, fig.show='hold'}
+```{r selected loonplot with several point layers layout, fig.width=7.5, fig.height=7, fig.show='hold', eval = FALSE, echo = TRUE}
 # lp_three_scatterplots_active1
 sel_lp_three_scatterplots_active1 <- lapply(lp_three_scatterplots_active1, 
                       function(loon_plot){
@@ -184,14 +218,18 @@ grid.arrange(
   loonGrob(lp_three_scatterplots_active12), 
   ncol = 2, 
   nrow = 2,
-  top = "lp_three_scatterplots_active1 and lp_three_scatterplots_active2 and lp_three_scatterplots_active12")
+  top = "plot1 vs plot2 vs plot3")
+```
+
+```{r png selected loonplot with several point layers layout, fig.width=7.5, fig.height=7, fig.show='hold', eval = TRUE, echo = FALSE, fig.cap="selected loonplot with several point layers layout"}
+include_graphics("img/loon_ggplot/selected_loonplot_with_several_point_layers_layout.png")
 ```
 
 In this example, the active points should be the colorful ones; the grey points are background and should **not** be activated. In `ggplot` object, the first layer is the grey point layer, thus we need to set `activeGeomLayers` as **2**. That is why `lp_three_scatterplots_active2` is more appropriate than the rest (no warnings).
 
 Also, you can reset the `ggplot` model as
 
-```{r reset ggplot, eval = F}
+```{r reset ggplot, eval = FALSE, echo = TRUE}
 g_three_scatterplots <- ggplot(df, aes(x, y)) +
   geom_point(aes(colour = z)) +
   geom_point(data = df2, colour = "grey70") +
@@ -204,13 +242,12 @@ Then, `lp_three_scatterplots_active1` would be the appropriate one.
 
 `loon` has a powerful interactive system, `linkingKey` and `linkingGroup`, so that some of their $n$ dimensional states can be synchronized. Displays are linked if their share the same `linkingGroup`; the $n$ dimensional `linkingKey` state controls which elements get synchronized between the linked displays. More details are shown in  [`loon` linking](http://waddella.github.io/loon/learn_R_linking.html).
 
-```{r ggplot arranged plots, fig.width = 7, fig.height = 3.5, fig.show='hold', message=FALSE}
+```{r ggplot arranged plots, fig.width = 7, fig.height = 3.5, fig.show='hold', message=FALSE, eval = FALSE, echo = TRUE}
 g_linking_scatter <- ggplot(mtcars, aes(mpg, wt, colour = as.factor(cyl))) + geom_point()
 g_linking_hist <- ggplot(mtcars, aes(x = mpg, fill = as.factor(cyl))) + geom_histogram()
-grid.arrange(g_linking_scatter, g_linking_hist, ncol = 2)
 ```
 
-```{r selected loonplot with linkingGroup and linkingKey, fig.width=7, fig.height=3.5, fig.show='hold'}
+```{r selected loonplot with linkingGroup and linkingKey, fig.width=7, fig.height=3.5, fig.show='hold', eval = FALSE, echo = TRUE}
 lp_linking_scatter <- loon.ggplot(g_linking_scatter, linkingGroup = "mtcars")
 lp_linking_hist <- loon.ggplot(g_linking_hist, linkingGroup = "mtcars")
 lp_linking_scatter$plots$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- TRUE
@@ -219,9 +256,13 @@ lp_linking_scatter$plots$x1y1['selected'][which((mtcars$cyl == 4) == TRUE)] <- T
 grid.arrange(loonGrob(lp_linking_scatter), loonGrob(lp_linking_hist), ncol = 2)
 ```
 
+```{r png selected loonplot with linkingGroup and linkingKey, fig.width=7, fig.height=3.5, fig.show='hold', eval = TRUE, echo = FALSE, fig.cap="selected loonplot with linkingGroup and linkingKey"}
+include_graphics("img/loon_ggplot/selected_loonplot_with_linkingGroup_and_linkingKey.png")
+```
+
 ### 1.4.Handle `geom_curve`
 
-```{r geom_curve in loonplot, eval=FALSE}
+```{r geom_curve in loonplot, eval = FALSE, echo = TRUE}
 df <- data.frame(x = 1:3, y = 1:3)
 df2 <- data.frame(x = c(1,3), y = c(1,3), 
                   xend = c(2,2), yend = c(2,2))
@@ -240,7 +281,7 @@ Most geom layers in `ggplot` object are straight forward except `geom_curve`. Co
 
 One convenient programming style is that of pipes as developed in the package `magrittr`. 
 
-```{r tidyverse, message=FALSE}
+```{r tidyverse, message=FALSE, eval = FALSE, echo = TRUE}
 library(magrittr)
 library(tidyverse)
 SAheart %>%
@@ -255,7 +296,7 @@ lp_pipe <- loon.ggplot(gg)
 
 However, if we pipe `ggplot` as following, error will occur
 
-```{r failed tidyverse when piping ggplot, eval=FALSE}
+```{r failed tidyverse when piping ggplot, eval = FALSE, echo = TRUE}
 ## Error occures 
 SAheart %>%
   mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
@@ -277,7 +318,7 @@ would run in front of
 
 In `loon.ggplot`, `gg_pipe` packs the `ggplot` object and forces it to pass through in order.
 
-```{r ggpipe, fig.width=7, fig.height=3.5}
+```{r ggpipe, fig.width=7, fig.height=3.5, eval = FALSE, echo = TRUE}
 ## Works
 SAheart %>%
   mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
@@ -291,3 +332,6 @@ SAheart %>%
   grid.loon()
 ```
 
+```{r png ggpipe, fig.width=7, fig.height=3.5, fig.cap="ggpipe", eval = TRUE, echo = FALSE}
+include_graphics("img/loon_ggplot/ggpipe.png")
+```
