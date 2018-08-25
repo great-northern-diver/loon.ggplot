@@ -29,7 +29,7 @@ loonGrob_layoutType.l_ggplot <- function(target) {
 #' @return arrangeGrob arguments, see \code{\link{arrangeGrob}}
 #'
 #' @import grid
-#' @importFrom gridExtra arrangeGrob
+#' @importFrom gridExtra arrangeGrob tableGrob
 #'
 #' @seealso \code{\link{loonGrob_layoutType.l_ggplot}}
 #'
@@ -97,13 +97,14 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                                                       nrow = 1,
                                                       # ncol = numofCOL,
                                                       ncol = length(rowi_columnIds),
-                                                      name = paste0("row", i))
+                                                      name = paste(c("row", i, "arrangeGrob"), collapse = " ")
+                                                      )
 
                                  tG <- tableGrob(matrix(subtitle[rowi_columnIds],
                                                         ncol = length(rowi_columnIds)),
                                                  theme = tt)
                                  rbind(tG, aGrob, size = "last")
-                               } else NULL
+                               } else nullGrob(name = "null grob")
                              }
                       )
     )
@@ -126,7 +127,8 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                        }
         ),
         nrow = 1,
-        ncol = length(colSubtitles)
+        ncol = length(colSubtitles),
+        name = paste(c("byColumn", "arrangeGrob"), collapse = " ")
       )
       tG <- tableGrob(matrix(colSubtitles, ncol = length(colSubtitles)), theme = tt)
 
@@ -143,7 +145,8 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                        }
         ),
         nrow = length(rowSubtitles),
-        ncol = 1
+        ncol = 1,
+        name = paste(c("byRow", "arrangeGrob"), collapse = " ")
       )
       tG <- tableGrob(matrix(rowSubtitles, nrow = length(rowSubtitles)), theme = tt)
 
@@ -161,7 +164,8 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                        }
         ),
         nrow = length(uniqueRowSubtitles),
-        ncol = length(uniqueColSubtitles)
+        ncol = length(uniqueColSubtitles),
+        name = paste(c("byRow", "byColumn", "arrangeGrob"), collapse = " ")
       )
 
       tG_row <- tableGrob(matrix(uniqueRowSubtitles, nrow = length(uniqueRowSubtitles)), theme = tt)
@@ -172,7 +176,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
         rbind(tG_col, lgrobs_row, size = "last")
       )
 
-    } else lgrobs <- grob()
+    } else lgrobs <- nullGrob(name = "null grob")
 
     layout_matrix <- matrix(1, nrow = 1, ncol = 1)
 
