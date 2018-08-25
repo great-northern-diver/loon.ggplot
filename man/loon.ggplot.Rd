@@ -4,8 +4,9 @@
 \alias{loon.ggplot}
 \title{Create a loon plot from a ggplot2 object}
 \usage{
-loon.ggplot(ggplotObject, ggGuides = FALSE, activeGeomLayers = integer(0),
-  tkLabels = TRUE, span = 5, canvasHeight = 850, canvasWidth = 700, ...)
+loon.ggplot(ggplotObject, ggGuides = FALSE,
+  activeGeomLayers = integer(0), tkLabels = TRUE, span = 5,
+  canvasHeight = 850, canvasWidth = 700, ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
@@ -66,4 +67,3 @@ g <- loon.ggplot(pp, activeGeomLayers = 2)
 suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = c(1,2)))
 }
 }
-

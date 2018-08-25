@@ -53,4 +53,3 @@ loon.ggplot(p2, ggGuides = TRUE, activeGeomLayers = integer(0))
 \seealso{
 \code{\link{loon.ggplot}}
 }
-

@@ -24,4 +24,3 @@ grid.newpage(); grid.draw(loonGrob(g))
 \seealso{
 \code{\link{l_get_arrangeGrobArgs.l_ggplot}}
 }
-

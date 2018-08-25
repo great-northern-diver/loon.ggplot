@@ -24,4 +24,3 @@ grid.newpage(); grid.draw(loonGrob(g))
 \seealso{
 \code{\link{loonGrob_layoutType.l_ggplot}}
 }
-
