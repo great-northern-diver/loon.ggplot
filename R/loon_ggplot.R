@@ -41,26 +41,14 @@
 #'  suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = 2))
 #'
 #' \dontrun{
-#' ## the priority of points layer
-#' df <- data.frame(
-#'   x = rnorm(120, c(0, 2, 4)),
-#'   y = rnorm(120, c(1, 2, 1)),
-#'   z = letters[1:3]
-#' )
-#' df2 <- dplyr::select(df, -z)
-#' pp <- ggplot(df, aes(x, y)) +
-#'  geom_point(data = df2, colour = "grey70") +
-#'  geom_point(aes(colour = z)) +
-#'  facet_wrap(~z)
-#'
-#' ### check difference
-#' suppressWarnings(g <- loon.ggplot(pp))
-#' g <- loon.ggplot(pp, activeGeomLayers = 2)
-#' suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = c(1,2)))
+#' p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
+#'    colour = factor(gear))) + facet_wrap(~am)
+#' g1 <- loon.ggplot(p)
+#' g2 <- loon.ggplot(p, tkLabels = TRUE)
 #' }
 
 
-loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integer(0), tkLabels = TRUE,
+loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integer(0), tkLabels = FALSE,
                         span = 5, canvasHeight = 850, canvasWidth = 700, ...){
   # check arguments
   args <- list(...)
@@ -137,8 +125,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
     byCOLS <- FALSE
     byROWS <- FALSE
 
-    start.xpos <- 0
-    start.ypos <- start.subtitlepos <- if(!is.null(title)) 1 else 0
+    start.xpos <- start.ypos <- start.subtitlepos <- 0
     showLabels <- TRUE
   }
   colSubtitles <- c()
@@ -239,7 +226,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                       }
                     }
 
-                    loonTitle <- paste(c(colSubtitle, rowSubtitle), collapse = "\n")
+                    loonTitle <- paste(c(title, colSubtitle, rowSubtitle), collapse = "\n")
 
                     if (len_layers != 0) {
                       importantLayers <- importantLayers(len_layers, ggplotObject)
@@ -388,7 +375,8 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   names(plots) <- sapply(seq_len(panelNum),
                          function(j){
                            paste0(c("x", "y"), ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)], collapse = "")
-                         })
+                         }
+  )
   # tk column row configure
   for (j in 0:(column.span + start.xpos)) {
     tkgrid.columnconfigure(tt, j, weight=1)
@@ -448,8 +436,8 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
              sticky="nesw")
     }
   }
-  # title is always packed up with tk label
-  if(!is.null(title)) {
+
+  if(!is.null(title) & tkLabels) {
     titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
                             text= title, background = "white"))
@@ -474,21 +462,26 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
     }
   }
 
-  gp <- list(
-    plots = plots,
-    facet = list(
-      is_facet_wrap = is_facet_wrap,
-      is_facet_grid = is_facet_grid,
-      byCOLS = byCOLS,
-      byROWS = byROWS
-    ),
-    titles = list(
-      title = title,
-      colSubtitles = colSubtitles,
-      rowSubtitles = rowSubtitles
+  if (panelNum == 1) {
+    gp <- plots$x1y1
+  } else {
+    gp <- list(
+      plots = plots,
+      facet = list(
+        is_facet_wrap = is_facet_wrap,
+        is_facet_grid = is_facet_grid,
+        byCOLS = byCOLS,
+        byROWS = byROWS
+      ),
+      titles = list(
+        title = title,
+        colSubtitles = colSubtitles,
+        rowSubtitles = rowSubtitles
+      )
     )
-  )
-  class(gp) <- c("l_ggplot", "l_compound", "loon")
+    class(gp) <- c("l_ggplot", "l_compound", "loon")
+  }
+
   return(gp)
 }
 #'@export

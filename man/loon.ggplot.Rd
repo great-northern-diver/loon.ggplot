@@ -5,7 +5,7 @@
 \title{Create a loon plot from a ggplot2 object}
 \usage{
 loon.ggplot(ggplotObject, ggGuides = FALSE,
-  activeGeomLayers = integer(0), tkLabels = TRUE, span = 5,
+  activeGeomLayers = integer(0), tkLabels = FALSE, span = 5,
   canvasHeight = 850, canvasWidth = 700, ...)
 }
 \arguments{
@@ -49,21 +49,9 @@ Interactive loon plots from ggplots
  suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = 2))
 
 \dontrun{
-## the priority of points layer
-df <- data.frame(
-  x = rnorm(120, c(0, 2, 4)),
-  y = rnorm(120, c(1, 2, 1)),
-  z = letters[1:3]
-)
-df2 <- dplyr::select(df, -z)
-pp <- ggplot(df, aes(x, y)) +
- geom_point(data = df2, colour = "grey70") +
- geom_point(aes(colour = z)) +
- facet_wrap(~z)
-
-### check difference
-suppressWarnings(g <- loon.ggplot(pp))
-g <- loon.ggplot(pp, activeGeomLayers = 2)
-suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = c(1,2)))
+p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
+   colour = factor(gear))) + facet_wrap(~am)
+g1 <- loon.ggplot(p)
+g2 <- loon.ggplot(p, tkLabels = TRUE)
 }
 }
