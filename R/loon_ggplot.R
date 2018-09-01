@@ -249,7 +249,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                         mapping.y <- mapping.y[-which("~" %in% mapping.y)]
                         column_names <- colnames(dataFrame)
                       } else {
-                        if(length(activeGeomLayers) != 0) {
+                        if(length(activeGeomLayers) == 1) {
                           dataFrame <- ggplotObject$layers[[activeGeomLayers]]$data
                           linkingKey <- loonLinkingKey(dataFrame, args)
                           mapping.x <- as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$x)
@@ -257,7 +257,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                           mapping.y <- as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y)
                           mapping.y <- mapping.y[-which("~" %in% mapping.y)]
                           column_names <- colnames(dataFrame)
-                        }
+                        } else NULL # activeGeomLayers > 1 not implemented so far
                       }
 
                       if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
@@ -446,21 +446,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
            rowspan = 1, columnspan = column.span,
            sticky="w")
   }
-  # set args
-  if (length(args) != 0) {
-    # args remove linkingKey and linkingGroup (if they have)
-    new_args <- setNames(lapply(seq_len(length(args)),
-                                function(j){
-                                  if(names(args)[j] == "linkingKey") NULL
-                                  else if(names(args)[j] == "linkingGroup") NULL
-                                  else args[[j]]
-                                }),
-                         names(args))
-    new_args[sapply(new_args, is.null)] <- NULL
-    if(length(new_args) != 0){
-      l_configure_l_ggplot(plots, new_args)
-    }
-  }
 
   if (panelNum == 1) {
     gp <- plots$x1y1
@@ -482,6 +467,29 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
     class(gp) <- c("l_ggplot", "l_compound", "loon")
   }
 
+  # set args
+  if(length(args) != 0){
+    # args remove linkingKey and linkingGroup (if they have)
+    new_args <- setNames(
+      lapply(seq_len(length(args) + 1) - 1,
+             function(j){
+               if(j == 0) {
+                 gp
+               } else {
+                 if(names(args)[j] == "linkingKey") NULL
+                 else if(names(args)[j] == "linkingGroup") NULL
+                 else args[[j]]
+               }
+             }
+      ),
+      c("target", names(args))
+    )
+    new_args[sapply(new_args, is.null)] <- NULL
+    if(length(new_args) > 1){
+      do.call(l_configure, new_args)
+    }
+  }
+
   return(gp)
 }
 #'@export
@@ -490,16 +498,14 @@ names.l_ggplot <- function(x) {attr(x, "names")}
 #' @export
 l_cget.l_ggplot <- function(target, state) {
 
-  widget <- target$plots
-  plotNames <- names(widget)
+  widgets <- target$plots
+  plotNames <- names(widgets)
   plots <- lapply(plotNames,
                   function(plotName) {
-                    widget[[plotName]]
+                    widgets[[plotName]]
                   })
-  values <- lapply(plots, l_cget, state)
-
-  values
-
+  setNames(lapply(plots, l_cget, state),
+           plotNames)
 }
 
 
@@ -509,19 +515,14 @@ l_configure.l_ggplot <- function(target, ...) {
   args <- list(...)
   states <- names(args)
   widget <- target$plots
+
   if (is.null(states) || any("" %in% states))
     stop("configuration needs key=value pairs")
 
-  l_configure_l_ggplot(widget, args)
-}
-
-# helper function for l_configure.l_ggplot
-l_configure_l_ggplot <- function(target, args) {
-
-  plotNames <- names(target)
+  plotNames <- names(widget)
   plots <- lapply(plotNames,
                   function(plotName) {
-                    target[[plotName]]
+                    widget[[plotName]]
 
                   })
   states <- names(args)
@@ -540,7 +541,21 @@ l_configure_l_ggplot <- function(target, args) {
            })
   }
 
-  invisible()
+  invisible(target)
+}
+
+# aliased in l_cget
+#' @export
+`[.l_ggplot` <- function(target, state) {
+  l_cget(target, state)
+}
+
+# aliased in l_configure
+#' @export
+`[<-.l_ggplot` <- function(target, state, value) {
+  args <- list(target, value)
+  names(args) <- c("target", state)
+  do.call("l_configure", args)
 }
 
 # 1. l_layer_lines does not work well on "dash" (l_layer_line is fine) *
@@ -715,9 +730,9 @@ abline2xy <- function(xrange, yrange, slope, intercept){
 loonLinkingKey <- function(data, args) {
   if (is.data.frame(data) & !"waiver" %in% class(data)) {
     # check linkingKey
-    linkingKey <- if (is.null(args[['linkingKey']])) {
+    if (is.null(args[['linkingKey']])) {
       # default linkingKey
-      as.character(seq_len(dim(data)[1]) - 1)
+      row.names(data)
     } else {
       if (length(args[['linkingKey']]) != dim(data)[1]) {
         warning("the length of linkingKey does not match the number of observations")
