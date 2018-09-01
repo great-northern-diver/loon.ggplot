@@ -31,7 +31,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
 
                                     if (is.null(label)) {
                                       if(length(x) != 0 & length(y) != 0) {
-                                        label <- paste0("item", seq_len(length(x)) - 1, "panel", panelIndex)
+                                        label <- paste0("layer", k, "panel", panelIndex, row.names(data))
                                         warning("item label may not match\n")
                                       }
                                     }
