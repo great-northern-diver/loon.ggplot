@@ -1,6 +1,6 @@
 loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_params, ggplotObject,
                           activeGeomLayers, panelIndex, column_names, dataFrame, mapping.x, mapping.y, numOfSubtitles,
-                          toplevel, showGuides, showScales, swapAxes, linkingKey, args, showLabels,
+                          toplevel, showGuides, showScales, swapAxes, linkingKey, showLabels,
                           xlabel, ylabel, loonTitle){
   # set binwidth
   hist_data <- ggBuild$data[[activeGeomLayers]]
@@ -127,7 +127,6 @@ loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_par
          yshows = yshows,
          linkingKey = linkingKey,
          showStackedColors = TRUE,
-         linkingGroup = args$linkingGroup,
          xlabel = if(is.null(xlabel)) "" else xlabel,
          ylabel = if(is.null(ylabel)) "" else ylabel,
          title = loonTitle)

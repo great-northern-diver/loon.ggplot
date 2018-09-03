@@ -1,6 +1,6 @@
 loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping.x, mapping.y, dataFrame,
                         activeGeomLayers, isCoordPolar, toplevel, showGuides, showScales, swapAxes, linkingKey,
-                        args, showLabels, xlabel, ylabel, loonTitle){
+                        showLabels, xlabel, ylabel, loonTitle){
   if(length(activeGeomLayers) !=0) {
     # combine points data
     combined.pointsData <- lapply(activeGeomLayers,
@@ -91,7 +91,6 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
            showLabels = showLabels,
            showItemLabels = TRUE,
            swapAxes = swapAxes,
-           linkingGroup = args$linkingGroup,
            xlabel = if(is.null(xlabel)) "" else xlabel,
            ylabel = if(is.null(ylabel)) "" else ylabel,
            title = loonTitle)
@@ -102,7 +101,6 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
            showLabels = showLabels,
            showItemLabels = TRUE,
            swapAxes = swapAxes,
-           linkingGroup = args$linkingGroup,
            xlabel = if(is.null(xlabel)) "" else xlabel,
            ylabel = if(is.null(ylabel)) "" else ylabel,
            title = loonTitle)

@@ -52,9 +52,6 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                         span = 5, canvasHeight = 850, canvasWidth = 700, ...){
   # check arguments
   args <- list(...)
-  if (is.null(args[['linkingGroup']])) {
-    args[['linkingGroup']] <- "none"
-  }
   if (is.null(args[['scalesMargins']]) & tkLabels) {
     args[['scalesMargins']] <- c(30, 50, 0, 0)
   }
@@ -73,6 +70,9 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
     5/6
   } else {
     args[['zoomY']]
+  }
+  if (is.null(args[['linkingGroup']])) {
+    args[['linkingGroup']] <- "none"
   }
 
   dataFrame <- ggplotObject$data
@@ -268,7 +268,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                                                   mapping.x = mapping.x, mapping.y = mapping.y,  numOfSubtitles = numOfSubtitles,
                                                   toplevel = tt, showGuides = showGuides,
                                                   showScales = showScales, swapAxes = swapAxes, linkingKey = linkingKey,
-                                                  args = args, showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
+                                                  showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
                                                   loonTitle = loonTitle)
 
 
@@ -279,7 +279,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                                                 dataFrame = dataFrame, activeGeomLayers = activeGeomLayers,
                                                 isCoordPolar = isCoordPolar, toplevel = tt,
                                                 showGuides = showGuides, showScales = showScales,
-                                                swapAxes = swapAxes, linkingKey = linkingKey, args = args,
+                                                swapAxes = swapAxes, linkingKey = linkingKey,
                                                 showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
                                                 loonTitle = loonTitle)
 
@@ -447,6 +447,13 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
            sticky="w")
   }
 
+  # set linkingGroup
+  lapply(plots,
+         function(plot){
+           l_configure(plot, linkingGroup = args$linkingGroup, sync = "pull")
+         }
+  )
+
   if (panelNum == 1) {
     gp <- plots$x1y1
   } else {
@@ -468,26 +475,24 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   }
 
   # set args
-  if(length(args) != 0){
-    # args remove linkingKey and linkingGroup (if they have)
-    new_args <- setNames(
-      lapply(seq_len(length(args) + 1) - 1,
-             function(j){
-               if(j == 0) {
-                 gp
-               } else {
-                 if(names(args)[j] == "linkingKey") NULL
-                 else if(names(args)[j] == "linkingGroup") NULL
-                 else args[[j]]
-               }
+  new_args <- setNames(
+    lapply(seq_len(length(args) + 1) - 1,
+           function(j){
+             if(j == 0) {
+               gp
+             } else {
+               if(names(args)[j] == "linkingKey") NULL
+               else if(names(args)[j] == "linkingGroup") NULL
+               else args[[j]]
              }
-      ),
-      c("target", names(args))
-    )
-    new_args[sapply(new_args, is.null)] <- NULL
-    if(length(new_args) > 1){
-      do.call(l_configure, new_args)
-    }
+           }
+    ),
+    c("target", names(args))
+  )
+  new_args[sapply(new_args, is.null)] <- NULL
+
+  if(length(new_args) > 1){
+    do.call(l_configure, new_args)
   }
 
   return(gp)
@@ -514,31 +519,33 @@ l_configure.l_ggplot <- function(target, ...) {
 
   args <- list(...)
   states <- names(args)
-  widget <- target$plots
+  plots <- target$plots
 
   if (is.null(states) || any("" %in% states))
     stop("configuration needs key=value pairs")
 
-  plotNames <- names(widget)
-  plots <- lapply(plotNames,
-                  function(plotName) {
-                    widget[[plotName]]
-
-                  })
-  states <- names(args)
   for (state in states) {
-
-    switch(
-      state,
-      linkingGroup = lapply(plots, l_configure,
-                            linkingGroup = args$linkingGroup, sync = "pull"),
-      selected = stop("not implemented yet")
-      # stop("state ", state, " not implemented")
+    arg <- args[[state]]
+    lapply(1:length(plots),
+           function(i){
+             plot <- plots[[i]]
+             if(state == "linkingGroup") {
+               l_configure(plot, linkingGroup = arg, sync = "pull")
+             } else if(state == "selected") {
+               stop("not implemented yet")
+             } else {
+               if(is.list(arg)) {
+                 if(length(arg) == length(plots)) {
+                   plot[state] <- arg[[i]]
+                 } else {
+                   stop(paste0("the length of argument ", state, " should be equal to the length of facets"))
+                 }
+               } else {
+                 plot[state] <- arg
+               }
+             }
+           }
     )
-    lapply(plots,
-           function(plot){
-             plot[state] <- args[[state]]
-           })
   }
 
   invisible(target)
