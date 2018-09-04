@@ -530,6 +530,6 @@ test_that("example works", {
 
   # example 72
   p3 <- p + facet_grid(vars(drv), vars(cyl))
-  g <- loon.ggplot(p3)
+  g <- loon.ggplot(p3, tkLabels = TRUE)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 })

@@ -1,6 +1,6 @@
 # adding labels to ggplot_build points layer
 
-ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
+ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
 
   len_layers <- length(ggplotObject$layers)
   ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggplotObject))
@@ -64,8 +64,8 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
       pointsLayerId <- which(sapply(layerNames,
                                     function(layerName){
                                       "GeomPoint" %in% layerName
-                                      }
-                                    ) == TRUE)
+                                    }
+      ) == TRUE)
 
       # do we have a point layer?
       if (length(pointsLayerId) != 0) {
@@ -82,85 +82,89 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL){
         for(i in 1:lenPointsLayer){
           buildData  <- ggBuild$data[[pointsLayerId[i]]]
           numOfObservation <- dim(buildData)[1]
-          ggBuild$data[[pointsLayerId[i]]]$label <-
-            if (numOfObservation == dim(input)[1]) {
-              if (!multiFacets) {
-                # one facet linkingKey
-                linkingKey
-              } else {
-                # multiple facet linkingKey
-                # which variable is used to separate facet
-                panelMatch <- sapply(seq_len(wrap.num),
-                                     function (j) {
-                                       which(str_detect(colnames(ggLayout)[j + ggLayout_start_pos],
-                                                        colnames(input)) == TRUE)
-                                     })
-                panelMatch.len <- length(panelMatch)
-                panelLevels <- list()
-                factors <- list()
-                panelLevels.len <- c()
-                # determine the factors and levels of those variables used for separating
-                for (j in 1:panelMatch.len) {
-                  factors[[j]] <- as.factor(unlist(input[,   panelMatch[j]]))
-                  panelLevels[[j]] <- levels(factors[[j]])
-                  panelLevels.len[j] <- length(panelLevels[[j]])
-                }
-                # if we just have one variable used for separating
-                if(panelMatch.len == 1){
-                  # factors
-                  panelValues <- as.character(factors[[1]])
-                  # label order
-                  linkingKey_order <- unlist(
-                    lapply(panelLevels[[1]],
-                           function(panelLevel){
-                             which(panelValues %in% panelLevel)
-                           }))
-                  linkingKey[linkingKey_order]
-                } else {
-                  ################ cum_multiply
-                  # suppose we have two variables used for separating, first variable has 6 factors, second has 3
-                  # First: I II III IV V VI
-                  # Second: A B C
-                  # The first group is determind by IA (match these two factors), then the second is determined by IB, ..., the last is VIC.
-                  # In other word, ggplot_build reorder the data set by
-                  # IA, IA, ... IA, IB,..., IB, ..., VIC
-                  # thus we have to do the loop from 1 to 18(3 * 6)
 
-                  # give the number of loop and the depth in each loop
-                  depth <- cum_multiply(panelLevels.len)
-                  numOfLoop <- depth[1]
-                  depth <- depth[-1]
-                  # find label order
-                  linkingKey_order <- unlist(
-                    lapply(seq_len(numOfLoop),
-                           function(j){
-                             id <- c()
-                             divider <- j
-                             for (k in 1:(panelMatch.len - 1)) {
-                               # last list index
-                               id[k] <- ceiling(divider / depth[k])
-                               divider <- divider %% depth[k]
-                             }
-                             last.id <- j %% depth[length(depth)]
-                             if (last.id == 0) {last.id <- depth[length(depth)]}
-                             id <- c(id, last.id)
-                             factors_index <- lapply(seq_len(length(id)),
-                                                     function(k){
-                                                       fact <- panelLevels[[k]][id[k]]
-                                                       which(factors[[k]] %in% fact == TRUE)
-                                                     })
-                             common_index <- factors_index[[1]]
-                             for (k in 1:(length(factors_index) - 1)) {
-                               common_index <- intersect(common_index, factors_index[[k+1]])
-                             }
-                             common_index
+          if (numOfObservation == dim(input)[1]) {
+            if (!multiFacets) {
+              # one facet linkingKey itemLabel
+              ggBuild$data[[pointsLayerId[i]]]$linkingKey <- linkingKey
+              ggBuild$data[[pointsLayerId[i]]]$itemLabel <- itemLabel
+            } else {
+              # multiple facet linkingKey
+              # which variable is used to separate facet
+              panelMatch <- sapply(seq_len(wrap.num),
+                                   function (j) {
+                                     which(str_detect(colnames(ggLayout)[j + ggLayout_start_pos],
+                                                      colnames(input)) == TRUE)
+                                   }
+              )
+              panelMatch.len <- length(panelMatch)
+              panelLevels <- list()
+              factors <- list()
+              panelLevels.len <- c()
+              # determine the factors and levels of those variables used for separating
+              for (j in 1:panelMatch.len) {
+                factors[[j]] <- as.factor(unlist(input[,   panelMatch[j]]))
+                panelLevels[[j]] <- levels(factors[[j]])
+                panelLevels.len[j] <- length(panelLevels[[j]])
+              }
+              # if we just have one variable used for separating
+              if(panelMatch.len == 1){
+                # factors
+                panelValues <- as.character(factors[[1]])
+                # label order
+                reOrder <- unlist(
+                  lapply(panelLevels[[1]],
+                         function(panelLevel){
+                           which(panelValues %in% panelLevel)
+                         }))
+                ggBuild$data[[pointsLayerId[i]]]$linkingKey <- linkingKey[reOrder]
+                ggBuild$data[[pointsLayerId[i]]]$itemLabel <- itemLabel[reOrder]
+              } else {
+                ################ cum_multiply
+                # suppose we have two variables used for separating, first variable has 6 factors, second has 3
+                # First: I II III IV V VI
+                # Second: A B C
+                # The first group is determind by IA (match these two factors), then the second is determined by IB, ..., the last is VIC.
+                # In other word, ggplot_build reorder the data set by
+                # IA, IA, ... IA, IB,..., IB, ..., VIC
+                # thus we have to do the loop from 1 to 18(3 * 6)
+
+                # give the number of loop and the depth in each loop
+                depth <- cum_multiply(panelLevels.len)
+                numOfLoop <- depth[1]
+                depth <- depth[-1]
+                # find label order
+                reOrder <- unlist(
+                  lapply(seq_len(numOfLoop),
+                         function(j){
+                           id <- c()
+                           divider <- j
+                           for (k in 1:(panelMatch.len - 1)) {
+                             # last list index
+                             id[k] <- ceiling(divider / depth[k])
+                             divider <- divider %% depth[k]
                            }
-                    )
+                           last.id <- j %% depth[length(depth)]
+                           if (last.id == 0) {last.id <- depth[length(depth)]}
+                           id <- c(id, last.id)
+                           factors_index <- lapply(seq_len(length(id)),
+                                                   function(k){
+                                                     fact <- panelLevels[[k]][id[k]]
+                                                     which(factors[[k]] %in% fact == TRUE)
+                                                   })
+                           common_index <- factors_index[[1]]
+                           for (k in 1:(length(factors_index) - 1)) {
+                             common_index <- intersect(common_index, factors_index[[k+1]])
+                           }
+                           common_index
+                         }
                   )
-                  linkingKey[linkingKey_order]
-                }
+                )
+                ggBuild$data[[pointsLayerId[i]]]$linkingKey <- linkingKey[reOrder]
+                ggBuild$data[[pointsLayerId[i]]]$itemLabel <- itemLabel[reOrder]
               }
             }
+          }
         }
         # end loop
       }

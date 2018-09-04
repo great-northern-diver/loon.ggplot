@@ -77,9 +77,10 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
 
   dataFrame <- ggplotObject$data
   linkingKey <- loonLinkingKey(dataFrame, args)
+  itemLabel <- loonItemLabel(dataFrame, args)
 
   # ggplot_build
-  buildggplotObject <-  ggBuild2Loon(ggplotObject, linkingKey)
+  buildggplotObject <-  ggBuild2Loon(ggplotObject, linkingKey, itemLabel)
   ggBuild <- buildggplotObject$ggBuild
   ggLayout <- buildggplotObject$ggLayout
   ggplotPanel_params <- buildggplotObject$ggplotPanel_params
@@ -163,10 +164,15 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                     # subtitle
                     # if wrap number is larger than 0, multiple facets are displayed
                     numOfSubtitles <- wrap_num(ggLayout)
-                    getSubtitle <- getSubtitle(layoutByROWS, layoutByCOLS,
-                                               ggLayout = ggLayout, ggLayout_start_pos = ggLayout_start_pos,
-                                               numOfSubtitles = numOfSubtitles, byROWS = byROWS, byCOLS = byCOLS,
-                                               panelNum = i, is_facet_wrap = is_facet_wrap, is_facet_grid = is_facet_grid,
+                    getSubtitle <- getSubtitle(layoutByROWS,
+                                               layoutByCOLS,
+                                               ggLayout = ggLayout,
+                                               ggLayout_start_pos = ggLayout_start_pos,
+                                               numOfSubtitles = numOfSubtitles,
+                                               byROWS = byROWS, byCOLS = byCOLS,
+                                               panelNum = i,
+                                               is_facet_wrap = is_facet_wrap,
+                                               is_facet_grid = is_facet_grid,
                                                tkLabels = tkLabels)
                     colSubtitle <- getSubtitle$colSubtitle
                     rowSubtitle <- getSubtitle$rowSubtitle
@@ -252,6 +258,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                         if(length(activeGeomLayers) == 1) {
                           dataFrame <- ggplotObject$layers[[activeGeomLayers]]$data
                           linkingKey <- loonLinkingKey(dataFrame, args)
+                          itemLabel <- loonItemLabel(dataFrame, args)
                           mapping.x <- as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$x)
                           mapping.x <- mapping.x[-which("~" %in% mapping.x)]
                           mapping.y <- as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y)
@@ -261,26 +268,48 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                       }
 
                       if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
-                        loonPlot <- loonHistogram(ggBuild = ggBuild, ggLayout_start_pos = ggLayout_start_pos,
-                                                  ggLayout = ggLayout, ggplotPanel_params = ggplotPanel_params,
-                                                  ggplotObject = ggplotObject, activeGeomLayers = activeGeomLayers,
-                                                  panelIndex = i, column_names = column_names, dataFrame = dataFrame,
-                                                  mapping.x = mapping.x, mapping.y = mapping.y,  numOfSubtitles = numOfSubtitles,
-                                                  toplevel = tt, showGuides = showGuides,
-                                                  showScales = showScales, swapAxes = swapAxes, linkingKey = linkingKey,
-                                                  showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
+                        loonPlot <- loonHistogram(ggBuild = ggBuild,
+                                                  ggLayout_start_pos = ggLayout_start_pos,
+                                                  ggLayout = ggLayout,
+                                                  ggplotPanel_params = ggplotPanel_params,
+                                                  ggplotObject = ggplotObject,
+                                                  activeGeomLayers = activeGeomLayers,
+                                                  panelIndex = i,
+                                                  column_names = column_names,
+                                                  dataFrame = dataFrame,
+                                                  mapping.x = mapping.x,
+                                                  mapping.y = mapping.y,
+                                                  numOfSubtitles = numOfSubtitles,
+                                                  toplevel = tt,
+                                                  showGuides = showGuides,
+                                                  showScales = showScales,
+                                                  swapAxes = swapAxes,
+                                                  linkingKey = linkingKey,
+                                                  showLabels = showLabels,
+                                                  xlabel = xlabel,
+                                                  ylabel = ylabel,
                                                   loonTitle = loonTitle)
 
 
                       } else if(activeModel == "l_plot" & length(boxplot_point_layers) != 0) {
-                        loonPlot <- loonScatter(ggBuild = ggBuild, ggplotObject = ggplotObject,
+                        loonPlot <- loonScatter(ggBuild = ggBuild,
+                                                ggplotObject = ggplotObject,
                                                 ggplotPanel_params = ggplotPanel_params,
-                                                panelIndex = i, mapping.x = mapping.x, mapping.y = mapping.y,
-                                                dataFrame = dataFrame, activeGeomLayers = activeGeomLayers,
-                                                isCoordPolar = isCoordPolar, toplevel = tt,
-                                                showGuides = showGuides, showScales = showScales,
-                                                swapAxes = swapAxes, linkingKey = linkingKey,
-                                                showLabels = showLabels, xlabel = xlabel, ylabel = ylabel,
+                                                panelIndex = i,
+                                                mapping.x = mapping.x,
+                                                mapping.y = mapping.y,
+                                                dataFrame = dataFrame,
+                                                activeGeomLayers = activeGeomLayers,
+                                                isCoordPolar = isCoordPolar,
+                                                toplevel = tt,
+                                                showGuides = showGuides,
+                                                showScales = showScales,
+                                                swapAxes = swapAxes,
+                                                linkingKey = linkingKey,
+                                                itemLabel = itemLabel,
+                                                showLabels = showLabels,
+                                                xlabel = xlabel,
+                                                ylabel = ylabel,
                                                 loonTitle = loonTitle)
 
                       } else {
@@ -374,7 +403,9 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
 
   names(plots) <- sapply(seq_len(panelNum),
                          function(j){
-                           paste0(c("x", "y"), ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)], collapse = "")
+                           paste0(c("x", "y"),
+                                  ggLayout[j, c(ggLayout_ROW_pos, ggLayout_COL_pos)],
+                                  collapse = "")
                          }
   )
   # tk column row configure
@@ -483,6 +514,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
              } else {
                if(names(args)[j] == "linkingKey") NULL
                else if(names(args)[j] == "linkingGroup") NULL
+               else if(names(args)[j] == "itemLabel") NULL
                else args[[j]]
              }
            }
@@ -733,19 +765,36 @@ abline2xy <- function(xrange, yrange, slope, intercept){
   list(x = x, y = y)
 }
 
+loonDefaultLinkingKey <- function(data) {
+  paste0(seq(0, length(row.names(data)) - 1))
+}
 
 loonLinkingKey <- function(data, args) {
   if (is.data.frame(data) & !"waiver" %in% class(data)) {
     # check linkingKey
     if (is.null(args[['linkingKey']])) {
       # default linkingKey
-      row.names(data)
+      loonDefaultLinkingKey(data)
     } else {
       if (length(args[['linkingKey']]) != dim(data)[1]) {
         warning("the length of linkingKey does not match the number of observations")
       }
-      # row_names <- row.names(dataFrame)
       args[['linkingKey']]
+    }
+  } else NULL
+}
+
+loonItemLabel <- function(data, args) {
+  if (is.data.frame(data) & !"waiver" %in% class(data)) {
+    # check itemLabel
+    if (is.null(args[['itemLabel']])) {
+      # default itemLabel
+      row.names(data)
+    } else {
+      if (length(args[['itemLabel']]) != dim(data)[1]) {
+        warning("the length of itemLabel does not match the number of observations")
+      }
+      args[['itemLabel']]
     }
   } else NULL
 }

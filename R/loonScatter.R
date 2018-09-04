@@ -1,7 +1,7 @@
 loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping.x, mapping.y, dataFrame,
                         activeGeomLayers, isCoordPolar, toplevel, showGuides, showScales, swapAxes, linkingKey,
-                        showLabels, xlabel, ylabel, loonTitle){
-  if(length(activeGeomLayers) !=0) {
+                        itemLabel, showLabels, xlabel, ylabel, loonTitle){
+  if(length(activeGeomLayers) > 0) {
     # combine points data
     combined.pointsData <- lapply(activeGeomLayers,
                                   function(k){
@@ -10,12 +10,14 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                     x <- data$x
                                     y <- data$y
                                     if(length(x) == 0 & length(y) == 0){
-                                      label <- NULL
+                                      linkingKey <- NULL
+                                      itemLabel <- NULL
                                       color <- NULL
                                       glyph <- NULL
                                       size <- NULL
                                     } else {
-                                      label <- data$label
+                                      itemLabel <- data$itemLabel
+                                      linkingKey <- data$linkingKey
                                       color <- sapply(1:dim(data)[1],
                                                       function(j){
                                                         if(data$shape[j] %in% 21:24 ){
@@ -29,23 +31,25 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                     }
 
 
-                                    if (is.null(label)) {
+                                    if (is.null(itemLabel) | is.null(linkingKey)) {
                                       if(length(x) != 0 & length(y) != 0) {
-                                        label <- paste0("layer", k, "panel", panelIndex, row.names(data))
+                                        itemLabel <- linkingKey <- paste0("layer", k, row.names(data))
                                         warning("item label may not match\n")
                                       }
                                     }
 
-                                    data.frame(x = x, y = y, label = label, color = color, glyph = glyph, size = size)
+                                    data.frame(x = x, y = y, itemLabel = itemLabel, color = color, glyph = glyph,
+                                               size = size, linkingKey = linkingKey)
                                   })
 
     combined.pointsData <- do.call(rbind, combined.pointsData)
     combined.pointsData$color <- as.character( combined.pointsData$color)
     combined.pointsData$glyph <- as.character( combined.pointsData$glyph)
-    # linkingKey
-    combined.pointsData$itemLabel <- combined.pointsData$linkingKey <- as.character(combined.pointsData$label)
+    combined.pointsData$itemLabel <- as.character(combined.pointsData$itemLabel)
+    combined.pointsData$linkingKey <- as.character(combined.pointsData$linkingKey)
 
   } else {
+    # used for boxplot
     combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
                                       y = with(dataFrame, eval(parse(text = mapping.y))))
     # some default settings, need more thought
@@ -55,8 +59,8 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
       combined.pointsData$size <- 3
       combined.pointsData$color <- "black"
       combined.pointsData$glyph <- "circle"
-      # linkingKey
-      combined.pointsData$itemLabel <- combined.pointsData$linkingKey <- linkingKey
+      combined.pointsData$itemLabel <- itemLabel
+      combined.pointsData$linkingKey <- linkingKey
     }
   }
 
