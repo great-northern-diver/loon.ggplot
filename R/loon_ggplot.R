@@ -688,7 +688,7 @@ pch_to_glyph <- function(pch, alpha) {
 as_loon_size <- function(s, type) {
   if(is.null(s) ) 1 else
     switch(type,
-           "points" = ceiling( s^2 / 2),
+           "points" = ceiling( s^2 / 1.5),
            "lines" = 2 * s,
            "texts" = ceiling(s^2 / 1.5),
            {
