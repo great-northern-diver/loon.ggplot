@@ -3,13 +3,15 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                         itemLabel, showLabels, xlabel, ylabel, loonTitle){
   if(length(activeGeomLayers) > 0) {
     # combine points data
+    count <- 0
     combined.pointsData <- lapply(activeGeomLayers,
-                                  function(k){
-                                    Layer.k <- ggBuild$data[[k]]
-                                    data <- Layer.k[Layer.k$PANEL == panelIndex, ]
+                                  function(activeGeomLayer){
+                                    theLayer <- ggBuild$data[[activeGeomLayer]]
+                                    data <- theLayer[theLayer$PANEL == panelIndex, ]
+                                    num <- dim(data)[1]
                                     x <- data$x
                                     y <- data$y
-                                    if(length(x) == 0 & length(y) == 0){
+                                    if(num == 0){
                                       linkingKey <- NULL
                                       itemLabel <- NULL
                                       color <- NULL
@@ -32,21 +34,37 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
 
 
                                     if (is.null(itemLabel) | is.null(linkingKey)) {
-                                      if(length(x) != 0 & length(y) != 0) {
-                                        itemLabel <- linkingKey <- paste0("layer", k, row.names(data))
-                                        warning("item label may not match\n")
+                                      if(num != 0) {
+                                        itemLabel <- paste0("item", count : (count + num - 1))
+                                        linkingKey <- count : (count + num - 1)
+                                        count <<- count + num
+                                        warning("linkingKey may not match and be set as the default loon one\n
+                                                itemLabel may not match and be set as the default loon one")
+
                                       }
                                     }
 
                                     data.frame(x = x, y = y, itemLabel = itemLabel, color = color, glyph = glyph,
                                                size = size, linkingKey = linkingKey)
-                                  })
+                                  }
+    )
 
     combined.pointsData <- do.call(rbind, combined.pointsData)
     combined.pointsData$color <- as.character( combined.pointsData$color)
     combined.pointsData$glyph <- as.character( combined.pointsData$glyph)
     combined.pointsData$itemLabel <- as.character(combined.pointsData$itemLabel)
     combined.pointsData$linkingKey <- as.character(combined.pointsData$linkingKey)
+
+    isDuplicated_linkingKey <- duplicated(combined.pointsData$linkingKey)
+    if(any(isDuplicated_linkingKey)){
+      combined.pointsData$linkingKey <- 0:(dim(combined.pointsData)[1] - 1)
+      warning("linkingKey may not match and be set as the default loon one")
+    }
+    isDuplicated_itemLabel <- duplicated(combined.pointsData$itemLabel)
+    if(any(isDuplicated_itemLabel)){
+      combined.pointsData$itemLabel <- paste0("item", 0:(dim(combined.pointsData)[1] - 1))
+      warning("itemLabel may not match and be set as the default loon one")
+    }
 
   } else {
     # used for boxplot
