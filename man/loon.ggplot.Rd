@@ -37,21 +37,30 @@ Interactive loon plots from ggplots
  p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
  g <- loon.ggplot(p, ggGuides = TRUE)
 
- # which one is active?
- ## l_hist and l_plot, which one should be the priority?
- den <- density(mtcars$mpg)
- pp <- ggplot(mtcars, aes(x = mpg)) +
-   geom_histogram(mapping = aes(y = ..density..)) +
-   geom_point(data = data.frame(x = den$x, y = den$y), mapping = aes(x, y))
- pp
- ## check difference
- g <- loon.ggplot(pp)
- suppressWarnings(g <- loon.ggplot(pp, activeGeomLayers = 2))
-
-\dontrun{
+ # tkLabels
 p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
    colour = factor(gear))) + facet_wrap(~am)
 g1 <- loon.ggplot(p)
 g2 <- loon.ggplot(p, tkLabels = TRUE)
+
+\dontrun{
+df <- data.frame(
+  x = rnorm(120, c(0, 2, 4)),
+  y = rnorm(120, c(1, 2, 1)),
+  z = letters[1:3]
+)
+df2 <- dplyr::select(df, -z)
+scatterplots <- ggplot(df, aes(x, y)) +
+  geom_point(data = df2, colour = "grey70") +
+  geom_point(aes(colour = z)) +
+  facet_wrap(~z)
+suppressWarnings(
+  lp_scatterplots_active1 <- loon.ggplot(scatterplots, activeGeomLayers = 1)
+)
+
+lp_scatterplots_active2 <- loon.ggplot(scatterplots, activeGeomLayers = 2)
+suppressWarnings(
+ lp_scatterplots_active12 <- loon.ggplot(scatterplots, activeGeomLayers = c(1,2))
+)
 }
 }
