@@ -786,9 +786,6 @@ loonLinkingKey <- function(data, args) {
       # default linkingKey
       loonDefaultLinkingKey(data)
     } else {
-      if (length(args[['linkingKey']]) != dim(data)[1]) {
-        warning("the length of linkingKey does not match the number of observations")
-      }
       args[['linkingKey']]
     }
   } else NULL
