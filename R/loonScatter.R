@@ -1,5 +1,5 @@
 loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping.x, mapping.y, dataFrame,
-                        activeGeomLayers, isCoordPolar, toplevel, showGuides, showScales, swapAxes, linkingKey,
+                        activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
                         itemLabel, showLabels, xlabel, ylabel, loonTitle){
   if(length(activeGeomLayers) > 0) {
     # combine points data
@@ -106,7 +106,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
       y <- combined.pointsData$y
     }
     # loon scatter plot
-    l_plot(parent = toplevel,
+    l_plot(parent = parent,
            x = x,
            y = y,
            size = combined.pointsData$size,
@@ -123,7 +123,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
            ylabel = if(is.null(ylabel)) "" else ylabel,
            title = loonTitle)
   } else {
-    l_plot(parent = toplevel,
+    l_plot(parent = parent,
            showGuides = showGuides,
            showScales = showScales,
            showLabels = showLabels,

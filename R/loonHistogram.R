@@ -1,6 +1,6 @@
 loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_params, ggplotObject,
                           activeGeomLayers, panelIndex, column_names, dataFrame, mapping.x, mapping.y, numOfSubtitles,
-                          toplevel, showGuides, showScales, swapAxes, linkingKey, showLabels,
+                          parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                           xlabel, ylabel, loonTitle){
   # set binwidth
   hist_data <- ggBuild$data[[activeGeomLayers]]
@@ -114,7 +114,7 @@ loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_par
     if(any(str_detect(as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y), "density"))) yshows <- "density"
   }
   # loon histogram
-  l_hist(parent = toplevel,
+  l_hist(parent = parent,
          x = hist_values,
          color = color,
          binwidth = binwidth + 1e-6, # need more thoughts
