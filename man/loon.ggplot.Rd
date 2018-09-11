@@ -4,21 +4,26 @@
 \alias{loon.ggplot}
 \title{Create a loon plot from a ggplot2 object}
 \usage{
-loon.ggplot(ggplotObject, ggGuides = FALSE,
-  activeGeomLayers = integer(0), tkLabels = FALSE, span = 5,
+loon.ggplot(ggplotObject, activeGeomLayers = integer(0), parent = NULL,
+  ggGuides = FALSE, pack = TRUE, tkLabels = NULL, span = 5,
   canvasHeight = 850, canvasWidth = 700, ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
 
-\item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
-
 \item{activeGeomLayers}{to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
 (Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)}
 
-\item{tkLabels}{logical (default \code{TRUE}) to show tk packing labels or not}
+\item{parent}{parent widget path}
 
-\item{span}{the span of canvas}
+\item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
+
+\item{pack}{logical (default \code{TRUE}) to pack widgets. If \code{FALSE}, widgets will be produced but won't be packed.}
+
+\item{tkLabels}{pack labels (title, subtitle, xlabel or ylabel) with tk.grid(). It can be set as \code{NULL} or logical; if it is set as \code{NULL} (default)
+tkLabels will be set as \code{FALSE} to one facet or \code{TRUE} to multiple facets.}
+
+\item{span}{the span of canvas. To determine the proportion size bewteen tklabels and each canvas. Default is 5.}
 
 \item{canvasHeight}{the height of canvas}
 
