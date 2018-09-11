@@ -3,11 +3,13 @@
 #' @description Interactive loon plots from ggplots
 #'
 #' @param ggplotObject a ggplot object
-#' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
 #' @param activeGeomLayers to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
 #' (Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)
-#' @param tkLabels logical (default \code{TRUE}) to show tk packing labels or not
-#' @param span the span of canvas
+#' @param parent parent widget path
+#' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
+#' @param tkLabels pack labels (title, subtitle, xlabel or ylabel) with tk.grid(). It can be set as \code{NULL} or logical; if it is set as \code{NULL} (default)
+#' tkLabels will be set as \code{FALSE} to one facet or \code{TRUE} to multiple facets.
+#' @param span the span of canvas. To determine the proportion size bewteen tklabels and each canvas. Default is 5.
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
 #' @param ... named arguments to modify loon plot states
@@ -18,6 +20,7 @@
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange
 #' @importFrom stringr str_detect
+#' @importFrom gridExtra arrangeGrob tableGrob
 #'
 #' @export
 #'
@@ -58,8 +61,8 @@
 #' }
 
 
-loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integer(0), tkLabels = FALSE,
-                        span = 5, canvasHeight = 850, canvasWidth = 700, ...){
+loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
+                        tkLabels = NULL, span = 5, canvasHeight = 850, canvasWidth = 700, ...){
   # check arguments
   args <- list(...)
   if (is.null(args[['scalesMargins']]) & tkLabels) {
@@ -103,6 +106,15 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   # number of panels
   panelNum <- dim(ggLayout)[1]
 
+  if(is.null(tkLabels)) {
+    if(panelNum == 1) {
+      tkLabels <- FALSE
+    } else {
+      tkLabels <- TRUE
+    }
+  } else {
+    if(!is.logical(tkLabels)) stop("tkLabels can only be set as TRUE, FALSE or NULL.")
+  }
 
   if (tkLabels) {
     # two ways to separate facets, facet_wrap or facet_grid
@@ -145,8 +157,11 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   # theme
   theme <- ggplotObject$theme
 
-  tt <- tktoplevel(background = "white")
-  tktitle(tt) <- paste0("loon.ggplot", as.character(tktitle(tt)))
+  if(is.null(parent)) {
+    parent <- tktoplevel(background = "white")
+    tktitle(parent) <- paste0("loon.ggplot", as.character(tktitle(parent)))
+  }
+
 
   column <- max(ggLayout$COL)
   row <- max(ggLayout$ROW)
@@ -190,7 +205,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                     rowSubtitles <<- c(rowSubtitles, rowSubtitle)
 
                     if(!is.null(colSubtitle) & !is_facet_grid & tkLabels) {
-                      sub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+                      sub <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
                                               text= colSubtitle, background = "grey90"))
                       tkgrid(sub,
                              row = (ggLayout[i,]$ROW - 1) * span + start.ypos,
@@ -290,7 +305,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                                                   mapping.x = mapping.x,
                                                   mapping.y = mapping.y,
                                                   numOfSubtitles = numOfSubtitles,
-                                                  toplevel = tt,
+                                                  parent = parent,
                                                   showGuides = showGuides,
                                                   showScales = showScales,
                                                   swapAxes = swapAxes,
@@ -311,7 +326,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                                                 dataFrame = dataFrame,
                                                 activeGeomLayers = activeGeomLayers,
                                                 isCoordPolar = isCoordPolar,
-                                                toplevel = tt,
+                                                parent = parent,
                                                 showGuides = showGuides,
                                                 showScales = showScales,
                                                 swapAxes = swapAxes,
@@ -323,7 +338,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                                                 loonTitle = loonTitle)
 
                       } else {
-                        loonPlot <- l_plot(parent = tt,
+                        loonPlot <- l_plot(parent = parent,
                                            showGuides = showGuides,
                                            showScales = showScales,
                                            showLabels = showLabels,
@@ -374,7 +389,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
                                                })
                       }
 
-                    } else loonPlot <- l_plot(parent = tt,
+                    } else loonPlot <- l_plot(parent = parent,
                                               showGuides = showGuides,
                                               showScales = showScales,
                                               showLabels = showLabels,
@@ -420,10 +435,10 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   )
   # tk column row configure
   for (j in 0:(column.span + start.xpos)) {
-    tkgrid.columnconfigure(tt, j, weight=1)
+    tkgrid.columnconfigure(parent, j, weight=1)
   }
   for(j in 0:(row.span + start.ypos)) {
-    tkgrid.rowconfigure(tt, j, weight=1)
+    tkgrid.rowconfigure(parent, j, weight=1)
   }
 
   # synchronize binding
@@ -437,15 +452,15 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
 
   # pack xlabel and ylabel
   if(!is.null(xlabel) & tkLabels){
-    xlab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+    xlab <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
                              text= xlabel, background = "white"))
     tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
            rowspan = 1, columnspan = column.span,
            sticky="nesw")
   }
   if(!is.null(ylabel) & tkLabels){
-    ylab <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
-                             text= paste(c( strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
+    ylab <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+                             text= paste(c(strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
                              background = "white")
     )
     tkgrid(ylab, row = start.ypos, column = 0,
@@ -457,7 +472,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   if(!is.null(rowSubtitles) & is_facet_grid & tkLabels) {
     uniqueRowSubtitles <- unique(rowSubtitles)
     for(i in 1:length(uniqueRowSubtitles)){
-      rowSub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+      rowSub <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
                                  text= uniqueRowSubtitles[i], background = "grey90"))
       tkgrid(rowSub, row = start.ypos + (i - 1)* span,
              column = start.xpos + column.span,
@@ -469,8 +484,9 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
   if(!is.null(colSubtitles) & is_facet_grid & tkLabels) {
     uniqueColSubtitles <- unique(colSubtitles)
     for(i in 1:length(uniqueColSubtitles)){
-      colSub <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
-                                 text= uniqueColSubtitles[i], background = "grey90"))
+      colSub <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+                                 text= paste(c(strsplit(uniqueColSubtitles[i], "")[[1]], " "), collapse = "\n"),
+                                 background = "grey90"))
       tkgrid(colSub, row = start.ypos - 1,
              column = start.xpos + (i - 1) * span,
              rowspan = 1, columnspan = span,
@@ -480,7 +496,7 @@ loon.ggplot <- function(ggplotObject, ggGuides = FALSE, activeGeomLayers = integ
 
   if(!is.null(title) & tkLabels) {
     titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
-    tit <- as.character(tcl('label', as.character(l_subwin(tt,'label')),
+    tit <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
                             text= title, background = "white"))
     tkconfigure(tit, font = titleFont)
     tkgrid(tit, row = 0, column = start.xpos,
