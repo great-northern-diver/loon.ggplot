@@ -1,53 +1,17 @@
-#' @title loonGrob layoutType
-#'
-#' @description a layout type, to be used in \code{\link{loonGrob.l_compound}}
-#' @param target `l_ggplot` loon target.
-#'
-#' @return "arrangeGrobArgs"
-#'
-#'
-#' @seealso \code{\link{l_get_arrangeGrobArgs.l_ggplot}}
-#'
-#' @examples
-#' p <- ggplot(mtcars, aes(mpg, wt, colour = cyl)) + geom_point()+ facet_wrap(~gear)
-#' g <- loon.ggplot(p)
-#' library(grid)
-#' grid.newpage(); grid.draw(loonGrob(g))
-
 #' @export
 loonGrob_layoutType.l_ggplot <- function(target) {
   "arrangeGrobArgs"
 }
 
-
-
-#' @title get arrangeGrob arguments
-#'
-#' @description to get arrangeGrob arguments and used in \code{\link{loonGrob.l_compound}}
-#' @param target `l_ggplot` loon target.
-#'
-#' @return arrangeGrob arguments, see \code{\link{arrangeGrob}}
-#'
-#' @import grid
-#' @importFrom gridExtra arrangeGrob tableGrob
-#'
-#' @seealso \code{\link{loonGrob_layoutType.l_ggplot}}
-#'
-#' @examples
-#' p <- ggplot(mtcars, aes(mpg, wt, colour = cyl)) + geom_point()+ facet_wrap(~gear)
-#' g <- loon.ggplot(p)
-#' library(grid)
-#' grid.newpage(); grid.draw(loonGrob(g))
-
 #' @export
 l_get_arrangeGrobArgs.l_ggplot <- function(target){
-  widget <- target$plots
-  len_widget <- length(widget)
+  plots <- target$plots
+  len_plots <- length(plots)
 
   # label
-  xlabel <- paste0(unique(sapply(widget, function(w)w['xlabel'])), collapse = " ")
+  xlabel <- paste0(unique(sapply(plots, function(plot)plot['xlabel'])), collapse = " ")
   xlabel <- if (xlabel == "") NULL else xlabel
-  ylabel <- paste0(unique(sapply(widget, function(w)w['ylabel'])), collapse = " ")
+  ylabel <- paste0(unique(sapply(plots, function(plot)plot['ylabel'])), collapse = " ")
   ylabel <- if (ylabel == "") NULL else ylabel
 
 
@@ -63,7 +27,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
   rowSubtitles <- titles$rowSubtitles
 
   ggLayout <- as.data.frame(
-    t(sapply(strsplit(names(widget), split = ""),
+    t(sapply(strsplit(names(plots), split = ""),
              function(i){
                xpos <- which(i %in% "x" == TRUE)
                ypos <- which(i %in% "y" == TRUE)
@@ -89,7 +53,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                                if(length(rowi_columnIds) > 0){
                                  lgrob <- lapply(rowi_columnIds,
                                                  function(rowi_columnId){
-                                                   loonGrob(widget[[rowi_columnId]])
+                                                   loonGrob(plots[[rowi_columnId]])
                                                  }
                                  )
 
@@ -121,9 +85,9 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     if(facet$byCOLS & !facet$byROWS) {
       # loon grobs
       aGrob <- arrangeGrob(
-        grobs = lapply(widget,
-                       function(w) {
-                         loonGrob(w)
+        grobs = lapply(plots,
+                       function(plot) {
+                         loonGrob(plot)
                        }
         ),
         nrow = 1,
@@ -139,9 +103,9 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     } else if(!facet$byCOLS & facet$byROWS) {
       # loon grobs
       aGrob <- arrangeGrob(
-        grobs = lapply(widget,
-                       function(w) {
-                         loonGrob(w)
+        grobs = lapply(plots,
+                       function(plot) {
+                         loonGrob(plot)
                        }
         ),
         nrow = length(rowSubtitles),
@@ -158,9 +122,9 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
       uniqueColSubtitles <- unique(colSubtitles)
       uniqueRowSubtitles <- unique(rowSubtitles)
       aGrob <- arrangeGrob(
-        grobs = lapply(widget,
-                       function(w) {
-                         loonGrob(w)
+        grobs = lapply(plots,
+                       function(plot) {
+                         loonGrob(plot)
                        }
         ),
         nrow = length(uniqueRowSubtitles),
@@ -182,24 +146,24 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
 
   } else {
     # loon grobs
-    lgrobs <- lapply(widget,
-                     function(w) {
-                       loonGrob(w)
+    lgrobs <- lapply(plots,
+                     function(plot) {
+                       loonGrob(plot)
                      }
     )
 
     # layout matrix
     layout_matrix <- matrix(rep(NA, numofROW * numofCOL), nrow = numofROW)
-    for(i in 1:len_widget) {
+    for(i in 1:len_plots) {
       ggLayouti <- unlist(ggLayout[i, ])
       # set layout matrix
       layout_matrix[ggLayouti[1], ggLayouti[2]] <- i
     }
-    ylabel <- if(length(widget) == 1) {
-      if(widget$x1y1['showLabels']) NULL else ylabel
+    ylabel <- if(length(plots) == 1) {
+      if(plots$x1y1['showLabels']) NULL else ylabel
     } else NULL
-    xlabel <- if(length(widget) == 1) {
-      if(widget$x1y1['showLabels']) NULL else xlabel
+    xlabel <- if(length(plots) == 1) {
+      if(plots$x1y1['showLabels']) NULL else xlabel
     } else NULL
   }
 
@@ -211,4 +175,43 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     top = grid::textGrob(title, x = 0, hjust = 0),
     name = "l_ggplot"
   )
+}
+
+
+#' @export
+l_getPlots.l_ggplot <- function(target){
+  plots  <- target$plots
+  lapply(plots,
+         function(plot){l_throwErrorIfNotLoonWidget(plot) }
+  )
+  plots
+}
+
+#' @export
+l_getLocations.l_ggplot <-  function(target){
+  plots <- target$plots
+  ggLayout <- as.data.frame(
+    t(sapply(strsplit(names(plots), split = ""),
+             function(i){
+               xpos <- which(i %in% "x" == TRUE)
+               ypos <- which(i %in% "y" == TRUE)
+               len_str <- length(i)
+               c(as.numeric(paste0(i[(xpos + 1) : (ypos - 1)], collapse = "")),
+                 as.numeric(paste0(i[(ypos + 1) : (len_str)], collapse = "")))
+             })
+    )
+  )
+  colnames(ggLayout) <- c("ROW", "COL")
+  layoutDim <- apply(ggLayout, 2, max)
+  numofROW <- layoutDim[1]
+  numofCOL <- layoutDim[2]
+
+  # layout matrix
+  layout_matrix <- matrix(rep(NA, numofROW * numofCOL), nrow = numofROW)
+  for(i in 1:length(plots)) {
+    ggLayouti <- unlist(ggLayout[i, ])
+    # set layout matrix
+    layout_matrix[ggLayouti[1], ggLayouti[2]] <- i
+  }
+  layout_matrix
 }
