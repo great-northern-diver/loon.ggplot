@@ -6,6 +6,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
     count <- 0
     activeGeomDim <- activeGeomDim(ggBuild, activeGeomLayers, panelIndex)
     len_linkingKey <- length(linkingKey)
+    len_itemLabel <- length(itemLabel)
     combined.pointsData <- lapply(activeGeomLayers,
                                   function(activeGeomLayer){
                                     thisLayer <- ggBuild$data[[activeGeomLayer]]
@@ -14,7 +15,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                     x <- data$x
                                     y <- data$y
                                     if(num != 0){
-                                      itemLabel <- data$itemLabel
+                                      thisLayer_itemLabel <- data$itemLabel
                                       thisLayer_linkingKey <- data$linkingKey
                                       color <- sapply(1:dim(data)[1],
                                                       function(j){
@@ -28,21 +29,25 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                       size <- as_loon_size( data$size , "points" )
                                     } else {
                                       thisLayer_linkingKey <- NULL
-                                      itemLabel <- NULL
+                                      thisLayer_itemLabel <- NULL
                                       color <- NULL
                                       glyph <- NULL
                                       size <- NULL
                                     }
 
 
-                                    if (is.null(itemLabel) | is.null(thisLayer_linkingKey)) {
+                                    if (is.null(thisLayer_itemLabel) | is.null(thisLayer_linkingKey)) {
                                       if(num != 0) {
                                         thisLayer_linkingKey <- if(activeGeomDim == len_linkingKey) {
                                           linkingKey[(count : (count + num - 1)) + 1]
                                         } else {
                                           count : (count + num - 1)
                                         }
-                                        itemLabel <- paste0("item", thisLayer_linkingKey)
+                                        thisLayer_itemLabel <- if(activeGeomDim == len_itemLabel) {
+                                          itemLabel[(count : (count + num - 1)) + 1]
+                                        } else {
+                                          paste0("item", thisLayer_linkingKey)
+                                        }
                                         count <<- count + num
                                         # give warning once
                                         if(activeGeomLayer == activeGeomLayers[length(activeGeomLayers)]) {
@@ -51,7 +56,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                       }
                                     }
 
-                                    data.frame(x = x, y = y, itemLabel = itemLabel, color = color, glyph = glyph,
+                                    data.frame(x = x, y = y, itemLabel = thisLayer_itemLabel, color = color, glyph = glyph,
                                                size = size, linkingKey = thisLayer_linkingKey)
                                   }
     )
