@@ -6,7 +6,7 @@
 \usage{
 loon.ggplot(ggplotObject, activeGeomLayers = integer(0), parent = NULL,
   ggGuides = FALSE, pack = TRUE, tkLabels = NULL, span = 5,
-  canvasHeight = 850, canvasWidth = 700, ...)
+  canvasHeight = 700, canvasWidth = 850, ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}

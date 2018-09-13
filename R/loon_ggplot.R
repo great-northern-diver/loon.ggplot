@@ -63,7 +63,7 @@
 
 
 loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
-                        pack = TRUE, tkLabels = NULL, span = 5, canvasHeight = 850, canvasWidth = 700, ...){
+                        pack = TRUE, tkLabels = NULL, span = 5, canvasHeight = 700, canvasWidth = 850, ...){
   # check arguments
   args <- list(...)
 
@@ -406,8 +406,8 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                     # resize loon plot
                     if(pack) {
                       tkconfigure(paste(loonPlot,'.canvas',sep=''),
-                                  width = canvasHeight/column,
-                                  height = canvasWidth/row)
+                                  width = canvasWidth/column,
+                                  height = canvasHeight/row)
                       # tk pack
                       tkgrid(loonPlot,
                              row = (ggLayout[i,]$ROW - 1) * span + start.subtitlepos,
@@ -823,9 +823,6 @@ loonItemLabel <- function(data, args) {
       # default itemLabel
       row.names(data)
     } else {
-      if (length(args[['itemLabel']]) != dim(data)[1]) {
-        warning("the length of itemLabel does not match the number of observations")
-      }
       args[['itemLabel']]
     }
   } else NULL
