@@ -5,25 +5,34 @@
 \title{Create a loon plot from a ggplot2 object}
 \usage{
 loon.ggplot(ggplotObject, activeGeomLayers = integer(0), parent = NULL,
-  ggGuides = FALSE, pack = TRUE, tkLabels = NULL, span = 5,
-  canvasHeight = 700, canvasWidth = 850, ...)
+  ggGuides = FALSE, pack = TRUE, tkLabels = NULL,
+  exteriorLabelProportion = 1/5, canvasHeight = 700,
+  canvasWidth = 850, ...)
 }
 \arguments{
 \item{ggplotObject}{a ggplot object}
 
-\item{activeGeomLayers}{to determine which geom layer is active. Only `geom_point()` and `geom_histogram()` can be set as active geom layer(s).
-(Notice, more than one `geom_point()` layers can be set as active layers, but only one `geom_histogram()` can be set as an active geom layer)}
+\item{activeGeomLayers}{to determine which geom layer is active. Only \code{geom_point()}
+ and \code{geom_histogram()} can be set as active geom layer(s).
+(Notice, more than one \code{geom_point()} layers can be set as active layers,
+ but only one \code{geom_histogram()} can be set as an active geom layer)}
 
 \item{parent}{parent widget path}
 
 \item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
 
-\item{pack}{logical (default \code{TRUE}) to pack widgets. If \code{FALSE}, widgets will be produced but won't be packed.}
+\item{pack}{logical (default \code{TRUE}) to pack widgets.
+If \code{FALSE}, widgets will be produced but won't be packed and so will not appear in the display.}
 
-\item{tkLabels}{pack labels (title, subtitle, xlabel or ylabel) with tk.grid(). It can be set as \code{NULL} or logical; if it is set as \code{NULL} (default)
-tkLabels will be set as \code{FALSE} to one facet or \code{TRUE} to multiple facets.}
+\item{tkLabels}{logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped with
+exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}.
+If \code{NULL} (default), then exterior labels appear only for multiple facets.
+If \code{TRUE} exterior labels appear regardless; if \code{FALSE} no exterior labels appear.}
 
-\item{span}{the span of canvas. To determine the proportion size bewteen tklabels and each canvas. Default is 5.}
+\item{exteriorLabelProportion}{space assigned to the vertical height/horizontal width of each exterior label
+expressed as a proportion of a single plot's height/width.  Default is 0.2.
+This is translated to a row/column span = 1 / exteriorLabelProportion for the plot size in
+\code{tkgrid()}.}
 
 \item{canvasHeight}{the height of canvas}
 
@@ -46,7 +55,7 @@ Interactive loon plots from ggplots
 p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
    colour = factor(gear))) + facet_wrap(~am)
 g1 <- loon.ggplot(p)
-g2 <- loon.ggplot(p, tkLabels = TRUE)
+g2 <- loon.ggplot(p, tkLabels = FALSE)
 
 \dontrun{
 df <- data.frame(
@@ -64,6 +73,7 @@ suppressWarnings(
 )
 
 lp_scatterplots_active2 <- loon.ggplot(scatterplots, activeGeomLayers = 2)
+
 suppressWarnings(
  lp_scatterplots_active12 <- loon.ggplot(scatterplots, activeGeomLayers = c(1,2))
 )
