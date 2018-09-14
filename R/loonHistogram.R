@@ -1,7 +1,7 @@
-loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_params, ggplotObject,
+loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, ggplotObject,
                           activeGeomLayers, panelIndex, column_names, dataFrame, mapping.x, mapping.y, numOfSubtitles,
                           parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                          xlabel, ylabel, loonTitle){
+                          xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid){
   # set binwidth
   hist_data <- ggBuild$data[[activeGeomLayers]]
   binwidth_vec <- hist_data[hist_data$PANEL == panelIndex, ]$xmax - hist_data[hist_data$PANEL == panelIndex, ]$xmin
@@ -11,15 +11,22 @@ loonHistogram <- function(ggBuild, ggLayout_start_pos, ggLayout, ggplotPanel_par
   if (numOfSubtitles == 0) {
     isPanel_i.hist_x <- rep(TRUE, length(hist_x))
   } else {
-    # multiple facets
-    panel_i.list <- lapply((1:numOfSubtitles + ggLayout_start_pos),
+    mapping.names_pos <-   if(is_facet_wrap) {
+      which(colnames(layout_matrix) == names(ggLayout$facet_params$facets))
+    } else if(is_facet_grid) {
+      which(colnames(layout_matrix) == c(names(ggLayout$facet_params$rows),names(ggLayout$facet_params$cols)))
+    } else NULL
+
+    panel_i.list <- lapply(mapping.names_pos,
                            function(j) {
-                             c(names(ggLayout[panelIndex, ])[j], as.character(ggLayout[panelIndex, j]))
-                           })
+                             c(names(layout_matrix[panelIndex, ])[j], as.character(layout_matrix[panelIndex, j]))
+                           }
+    )
     isPanel_i.hist_x_TorF <- lapply(seq_len(length(panel_i.list)),
                                     function(j){
                                       unlist(dataFrame[, panel_i.list[[j]][1]]) == panel_i.list[[j]][2]
-                                    })
+                                    }
+    )
     # one condition or multiple conditions; "if else" is not necessary, but for faster speed
     isPanel_i.hist_x <- if (length(isPanel_i.hist_x_TorF) == 1) {
       isPanel_i.hist_x_TorF[[1]]

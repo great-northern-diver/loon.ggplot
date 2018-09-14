@@ -6,13 +6,15 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
   ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggplotObject))
   input <- ggplotObject$data
 
+  ggLayout <- ggBuild$layout
+
   # different ggplot2 versions have different names
   if(is_devtools_ggplot2()){
-    ggLayout <- ggBuild$layout$layout
+    layout_matrix <- ggLayout$layout
     # panel_params
     ggplotPanel_params <- ggBuild$layout$panel_params
   } else {
-    ggLayout <- ggBuild$layout$panel_layout
+    layout_matrix <- ggLayout$panel_layout
     # panel_params
     ggplotPanel_params <- ggBuild$layout$panel_ranges
     message(
@@ -21,10 +23,15 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
       "before you start, make sure package `rlang` is installed"
     )
   }
-  # the parttern of ggLayout
-  # PANEL, ROW, COL, ..., SCALE_X, SCALE_Y. It is 3 so far
-  ggLayout_start_pos <- max(which(colnames(ggLayout) == "COL"),
-                            which(colnames(ggLayout) == "ROW"))
+
+  is_facet_wrap <- !is.null(ggLayout$facet_params$facets)
+  is_facet_grid <- !is.null(ggLayout$facet_params$cols) & !is.null(ggBuild$layout$facet_params$rows)
+
+  mapping.names <-   if(is_facet_wrap) {
+    names(ggLayout$facet_params$facets)
+  } else if(is_facet_grid) {
+    c(names(ggLayout$facet_params$rows),names(ggLayout$facet_params$cols))
+  } else NULL
 
   # if not, no input data in ggplot()
   if(is.data.frame(input)){
@@ -70,7 +77,10 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
       # do we have a point layer?
       if (length(pointsLayerId) != 0) {
         multiFacets <- FALSE
-        wrap.num <- wrap_num(ggLayout)
+        wrap.num <- wrap_num(ggLayout = ggLayout,
+                             is_facet_wrap = is_facet_wrap,
+                             is_facet_grid = is_facet_grid,
+                             tkLabels = FALSE)
         # is multiple facets?
         if(wrap.num > 0) {
           multiFacets <- TRUE
@@ -91,9 +101,9 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
             } else {
               # multiple facet linkingKey
               # which variable is used to separate facet
-              panelMatch <- sapply(seq_len(wrap.num),
-                                   function (j) {
-                                     which(str_detect(colnames(ggLayout)[j + ggLayout_start_pos],
+              panelMatch <- sapply(mapping.names,
+                                   function (mapping.name) {
+                                     which(str_detect(mapping.name,
                                                       colnames(input)) == TRUE)
                                    }
               )
@@ -172,14 +182,11 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
   }
   list(ggBuild = ggBuild,
        ggLayout = ggLayout,
-       ggplotPanel_params = ggplotPanel_params
+       layout_matrix = layout_matrix,
+       ggplotPanel_params = ggplotPanel_params,
+       is_facet_wrap = is_facet_wrap,
+       is_facet_grid = is_facet_grid
   )
-}
-
-
-# many names are changed after version 2.2.1
-is_devtools_ggplot2 <- function() {
-  packageVersion("ggplot2") > "2.2.1"
 }
 
 cum_multiply <- function(vec) {
@@ -193,4 +200,9 @@ cum_multiply <- function(vec) {
     }
   }
   rev(output)
+}
+
+# many names are changed after version 2.2.1
+is_devtools_ggplot2 <- function() {
+  packageVersion("ggplot2") > "2.2.1"
 }
