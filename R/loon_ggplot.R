@@ -423,13 +423,11 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                              columnspan = span,
                              sticky="nesw")
                       # facet wrap will have multiple column names
-                      if(is_facet_wrap) {
-                        for (j in row.start:(row.start + newspan - 1)) {
-                          tkgrid.rowconfigure(parent, j, weight=1)
-                        }
-                        for(j in col.start:(col.start + span)) {
-                          tkgrid.columnconfigure(parent, j, weight=1)
-                        }
+                      for (j in row.start:(row.start + newspan - 1)) {
+                        tkgrid.rowconfigure(parent, j, weight=1)
+                      }
+                      for(j in col.start:(col.start + span - 1)) {
+                        tkgrid.columnconfigure(parent, j, weight=1)
                       }
                     }
                     # loonPlot_configure does not produce anything but just configure the loon plot
@@ -464,15 +462,6 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
   }
 
   if(pack) {
-    if(!is_facet_wrap) {
-      # tk column row configure
-      for (j in start.xpos:(column.span + start.xpos - 1)) {
-        tkgrid.columnconfigure(parent, j, weight=1)
-      }
-      for(j in start.subtitlepos:(row.span + start.ypos - 1)) {
-        tkgrid.rowconfigure(parent, j, weight=1)
-      }
-    }
     # synchronize binding
     scalesSynchronize(plots, scales_free_x, scales_free_y)
 
