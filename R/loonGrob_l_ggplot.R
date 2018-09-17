@@ -26,19 +26,8 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
   colSubtitles <- titles$colSubtitles
   rowSubtitles <- titles$rowSubtitles
 
-  ggLayout <- as.data.frame(
-    t(sapply(strsplit(names(plots), split = ""),
-             function(i){
-               xpos <- which(i %in% "x" == TRUE)
-               ypos <- which(i %in% "y" == TRUE)
-               len_str <- length(i)
-               c(as.numeric(paste0(i[(xpos + 1) : (ypos - 1)], collapse = "")),
-                 as.numeric(paste0(i[(ypos + 1) : (len_str)], collapse = "")))
-             })
-    )
-  )
-  colnames(ggLayout) <- c("ROW", "COL")
-  layoutDim <- apply(ggLayout, 2, max)
+  layout.matrix <- layout_matrix(target)
+  layoutDim <- apply(layout.matrix, 2, max)
   numofROW <- layoutDim[1]
   numofCOL <- layoutDim[2]
 
@@ -49,7 +38,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     lgrobs <- do.call(gList,
                       lapply(1:numofROW,
                              function(i){
-                               rowi_columnIds <- which(ggLayout$ROW == i)
+                               rowi_columnIds <- which(layout.matrix$ROW == i)
                                if(length(rowi_columnIds) > 0){
                                  lgrob <- lapply(rowi_columnIds,
                                                  function(rowi_columnId){
@@ -75,7 +64,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     # layout matrix
     layout_matrix <- matrix(rep(1:numofROW, each = numofCOL), nrow = numofROW, byrow = TRUE)
     # last row
-    lastRowFacets <- length(which(ggLayout$ROW == numofROW))
+    lastRowFacets <- length(which(layout.matrix$ROW == numofROW))
     if(lastRowFacets != numofCOL) {
       layout_matrix[numofROW, ] <- c(rep(numofROW, lastRowFacets) , rep(NA, (numofCOL - lastRowFacets)))
     }
@@ -155,9 +144,9 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     # layout matrix
     layout_matrix <- matrix(rep(NA, numofROW * numofCOL), nrow = numofROW)
     for(i in 1:len_plots) {
-      ggLayouti <- unlist(ggLayout[i, ])
+      layout.matrixi <- unlist(layout.matrix[i, ])
       # set layout matrix
-      layout_matrix[ggLayouti[1], ggLayouti[2]] <- i
+      layout_matrix[layout.matrixi[1], layout.matrixi[2]] <- i
     }
     ylabel <- if(length(plots) == 1) {
       if(plots$x1y1['showLabels']) NULL else ylabel
@@ -190,28 +179,17 @@ l_getPlots.l_ggplot <- function(target){
 #' @export
 l_getLocations.l_ggplot <-  function(target){
   plots <- target$plots
-  ggLayout <- as.data.frame(
-    t(sapply(strsplit(names(plots), split = ""),
-             function(i){
-               xpos <- which(i %in% "x" == TRUE)
-               ypos <- which(i %in% "y" == TRUE)
-               len_str <- length(i)
-               c(as.numeric(paste0(i[(xpos + 1) : (ypos - 1)], collapse = "")),
-                 as.numeric(paste0(i[(ypos + 1) : (len_str)], collapse = "")))
-             })
-    )
-  )
-  colnames(ggLayout) <- c("ROW", "COL")
-  layoutDim <- apply(ggLayout, 2, max)
+  layout.matrix <- layout_matrix(target)
+  layoutDim <- apply(layout.matrix, 2, max)
   numofROW <- layoutDim[1]
   numofCOL <- layoutDim[2]
 
   # layout matrix
   layout_matrix <- matrix(rep(NA, numofROW * numofCOL), nrow = numofROW)
   for(i in 1:length(plots)) {
-    ggLayouti <- unlist(ggLayout[i, ])
+    layout.matrixi <- unlist(layout.matrix[i, ])
     # set layout matrix
-    layout_matrix[ggLayouti[1], ggLayouti[2]] <- i
+    layout_matrix[layout.matrixi[1], layout.matrixi[2]] <- i
   }
   layout_matrix
 }

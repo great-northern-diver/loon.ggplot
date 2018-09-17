@@ -46,21 +46,40 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
   }
 
   # set theme
-  background.color <- if (is.null(theme$plot.background$colour)) {
-    loonPlot['background']
-  } else hex6to12(theme$plot.background$colour)
+  if(length(theme) == 0) {
+    # default theme: white guide lines, grey92 guidesBackground
+    background.color <- loonPlot['background']
+    text.color <- loonPlot['foreground']
+    panel.background_fill <- loonPlot['guidesBackground']
+    panel.guideline_color <- loonPlot['guidelines']
+  } else {
+    background.color <- if (is.null(theme$plot.background$colour)) {
+      loonPlot['background']
+    } else hex6to12(theme$plot.background$colour)
 
-  text.color <- if (is.null(theme$text$colour)) {
-    loonPlot['foreground']
-  } else hex6to12(theme$text$colour)
+    text.color <- if (is.null(theme$text$colour)) {
+      loonPlot['foreground']
+    } else hex6to12(theme$text$colour)
 
-  panel.background_fill <- if(is.null(theme$panel.background$fill))  {
-    loonPlot['guidesBackground']
-  } else hex6to12(theme$panel.background$fill)
+    panel.background_fill <- if(is.null(theme$panel.background$fill))  {
+      "white"
+    } else hex6to12(theme$panel.background$fill)
 
-  panel.guideline_color <- if(is.null(theme$panel.grid$colour)) {
-    loonPlot['guidelines']
-  } else hex6to12(theme$panel.grid$colour)
+    panel.guideline_color <- if(is.null(theme$panel.grid$colour)) {
+      major_guideline_color <- hex6to12(theme$panel.grid.major$colour)
+      minor_guideline_color <- hex6to12(theme$panel.grid.minor$colour)
+      if(major_guideline_color != "") {
+        major_guideline_color
+      } else if(minor_guideline_color != "") {
+        minor_guideline_color
+      } else loonPlot['guidelines']
+    } else {
+      if(length(theme$panel.grid.major) == 0 & length(theme$panel.grid.minor) == 0) {
+        "white"
+      } else hex6to12(theme$panel.grid$colour)
+    }
+  }
+
 
   l_configure(loonPlot,
               background = background.color,
