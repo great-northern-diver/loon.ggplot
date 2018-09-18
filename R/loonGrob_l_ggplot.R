@@ -31,7 +31,9 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
   numofROW <- layoutDim[1]
   numofCOL <- layoutDim[2]
 
+  # ttheme_default will give the background with light grey and dark grey, one by one
   # tt <- gridExtra::ttheme_default(base_size = 8)
+  # ttheme_minimal will give the same color background
   tt <- gridExtra::ttheme_minimal(
     base_size = 8,
     core=list(bg_params = list(fill = "grey90", col=NA))
