@@ -31,7 +31,12 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
   numofROW <- layoutDim[1]
   numofCOL <- layoutDim[2]
 
-  tt <- gridExtra::ttheme_default(base_size = 8)
+  # tt <- gridExtra::ttheme_default(base_size = 8)
+  tt <- gridExtra::ttheme_minimal(
+    base_size = 8,
+    core=list(bg_params = list(fill = "grey90", col=NA))
+  )
+
   if(is_facet_wrap & length(colSubtitles) + length(rowSubtitles) > 0) {
     subtitle <- c(colSubtitles, rowSubtitles)
     # loon grobs
@@ -51,11 +56,12 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                                                       # ncol = numofCOL,
                                                       ncol = length(rowi_columnIds),
                                                       name = paste(c("row", i, "arrangeGrob"), collapse = " ")
-                                                      )
+                                 )
 
                                  tG <- tableGrob(matrix(subtitle[rowi_columnIds],
                                                         ncol = length(rowi_columnIds)),
-                                                 theme = tt)
+                                                 theme = tt
+                                 )
                                  rbind(tG, aGrob, size = "last")
                                } else nullGrob(name = "null grob")
                              }

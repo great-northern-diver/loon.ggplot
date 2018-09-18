@@ -569,7 +569,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
     do.call(l_configure, new_args)
   }
 
-  return(gp)
+  return(invisible(gp))
 }
 #'@export
 names.l_ggplot <- function(x) {attr(x, "names")}
