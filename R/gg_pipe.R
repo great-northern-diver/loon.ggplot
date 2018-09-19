@@ -1,13 +1,29 @@
-#' @title Create a ggplot object function for piping
+#' @title Pipe ggplot object
 #'
-#' @description This function is used to pack and pass ggplot object through a pipe model (because of the
-#' precedence of + and %>%, ggplot object will break the pipe model)
+#' @description Pack a \code{ggplot} object forward to \code{loon.ggplot} expressions
+#' via a pipe-operator "\%>\%".
+#'
+#' @details When "+" and "\%>\%" both appear in pipe operations, "\%>\%" takes the priority of "+",e.g:
+#'
+#' \code{mtcars \%>\%
+#'    ggplot(aes(mpg, wt, colour = cyl)) +
+#'    geom_point() \%>\%
+#'    loon.ggplot()},
+#'
+#' error would occure. The reason is
+#'
+#' \code{geom_point() \%>\% loon.ggplot()}
+#'
+#' would run before
+#'
+#' \code{ggplot(aes(mpg, wt, colour = cyl)) + geom_point()}.
+#'
+#' Hence, we need a function \code{gg_pipe()} to pack the \code{ggplot} object and force operations happen in order.
 #'
 #' @param data a data frame to use for ggplot
 #' @param ggplotObject a ggplot object to be passed though
 #'
-#' @return a ggplot function, not used for plot, just for passing through
-#'
+#' @return a ggplot evaluate object
 #'
 #' @export
 #'
@@ -15,8 +31,17 @@
 #'
 #' library(magrittr)
 #' g <- mtcars %>%
-#'    gg_pipe(ggplot(aes(mpg, wt, colour = cyl)) + geom_point()) %>%
+#'    gg_pipe(
+#'      ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
+#'    ) %>%
 #'    loon.ggplot()
+#' \dontrun{
+#'    # Error
+#'    g <- mtcars %>%
+#'       ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
+#'       %>%
+#'       loon.ggplot()
+#' }
 
 gg_pipe <- function(data, ggplotObject){
   if (!is.data.frame(data)) {
