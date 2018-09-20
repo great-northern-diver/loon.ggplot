@@ -7,7 +7,7 @@
 #'             and \code{geom_histogram()} can be set as active geom layer(s).
 #'            (Notice, more than one \code{geom_point()} layers can be set as active layers,
 #'             but only one \code{geom_histogram()} can be set as an active geom layer)
-#' @param parent parent widget path
+#' @param parent parent widget path (Tk toplevel)
 #' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
 #' @param pack logical (default \code{TRUE}) to pack widgets.
 #'             If \code{FALSE}, widgets will be produced but won't be packed and so will not appear in the display.
@@ -74,8 +74,36 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                         pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
                         canvasHeight = 700, canvasWidth = 850, ...){
   # check arguments
-  args <- list(...)
+  if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
+    stop("activeGeomLayers is a numeric argument")
+  }
+  if(!is.null(parent)) {
+    if(!is(parent, "tkwin")) stop("parent must be a Tk toplevel window")
+  }
+  if(!is.logical(ggGuides)) {
+    stop("ggGuides is a logical argument")
+  }
+  if(!is.logical(pack)) {
+    stop("pack is a logical argument")
+  }
+  if(!is.null(tkLabels)) {
+    if(!is.logical(tkLabels)) stop("tkLabels is a logical argument")
+  }
+  if(!is.numeric(exteriorLabelProportion)) {
+    stop("exteriorLabelProportion is a numerical argument")
+  } else {
+    if(exteriorLabelProportion >= 1 & length(exteriorLabelProportion) != 1) {
+      stop("exteriorLabelProportion is a single number between 0 to 1")
+    }
+  }
+  if(!is.numeric(canvasHeight)) {
+    stop("canvasHeight is a numerical argument")
+  }
+  if(!is.numeric(canvasWidth)) {
+    stop("canvasWidth is a numerical argument")
+  }
 
+  args <- list(...)
   dataFrame <- ggplotObject$data
   linkingKey <- loonLinkingKey(dataFrame, args)
   itemLabel <- loonItemLabel(dataFrame, args)
@@ -103,7 +131,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
       tkLabels <- TRUE
     }
   } else {
-    if(!is.logical(tkLabels)) stop("tkLabels can only be set as TRUE, FALSE or NULL.")
+    if(!is.logical(tkLabels)) stop("tkLabels can only be set as TRUE, FALSE or NULL")
   }
 
   if (tkLabels) {

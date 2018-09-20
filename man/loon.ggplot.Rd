@@ -17,7 +17,7 @@ loon.ggplot(ggplotObject, activeGeomLayers = integer(0), parent = NULL,
 (Notice, more than one \code{geom_point()} layers can be set as active layers,
  but only one \code{geom_histogram()} can be set as an active geom layer)}
 
-\item{parent}{parent widget path}
+\item{parent}{parent widget path (Tk toplevel)}
 
 \item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
 
