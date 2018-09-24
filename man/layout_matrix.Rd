@@ -7,7 +7,7 @@
 layout_matrix(target)
 }
 \arguments{
-\item{plots}{a list of loon object with specific names (x1y1, x1y2, ...)}
+\item{target}{a list of loon object with specific names (x1y1, x1y2, ...)}
 }
 \description{
 return the layout matrix of a list of loon plots

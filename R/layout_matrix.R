@@ -1,6 +1,6 @@
 #' @title layout matrix
 #' @description return the layout matrix of a list of loon plots
-#' @param plots a list of loon object with specific names (x1y1, x1y2, ...)
+#' @param target a list of loon object with specific names (x1y1, x1y2, ...)
 #'
 #' @examples
 #' p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
