@@ -69,11 +69,13 @@
 #' )
 #' }
 
-
 loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
                         pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
-                        canvasHeight = 700, canvasWidth = 850, ...){
+                        canvasHeight = 700, canvasWidth = 850, ...) {
   # check arguments
+  if(!is(ggplotObject, c("gg", "ggplot"))) {
+    stop(paste0(deparse(substitute(ggplotObject)), " is not a ggplot object"))
+  }
   if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
     stop("activeGeomLayers is a numeric argument")
   }
