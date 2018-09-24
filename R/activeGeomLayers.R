@@ -41,6 +41,9 @@
 #'
 #' @export
 activeGeomLayers <- function(ggplotObject){
+  if(!is(ggplotObject, c("gg", "ggplot"))) {
+    stop(paste0(deparse(substitute(ggplotObject)), " is not a ggplot object"))
+  }
   len_layers <- length(ggplotObject$layers)
   importantLayers <- importantLayers(len_layers, ggplotObject)
 
