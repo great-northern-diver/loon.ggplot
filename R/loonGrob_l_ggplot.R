@@ -65,7 +65,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                                                  theme = tt
                                  )
                                  rbind(tG, aGrob, size = "last")
-                               } else nullGrob(name = "null grob")
+                               } else nullGrob(name = "null: no grob")
                              }
                       )
     )
