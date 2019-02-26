@@ -3,10 +3,8 @@ title: "ggplots -> interactive loon plots"
 author: "Wayne Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
 output:
-  pdf_document:
-    keep_tex: yes
+  html_document:
     fig_caption: yes
-    latex_engine: xelatex
     number_sections: no
     toc: yes
   html_notebook: default
@@ -14,8 +12,10 @@ output:
     fig_caption: yes
     number_sections: no
     toc: yes
-  html_document:
+  pdf_document:
+    keep_tex: no
     fig_caption: yes
+    latex_engine: xelatex
     number_sections: no
     toc: yes
   word_document: default
@@ -23,7 +23,6 @@ vignette: >
   %\VignetteIndexEntry{Creating interactive loon plots from ggplots}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{grid}
-  
   %\VignetteEngine{knitr::rmarkdown}
 header-includes:
 - \usepackage{graphicx}
