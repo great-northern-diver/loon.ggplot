@@ -440,7 +440,7 @@ loonLayer.GeomPath <- function(widget,
              linesWidth <- as_loon_size(groupData$size, "lines")
              linesDash <- as_loon_dash(groupData$linetype)
              # a single line with a single color
-             if(len_uni_col == 1){
+             if(len_uni_col == 1) {
                if(isCoordPolar){
                  coordPolarxy <- Cartesianxy2Polarxy.GeomPath(NULL, coordinates, groupData, ggplotPanel_params)
                  x <- coordPolarxy$x
@@ -629,16 +629,22 @@ loonLayer.GeomSmooth <- function(widget,
                                  special,
                                  parent = "root"){
   if(dim(data)[1] != 0) {
-    smoothGroup <- l_layer_group(widget, "smooth")
 
-    if(!is.null(data$se)){
+    uniGroup <- unique(data$group)
+    smoothGroup <- lapply(1:length(uniGroup),
+                          function(i){
+                            l_layer_group(widget, paste0("smooth",i))
+                          }
+    )
+
+    if(!is.null(data$se)) {
+
       # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
       n <- dim(data)[1]
-      uniGroup <- unique(data$group)
       seqLength <- 20
-      newdata <- data.frame()
-      for (i in uniGroup) {
-        group_i_data <- data[data$group == i, ]
+
+      for (i in 1:length(uniGroup)) {
+        group_i_data <- data[data$group == uniGroup[i], ]
         n <- dim(group_i_data)[1]
         # set rev data x
         group_i_revdata <- group_i_data
@@ -652,28 +658,92 @@ loonLayer.GeomSmooth <- function(widget,
         group_i_data$y <- c(group_i_data.y, seq(group_i_data.y[n], group_i_revdata.y[1], length.out = seqLength))
         group_i_revdata$y <- c(group_i_revdata.y, seq(group_i_revdata.y[n], group_i_data.y[1], length.out = seqLength))
         group_i_newdata <- rbind(group_i_data, group_i_revdata)
-        newdata <- rbind(newdata, group_i_newdata)
-      }
-      newdata$colour <- NA
-      loonLayer.GeomPolygon(widget,
-                            layerGeom,
-                            newdata,
-                            ggplotPanel_params,
-                            ggplotObject,
-                            special,
-                            parent = if(parent == "root") smoothGroup else parent)
-    }
-    loonLayer.GeomPath(widget,
-                       layerGeom,
-                       data,
-                       ggplotPanel_params,
-                       ggplotObject,
-                       special,
-                       parent = if(parent == "root") smoothGroup else parent)
-  } else NULL
+        group_i_newdata$colour <- NA
 
+        loonLayer.GeomPolygon(widget,
+                              layerGeom,
+                              group_i_newdata,
+                              ggplotPanel_params,
+                              ggplotObject,
+                              special,
+                              parent = if(parent == "root") smoothGroup[[i]] else parent)
+        loonLayer.GeomPath(widget,
+                           layerGeom,
+                           data[data$group == uniGroup[i], ],
+                           ggplotPanel_params,
+                           ggplotObject,
+                           special,
+                           parent = if(parent == "root") smoothGroup[[i]] else parent)
+
+      }
+    } else {
+
+      for (i in 1:length(uniGroup)) {
+        group_i_data <- data[data$group == uniGroup[i], ]
+        loonLayer.GeomPath(widget,
+                           layerGeom,
+                           group_i_data,
+                           ggplotPanel_params,
+                           ggplotObject,
+                           special,
+                           parent = if(parent == "root") smoothGroup[[i]] else parent)
+      }
+    }
+  } else NULL
 }
 
+# loonLayer.GeomSmooth <- function(widget,
+#                                  layerGeom,
+#                                  data,
+#                                  ggplotPanel_params,
+#                                  ggplotObject,
+#                                  special,
+#                                  parent = "root"){
+#   if(dim(data)[1] != 0) {
+#     smoothGroup <- l_layer_group(widget, "smooth")
+#
+#     if(!is.null(data$se)){
+#       # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
+#       n <- dim(data)[1]
+#       uniGroup <- unique(data$group)
+#       seqLength <- 20
+#       newdata <- data.frame()
+#       for (i in uniGroup) {
+#         group_i_data <- data[data$group == i, ]
+#         n <- dim(group_i_data)[1]
+#         # set rev data x
+#         group_i_revdata <- group_i_data
+#         group_i_revdata$x <- rev(group_i_revdata$x)
+#         # set y for both
+#         group_i_data$y <- group_i_data.y <- group_i_data$ymin
+#         group_i_revdata$y <- group_i_revdata.y <- rev(group_i_revdata$ymax)
+#         # extend data and rev data
+#         group_i_data <- group_i_data[c(seq_len(n), rep(n, seqLength)), ]
+#         group_i_revdata <- group_i_revdata[c(seq_len(n), rep(n, seqLength)), ]
+#         group_i_data$y <- c(group_i_data.y, seq(group_i_data.y[n], group_i_revdata.y[1], length.out = seqLength))
+#         group_i_revdata$y <- c(group_i_revdata.y, seq(group_i_revdata.y[n], group_i_data.y[1], length.out = seqLength))
+#         group_i_newdata <- rbind(group_i_data, group_i_revdata)
+#         newdata <- rbind(newdata, group_i_newdata)
+#       }
+#       newdata$colour <- NA
+#       loonLayer.GeomPolygon(widget,
+#                             layerGeom,
+#                             newdata,
+#                             ggplotPanel_params,
+#                             ggplotObject,
+#                             special,
+#                             parent = if(parent == "root") smoothGroup else parent)
+#     }
+#     loonLayer.GeomPath(widget,
+#                        layerGeom,
+#                        data,
+#                        ggplotPanel_params,
+#                        ggplotObject,
+#                        special,
+#                        parent = if(parent == "root") smoothGroup else parent)
+#   } else NULL
+#
+# }
 
 
 loonLayer.GeomStep <- function(widget,
