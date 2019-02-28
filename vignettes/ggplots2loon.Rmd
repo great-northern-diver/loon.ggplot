@@ -3,10 +3,8 @@ title: "ggplots -> interactive loon plots"
 author: "Wayne Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
 output:
-  pdf_document:
-    keep_tex: yes
+  html_document:
     fig_caption: yes
-    latex_engine: xelatex
     number_sections: no
     toc: yes
   html_notebook: default
@@ -14,8 +12,10 @@ output:
     fig_caption: yes
     number_sections: no
     toc: yes
-  html_document:
+  pdf_document:
+    keep_tex: no
     fig_caption: yes
+    latex_engine: xelatex
     number_sections: no
     toc: yes
   word_document: default
@@ -23,7 +23,6 @@ vignette: >
   %\VignetteIndexEntry{Creating interactive loon plots from ggplots}
   %\VignetteEncoding{UTF-8}
   %\VignetteDepends{grid}
-  
   %\VignetteEngine{knitr::rmarkdown}
 header-includes:
 - \usepackage{graphicx}
@@ -74,7 +73,7 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
 set.seed(12314159)
-imageDirectory <- "./img/ggplots2loon/"
+imageDirectory <- "./img/ggplots2loon"
 dataDirectory <- "./data"
 path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 knitr::opts_chunk$set(
@@ -107,7 +106,7 @@ $\renewcommand{\union}{\cup}$
 
 The `ggplot2` graphics package (part of the `tidyverse` package collection) uses the base `grid` graphics package to produce publication quality graphics for data analysis.  Based on a grammar for graphics, `ggplot2` also provides a lot of functionality (e.g. `facet`s) that can be extremely useful in data analysis.
 
-The `loon` graphics package provides **interactive** graphics especially valuable in any **exploratory data analysis**.  This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays.  Of course, `loon` also provides publication quality static graphics in `grid` via loon's functions `grid.loon()` and `loonGrob()`.
+The `loon` graphics package provides **interactive** graphics especially valuable in any **exploratory data analysis**.  This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays.  Of course, `loon` also provides publication quality static graphics in `grid` via loon's functions `grid.loon()` and `loonGrob()`.  In particular, the standard `R` `plot()` function has been specialized to produce a `grid` version of any `loon` plot.
 
 The `loon.ggplot` package **brings both these packages together**.  Data analysts who value the ease with which `ggplot2` can create meaningful graphics with many facets and layers will also value the ease with which **ggplots can be turned into interactive loon plots** through a simple translation function `loon.ggplot()`.
 
@@ -136,7 +135,7 @@ and displayed as
 h1
 ```
 
-## loon.ggplot() and grid.loon()
+## `loon.ggplot()` and `grid.loon()` or `plot.loon()`
 
 Using the `loon.ggplot` package, the `"ggplot"` data structures `p1` and `h1` can be **turned into an interactive loon plot** using the `loon.ggplot()` function:
 
@@ -151,8 +150,9 @@ These loon plots should look very much (though not exactly) like the ggplot from
 grid.loon(l_p1)
 ```
 
+Alternatively, and more simply, we can use the usual `plot` function in `R` which has a method for `loon` objects (`plot` is essentially "syntactic sugar" since it simply calls `grid.loon()`)
 ```{r grid version of l_h1, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", out.width = "50%"}
-grid.loon(l_h1)
+plot(l_h1)   # equivalent to grid.loon(l_h1)
 ```
 
 ## interaction - direct manipulation
@@ -262,7 +262,7 @@ l_p1["title"] <- "5 speed manual transmission"
 The plot should now look something like this (a `grid` graphics version of `l_p1`):
 
 ```{r high gear manual grid plot, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-grid.loon(l_p1)
+plot(l_p1)
 ```
 
 Again, the plot can be returned to its original scale with all points reactivated as follows:
@@ -271,7 +271,7 @@ Again, the plot can be returned to its original scale with all points reactivate
 l_p1["active"] <- TRUE
 l_scaleto_plot(l_p1)
 l_p1["title"] <- "All points again"
-grid.loon(l_p1)
+plot(l_p1)
 ```
 
 ### linking
@@ -292,9 +292,9 @@ l_configure(l_h1, linkingGroup = "Motor Trend 1974", sync = "pull")
 
 Notice, by the way, that the (stacked) colours in the histogram will follow those of `l_p1`.  For example,
 
-```{r stacked colours grid.loon, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r stacked colours plot, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_h1["showStackedColors"] <- TRUE
-grid.loon(l_h1)
+plot(l_h1)
 ```
 
 
@@ -327,7 +327,7 @@ as can any other state of a loon plot, such as `title`, `xlabel`, `ylabel, or `i
 
 The points in the loon plot inherit their colours from the linking group "Motor Trend 1974":
 ```{r loon plot l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-grid.loon(l_p2)
+plot(l_p2)
 ```
 
 Note that `l_p2` did not inherit the shapes of its points from the `l_p1`.  That is because only those states that have been defined as `linkedStates` are shared by any given plot.
@@ -355,7 +355,7 @@ l_setLinkedStates(l_p1,  c("color", "selected", "size"))
 
 A more sophisticated change would be also link the glyphs used for each point between plots.  This will *typically* be the shape of the glyph. (**Warning**: but not always. For example, when images are used for the points, a little more care needs to be taken). To do this for both `l_p1` and `l_p2` we add to the states being linked as follows.
 ```{r add glyph to linked states, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-l_setLinkedStates(l_p1, c("glyph", l_getLinkedStates(l_p1)))
+l_setLinkedStates(l_p1, c("glyph", "active", l_getLinkedStates(l_p1)))
 l_setLinkedStates(l_p2, c("glyph", l_getLinkedStates(l_p2)))
 ```
 Now any **change** to the glyphs in either plot will change the glyphs in both.
@@ -365,11 +365,11 @@ l_p1["glyph"][triangles] <- "ctriangle"
 ```
 Here now for `l_p1`
 ```{r changed glyphs l_p1, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-grid.loon(l_p1)
+plot(l_p1)
 ```
 and propagated to `l_p2`
 ```{r changed glyphs l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-grid.loon(l_p2)
+plot(l_p2)
 ```
 
 # Layers
@@ -593,7 +593,7 @@ mtcars %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
   select(weight, lp100km) %>%
   ggplot(aes(x = weight, y = lp100km)) +
-  #geom_point() +
+  geom_point() +
   ylab("Litres per 100 kilometres") +
   ggtitle("Gas usage")  ->   # Note assignment occurs here
   p1_piped
@@ -665,8 +665,7 @@ mtcars %>%
   gg_pipe(ggplot(aes(x = weight, y = lp100km)) +
             geom_point() +
             ylab("Litres per 100 kilometres") +
-            ggtitle("Gas usage")
-          )  %>% 
+            ggtitle("Gas usage") )  %>% 
   # and pass the built plot on
   loon.ggplot(linkingGroup = "Motor Trend 1974") %>%  # pipe the loon plot on
   l_cget('color')  # Gets and returns the vector of point colours
@@ -688,7 +687,7 @@ mtcars %>%
          showGuides = TRUE, showScales = TRUE,
          ylabel = "Litres per 100 kilometres", 
          linkingGroup = "Motor Trend 1974") %>%
-  grid.loon()   # get a static version via grid
+  plot()   # get a static version via grid
 ```
 
 or 
@@ -708,7 +707,4 @@ mtcars %>%
 
 produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well).
 
-
-
-# Other plots
 
