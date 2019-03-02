@@ -796,7 +796,7 @@ as_loon_dash <- function(linetype){
            if(l == 1 | is.na(l) ) ""
            else if(l == 2) rep(1, 4)
            else if(l == 3) rep(1,2)
-           else rep(1, length(l))
+           else rep("", length(l))
          })
 
 }
