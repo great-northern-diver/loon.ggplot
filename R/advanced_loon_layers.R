@@ -942,12 +942,13 @@ get_mappingLabel <- function(layerGeom, name, label = NULL, i = NULL) {
       paste(c(name, i), collapse = " ")
     } else {
       n <- length(layerGeom$mapping)
-      names <- sapply(1:n,
-                      function(i){
-                        mapping <- as.character(layerGeom$mapping[[i]])
-                        mapping <- mapping[-which("~" %in% mapping)]
-                      }
-      )
+      names <- paste(
+        sapply(1:n,
+               function(i){
+                 mapping <- as.character(layerGeom$mapping[[i]])
+                 mapping <- mapping[-which("~" %in% mapping)]
+               }
+        ), collapse = "_")
       paste(c(names, i), collapse = " ")
     }
   } else label
