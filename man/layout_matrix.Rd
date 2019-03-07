@@ -7,7 +7,7 @@
 layout_matrix(target)
 }
 \arguments{
-\item{target}{a list of loon object with specific names (x1y1, x1y2, ...)}
+\item{target}{an object `loon.ggplot()` returns}
 }
 \description{
 return the layout matrix of a list of loon plots
@@ -18,4 +18,6 @@ p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
 g <- loon.ggplot(p)
 layout_matrix(g)
 # l_getLocations(g)
+
+
 }
