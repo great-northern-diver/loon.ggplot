@@ -937,9 +937,20 @@ loonLayer.GeomSmooth <- function(widget,
                group_i_data$y <- c(group_i_data.y, seq(group_i_data.y[n], group_i_revdata.y[1], length.out = seqLength))
                group_i_revdata$y <- c(group_i_revdata.y, seq(group_i_revdata.y[n], group_i_data.y[1], length.out = seqLength))
                group_i_newdata <- rbind(group_i_data, group_i_revdata)
+               # draw polygon but hidden
                group_i_newdata$colour <- NA
-
-               loonLayer.GeomPolygon(widget,
+               se_polygon <- loonLayer.GeomPolygon(widget,
+                                                   layerGeom,
+                                                   group_i_newdata,
+                                                   ggplotPanel_params,
+                                                   ggplotObject,
+                                                   special,
+                                                   parent = smoothGroup,
+                                                   label = "se polygon")
+               l_layer_hide(widget, se_polygon)
+               # draw se path
+               group_i_newdata$colour <- group_i_newdata$fill
+               loonLayer.GeomPath(widget,
                                      layerGeom,
                                      group_i_newdata,
                                      ggplotPanel_params,
