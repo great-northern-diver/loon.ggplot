@@ -58,15 +58,27 @@
 #'   geom_point(data = df2, colour = "grey70") +
 #'   geom_point(aes(colour = z)) +
 #'   facet_wrap(~z)
+#'
+#' # We can select the first geom_point layer to be
+#' # the active layer as in
 #' suppressWarnings(
-#'   lp_scatterplots_active1 <- loon.ggplot(scatterplots, activeGeomLayers = 1)
+#'   lp_scatterplots_active1 <- loon.ggplot(scatterplots,
+#'                                activeGeomLayers = 1,
+#'                                linkingGroup = "test")
 #' )
+#' # Here the grey points are linked (not the coloured ones)
 #'
+#' # We can select the second geom_point layer to be
+#' # the active layer as in
 #' lp_scatterplots_active2 <- loon.ggplot(scatterplots, activeGeomLayers = 2)
+#' # Here the colour points are linked
 #'
+#' # We can also select the both geom_point layers to be
+#' # the active layer as in
 #' suppressWarnings(
 #'  lp_scatterplots_active12 <- loon.ggplot(scatterplots, activeGeomLayers = c(1,2))
 #' )
+#' # Here the colour points and grey points are both linked
 #' }
 
 loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
@@ -226,7 +238,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                     # subtitle
                     # if wrap number is larger than 0, multiple facets are displayed
                     numOfSubtitles <- wrap_num(ggLayout, is_facet_wrap, is_facet_grid, tkLabels)
-                    getSubtitle <- getSubtitle(layoutByROWS,
+                    subtitle <- get_subtitle(layoutByROWS,
                                                layoutByCOLS,
                                                layout_matrix = layout_matrix,
                                                ggLayout = ggLayout,
@@ -236,8 +248,8 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                                                is_facet_wrap = is_facet_wrap,
                                                is_facet_grid = is_facet_grid,
                                                tkLabels = tkLabels)
-                    colSubtitle <- getSubtitle$colSubtitle
-                    rowSubtitle <- getSubtitle$rowSubtitle
+                    colSubtitle <- subtitle$colSubtitle
+                    rowSubtitle <- subtitle$rowSubtitle
                     colSubtitles <<- c(colSubtitles, colSubtitle)
                     rowSubtitles <<- c(rowSubtitles, rowSubtitle)
 
@@ -297,13 +309,13 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                     loonTitle <- paste(c(title, colSubtitle, rowSubtitle), collapse = "\n")
 
                     if (len_layers != 0) {
-                      importantLayers <- importantLayers(len_layers, ggplotObject)
+                      importantLayers <- get_importantLayers(len_layers, ggplotObject)
 
                       boxplotLayers <- importantLayers$boxplotLayers
                       curveLayers <- importantLayers$curveLayers
 
                       # set active geom layer and active model
-                      activeInfo <- activeInfo(importantLayers, activeGeomLayers, len_layers)
+                      activeInfo <- get_activeInfo(importantLayers, activeGeomLayers, len_layers)
                       activeGeomLayers <- activeInfo$activeGeomLayers
                       activeModel <- activeInfo$activeModel
 
@@ -875,7 +887,7 @@ wrap_num <- function(ggLayout, is_facet_wrap, is_facet_grid, tkLabels){
   } else 0
 }
 
-importantLayers <- function(len_layers, ggplotObject){
+get_importantLayers <- function(len_layers, ggplotObject){
   layerNames <- lapply(seq_len(len_layers),
                        function(j) {
                          className <- class(ggplotObject$layers[[j]]$geom)
@@ -919,7 +931,7 @@ importantLayers <- function(len_layers, ggplotObject){
        curveLayers = curveLayers)
 }
 
-activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
+get_activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
 
   pointLayers <- importantLayers$pointLayers
   histogramLayers <- importantLayers$histogramLayers
@@ -965,7 +977,7 @@ activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
        activeGeomLayers = activeGeomLayers)
 }
 
-getSubtitle <- function(layoutByROWS, layoutByCOLS, layout_matrix, ggLayout, numOfSubtitles,
+get_subtitle <- function(layoutByROWS, layoutByCOLS, layout_matrix, ggLayout, numOfSubtitles,
                         byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid, tkLabels){
   if(is_facet_wrap | !tkLabels) {
     colSubtitle <- if (numOfSubtitles > 0) {
