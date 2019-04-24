@@ -79,8 +79,20 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
 
   } else {
     # used for boxplot
-    combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
-                                      y = with(dataFrame, eval(parse(text = mapping.y))))
+    if(length(mapping.x) == 0 & length(mapping.y) != 0) {
+
+      combined.pointsData <- data.frame(x = rep(0, dim(dataFrame)[1]),
+                                        y = with(dataFrame, eval(parse(text = mapping.y))))
+    } else if(length(mapping.x) != 0 & length(mapping.y) == 0) {
+
+      combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
+                                        y = rep(0, dim(dataFrame)[1]))
+    } else {
+      # both zero or both non zero
+      combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
+                                        y = with(dataFrame, eval(parse(text = mapping.y))))
+    }
+
     # some default settings, need more thought
     if(length(combined.pointsData$x) > 0 & length(combined.pointsData$y) > 0) {
       combined.pointsData$x <- as.numeric(combined.pointsData$x)
@@ -92,6 +104,9 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
       combined.pointsData$linkingKey <- linkingKey
     }
   }
+
+  # remove NA
+  combined.pointsData <- na.omit(combined.pointsData)
 
   if(dim(combined.pointsData)[1] > 0) {
     # TODO a loon bug cannot handle a single point
@@ -106,10 +121,12 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                           ggplotPanel_params = ggplotPanel_params[[panelIndex]])
       x <- coordPolarxy$x
       y <- coordPolarxy$y
+
     } else {
       x <- combined.pointsData$x
       y <- combined.pointsData$y
     }
+
     # loon scatter plot
     l_plot(parent = parent,
            x = x,

@@ -239,15 +239,15 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                     # if wrap number is larger than 0, multiple facets are displayed
                     numOfSubtitles <- wrap_num(ggLayout, is_facet_wrap, is_facet_grid, tkLabels)
                     subtitle <- get_subtitle(layoutByROWS,
-                                               layoutByCOLS,
-                                               layout_matrix = layout_matrix,
-                                               ggLayout = ggLayout,
-                                               numOfSubtitles = numOfSubtitles,
-                                               byROWS = byROWS, byCOLS = byCOLS,
-                                               panelNum = i,
-                                               is_facet_wrap = is_facet_wrap,
-                                               is_facet_grid = is_facet_grid,
-                                               tkLabels = tkLabels)
+                                             layoutByCOLS,
+                                             layout_matrix = layout_matrix,
+                                             ggLayout = ggLayout,
+                                             numOfSubtitles = numOfSubtitles,
+                                             byROWS = byROWS, byCOLS = byCOLS,
+                                             panelNum = i,
+                                             is_facet_wrap = is_facet_wrap,
+                                             is_facet_grid = is_facet_grid,
+                                             tkLabels = tkLabels)
                     colSubtitle <- subtitle$colSubtitle
                     rowSubtitle <- subtitle$rowSubtitle
                     colSubtitles <<- c(colSubtitles, colSubtitle)
@@ -452,12 +452,14 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
 
                     # resize loon plot
                     if(pack) {
+
                       tkconfigure(paste(loonPlot,'.canvas',sep=''),
                                   width = canvasWidth/column,
                                   height = canvasHeight/row)
                       # tk pack
                       row.start <- (layout_matrix[i,]$ROW - 1) * span + start.subtitlepos
                       col.start <- (layout_matrix[i,]$COL - 1) * span + start.xpos
+
                       tkgrid(loonPlot,
                              row = row.start,
                              column= col.start,
@@ -491,12 +493,15 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
 
   names(plots) <- sapply(seq_len(panelNum),
                          function(j){
-                           paste0(c("x", "y"),
-                                  layout_matrix[j, c(which(colnames(layout_matrix) == "ROW"),
-                                                     which(colnames(layout_matrix) == "COL"))],
-                                  collapse = "")
+                           paste0(
+                             c("x", "y"),
+                             layout_matrix[j, c(which(colnames(layout_matrix) == "ROW"),
+                                                which(colnames(layout_matrix) == "COL"))],
+                             collapse = ""
+                           )
                          }
   )
+
   if(swapAxes) {
     label <- ylabel
     ylabel <- xlabel
@@ -560,8 +565,8 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
              rowspan = 1, columnspan = column.span,
              sticky="w")
     }
-
   }
+
   # set linkingGroup
   lapply(plots,
          function(plot){
