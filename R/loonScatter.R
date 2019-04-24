@@ -158,6 +158,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
 
 }
 
+
 activeGeomDim <- function(ggBuild, activeGeomLayers, panelIndex){
   dim <- 0
   lapply(activeGeomLayers,
