@@ -134,7 +134,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
   ylabel <- ggplotObject$labels$y
   xlabel <- ggplotObject$labels$x
   span <- round(1/exteriorLabelProportion)
-  newspan <- span
+  # newspan <- span
   # number of panels
   panelNum <- dim(layout_matrix)[1]
 

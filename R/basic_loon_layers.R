@@ -48,7 +48,7 @@ loonLayer.GeomPoint <- function(widget,
     } else hex6to12(data$colour)
     pointsSize <- as_loon_size( data$size, "points" )
 
-    method <- get_stat_param(layerGeom, "distribution", ...)
+    # method <- get_stat_param(layerGeom, "distribution", ...)
 
     l_layer_points(widget,
                    x = x, y = y,
@@ -720,7 +720,7 @@ loonLayer.GeomDotplot <- function(widget,
                                   label = NULL,
                                   ...) {
   if(dim(data)[1] != 0) {
-    uniGroup <- unique(data$group)
+    # uniGroup <- unique(data$group)
     fillColor <- hex6to12(data$fill)
     lineColor <- hex6to12(data$colour)
 

@@ -65,7 +65,6 @@ loonLayer.GeomViolin <- function(widget,
              if (!is.null(layerGeom$geom_params$draw_quantiles)) {
 
                quantiles <- layerGeom$geom_params$draw_quantiles
-               len_quantiles <- length(quantiles)
 
                group_i_data <- data[data$group == uniGroup[i], ]
                xx <- group_i_data$violinwidth/2
@@ -713,12 +712,12 @@ loonLayer.GeomCurve <- function(widget,
     # avoid duplicated rows
     # data <- data[!duplicated(data), ]
     n <- dim(data)[1]
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    # isCoordPolar <- is.CoordPolar(ggplotPanel_params)
     size <- data$size
     colour <- data$colour
     linetype <- data$linetype
 
-    coordinates <- ggplotObject$coordinates
+    # coordinates <- ggplotObject$coordinates
 
     which_curve <- special[["curve"]]$which_curve
     curveLayers <- special[["curve"]]$curveLayers
@@ -735,7 +734,7 @@ loonLayer.GeomCurve <- function(widget,
       gridList <- grid.ls(print = FALSE)
       gridList.name <- gridList$name
       xspline.name <- gridList.name[which(str_detect(gridList.name, "curve") == TRUE)]
-      xspline.len <- length(xspline.name)
+      # xspline.len <- length(xspline.name)
 
       lapply(1:n,
              function(i){
@@ -907,7 +906,7 @@ loonLayer.GeomSmooth <- function(widget,
                             label = if(is.null(label)) "smooths" else label)
 
     # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
-    n <- dim(data)[1]
+    # n <- dim(data)[1]
     seqLength <- 20
 
     lapply(1:m,
