@@ -709,15 +709,10 @@ loonLayer.GeomCurve <- function(widget,
                               label = if(is.null(label)) "curves" else label)
     }
 
-    # avoid duplicated rows
-    # data <- data[!duplicated(data), ]
     n <- dim(data)[1]
-    # isCoordPolar <- is.CoordPolar(ggplotPanel_params)
     size <- data$size
     colour <- data$colour
     linetype <- data$linetype
-
-    # coordinates <- ggplotObject$coordinates
 
     which_curve <- special[["curve"]]$which_curve
     curveLayers <- special[["curve"]]$curveLayers
@@ -906,7 +901,6 @@ loonLayer.GeomSmooth <- function(widget,
                             label = if(is.null(label)) "smooths" else label)
 
     # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
-    # n <- dim(data)[1]
     seqLength <- 20
 
     lapply(1:m,
