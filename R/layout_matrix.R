@@ -1,6 +1,6 @@
 #' @title layout matrix
 #' @description return the layout matrix of a list of loon plots
-#' @param target a list of loon object with specific names (x1y1, x1y2, ...)
+#' @param target an object `loon.ggplot()` returns
 #'
 #' @examples
 #' p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
@@ -8,10 +8,13 @@
 #' g <- loon.ggplot(p)
 #' layout_matrix(g)
 #' # l_getLocations(g)
+#'
+#'
 #' @export
 layout_matrix <- function(target) {
   UseMethod("layout_matrix", target)
 }
+
 #' @export
 layout_matrix.l_plot <- function(target) {
   ggLayout <- matrix(c(1,1), nrow = 1)

@@ -61,8 +61,10 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
       loonPlot['foreground']
     } else hex6to12(theme$text$colour)
 
-    panel.background_fill <- if(is.null(theme$panel.background$fill))  {
-      "white"
+    panel.background_fill <- if(is.null(theme$panel.background$fill)) {
+      if(is(theme$panel.background, "NULL")) {
+        if(is(theme$rect, "element_blank")) "white" else "grey92"
+      } else "white"
     } else hex6to12(theme$panel.background$fill)
 
     panel.guideline_color <- if(is.null(theme$panel.grid$colour)) {

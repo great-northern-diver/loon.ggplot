@@ -68,14 +68,26 @@ scatterplots <- ggplot(df, aes(x, y)) +
   geom_point(data = df2, colour = "grey70") +
   geom_point(aes(colour = z)) +
   facet_wrap(~z)
+
+# We can select the first geom_point layer to be
+# the active layer as in
 suppressWarnings(
-  lp_scatterplots_active1 <- loon.ggplot(scatterplots, activeGeomLayers = 1)
+  lp_scatterplots_active1 <- loon.ggplot(scatterplots,
+                               activeGeomLayers = 1,
+                               linkingGroup = "test")
 )
+# Here the grey points are linked (not the coloured ones)
 
+# We can select the second geom_point layer to be
+# the active layer as in
 lp_scatterplots_active2 <- loon.ggplot(scatterplots, activeGeomLayers = 2)
+# Here the colour points are linked
 
+# We can also select the both geom_point layers to be
+# the active layer as in
 suppressWarnings(
  lp_scatterplots_active12 <- loon.ggplot(scatterplots, activeGeomLayers = c(1,2))
 )
+# Here the colour points and grey points are both linked
 }
 }

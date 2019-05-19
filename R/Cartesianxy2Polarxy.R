@@ -107,12 +107,12 @@ Cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, coordinates, data, g
 
 
 
-Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
+Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params) {
+
   theta.range <- ggplotPanel_params$theta.range
   r.range <- ggplotPanel_params$r.range
   theta <- coordinates$theta
-  intercept <- data$intercept
-  slope <- data$slope
+
   if(theta == "x"){
     coordCartesianxy <- abline2xy(theta.range, r.range, data$slope, data$intercept)
     x <- coordCartesianxy$x
