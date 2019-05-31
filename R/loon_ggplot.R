@@ -118,6 +118,15 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
   }
 
   args <- list(...)
+  if(is.null(args$sync)) {
+    sync <- "pull"
+  } else {
+    # check sync
+    sync <- args$sync
+    if(!sync %in% c("pull", "push")) stop("not known sync")
+    args$sync <- NULL
+  }
+
   dataFrame <- ggplotObject$data
   linkingKey <- loonLinkingKey(dataFrame, args)
   itemLabel <- loonItemLabel(dataFrame, args)
@@ -570,7 +579,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
   # set linkingGroup
   lapply(plots,
          function(plot){
-           l_configure(plot, linkingGroup = args$linkingGroup, sync = "pull")
+           l_configure(plot, linkingGroup = args$linkingGroup, sync = sync)
          }
   )
 
@@ -639,7 +648,20 @@ l_cget.l_ggplot <- function(target, state) {
 l_configure.l_ggplot <- function(target, ...) {
 
   args <- list(...)
-  states <- names(args)
+
+  if(is.null(args$sync)) {
+
+    states <- names(args)
+    sync <- "pull"
+    message("default sync is 'pull'")
+  } else {
+    # check sync
+    sync <- args$sync
+    if(!sync %in% c("pull", "push")) stop("not known sync")
+    states <- names(args)
+    states <- states[-which(states == "sync")]
+  }
+
   plots <- target$plots
 
   if (is.null(states) || any("" %in% states))
@@ -651,7 +673,7 @@ l_configure.l_ggplot <- function(target, ...) {
            function(i){
              plot <- plots[[i]]
              if(state == "linkingGroup") {
-               l_configure(plot, linkingGroup = arg, sync = "pull")
+               l_configure(plot, linkingGroup = arg, sync = sync)
              } else if(state == "selected") {
                stop("not implemented yet")
              } else {
@@ -867,7 +889,13 @@ loonLinkingKey <- function(data, args) {
     } else {
       args[['linkingKey']]
     }
-  } else NULL
+  } else {
+    if (is.null(args[['linkingKey']])) {
+      NULL
+    } else {
+      args[['linkingKey']]
+    }
+  }
 }
 
 loonItemLabel <- function(data, args) {

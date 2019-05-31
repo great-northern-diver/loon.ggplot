@@ -46,8 +46,8 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
                      na.rm = TRUE)
   end_value <- max(hist_data[hist_data$PANEL == panelIndex, ]$xmax, na.rm = TRUE)
   # any x y limit?
-  x.limits <- ggBuild$layout$panel_scales_x[[activeGeomLayers]]$limits
-  y.limits <- ggBuild$layout$panel_scales_y[[activeGeomLayers]]$limits
+  x.limits <- ggBuild$layout$panel_scales_x[[1]]$limits
+  y.limits <- ggBuild$layout$panel_scales_y[[1]]$limits
   in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
 
   if (!is.null(x.limits)) {
@@ -109,7 +109,14 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
   }
 
   # show outline color or not
-  showOutlines <- if (any(!hex6to12(hist_data$colour) %in% "" )) TRUE else FALSE
+  if (any(!hex6to12(hist_data$colour) %in% "" )) {
+    showOutlines <- TRUE
+    colorOutline <- hex6to12(Filter(function(k) k != "", unique(hex6to12(hist_data$colour)))[1])
+  } else {
+    showOutlines <- FALSE
+    colorOutline <- hex6to12("black")
+  }
+
   # set linkingKey
   linkingKey <- linkingKey[isPanel_i.hist_x][in_limits]
   # set yshows
@@ -129,6 +136,7 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
          showGuides = showGuides,
          showScales = showScales,
          showOutlines = showOutlines,
+         colorOutline = colorOutline,
          swapAxes = swapAxes,
          colorStackingOrder = colorStackingOrder,
          yshows = yshows,
