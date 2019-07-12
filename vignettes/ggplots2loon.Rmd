@@ -137,7 +137,7 @@ h1
 
 ## `loon.ggplot()` and `grid.loon()` or `plot.loon()`
 
-Using the `loon.ggplot` package, the `"ggplot"` data structures `p1` and `h1` can be **turned into an interactive loon plot** using the `loon.ggplot()` function:
+Using the `loon.ggplot` package, the `"ggplot"` data structures `p1` and `h1` can be **turned into interactive loon plots** using the `loon.ggplot()` function:
 
 ```{r mpg vs wt loon display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 library(loon.ggplot)
