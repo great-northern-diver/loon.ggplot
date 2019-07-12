@@ -25,7 +25,7 @@
 #'
 #'
 #' @import ggplot2 loon tcltk methods grid
-#' @importFrom stats quantile approxfun integrate setNames
+#' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange
 #' @importFrom stringr str_detect

@@ -122,7 +122,7 @@ p1 <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 ```
 and displayed by printing the `"ggplot"` data structure `p1` as
 
-```{r mpg_vs_wt_ggplot display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r mpg_vs_wt_ggplot_display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 p1 
 ```
 
@@ -368,7 +368,7 @@ Here now for `l_p1`
 plot(l_p1)
 ```
 and propagated to `l_p2`
-```{r changed_glyphs l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r changed_glyphs_l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 plot(l_p2)
 ```
 
