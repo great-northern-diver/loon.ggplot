@@ -1,0 +1,7 @@
+sudo: false
+
+language: r
+
+r:
+ - release
+ - devel
