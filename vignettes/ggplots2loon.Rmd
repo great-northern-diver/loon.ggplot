@@ -116,22 +116,22 @@ The `loon.ggplot` package **brings both these packages together**.  Data analyst
 ## ggplot()
 Consider the `mtcars` data set and suppose we draw a scatterplot of the mileage `mpg` (miles per US gallon) versus the weight of the car `wt` in thousands of pounds.  In `ggplot2` this would be constructed as
 
-```{r mpg vs wt, message = FALSE, warning = FALSE}
+```{r mpg_vs_wt, message = FALSE, warning = FALSE}
 library(ggplot2)
 p1 <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 ```
 and displayed by printing the `"ggplot"` data structure `p1` as
 
-```{r mpg vs wt ggplot display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r mpg_vs_wt_ggplot display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 p1 
 ```
 
 We might also display a histogram of some other variate, say the engine's horsepower `hp`.  In `ggplot2` this would be constructed as
-```{r hp ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r hp_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "50%"}
 h1 <- ggplot(mtcars, aes(hp)) + geom_histogram()
 ```
 and displayed as
-```{r hp ggplot display, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r hp_ggplot_display, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "50%"}
 h1
 ```
 
@@ -139,19 +139,19 @@ h1
 
 Using the `loon.ggplot` package, the `"ggplot"` data structures `p1` and `h1` can be **turned into interactive loon plots** using the `loon.ggplot()` function:
 
-```{r mpg vs wt loon display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r mpg_vs_wt_loon_display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 library(loon.ggplot)
 l_p1 <- loon.ggplot(p1)  # the scatterplot
 l_h1 <- loon.ggplot(h1)  # the histogram
 ```
 
 These loon plots should look very much (though not exactly) like the ggplot from which it was constructed.  Using `grid.loon()`  `grid` graphics versions of the loon plots can be created for static display, printing, and incorporation into documents:
-```{r grid version of l_p1, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r grid_version_of_l_p1, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", out.width = "50%"}
 grid.loon(l_p1)
 ```
 
 Alternatively, and more simply, we can use the usual `plot` function in `R` which has a method for `loon` objects (`plot` is essentially "syntactic sugar" since it simply calls `grid.loon()`)
-```{r grid version of l_h1, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r grid_version_of_l_h1, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", out.width = "50%"}
 plot(l_h1)   # equivalent to grid.loon(l_h1)
 ```
 
@@ -159,7 +159,7 @@ plot(l_h1)   # equivalent to grid.loon(l_h1)
 
 Unlike `p1` and `h1`, the loon counterparts `l_p1` and `l_h1` are both **interactive**; their displays can be changed by **direct manipulation** using the mouse and/or each loon plot's  **loon inspector**. 
 
-```{r inspector of l_p1, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "25%"}
+```{r inspector_of_l_p1, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "25%"}
 include_graphics(path_concat(imageDirectory, "inspector_l_p1.png"))
 ```
 
@@ -186,7 +186,7 @@ Linking is one way to condition on the values in one plot and observe their effe
 ## interaction - programmatic
 
 The loon plot, `l_p1` is itself a data structure of class `"l_plot"` and `"loon"`
-```{r loon data structure, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r loon_data_structure, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 class(l_p1)
 l_p1
 ```
@@ -194,12 +194,12 @@ whose value is a string which uniquely identifies it.
 As such, it can be interacted with programmatically as well as by direct manipulation using the mouse and/or the plot's loon inspector.
 
 For example, via direct manipulation, the plot might have zoomed or panned so that many of the points no longer appear in the plot.  The plot can be returned to its original position and scaling (either through the loon inspector's `scale to: plot` or) by calling the function `l_scaleto_plot()` programmatically on the loon data structure `l_p1` as in
-```{r loon scale to plot, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r loon_scale_to_plot, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 l_scaleto_plot(l_p1)
 ```
 
 As a base loon structure, an `l_plot` has a variety of `l_info_states` available that can be accessed and/or set.  The names of these states are had with `names(l_info_states(l_p1))` or more simply with 
-```{r loon names, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r loon_names, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 names(l_p1)
 ```
 
@@ -211,7 +211,7 @@ l_p1["showGuides"]
 
 These can be turned off (loon default) or on (ggplot default) by simply changing this value -- either through the `guides` check box in the inspector or programmatically as 
 
-```{r change showGuides, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r change_showGuides, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 # Turn the guides off
 l_p1["showGuides"] <- FALSE
 # Turn the guides on again
@@ -240,7 +240,7 @@ This gives some interesting information to the curious autophile.
 
 The points might also be visibly distinguished by the transmission type and the number of cylinders of its engine. Glyph type could distinguish transmissions and colour the number of cylinders.  (To better distinguish shapes, we also make the glyphs fairly large via the `size` state.)
 
-```{r grouping by colour and symbol, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r grouping_by_colour_and_symbol, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 l_p1["size"] <- 10
 l_p1["glyph"][mtcars$am == 0] <- "ccircle"
 l_p1["glyph"][mtcars$am == 1] <- "triangle"
@@ -253,7 +253,7 @@ for (i in 1:ngears) {
 ```
 
 We might then zoom in on the `"black"` coloured points (note that these are now `hex colors`), and maybe remove the others from the display (temporarily render them inactive) as follows.
-```{r high gear manual, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+```{r high_gear_manual, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 l_p1["active"] <- l_p1["color"] == l_hexcolor("black")
 l_scaleto_active(l_p1)
 l_p1["title"] <- "5 speed manual transmission"
@@ -261,13 +261,13 @@ l_p1["title"] <- "5 speed manual transmission"
 
 The plot should now look something like this (a `grid` graphics version of `l_p1`):
 
-```{r high gear manual grid plot, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r high_gear_manual_grid_plot, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 plot(l_p1)
 ```
 
 Again, the plot can be returned to its original scale with all points reactivated as follows:
 
-```{r Back to all points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r Back_to_all_points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_p1["active"] <- TRUE
 l_scaleto_plot(l_p1)
 l_p1["title"] <- "All points again"
@@ -279,20 +279,20 @@ plot(l_p1)
 In loon, plots are linked only if they are in the same `linkingGroup` (which can be any string that meaningfully identifies the group of plots).
 The `linkingGroup` can also be set programmatically. 
 For the **first** plot in a linking group, this can be set using the square bracket notation as above.  For example, instead of "mtcars" we might want a more meaningful string for the linking group for `l_p1`.  
-```{r set initial linking Group}
+```{r set_initial_linking_Group}
 l_p1["linkingGroup"] <- "Motor Trend 1974"
 ```
 The two plots `l_p1` and `l_h1` are now no longer linked because they are no longer in the same linking group.
 
 To add `l_h1` to this new linking group called "Motor Trend 1974", **the square bracket assignment will no longer work**.  This is because the two plots must be synchronized at the time any plot is added to an existing group.  Instead, `l_h1` (and any subsequent plot) must be added to the group using the `l_configure()` function as follows:
 
-```{r l_configure linking Group}
+```{r l_configure_linking_Group}
 l_configure(l_h1, linkingGroup = "Motor Trend 1974", sync = "pull")
 ```
 
 Notice, by the way, that the (stacked) colours in the histogram will follow those of `l_p1`.  For example,
 
-```{r stacked colours plot, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r stacked_colours_plot, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_h1["showStackedColors"] <- TRUE
 plot(l_h1)
 ```
@@ -304,17 +304,17 @@ It is possible to declare the linking group of the loon plot at the time it is c
 
 For example, the relationship between the acceleration and the drive axle ratio could be of interest; these are measured by the time taken to accelerate to a quarter mile, `qsec`,  and `drat`.  The `gplot` is
 
-```{r ggplot acceleration, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
+```{r ggplot_acceleration, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
 # First using another ggplot
 p2 <- ggplot(mtcars, aes(x = drat, y = qsec)) + geom_point()
 ```
 which looks like
-```{r ggplot p2, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
+```{r ggplot_p2, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
 p2
 ```
 
 The corresponding loon plot can be linked immediately when it is created
-```{r stacked colours linking, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r stacked_colours_linking, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_p2 <- loon.ggplot(p2, 
                     linkingGroup = "Motor Trend 1974",
                     title = "Acceleration measures", 
@@ -326,7 +326,7 @@ l_p2 <- loon.ggplot(p2,
 as can any other state of a loon plot, such as `title`, `xlabel`, `ylabel, or `itemLabel` as shown here.   
 
 The points in the loon plot inherit their colours from the linking group "Motor Trend 1974":
-```{r loon plot l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r loon_plot_l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 plot(l_p2)
 ```
 
@@ -335,13 +335,13 @@ Note that `l_p2` did not inherit the shapes of its points from the `l_p1`.  That
 ### linked states
 
 The `linkedStates` of any plot are those which that plot will share (and hence update) with any other plot in the same `linkingGroup`.  The default states that are linked for an `l_plot` like `l_p1` are
-```{r default linked states l_plot, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
+```{r default_linked_states_l_plot, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
 l_getLinkedStates(l_p1)
 ```
 and a change in any of these states by any plot in the linking group will cause the same change in these states on `l_p1`.  These are the same states linked by `l_p2`.
 
 In contrast, the loon histogram `l_h1` has default linked states
-```{r default linked states l_hist, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
+```{r default_linked_states_l_hist, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
 l_getLinkedStates(l_h1)
 ```
 which excludes `size` as not a meaningful state for a loon histogram (class `l_hist`).
@@ -349,45 +349,45 @@ which excludes `size` as not a meaningful state for a loon histogram (class `l_h
 The linked states can be modified.  For example, we might choose to not have the second plot respond to changes in the "active" state of other plots in the same linking group.
 This is effected by reducing the states for just the plot `l_p2`
 
-```{r remove active from linked states, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r remove_active_from_linked_states, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_setLinkedStates(l_p1,  c("color", "selected", "size"))
 ```
 
 A more sophisticated change would be also link the glyphs used for each point between plots.  This will *typically* be the shape of the glyph. (**Warning**: but not always. For example, when images are used for the points, a little more care needs to be taken). To do this for both `l_p1` and `l_p2` we add to the states being linked as follows.
-```{r add glyph to linked states, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r add_glyph_to_linked_states, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_setLinkedStates(l_p1, c("glyph", "active", l_getLinkedStates(l_p1)))
 l_setLinkedStates(l_p2, c("glyph", l_getLinkedStates(l_p2)))
 ```
 Now any **change** to the glyphs in either plot will change the glyphs in both.
-```{r change glyphs, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r change_glyphs, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 triangles <- l_p1["glyph"] == "triangle"
 l_p1["glyph"][triangles] <- "ctriangle"
 ```
 Here now for `l_p1`
-```{r changed glyphs l_p1, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r changed_glyphs_l_p1, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 plot(l_p1)
 ```
 and propagated to `l_p2`
-```{r changed glyphs l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r changed_glyphs l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 plot(l_p2)
 ```
 
 # Layers
 
 Rather complex plots can be built up in `ggplot2` by adding *layers*.  For example,
-```{r mtcars smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r mtcars_smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 p_fit <- ggplot(mtcars, aes(drat, mpg)) + geom_smooth() + geom_point()
 p_fit
 ```
 
 The **corresponding interactive** loon plot is
-```{r loon mtcars smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r loon_mtcars_smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_p_fit <- loon.ggplot(p_fit)
 ```
 
 As with ggplots (and grid graphics plots), loon plots have layers.  These can be identified (and manipulated) by selecting the "Layers" tab of the inspector.
 
-```{r inspector of l_p_fit, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "25%"}
+```{r inspector_of_l_p_fit, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "25%"}
 include_graphics(path_concat(imageDirectory, "inspector_l_p_fit.png"))
 ```
 
@@ -400,11 +400,11 @@ The **order of the layers is important** and represent their visual order in the
 \end{center}
 
 The order of display can be changed from the inspector via the first two buttons at the bottom left of the layers panel.  The order can also be changed programmatically.  For example, the scatterplot can be moved lower in the display order as
-```{r lower layer, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r lower_layer, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_layer_lower(l_p_fit, "model")
 ```
 and raised back up again so that the points are again on top
-```{r raise layer, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r raise_layer, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_layer_raise(l_p_fit, "model")
 ```
 Note that the scatterplot layer identified by its "layer id", namely the string `"model"`.  The function `l_layer_ids( l_p_fit )` will return a list of all the layer ids from its argument `l_p_fit`.
@@ -422,7 +422,7 @@ A loon `l_plot()` corresponds to a ggplot `geom_point()` and  a loon `l_hist()` 
 In `ggplot2` several `geom`s might appear in the construction of a plot, each one providing a layer.  But in `loon`  only one layer, namely the `"model"` layer, can be active. This means which of the ggplot layers are intended to be the active `"model"` layer in loon must be determined at the time of construction (the call to `loon.ggplot()`).
 
 Consider the following example where three `geom`s are created as layers in the ggplot. Here a histogram (on a density scale) is overlaid with a scatter of points along the horizontal axis, and then with a curve from a density estimate.
-```{r multiple geoms, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r multiple_geoms, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 p_hdp <- ggplot(mtcars, aes(x = wt, y = ..density..)) +
   geom_histogram(binwidth = 0.5, 
                  fill = "grey", 
@@ -442,7 +442,7 @@ To render this in loon, which layer will be interactive needs to be determined. 
 The default active layer is the first `geom` having a "model" layer counterpart in a loon plot.  In this way, the order of construction of the ggplot implicitly determines the `geom` to be active in loon.
 Alternatively, the active layer can be explicitly specified when creating the loon plot via the `activeGeomLayers` argument.
 
-```{r active selected geoms, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r active_selected_geoms, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 # To have the the histogram active (the first geom in p_hdp)
 l_p_Hdp <- loon.ggplot(p_hdp, activeGeomLayers = 1,
                        linkingGroup = "Motor Trend 1974")
@@ -463,7 +463,7 @@ Note that the colouring will reflect the linking and indicate which layer is act
 When there are two or more `geom_point()` layers in the ggplot, it might sometime be of interest to have two or more of these merged into a single active layer.
 
 For example, consider the following ggplot construction
-```{r multiple geom_points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r multiple_geom_points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 pgps <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point(data = subset(mtcars, gear == 3), col = "firebrick") +
   geom_point(data = subset(mtcars, gear == 4), col = "steelblue") +
@@ -472,7 +472,7 @@ pgps
 ```
 
 To create the interactive plot, any of the `geom_point` layers could contribute to the active scatterplot model layer.
-```{r loon multiple geom_points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r loon_multiple geom_points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_pgps.1 <- loon.ggplot(pgps, linkingGroup = "Motor Trend 1974")
 l_pgps.13 <- loon.ggplot(pgps, activeGeomLayers = c(1,3),
                          linkingGroup = "Motor Trend 1974")
@@ -488,7 +488,7 @@ With a little extra care/work, this too is possible.
 One solution to getting the linking correct is to force the `linkingKey` of any new plot to match the keys already defined by the other plots in the linking group.
 
 The linking key of a loon plot is simply a character vector (default here)
-```{r linking Key l_p1, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r linking_Key_l_p1, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 # this group's linking keys can be found from l_p1
 groupKeys <- l_p1["linkingKey"]
 groupKeys
@@ -496,7 +496,7 @@ groupKeys
 
 These values need to be selected and matched to the subsetting used by the `geom_point()` calls in the ggplot.
 
-```{r linking subsets, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r linking_subsets, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 # the subsets were defined as
 dataGeom1 <- mtcars$gear == 3
 dataGeom2 <- mtcars$gear == 4
@@ -504,7 +504,7 @@ dataGeom3 <- mtcars$gear == 5
 ```
 
 As with `linkingGroup`, any change to `linkingKey` must also declare whether the existing linked states are to be pushed to, or pulled from, the group.  Hence `l_configure()` must be used.
-```{r linking Key setting, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r linking_Key_setting, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_configure(l_pgps.1, 
             linkingKey = groupKeys[dataGeom1], 
             sync = "pull")
@@ -521,7 +521,7 @@ l_configure(l_pgps.123,
 ```
 
 **Alternatively**, the linking keys could be set up correctly when the loon plot was created
-```{r linking Key initialized, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r linking_Key_initialized, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_pgps.23 <- loon.ggplot(pgps, 
                          linkingGroup = "Motor Trend 1974",
                          activeGeomLayers = c(2,3),
@@ -544,13 +544,13 @@ Facetted plots can also be rendered interactive in the same way as any other ggp
 l_fwrap <- loon.ggplot(fwrap, linkingGroup = "Motor Trend 1974")
 ```
 which will look like
-```{r linking Key fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r linking_Key_fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 include_graphics(path_concat(imageDirectory, "l_fwrap.png"))
 ```
 Note that because we set the `linkingGroup` at the time of creation (and because the `linkingKey` is the the default in all plots in this group), the interactive facetted plot has pulled the colours from the other plots in the same `linkingGroup`.
 
 Note the class of `l_fwrap`:
-```{r class l_fwrap}
+```{r class_l_fwrap}
 class(l_fwrap)
 ```
 is an `l_ggplot` because it is a loon rendition of a more complex `ggplot`,and it is an `l_compound` which indicates that it is a composition of individual loon plots.
@@ -587,7 +587,7 @@ This connects nicely with `ggplot2`'s addition `+` operator (`+` itself is somet
 
 Two things to note here are.
 First, the result of the data manipulation is assigned at the beginning using the `<-` assignment function which seems to run counter to the data flow indicated by the pipes.  A more consistent flow would be to have instead written
-```{r consistent pipe flow}
+```{r consistent_pipe_flow}
 mtcars %>%
   rename(transmission = am, weight = wt) %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
@@ -608,17 +608,17 @@ p1_piped
 ```
 
 Once built, as happens when the plot has been displayed as above,  an interactive loon plot can be had as always, simply by calling `loon.ggplot()` on the built `ggplot`:
-```{r loon p1_piped, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r loon_p1_piped, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 loon.ggplot(p1_piped, linkingGroup = "Motor Trend 1974")
 ```
 Again, the additional specification here of the `linkingGroup` will cause display attributes to be pulled from the plots in that linking group.
 
-## `gg_pipe(data, ggplotObj)`
+## Using `gg_pipe(data, ggplotObj)`
 
 Note that before a `ggplot` can be displayed, a number of steps are performed so as to prepare the plot object for rendering (e.g. see `ggplot2::ggplot_build`).
 Unfortunately, this delay in completing the preparation of the `ggplot` can make it difficult to attach further operations in the `%>%` pipeline after the `ggplot` itself -- apart of course from further `ggplot2` additions via the `+` operator.
 For example, one cannot simply add `%>% loon.ggplot()` at the end of the pipeline used to construct the `ggplot`.  That is,
-```{r fail pipeline, eval = FALSE }
+```{r fail_pipeline, eval = FALSE }
 mtcars %>%
   rename(transmission = am, weight = wt) %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
@@ -655,7 +655,7 @@ This means that functions that operate on `loon` plots (as their first argument 
 
 For example, 
 
-```{r magrittr pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r magrittr_pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 library(magrittr)
 mtcars %>%
   rename(transmission = am, weight = wt) %>%
@@ -677,7 +677,7 @@ In the `magrittr` package (the source of the pipeline operation) there are a var
 ## just use loon for built-in interactive plots
 
 Of course, for plots already existing in `loon`,  `ggplot()` and hence `gg_pipe()` could be avoided entirely:
-```{r loon only pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r loon_only_pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 mtcars %>%
   rename(transmission = am, weight = wt) %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
@@ -692,7 +692,7 @@ mtcars %>%
 
 or 
 
-```{r loon pairs  pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r loon_pairs  pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 mtcars %>%
   rename(transmission = am, weight = wt) %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
