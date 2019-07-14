@@ -122,29 +122,29 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
   # set yshows
   yshows <- "frequency"
   if (length(mapping.y) != 0) {
-    if(any(str_detect(as.character(mapping.y), "density"))) yshows <- "density"
+    if(any(stringr::str_detect(as.character(mapping.y), "density"))) yshows <- "density"
   }
   if (!is.null(ggplotObject$layers[[activeGeomLayers]]$mapping$y)) {
-    if(any(str_detect(as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y), "density"))) yshows <- "density"
+    if(any(stringr::str_detect(as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y), "density"))) yshows <- "density"
   }
   # loon histogram
-  l_hist(parent = parent,
-         x = hist_values,
-         color = color,
-         binwidth = binwidth + 1e-6, # need more thoughts
-         showLabels = showLabels,
-         showGuides = showGuides,
-         showScales = showScales,
-         showOutlines = showOutlines,
-         colorOutline = colorOutline,
-         swapAxes = swapAxes,
-         colorStackingOrder = colorStackingOrder,
-         yshows = yshows,
-         linkingKey = linkingKey,
-         showStackedColors = TRUE,
-         xlabel = if(is.null(xlabel)) "" else xlabel,
-         ylabel = if(is.null(ylabel)) "" else ylabel,
-         title = loonTitle)
+  loon::l_hist(parent = parent,
+               x = hist_values,
+               color = color,
+               binwidth = binwidth + 1e-6, # need more thoughts
+               showLabels = showLabels,
+               showGuides = showGuides,
+               showScales = showScales,
+               showOutlines = showOutlines,
+               colorOutline = colorOutline,
+               swapAxes = swapAxes,
+               colorStackingOrder = colorStackingOrder,
+               yshows = yshows,
+               linkingKey = linkingKey,
+               showStackedColors = TRUE,
+               xlabel = if(is.null(xlabel)) "" else xlabel,
+               ylabel = if(is.null(ylabel)) "" else ylabel,
+               title = loonTitle)
 }
 
 

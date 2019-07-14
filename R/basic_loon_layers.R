@@ -50,13 +50,13 @@ loonLayer.GeomPoint <- function(widget,
 
     # method <- get_stat_param(layerGeom, "distribution", ...)
 
-    l_layer_points(widget,
-                   x = x, y = y,
-                   color = pointsColor,
-                   size = pointsSize,
-                   linecolor = lineColor,
-                   parent = parent,
-                   label = "points")
+    loon::l_layer_points(widget,
+                         x = x, y = y,
+                         color = pointsColor,
+                         size = pointsSize,
+                         linecolor = lineColor,
+                         parent = parent,
+                         label = "points")
   } else NULL
 }
 
@@ -86,7 +86,7 @@ loonLayer.GeomRect <- function(widget,
         coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, coordinates, data, ggplotPanel_params)
         x <- coordPolarxy$x
         y <- coordPolarxy$y
-        l_layer_polygon(
+        loon::l_layer_polygon(
           widget, x = x, y = y,
           color = fillColor,
           linecolor = linesColor,
@@ -97,7 +97,7 @@ loonLayer.GeomRect <- function(widget,
       } else {
         x <- c(data$xmin, data$xmax)
         y <- c(data$ymin, data$ymax)
-        l_layer_rectangle(
+        loon::l_layer_rectangle(
           widget,
           x = x, y = y,
           color = fillColor,
@@ -112,8 +112,8 @@ loonLayer.GeomRect <- function(widget,
       method <- get_stat_param(layerGeom, "bins", ...)
 
       if(parent == "root") {
-        parent <- l_layer_group(widget,
-                                label = if(is.null(label)) paste(c("rectangles", method)) else label)
+        parent <- loon::l_layer_group(widget,
+                                      label = if(is.null(label)) paste(c("rectangles", method)) else label)
       }
 
       # any NA will not be drawn
@@ -130,7 +130,7 @@ loonLayer.GeomRect <- function(widget,
                                                   label = label,
                                                   i = if(n == 1) NULL else i)
 
-                 l_layer_polygon(
+                 loon::l_layer_polygon(
                    widget,
                    x = x,
                    y = y,
@@ -171,7 +171,7 @@ loonLayer.GeomRect <- function(widget,
                                                     label = label,
                                                     i = if(n == 1) NULL else i)
 
-                   l_layer_rectangle(
+                   loon::l_layer_rectangle(
                      widget,
                      x = x, y = y,
                      color = fillColor[i],
@@ -215,7 +215,7 @@ loonLayer.GeomPolygon <- function(widget,
         y <- data$y
       }
 
-      l_layer_polygon(
+      loon::l_layer_polygon(
         widget,
         x = x, y = y,
         color = fillColor[1],
@@ -227,8 +227,8 @@ loonLayer.GeomPolygon <- function(widget,
     } else {
 
       if(parent == "root") {
-        parent <- l_layer_group(widget,
-                                label = if(is.null(label)) "polygons" else label)
+        parent <- loon::l_layer_group(widget,
+                                      label = if(is.null(label)) "polygons" else label)
       }
 
       m <- length(uniGroup)
@@ -251,7 +251,7 @@ loonLayer.GeomPolygon <- function(widget,
                                                 label = label,
                                                 i = if(m == 1) NULL else i)
 
-               l_layer_polygon(
+               loon::l_layer_polygon(
                  widget,
                  x = x,
                  y = y,
@@ -297,7 +297,7 @@ loonLayer.GeomText <- function(widget,
 
     if(dim(data)[1] == 1) {
 
-      l_layer_text(
+      loon::l_layer_text(
         widget,
         x = x, y = y,
         text = as.character(data$label),
@@ -310,7 +310,7 @@ loonLayer.GeomText <- function(widget,
         label = if(is.null(label)) "text" else label
       )
     } else {
-      l_layer_texts(
+      loon::l_layer_texts(
         widget,
         x = x, y = y,
         text = as.character(data$label),
@@ -380,18 +380,18 @@ loonLayer.GeomVline <- function(widget,
         y <- yrange
       }
 
-      l_layer_line(widget,
-                   x = x, y = y,
-                   linewidth = linesWidth,
-                   color = linesColor,
-                   dash = linesDash[[1]],
-                   parent = parent,
-                   label = if(is.null(label)) "vline" else label)
+      loon::l_layer_line(widget,
+                         x = x, y = y,
+                         linewidth = linesWidth,
+                         color = linesColor,
+                         dash = linesDash[[1]],
+                         parent = parent,
+                         label = if(is.null(label)) "vline" else label)
     } else {
 
       if(parent == "root") {
-        parent <-  l_layer_group(widget,
-                                 label = if(is.null(label)) "vlines" else label)
+        parent <-  loon::l_layer_group(widget,
+                                       label = if(is.null(label)) "vlines" else label)
       }
 
       lapply(1:n,
@@ -410,14 +410,14 @@ loonLayer.GeomVline <- function(widget,
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
-               l_layer_line(widget,
-                            x = x,
-                            y = y,
-                            linewidth = linesWidth[i],
-                            color = linesColor[i],
-                            dash = linesDash[[i]],
-                            parent = parent,
-                            label = mappingLabel)
+               loon::l_layer_line(widget,
+                                  x = x,
+                                  y = y,
+                                  linewidth = linesWidth[i],
+                                  color = linesColor[i],
+                                  dash = linesDash[[i]],
+                                  parent = parent,
+                                  label = mappingLabel)
              })
     }
   } else NULL
@@ -452,18 +452,18 @@ loonLayer.GeomHline <- function(widget,
         y <- rep(data$yintercept, 2)
         x <- xrange
       }
-      l_layer_line(widget,
-                   x = x, y = y,
-                   linewidth = linesWidth,
-                   color = linesColor,
-                   dash = linesDash[[1]],
-                   parent = parent,
-                   label = if(is.null(label)) "hline" else label)
+      loon::l_layer_line(widget,
+                         x = x, y = y,
+                         linewidth = linesWidth,
+                         color = linesColor,
+                         dash = linesDash[[1]],
+                         parent = parent,
+                         label = if(is.null(label)) "hline" else label)
     } else {
 
       if(parent == "root") {
-        parent <- l_layer_group(widget,
-                                label = if(is.null(label)) "hlines" else label)
+        parent <- loon::l_layer_group(widget,
+                                      label = if(is.null(label)) "hlines" else label)
       }
       lapply(1:n,
              function(i){
@@ -481,14 +481,14 @@ loonLayer.GeomHline <- function(widget,
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
-               l_layer_line(widget,
-                            x = x,
-                            y = y,
-                            linewidth = linesWidth[i],
-                            color = linesColor[i],
-                            dash = linesDash[[i]],
-                            parent = parent,
-                            label = mappingLabel)
+               loon::l_layer_line(widget,
+                                  x = x,
+                                  y = y,
+                                  linewidth = linesWidth[i],
+                                  color = linesColor[i],
+                                  dash = linesDash[[i]],
+                                  parent = parent,
+                                  label = mappingLabel)
              })
     }
   } else NULL
@@ -525,17 +525,17 @@ loonLayer.GeomAbline <- function(widget,
         x <- coordCartesianxy$x
         y <- coordCartesianxy$y
       }
-      l_layer_line(widget, x = x, y = y,
-                   linewidth = linesWidth,
-                   color = linesColor,
-                   dash = linesDash[[1]],
-                   parent = parent,
-                   label = if(is.null(label)) "abline" else label)
+      loon::l_layer_line(widget, x = x, y = y,
+                         linewidth = linesWidth,
+                         color = linesColor,
+                         dash = linesDash[[1]],
+                         parent = parent,
+                         label = if(is.null(label)) "abline" else label)
     } else {
 
       if(parent == "root") {
-        parent <-  l_layer_group(widget,
-                                 label = if(is.null(label)) "ablines" else label)
+        parent <-  loon::l_layer_group(widget,
+                                       label = if(is.null(label)) "ablines" else label)
       }
 
       lapply(1:n,
@@ -556,13 +556,13 @@ loonLayer.GeomAbline <- function(widget,
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
-               l_layer_line(widget,
-                            x = x, y = y,
-                            linewidth = linesWidth[i],
-                            color = linesColor[i],
-                            dash = linesDash[[i]],
-                            parent = parent,
-                            label =mappingLabel)
+               loon::l_layer_line(widget,
+                                  x = x, y = y,
+                                  linewidth = linesWidth[i],
+                                  color = linesColor[i],
+                                  dash = linesDash[[i]],
+                                  parent = parent,
+                                  label =mappingLabel)
              })
     }
   } else NULL
@@ -598,17 +598,17 @@ loonLayer.GeomSegment <- function(widget,
         y <- c(data$y, data$yend)
       }
 
-      l_layer_line(widget, x = x, y = y,
-                   linewidth = linesWidth,
-                   color = linesColor,
-                   dash = linesDash[[1]],
-                   parent = parent,
-                   label = if(is.null(label)) "segment" else label)
+      loon::l_layer_line(widget, x = x, y = y,
+                         linewidth = linesWidth,
+                         color = linesColor,
+                         dash = linesDash[[1]],
+                         parent = parent,
+                         label = if(is.null(label)) "segment" else label)
     } else {
 
       if(parent == "root") {
-        parent <-  l_layer_group(widget,
-                                 label = if(is.null(label)) "segments" else label)
+        parent <-  loon::l_layer_group(widget,
+                                       label = if(is.null(label)) "segments" else label)
       }
 
       lapply(1:n,
@@ -627,13 +627,13 @@ loonLayer.GeomSegment <- function(widget,
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
-               l_layer_line(widget,
-                            x = x, y = y,
-                            linewidth = linesWidth[i],
-                            color = linesColor[i],
-                            dash = linesDash[[i]],
-                            parent = parent,
-                            label = mappingLabel)
+               loon::l_layer_line(widget,
+                                  x = x, y = y,
+                                  linewidth = linesWidth[i],
+                                  color = linesColor[i],
+                                  dash = linesDash[[i]],
+                                  parent = parent,
+                                  label = mappingLabel)
              })
     }
   } else NULL
@@ -697,13 +697,13 @@ loonLayer.GeomHex <- function(widget,
                                        label = label,
                                        i = NULL)
 
-      l_layer_polygons(widget,
-                       hex_x, hex_y,
-                       color = fillColor,
-                       linecolor = linesColor,
-                       linewidth = linesWidth,
-                       parent = parent,
-                       label = mappingLabel)
+      loon::l_layer_polygons(widget,
+                             hex_x, hex_y,
+                             color = fillColor,
+                             linecolor = linesColor,
+                             linewidth = linesWidth,
+                             parent = parent,
+                             label = mappingLabel)
     }
   } else NULL
 }
@@ -737,8 +737,8 @@ loonLayer.GeomDotplot <- function(widget,
     radius <- data$binwidth[1]/2
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "dots" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = if(is.null(label)) "dots" else label)
     }
 
     if(layerGeom$geom_params$binaxis == "y"){
@@ -751,14 +751,14 @@ loonLayer.GeomDotplot <- function(widget,
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
-               l_layer_oval(widget,
-                            x = c(data$x[i] + stackPos[i] * 2 * xradius - xradius,
-                                  data$x[i] + stackPos[i] * 2 * xradius + xradius),
-                            y = c(data$y[i] - radius, data$y[i] + radius),
-                            color =  fillColor[i],
-                            linecolor = lineColor[i],
-                            parent = parent,
-                            label = mappingLabel)
+               loon::l_layer_oval(widget,
+                                  x = c(data$x[i] + stackPos[i] * 2 * xradius - xradius,
+                                        data$x[i] + stackPos[i] * 2 * xradius + xradius),
+                                  y = c(data$y[i] - radius, data$y[i] + radius),
+                                  color =  fillColor[i],
+                                  linecolor = lineColor[i],
+                                  parent = parent,
+                                  label = mappingLabel)
              })
     } else  {
       yradius <- diff(ggplotPanel_params$y.range)/diff(ggplotPanel_params$x.range)*radius
@@ -770,14 +770,14 @@ loonLayer.GeomDotplot <- function(widget,
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
-               l_layer_oval(widget,
-                            x = c(data$x[i] - radius, data$x[i] + radius),
-                            y = c(data$y[i] - yradius + stackPos[i] * 2 * yradius,
-                                  data$y[i] + yradius + stackPos[i] * 2 * yradius),
-                            color =  fillColor[i],
-                            linecolor = lineColor[i],
-                            parent = parent,
-                            label = mappingLabel)
+               loon::l_layer_oval(widget,
+                                  x = c(data$x[i] - radius, data$x[i] + radius),
+                                  y = c(data$y[i] - yradius + stackPos[i] * 2 * yradius,
+                                        data$y[i] + yradius + stackPos[i] * 2 * yradius),
+                                  color =  fillColor[i],
+                                  linecolor = lineColor[i],
+                                  parent = parent,
+                                  label = mappingLabel)
              })
     }
   } else NULL

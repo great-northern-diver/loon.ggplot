@@ -18,7 +18,7 @@
 #' @param exteriorLabelProportion space assigned to the vertical height/horizontal width of each exterior label
 #'          expressed as a proportion of a single plot's height/width.  Default is 0.2.
 #'          This is translated to a row/column span = 1 / exteriorLabelProportion for the plot size in
-#'          \code{tkgrid()}.
+#'          \code{tcltk::tkgrid()}.
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
 #' @param ... named arguments to modify loon plot states
@@ -263,14 +263,14 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                     rowSubtitles <<- c(rowSubtitles, rowSubtitle)
 
                     if(!is.null(colSubtitle) & !is_facet_grid & tkLabels & pack) {
-                      sub <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+                      sub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                                               text= colSubtitle, background = "grey90"))
-                      tkgrid(sub,
-                             row = (layout_matrix[i,]$ROW - 1) * span + start.ypos,
-                             column = (layout_matrix[i,]$COL - 1) * span + start.xpos,
-                             rowspan = numOfSubtitles,
-                             columnspan = span,
-                             sticky="nesw")
+                      tcltk::tkgrid(sub,
+                                    row = (layout_matrix[i,]$ROW - 1) * span + start.ypos,
+                                    column = (layout_matrix[i,]$COL - 1) * span + start.xpos,
+                                    rowspan = numOfSubtitles,
+                                    columnspan = span,
+                                    sticky="nesw")
                       start.subtitlepos <<- start.ypos + numOfSubtitles
                       newspan <- span - numOfSubtitles
                       if(newspan <= 0) stop(paste0("pick a larger span, at least larger than ", numOfSubtitles))
@@ -398,14 +398,14 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                                                 loonTitle = loonTitle)
 
                       } else {
-                        loonPlot <- l_plot(parent = parent,
-                                           showGuides = showGuides,
-                                           showScales = showScales,
-                                           showLabels = showLabels,
-                                           swapAxes = swapAxes,
-                                           xlabel = if(is.null(xlabel)) "" else xlabel,
-                                           ylabel = if(is.null(ylabel)) "" else ylabel,
-                                           title = loonTitle)
+                        loonPlot <- loon::l_plot(parent = parent,
+                                                 showGuides = showGuides,
+                                                 showScales = showScales,
+                                                 showLabels = showLabels,
+                                                 swapAxes = swapAxes,
+                                                 xlabel = if(is.null(xlabel)) "" else xlabel,
+                                                 ylabel = if(is.null(ylabel)) "" else ylabel,
+                                                 title = loonTitle)
 
                       }
                       # adding layers
@@ -433,7 +433,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                         if(max_hist_points_layerId > minOtherLayerId){
                           modelLayerup <- sapply(seq_len(length(which(otherLayerId < max_hist_points_layerId) == T)),
                                                  function(j){
-                                                   l_layer_raise(loonPlot, "model")
+                                                   loon::l_layer_raise(loonPlot, "model")
                                                  }
                           )
                         }
@@ -442,45 +442,45 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
                       # special case
                       if (length(boxplotLayers) != 0 & activeModel == "l_plot" & length(activeGeomLayers) == 0) {
                         # hidden points layer
-                        l_layer_hide(loonPlot, "model")
+                        loon::l_layer_hide(loonPlot, "model")
                         # move the hidden layer on the top
                         modelLayerup <- sapply(seq_len(len_layers),
                                                function(j){
-                                                 l_layer_raise(loonPlot, "model")
+                                                 loon::l_layer_raise(loonPlot, "model")
                                                })
                       }
 
-                    } else loonPlot <- l_plot(parent = parent,
-                                              showGuides = showGuides,
-                                              showScales = showScales,
-                                              showLabels = showLabels,
-                                              swapAxes = swapAxes,
-                                              xlabel = if(is.null(xlabel)) "" else xlabel,
-                                              ylabel = if(is.null(ylabel)) "" else ylabel,
-                                              title = loonTitle)
+                    } else loonPlot <- loon::l_plot(parent = parent,
+                                                    showGuides = showGuides,
+                                                    showScales = showScales,
+                                                    showLabels = showLabels,
+                                                    swapAxes = swapAxes,
+                                                    xlabel = if(is.null(xlabel)) "" else xlabel,
+                                                    ylabel = if(is.null(ylabel)) "" else ylabel,
+                                                    title = loonTitle)
 
                     # resize loon plot
                     if(pack) {
 
-                      tkconfigure(paste(loonPlot,'.canvas',sep=''),
-                                  width = canvasWidth/column,
-                                  height = canvasHeight/row)
+                      tcltk::tkconfigure(paste(loonPlot,'.canvas',sep=''),
+                                         width = canvasWidth/column,
+                                         height = canvasHeight/row)
                       # tk pack
                       row.start <- (layout_matrix[i,]$ROW - 1) * span + start.subtitlepos
                       col.start <- (layout_matrix[i,]$COL - 1) * span + start.xpos
 
-                      tkgrid(loonPlot,
-                             row = row.start,
-                             column= col.start,
-                             rowspan = newspan,
-                             columnspan = span,
-                             sticky="nesw")
+                      tcltk::tkgrid(loonPlot,
+                                    row = row.start,
+                                    column= col.start,
+                                    rowspan = newspan,
+                                    columnspan = span,
+                                    sticky="nesw")
                       # facet wrap will have multiple column names
                       for (j in row.start:(row.start + newspan - 1)) {
-                        tkgrid.rowconfigure(parent, j, weight=1)
+                        tcltk::tkgrid.rowconfigure(parent, j, weight=1)
                       }
                       for(j in col.start:(col.start + span - 1)) {
-                        tkgrid.columnconfigure(parent, j, weight=1)
+                        tcltk::tkgrid.columnconfigure(parent, j, weight=1)
                       }
                     }
                     # loonPlot_configure does not produce anything but just configure the loon plot
@@ -523,63 +523,63 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
 
     # pack xlabel and ylabel
     if(!is.null(xlabel) & tkLabels){
-      xlab <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+      xlab <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                                text= xlabel, background = "white"))
-      tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
-             rowspan = 1, columnspan = column.span,
-             sticky="nesw")
+      tcltk::tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
+                    rowspan = 1, columnspan = column.span,
+                    sticky="nesw")
     }
     if(!is.null(ylabel) & tkLabels){
-      ylab <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+      ylab <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                                text= paste(paste0(" ", strsplit(ylabel, "")[[1]], " "), collapse = "\n"),
                                background = "white")
       )
-      tkgrid(ylab, row = start.ypos, column = 0,
-             rowspan = row.span, columnspan = 1,
-             sticky="nesw")
+      tcltk::tkgrid(ylab, row = start.ypos, column = 0,
+                    rowspan = row.span, columnspan = 1,
+                    sticky="nesw")
     }
 
     # is_facet_grid; subtitle by row?
     if(!is.null(rowSubtitles) & is_facet_grid & tkLabels) {
       uniqueRowSubtitles <- unique(rowSubtitles)
       for(i in 1:length(uniqueRowSubtitles)){
-        rowSub <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+        rowSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                                    text= paste(paste0(" ", strsplit(uniqueRowSubtitles[i], "")[[1]], " "), collapse = "\n"),
                                    background = "grey90"))
-        tkgrid(rowSub, row = start.ypos + (i - 1)* span,
-               column = start.xpos + column.span,
-               rowspan = span, columnspan = 1,
-               sticky="nesw")
+        tcltk::tkgrid(rowSub, row = start.ypos + (i - 1)* span,
+                      column = start.xpos + column.span,
+                      rowspan = span, columnspan = 1,
+                      sticky="nesw")
       }
     }
     # is_facet_grid; subtitle by col?
     if(!is.null(colSubtitles) & is_facet_grid & tkLabels) {
       uniqueColSubtitles <- unique(colSubtitles)
       for(i in 1:length(uniqueColSubtitles)){
-        colSub <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+        colSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                                    text= uniqueColSubtitles[i], background = "grey90"))
-        tkgrid(colSub, row = start.ypos - 1,
-               column = start.xpos + (i - 1) * span,
-               rowspan = 1, columnspan = span,
-               sticky="nesw")
+        tcltk::tkgrid(colSub, row = start.ypos - 1,
+                      column = start.xpos + (i - 1) * span,
+                      rowspan = 1, columnspan = span,
+                      sticky="nesw")
       }
     }
 
     if(!is.null(title) & tkLabels) {
       titleFont <- if(start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
-      tit <- as.character(tcl('label', as.character(l_subwin(parent,'label')),
+      tit <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                               text= title, background = "white"))
       tkconfigure(tit, font = titleFont)
-      tkgrid(tit, row = 0, column = start.xpos,
-             rowspan = 1, columnspan = column.span,
-             sticky="w")
+      tcltk::tkgrid(tit, row = 0, column = start.xpos,
+                    rowspan = 1, columnspan = column.span,
+                    sticky="w")
     }
   }
 
   # set linkingGroup
   lapply(plots,
          function(plot){
-           l_configure(plot, linkingGroup = args$linkingGroup, sync = sync)
+           loon::l_configure(plot, linkingGroup = args$linkingGroup, sync = sync)
          }
   )
 
@@ -622,7 +622,7 @@ loon.ggplot <- function(ggplotObject, activeGeomLayers = integer(0), parent = NU
   new_args[sapply(new_args, is.null)] <- NULL
 
   if(length(new_args) > 1){
-    do.call(l_configure, new_args)
+    do.call(loon::l_configure, new_args)
   }
 
   return(invisible(gp))
@@ -639,7 +639,7 @@ l_cget.l_ggplot <- function(target, state) {
                   function(plotName) {
                     widgets[[plotName]]
                   })
-  setNames(lapply(plots, l_cget, state),
+  setNames(lapply(plots, loon::l_cget, state),
            plotNames)
 }
 
@@ -673,7 +673,7 @@ l_configure.l_ggplot <- function(target, ...) {
            function(i){
              plot <- plots[[i]]
              if(state == "linkingGroup") {
-               l_configure(plot, linkingGroup = arg, sync = sync)
+               loon::l_configure(plot, linkingGroup = arg, sync = sync)
              } else if(state == "selected") {
                stop("not implemented yet")
              } else {
@@ -697,7 +697,7 @@ l_configure.l_ggplot <- function(target, ...) {
 # aliased in l_cget
 #' @export
 `[.l_ggplot` <- function(target, state) {
-  l_cget(target, state)
+  loon::l_cget(target, state)
 }
 
 # aliased in l_configure
@@ -728,9 +728,9 @@ hex6to12 <- function(col){
                # ARGB is 8 digits, with last two representing transparency.
                # We have to erase last two digits (TK color codes do not include transparency information)
                splitCol <- unlist(strsplit(col[i], split = ""))
-               if("#" %in% splitCol & length(splitCol) > 7 ) l_hexcolor(paste(splitCol[1:7], collapse = ""))
+               if("#" %in% splitCol & length(splitCol) > 7 ) loon::l_hexcolor(paste(splitCol[1:7], collapse = ""))
                else if("#" %in% splitCol & length(splitCol) < 7) ""
-               else l_hexcolor(col[i])
+               else loon::l_hexcolor(col[i])
              }
            }
     )
@@ -1011,7 +1011,7 @@ get_activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
 }
 
 get_subtitle <- function(layoutByROWS, layoutByCOLS, layout_matrix, ggLayout, numOfSubtitles,
-                        byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid, tkLabels){
+                         byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid, tkLabels){
   if(is_facet_wrap | !tkLabels) {
     colSubtitle <- if (numOfSubtitles > 0) {
       paste(

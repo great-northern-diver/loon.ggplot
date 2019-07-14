@@ -128,32 +128,32 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
     }
 
     # loon scatter plot
-    l_plot(parent = parent,
-           x = x,
-           y = y,
-           size = combined.pointsData$size,
-           color = combined.pointsData$color,
-           glyph = combined.pointsData$glyph,
-           itemLabel = combined.pointsData$itemLabel,
-           linkingKey = combined.pointsData$linkingKey,
-           showGuides = showGuides,
-           showScales = showScales,
-           showLabels = showLabels,
-           showItemLabels = TRUE,
-           swapAxes = swapAxes,
-           xlabel = if(is.null(xlabel)) "" else xlabel,
-           ylabel = if(is.null(ylabel)) "" else ylabel,
-           title = loonTitle)
+    loon::l_plot(parent = parent,
+                 x = x,
+                 y = y,
+                 size = combined.pointsData$size,
+                 color = combined.pointsData$color,
+                 glyph = combined.pointsData$glyph,
+                 itemLabel = combined.pointsData$itemLabel,
+                 linkingKey = combined.pointsData$linkingKey,
+                 showGuides = showGuides,
+                 showScales = showScales,
+                 showLabels = showLabels,
+                 showItemLabels = TRUE,
+                 swapAxes = swapAxes,
+                 xlabel = if(is.null(xlabel)) "" else xlabel,
+                 ylabel = if(is.null(ylabel)) "" else ylabel,
+                 title = loonTitle)
   } else {
-    l_plot(parent = parent,
-           showGuides = showGuides,
-           showScales = showScales,
-           showLabels = showLabels,
-           showItemLabels = TRUE,
-           swapAxes = swapAxes,
-           xlabel = if(is.null(xlabel)) "" else xlabel,
-           ylabel = if(is.null(ylabel)) "" else ylabel,
-           title = loonTitle)
+    loon::l_plot(parent = parent,
+                 showGuides = showGuides,
+                 showScales = showScales,
+                 showLabels = showLabels,
+                 showItemLabels = TRUE,
+                 swapAxes = swapAxes,
+                 xlabel = if(is.null(xlabel)) "" else xlabel,
+                 ylabel = if(is.null(ylabel)) "" else ylabel,
+                 title = loonTitle)
   }
 
 }

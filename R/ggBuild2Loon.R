@@ -119,7 +119,7 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
 
                 panelMatch <- sapply(mapping.names,
                                      function (mapping.name) {
-                                       which(str_detect(mapping.name,
+                                       which(stringr::str_detect(mapping.name,
                                                         colnames(input)) == TRUE)
                                      }
                 )

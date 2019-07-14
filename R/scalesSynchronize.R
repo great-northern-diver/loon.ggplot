@@ -14,20 +14,20 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
 
         lapply(plots,
                function(p) {
-                 l_configure(p, swapAxes = swapAxes,
-                             zoomX = zoomX, panX = panX, deltaX = deltaX,
-                             zoomY = zoomY, panY = panY, deltaY = deltaY)
+                 loon::l_configure(p, swapAxes = swapAxes,
+                                   zoomX = zoomX, panX = panX, deltaX = deltaX,
+                                   zoomY = zoomY, panY = panY, deltaY = deltaY)
                }
         )
         busy <<- FALSE
-        tcl('update', 'idletasks')
+        tcltk::tcl('update', 'idletasks')
       }
     }
 
     lapply(plots, function(p) {
-      tcl(p, 'systembind', 'state', 'add',
-          c('zoomX', 'panX', 'zoomY', 'panY', 'deltaX', 'deltaY', 'swapAxes'),
-          synchronizeBindings)
+      tcltk::tcl(p, 'systembind', 'state', 'add',
+                 c('zoomX', 'panX', 'zoomY', 'panY', 'deltaX', 'deltaY', 'swapAxes'),
+                 synchronizeBindings)
     })
 
   } else if (scales_free_x & !scales_free_y) {
@@ -43,19 +43,19 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
 
         lapply(plots,
                function(p) {
-                 l_configure(p, zoomY=zoomY, panY=panY, deltaY=deltaY, swapAxes = swapAxes)
+                 loon::l_configure(p, zoomY=zoomY, panY=panY, deltaY=deltaY, swapAxes = swapAxes)
                }
         )
         busy <<- FALSE
-        tcl('update', 'idletasks')
+        tcltk::tcl('update', 'idletasks')
 
       }
     }
 
     lapply(plots, function(p) {
-      tcl(p, 'systembind', 'state', 'add',
-          c('zoomY', 'panY', 'deltaY', 'swapAxes'),
-          synchronizeBindings)
+      tcltk::tcl(p, 'systembind', 'state', 'add',
+                 c('zoomY', 'panY', 'deltaY', 'swapAxes'),
+                 synchronizeBindings)
     })
 
   } else if (!scales_free_x & scales_free_y) {
@@ -71,22 +71,22 @@ scalesSynchronize <- function(plots, scales_free_x, scales_free_y){
 
         lapply(plots,
                function(p) {
-                 l_configure(p, zoomX=zoomX, panX=panX, deltaX=deltaX, swapAxes = swapAxes)
+                 loon::l_configure(p, zoomX=zoomX, panX=panX, deltaX=deltaX, swapAxes = swapAxes)
                }
         )
         busy <<- FALSE
-        tcl('update', 'idletasks')
+        tcltk::tcl('update', 'idletasks')
 
       }
     }
 
     lapply(plots, function(p) {
-      tcl(p, 'systembind', 'state', 'add',
-          c('zoomX', 'panX', 'deltaX', 'swapAxes'),
-          synchronizeBindings)
+      tcltk::tcl(p, 'systembind', 'state', 'add',
+                 c('zoomX', 'panX', 'deltaX', 'swapAxes'),
+                 synchronizeBindings)
     })
   } else {
     NULL
   }
-  .Tcl('set ::loon::Options(printInConfigurationWarning) FALSE')
+  tcltk::.Tcl('set ::loon::Options(printInConfigurationWarning) FALSE')
 }
