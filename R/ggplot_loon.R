@@ -1,0 +1,603 @@
+ggplot.loon <- function(target) {
+  UseMethod('ggplot.loon', target)
+}
+
+ggplot.loon.default <- function(target) {
+  # stop('ggplot.loon default no valid inheritance')
+  # TODO
+  ggplot2::geom_blank()
+}
+
+ggplot.loon.l_plot <- function(target) {
+
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  rl <- loon::l_create_handle(c(target, 'root'))
+  cartesian_gg(ggplot_obj = ggplot.loon(rl),
+               target)
+}
+
+ggplot.loon.l_hist <- function(target) {
+
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  rl <- loon::l_create_handle(c(target, 'root'))
+  cartesian_gg(ggplot_obj = ggplot.loon(rl),
+               target)
+}
+
+ggplot.loon.l_graph <- function(target) {
+
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  rl <- loon::l_create_handle(c(target, 'root'))
+  cartesian_gg(ggplot_obj = ggplot.loon(rl),
+               target)
+}
+
+ggplot.loon.l_plot3D <- function(target) {
+
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  rl <- loon::l_create_handle(c(target, 'root'))
+
+  axes_coords <- target["axesCoords"]
+
+  adjust_brightness <- function(z_coord, r, g, b) {
+    change <- as.integer(100 + 80 * z_coord)
+    if (change < 0) {
+      rgb(0,0,0)
+    } else if (change <= 100) {
+      rgb((r/256) * change/100, (g/256) * change/100, (b/256) * change/100)
+    } else {
+      rgb(r,g,b, maxColorValue=255)
+    }
+  }
+
+  x_color <- adjust_brightness(axes_coords[[3]][1], 255, 0, 0)
+  y_color <- adjust_brightness(axes_coords[[3]][2], 0, 0, 255)
+  z_color <- adjust_brightness(axes_coords[[3]][3], 0, 255, 0)
+
+  cartesian_gg(ggplot_obj = ggplot.loon(rl),
+               target) +
+    ggplot2::geom_line(
+      data = data.frame(
+        x = c(0.5, 0.5 + 0.08*axes_coords[[1]][1]),
+        y = c(0.5, 0.5 + 0.08*axes_coords[[2]][1])
+      ),
+      mapping = aes(x = x, y = y),
+      colour = x_color,
+      size = 1
+    ) +
+    ggplot2::geom_line(
+      data = data.frame(
+        x = c(0.5, 0.5 + 0.08*axes_coords[[1]][2]),
+        y = c(0.5, 0.5 + 0.08*axes_coords[[2]][2])
+      ),
+      mapping = aes(x = x, y = y),
+      colour = y_color,
+      size = 1
+    ) +
+    ggplot2::geom_line(
+      data = data.frame(
+        x = c(0.5, 0.5 + 0.08*axes_coords[[1]][3]),
+        y = c(0.5, 0.5 + 0.08*axes_coords[[2]][3])
+      ),
+      mapping = aes(x = x, y = y),
+      colour = z_color,
+      size = 1
+    )
+}
+
+cartesian_gg <- function(ggplot_obj, target) {
+
+  # keep name consistency
+  widget <- target
+
+  panX <- widget['panX']
+  deltaX <- widget['deltaX']
+  zoomX <- widget['zoomX']
+  xlim <- c(panX, panX + deltaX/zoomX)
+
+  panY <- widget['panY']
+  deltaY <- widget['deltaY']
+  zoomY <- widget['zoomY']
+  ylim <- c(panY, panY + deltaY/zoomY)
+
+  swapAxes <- widget['swapAxes']
+  showScales <- widget['showScales']
+
+  showLabels <- widget['showLabels']
+  showGuides <- widget['showGuides']
+
+  title <- widget['title']
+  xlabel <- widget['xlabel']
+  ylabel <- widget['ylabel']
+
+  if (swapAxes) {
+    tmp <- xlim
+    xlim <- ylim
+    ylim <- tmp
+
+    tmp <- xlabel
+    xlabel <- ylabel
+    ylabel <- tmp
+  }
+
+  minimumMargins <- widget['minimumMargins']
+  margins <- c(0, 0, 0, 0)
+  if (showLabels) {
+    labelMargins <- widget['labelMargins']
+    if(xlabel == "") labelMargins[1] <- minimumMargins[1]
+    if(ylabel == "") labelMargins[2] <- minimumMargins[2]
+    if(title == "") labelMargins[3] <- minimumMargins[3]
+    margins <- margins + labelMargins
+  }
+  if (showScales) {margins <- margins + widget['scalesMargins'] }
+  if(showLabels | showScales) {
+    margins <- apply(cbind(margins, minimumMargins), 1, max)
+  }
+  # loon pixel margin to grid margin
+  margins <- pixels_2_lines(margins)
+
+  xlabelFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-xlabel"))
+  ylabelFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-ylabel"))
+  titleFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-title"))
+  scalesFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-scales"))
+
+  guidesBackGround <- if(showGuides) loon:::as_hex6color(widget['guidesBackground']) else loon:::as_hex6color(widget['background'])
+
+  ggplot_obj +
+    ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
+    ggplot2::xlab(xlabel) +
+    ggplot2::ylab(ylabel) +
+    ggplot2::theme(
+      axis.ticks = if(showScales) element_line() else element_blank(),
+      axis.title = if(showLabels) element_text(size = titleFont$size, family = titleFont$family, face = titleFont$face) else element_blank(),
+      axis.text.x = if(showScales) element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else element_blank(),
+      axis.text.y = if(showScales) element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else element_blank(),
+      axis.title.x = if(showLabels) element_text(size = xlabelFont$size, family = xlabelFont$family, face = xlabelFont$face) else element_blank(),
+      axis.title.y = if(showLabels) element_text(size = ylabelFont$size, family = ylabelFont$family, face = ylabelFont$face) else element_blank(),
+      plot.background = element_rect(fill = loon:::as_hex6color(widget['background'])),
+      panel.background = element_rect(fill = guidesBackGround),
+      panel.grid.major = element_line(size = 1,
+                                      linetype = 'solid',
+                                      colour = loon:::as_hex6color(widget['guidelines'])),
+      panel.grid.minor = element_line(size = 0.5,
+                                      linetype = 'solid',
+                                      colour = loon:::as_hex6color(widget['guidelines'])),
+      panel.border = if(sum(margins) > 0)
+        element_rect(colour = loon:::as_hex6color(widget['foreground']),
+                     fill = NA,
+                     size = 1) else element_blank()
+    )
+}
+
+ggplot.loon.l_layer_group <- function(target) {
+
+  widget <- attr(target, 'widget')
+  ggObj <- ggplot()
+  children <- l_layer_getUngroupedChildren(widget = widget, target = widget)
+  l_children_layers <- lapply(rev(children),
+                              function(layerid) {
+
+                                layer <- loon::l_create_handle(c(widget, layerid))
+
+                                if(layerid == 'model') {
+
+                                  states <- loon:::get_layer_states(widget)
+                                  x <- states$x
+                                  y <- states$y
+
+                                  if(length(x) > 0 & length(y) == 0) {
+                                    ggObj <<- ggplot2::ggplot(data = data.frame(x = as.numeric(x)),
+                                                              mapping = aes(x = x))
+                                  } else if (length(x) > 0 & length(y) > 0) {
+                                    ggObj <<- ggplot2::ggplot(data = data.frame(x = as.numeric(x),
+                                                                                y = as.numeric(y)),
+                                                              mapping = aes(x = x, y = y))
+                                  } else if (length(x) == 0 & length(y) > 0) {
+                                    ggObj <<- ggplot2::ggplot(data = data.frame(y = as.numeric(y)),
+                                                              mapping = aes(y = y))
+                                  } else NULL
+                                }
+
+                                layer
+                              })
+
+  l_visible_children_layer <- Filter(
+    function(layerid) {
+      loon::l_layer_isVisible(widget, layerid)
+    },
+    l_children_layers)
+
+  lapply(l_visible_children_layer,
+         function(layer) {
+
+           ggObj <<- ggObj + ggplot.loon(layer)
+         })
+
+  ggObj
+}
+
+# primitive ggplot layers
+
+ggplot.loon.l_layer_polygon <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  if(length(states$x) > 0  & length(states$y) > 0){
+    ggplot2::geom_polygon(
+      data = data.frame(
+        x = as.numeric(states$x),
+        y = as.numeric(states$y)
+      ),
+      mapping = aes(x = x, y = y),
+      fill = states$color,
+      colour = states$linecolor,
+      size =  as_r_line_size(states$linewidth)
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_line <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  if(length(states$x) > 0  & length(states$y) > 0) {
+
+    ggplot2::geom_line(
+      data = data.frame(
+        x = as.numeric(states$x),
+        y = as.numeric(states$y)
+      ),
+      mapping = aes(x = x, y = y),
+      colour = states$color,
+      size = as_r_line_size(states$linewidth)
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_rectangle <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  if(length(states$x) > 0  & length(states$y) > 0) {
+
+    ggplot2::geom_rect(
+      data = data.frame(
+        x = as.numeric(states$x),
+        y = as.numeric(states$y)
+      ),
+      mapping = aes(xmin = x[1], xmax = x[2], ymin = y[1], ymax = y[2]),
+      colour = states$linecolor,
+      fill = states$color,
+      size =  as_r_line_size(states$linewidth)
+    )
+
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_oval <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  if(length(states$x) > 0  & length(states$y) > 0){
+
+    xcoords <- as.numeric(states$x)
+    ycoords <- as.numeric(states$y)
+
+    angle <- seq(0, 2*base::pi, length=101)
+
+    xCenter <- mean(xcoords)
+    yCenter <- mean(ycoords)
+
+    xRadius <- diff(range(xcoords))/2
+    yRadius <- diff(range(ycoords))/2
+
+    x <- mean(xcoords) + xRadius * cos(angle)
+    y <- mean(ycoords) + yRadius * sin(angle)
+
+    ggplot2::geom_polygon(
+      data = data.frame(
+        x = x,
+        y = y
+      ),
+      mapping = aes(x = x, y = y),
+      fill = states$color,
+      colour = states$linecolor,
+      size = as_r_line_size(states$linewidth)
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_text <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+  textCoords <- get_textCoords(angle = states$angle, anchor = states$anchor, just = states$just)
+
+  if(length(states$x) > 0  & length(states$y) > 0){
+
+    ggplot2::geom_text(
+      data = data.frame(
+        x = as.numeric(states$x) + textCoords[1],
+        y = as.numeric(states$y) + textCoords[2],
+        label = states$text
+      ),
+      mapping = aes(x = x, y = y, label = label),
+      angle = states$angle,
+      colour = states$color,
+      hjust = get_hjust(states$justify),
+      size = as_r_text_size(states$size)
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_texts <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  active <- states$active
+  x <- as.numeric(states$x[active])
+  y <- as.numeric(states$y[active])
+
+  if(length(x) > 0  & length(y) > 0){
+
+    text  <- states$text[active]
+    size  <- as_r_text_size(states$size[active])
+    angle  <- states$angle[active]
+    anchor  <- states$anchor[active]
+    justify  <- states$justify[active]
+    color <- states$color[active]
+
+    data <- lapply(1:length(text),
+                   function(i){
+                     textCoords <- get_textCoords(angle = angle[i],
+                                                  anchor = anchor[i],
+                                                  just = justify[i])
+
+                     c(label = text[i],
+                       x = x[i] + textCoords[1],
+                       y = y[i] + textCoords[2])
+                   })
+
+    df <- as.data.frame(
+      do.call(rbind, data),
+      stringsAsFactors = FALSE
+    )
+    df$x <- as.numeric(df$x)
+    df$y <- as.numeric(df$y)
+
+    ggplot2::geom_text(
+      data = df,
+      mapping = aes(x = x, y = y, label = label),
+      angle = angle,
+      colour = color,
+      hjust = get_hjust(justify),
+      size = as_r_text_size(size)
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_points <- function(target) {
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  active <- states$active
+  x <- as.numeric(states$x[active])
+  y <- as.numeric(states$y[active])
+
+  if(length(x) > 0  && length(y)  > 0) {
+    size  <- as_r_point_size(states$size[active])
+    color <- states$color[active]
+
+    ggplot2::geom_point(
+      data = data.frame(x = x, y = y),
+      mapping = aes(x = x, y = y),
+      colour = color,
+      size = size,
+      pch = 16
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_polygons <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  active <- states$active
+  x <- states$x[active]
+  y <- states$y[active]
+
+  if(length(x) > 0  & length(y) > 0){
+
+    linewidth  <- as_r_line_size(states$linewidth[active])
+    linecolor <- states$linecolor[active]
+    fill <- states$color[active]
+
+    len_x <- lengths(x)
+
+    df <- data.frame(
+      x = as.numeric(unlist(x)),
+      y = as.numeric(unlist(y)),
+      id = as.factor(rep(1:length(len_x), times = len_x))
+    )
+
+    ggplot2::geom_polygon(
+      data =df,
+      mapping = aes(x = x, y = y, group = id),
+      fill = rep(fill, times = len_x),
+      colour = rep(linecolor, times = len_x),
+      size = rep(linewidth, times = len_x)
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_rectangles <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  active <- states$active
+  x <- states$x[active]
+  y <- states$y[active]
+
+  if(length(x) > 0  & length(y) > 0){
+
+    df <- data.frame(
+      xmin = as.numeric(sapply(x, function(xx) xx[1])),
+      xmax = as.numeric(sapply(x, function(xx) xx[2])),
+      ymin = as.numeric(sapply(y, function(yy) yy[1])),
+      ymax = as.numeric(sapply(y, function(yy) yy[2]))
+    )
+
+    ggplot2::geom_rect(
+      data =df,
+      mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = states$color[active],
+      colour = states$linecolor[active],
+      size = as_r_line_size(states$linewidth[active])
+    )
+  } else ggplot2::geom_blank()
+}
+
+ggplot.loon.l_layer_lines <- function(target) {
+
+  widget <- attr(target, "widget")
+  states <- loon:::get_layer_states(target)
+
+  active <- states$active
+  x <- states$x[active]
+  y <- states$y[active]
+
+  if(length(x) > 0  & length(y) > 0){
+
+    linewidth  <- as_r_line_size(states$linewidth[active])
+    linecolor <- states$color[active]
+
+    len_x <- lengths(x)
+
+    df <- data.frame(
+      x = as.numeric(unlist(x)),
+      y = as.numeric(unlist(y)),
+      id = as.factor(rep(1:length(len_x), times = len_x))
+    )
+
+    ggplot2::geom_line(
+      data =df,
+      mapping = aes(x = x, y = y, group = id),
+      colour = rep(linecolor, times = len_x),
+      size = rep(linewidth, times = len_x)
+    )
+  } else ggplot2::geom_blank()
+}
+
+get_textCoords <- function(angle, anchor, just) {
+
+  angle <- angle * pi / 180
+
+  switch(anchor,
+         "center" = {
+           hjust <- 0
+           vjust <- 0
+         },
+         "n" = {
+           hjust <- 1/2 * sin(angle)
+           vjust <- -1/2 * cos(angle)
+         },
+         "e" = {
+           hjust <- -1/2 * cos(angle)
+           vjust <- -1/2 * sin(angle)
+         },
+         "s" = {
+           hjust <- - 1/2 * sin(angle)
+           vjust <- 1/2 * cos(angle)
+         },
+         "w" = {
+           hjust <- 1/2 * cos(angle)
+           vjust <- 1/2 * sin(angle)
+         },
+         "sw" = {
+           hjust <- - 1/2 * sin(angle) +
+             1/2 * cos(angle)
+           vjust <- 1/2 * cos(angle) +
+             1/2 * sin(angle)
+         },
+         "nw" = {
+           hjust <- 1/2 * sin(angle) +
+             1/2 * cos(angle)
+           vjust <- -1/2 * cos(angle) +
+             1/2 * sin(angle)
+         },
+         "ne" =  {
+           hjust <-  1/2 * sin(angle)  +
+             (-1/2) * cos(angle)
+           vjust <- -1/2 * cos(angle)  +
+             (-1/2) * sin(angle)
+         },
+         "se" = {
+           hjust <- - 1/2 * sin(angle)  +
+             (-1/2) * cos(angle)
+           vjust <- 1/2 * cos(angle)  +
+             (-1/2) * sin(angle)
+         }
+  )
+  # just can only be "left", "right" and "center"
+  if(just == "left") {
+    hjust <- hjust - 1/2 * cos(angle)
+    vjust <- vjust - 1/2 * sin(angle)
+  } else if(just == "right") {
+    hjust <- hjust + 1/2 * cos(angle)
+    vjust <- vjust + 1/2 * sin(angle)
+  }
+
+  c(hjust, vjust)
+}
+
+get_hjust <- function(just) {
+  sapply(just,
+         function(j){
+           switch(j,
+                  "right" = 0,
+                  "left" = 1,
+                  "center" = 0.5)
+         })
+}
+
+l_layer_getUngroupedChildren <- function(widget, target) {
+
+  loon::l_isLoonWidget(widget) || stop("widget does not seem to exist")
+  children <- loon::l_layer_getChildren(target)
+  layer <- lapply(children,
+                  function(child) {
+                    target <- loon::l_create_handle(c(widget, child))
+                    if(is(target, "l_layer_group")) {
+                      # do recursive
+                      l_layer_getUngroupedChildren(widget, target)
+                    } else {
+                      target
+                    }
+                  }
+  )
+
+  unlist(layer, recursive = TRUE)
+}
+
+as_r_text_size <- function(size) {
+  size/1.76
+}
+
+as_r_point_size <- function(size) {
+  2*log(size)
+}
+
+as_r_line_size <- function(size) {
+  size/.pt
+}
+
+pixels_2_lines <- function(x) {
+  x / 30
+}
