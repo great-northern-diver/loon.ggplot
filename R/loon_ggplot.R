@@ -18,14 +18,14 @@
 #' @param exteriorLabelProportion space assigned to the vertical height/horizontal width of each exterior label
 #'          expressed as a proportion of a single plot's height/width.  Default is 0.2.
 #'          This is translated to a row/column span = 1 / exteriorLabelProportion for the plot size in
-#'          \code{tcltk::tkgrid()}.
+#'          \code{tkgrid()}.
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
 #' @param ... named arguments to modify loon plot states
 #'
 #'
 #' @import ggplot2 loon tcltk methods grid
-#' @importFrom stats quantile approxfun integrate setNames
+#' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange
 #' @importFrom stringr str_detect
