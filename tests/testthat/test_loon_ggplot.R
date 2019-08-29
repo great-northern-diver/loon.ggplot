@@ -4,13 +4,12 @@ library(dplyr)
 library(lattice)
 library(magrittr)
 library(tidyverse)
-library(png)
 
 test_that("example works", {
   # example 1
-  p1 <- ggplot(data = SAheart) + aes( x = age, y = chd, color = famhist) + geom_point()
-  g1 <- loon.ggplot(p1, linkingGroup = "SAheart")
-  expect_equal(class(g1), c("l_plot", "loon"))
+  # p1 <- ggplot(data = SAheart) + aes( x = age, y = chd, color = famhist) + geom_point()
+  # g1 <- loon.ggplot(p1, linkingGroup = "SAheart")
+  # expect_equal(class(g1), c("l_plot", "loon"))
 
   # example 2
   p<- ggplot(mtcars, aes(mpg, wt)) + geom_point( aes(colour = "darkblue"))
@@ -38,13 +37,13 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 4
-  p <- ggplot(data = SAheart, mapping = aes(x = age, y = chd, col = famhist)) +
-
-    geom_smooth(method = "loess", colour = "steelblue") +
-    geom_point(size = 3, alpha = 0.4) +
-    facet_wrap(~famhist)
-  g <- loon.ggplot(p)
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # p <- ggplot(data = SAheart, mapping = aes(x = age, y = chd, col = famhist)) +
+  #
+  #   geom_smooth(method = "loess", colour = "steelblue") +
+  #   geom_point(size = 3, alpha = 0.4) +
+  #   facet_wrap(~famhist)
+  # g <- loon.ggplot(p)
+  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 5
   p <- ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class)
@@ -119,13 +118,13 @@ test_that("example works", {
   expect_equal(length(g$plots), 5)
 
   # example 11
-  mi_counties <- map_data("county", "michigan") %>%
-    select(lon = long, lat, group, id = subregion)
-  poly <- ggplot(mi_counties, aes(lon, lat)) +
-    geom_polygon(aes(group = group)) +
-    coord_quickmap()
-  g <- loon.ggplot(poly)
-  expect_equal(class(g), c("l_plot", "loon"))
+  # mi_counties <- map_data("county", "michigan") %>%
+  #   select(lon = long, lat, group, id = subregion)
+  # poly <- ggplot(mi_counties, aes(lon, lat)) +
+  #   geom_polygon(aes(group = group)) +
+  #   coord_quickmap()
+  # g <- loon.ggplot(poly)
+  # expect_equal(class(g), c("l_plot", "loon"))
 
   # example 12
   df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
@@ -165,10 +164,10 @@ test_that("example works", {
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 17
-  mtlong <- reshape2::melt(mtcars)
-  pp <- ggplot(mtlong, aes(value)) + facet_wrap(~variable, scales = 'free_x') +
-    geom_histogram(binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)))
-  g <- loon.ggplot(pp)
+  # mtlong <- reshape2::melt(mtcars)
+  # pp <- ggplot(mtlong, aes(value)) + facet_wrap(~variable, scales = 'free_x') +
+  #   geom_histogram(binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)))
+  # g <- loon.ggplot(pp)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 18
@@ -358,24 +357,24 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 45
-  data(Oats, package = "MEMSS")
-  pg.oats <- ggplot(Oats, aes(nitro, yield)) +
-    geom_line() +
-    geom_point() +
-    ggtitle("foo") +
-    facet_wrap(~Block + Variety, ncol = 3)
-  g <- loon.ggplot(pg.oats, linkingGroup = "A")
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # data(Oats, package = "MEMSS")
+  # pg.oats <- ggplot(Oats, aes(nitro, yield)) +
+  #   geom_line() +
+  #   geom_point() +
+  #   ggtitle("foo") +
+  #   facet_wrap(~Block + Variety, ncol = 3)
+  # g <- loon.ggplot(pg.oats, linkingGroup = "A")
+  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 46
-  SAheart %>%
-    mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
-    filter(age < 50) %>%
-    ggplot(aes(x = ltob, y = lsbp)) +
-    geom_point() +
-    facet_wrap(~chd) -> p
-  g <- loon.ggplot(p)
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # SAheart %>%
+  #   mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
+  #   filter(age < 50) %>%
+  #   ggplot(aes(x = ltob, y = lsbp)) +
+  #   geom_point() +
+  #   facet_wrap(~chd) -> p
+  # g <- loon.ggplot(p)
+  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 47
   pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density..))
@@ -383,14 +382,14 @@ test_that("example works", {
   expect_equal(class(g), c("l_hist", "loon"))
 
   # example 48
-  h <- ggplot(data = SAheart, mapping = aes(x = adiposity)) +
-    geom_histogram(mapping = aes(y = ..density..),
-                   bins = 10, fill = "steelblue",
-                   col = "black", alpha = 0.5) +
-    geom_density(mapping = aes(y = ..density..),
-                 fill = "grey", alpha = 0.5)
-  g <- loon.ggplot(h)
-  expect_equal(class(g), c("l_hist", "loon"))
+  # h <- ggplot(data = SAheart, mapping = aes(x = adiposity)) +
+  #   geom_histogram(mapping = aes(y = ..density..),
+  #                  bins = 10, fill = "steelblue",
+  #                  col = "black", alpha = 0.5) +
+  #   geom_density(mapping = aes(y = ..density..),
+  #                fill = "grey", alpha = 0.5)
+  # g <- loon.ggplot(h)
+  # expect_equal(class(g), c("l_hist", "loon"))
 
   # example 49 theme
   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
@@ -599,6 +598,7 @@ test_that("example works", {
   # example 77
   p <- l_plot()
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
+  l_scaleto_world(p)
   g <- ggplot.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -706,12 +706,12 @@ test_that("example works", {
   images <- lapply(img_paths, function(path) png::readPNG(path))
   p <- ggplot(data = data.frame(x = 1:6, y = 1:6),
               mapping = aes(x = x, y = y)) +
-    geom_imageGlyph(images = images, size = 8)
+    geom_imageGlyph(images = images, alpha = 0.4)
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 87
   p <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
-    geom_serialAxesGlyph(serialAxesData = iris[, -5])
+    geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = "radial")
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 88
