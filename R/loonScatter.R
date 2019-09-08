@@ -1,4 +1,4 @@
-loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping.x, mapping.y, dataFrame,
+loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping, dataFrame,
                         activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
                         itemLabel, showLabels, xlabel, ylabel, loonTitle){
   if(length(activeGeomLayers) > 0) {
@@ -35,7 +35,6 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                       size <- NULL
                                     }
 
-
                                     if (is.null(thisLayer_itemLabel) | is.null(thisLayer_linkingKey)) {
                                       if(num != 0) {
                                         thisLayer_linkingKey <- if(activeGeomDim == len_linkingKey) {
@@ -50,14 +49,19 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
                                         }
                                         count <<- count + num
                                         # give warning once
-                                        if(activeGeomLayer == activeGeomLayers[length(activeGeomLayers)]) {
-                                          warning("linkingKey and itemLabel may not match and will be set as the default loon one.")
-                                        }
+                                        # if(activeGeomLayer == activeGeomLayers[length(activeGeomLayers)]) {
+                                        #   warning("linkingKey and itemLabel may not match and will be set as the default loon one.")
+                                        # }
                                       }
                                     }
 
-                                    data.frame(x = x, y = y, itemLabel = thisLayer_itemLabel, color = color, glyph = glyph,
-                                               size = size, linkingKey = thisLayer_linkingKey)
+                                    data.frame(x = x,
+                                               y = y,
+                                               itemLabel = thisLayer_itemLabel,
+                                               color = color,
+                                               glyph = glyph,
+                                               size = size,
+                                               linkingKey = thisLayer_linkingKey)
                                   }
     )
     combined.pointsData <- do.call(rbind, combined.pointsData)
@@ -67,30 +71,24 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
     combined.pointsData$linkingKey <- as.character(combined.pointsData$linkingKey)
 
     isDuplicated_linkingKey <- duplicated(combined.pointsData$linkingKey)
-    if(any(isDuplicated_linkingKey)){
+    if(any(isDuplicated_linkingKey)) {
       combined.pointsData$linkingKey <- 0:(dim(combined.pointsData)[1] - 1)
       warning("linkingKey may not match and will be set as the default loon one")
     }
-    # isDuplicated_itemLabel <- duplicated(combined.pointsData$itemLabel)
-    # if(any(isDuplicated_itemLabel)){
-    #   combined.pointsData$itemLabel <- paste0("item", 0:(dim(combined.pointsData)[1] - 1))
-    #   warning("itemLabel may not match and will be set as the default loon one")
-    # }
-
   } else {
     # used for boxplot
-    if(length(mapping.x) == 0 & length(mapping.y) != 0) {
+    if(is.null(mapping$x) & !is.null(mapping$y)) {
 
       combined.pointsData <- data.frame(x = rep(0, dim(dataFrame)[1]),
-                                        y = with(dataFrame, eval(parse(text = mapping.y))))
-    } else if(length(mapping.x) != 0 & length(mapping.y) == 0) {
+                                        y = rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame))
+    } else if(!is.null(mapping$x) & is.null(mapping$y)) {
 
-      combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
+      combined.pointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
                                         y = rep(0, dim(dataFrame)[1]))
     } else {
       # both zero or both non zero
-      combined.pointsData <- data.frame(x = with(dataFrame, eval(parse(text = mapping.x))),
-                                        y = with(dataFrame, eval(parse(text = mapping.y))))
+      combined.pointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
+                                        y = rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame))
     }
 
     # some default settings, need more thought
@@ -159,7 +157,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
 }
 
 
-activeGeomDim <- function(ggBuild, activeGeomLayers, panelIndex){
+activeGeomDim <- function(ggBuild, activeGeomLayers, panelIndex) {
   dim <- 0
   lapply(activeGeomLayers,
          function(activeGeomLayer){
