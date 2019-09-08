@@ -571,41 +571,41 @@ test_that("example works", {
     label = "95 % prediction interval",
     parent = gLayer, index='end'
   )
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 74
   p <- l_plot()
   l <- l_layer_line(p, x=c(1,2,3,4), y=c(1,3,2,4), color='red', linewidth=2)
   l_scaleto_world(p)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 75
   p <- l_plot()
   l <- l_layer_rectangle(p, x=c(2,3), y=c(1,10), color='steelblue')
   l_scaleto_layer(l)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 76
   p <- l_plot()
   l <- l_layer_oval(p, c(1,5), c(2,12), color='steelblue')
   l_configure(p, panX=0, panY=0, deltaX=20, deltaY=20)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 77
   p <- l_plot()
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
   l_scaleto_world(p)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 78
   p <- l_plot()
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 79
@@ -619,7 +619,7 @@ test_that("example works", {
     linecolor = ""
   )
   l_scaleto_world(p)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 80
@@ -633,7 +633,7 @@ test_that("example works", {
     linecolor = "black"
   )
   l_scaleto_world(p)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 81
@@ -646,14 +646,14 @@ test_that("example works", {
   p <- l_plot(showItemLabels=TRUE)
   l <- l_layer_lines(p, xcoords, ycoords, itemLabel=names(sUaT), color=region)
   l_scaleto_layer(l)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 82
   p <- l_plot()
   l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10], size= as.integer(seq(5, 30, length.out = 10)))
   l_scaleto_world(p)
-  g <- ggplot.loon(p)
+  g <- ggplot2.loon(p)
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex83
