@@ -1,39 +1,120 @@
-ggplot.loon.l_layer_histogram <- function(target, ...) {
+#' @export
+ggplot2.loon.l_layer_histogram <- function(target, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
-  states <- loon:::get_layer_states(widget, native_unit = FALSE)
-
   ggObj <- list(...)$ggObj
 
-  # No active points in scatterplot
-  active <- states$active
-  if(any(active)) {
+  data <- transform_hist_x(widget)
 
-    display_order <- loon:::get_model_display_order(widget)
-    selected <- states$selected[display_order][active]
-
-    s_a <- list(
-      x = states$x[display_order][active],
-      y = as.numeric(selected),
-      fill = loon:::get_display_color(states$color[display_order][active], selected)
+  ggObj <- ggObj +
+    geom_rect(
+      data = data.frame(xmin = data$x,
+                        ymin = data$y,
+                        xmax = data$x + data$width,
+                        ymax = data$y + data$height),
+      mapping = aes(xmin = xmin,
+                    ymin = ymin,
+                    xmax = xmax,
+                    ymax = ymax),
+      fill = data$fill,
+      colour = data$colour
     )
-browser()
-    ggObj <- ggObj +
-      geom_hist(
-        data = data.frame(
-          x = s_a$x,
-          y = s_a$y
-        ),
-        mapping = aes(x = x, y = y),
-        fill = s_a$fill,
-        colour = states$colorOutline,
-        yshows = states$yshows,
-        showStackedColors = states$showStackedColors,
-        showOutlines = states$showOutlines,
-        colourFill = states$colorFill, # colourFill is default colour
-        origin = states$origin,
-        binwidth = states$binwidth
-      )
+  return(ggObj)
+}
+
+
+transform_hist_x <- function(widget) {
+
+  yshows <- widget['yshows']
+  bins <- loon:::getBinData(widget)
+
+  showStackedColors <- widget['showStackedColors']
+  showOutlines <- widget['showOutlines']
+  colorOutline <- if(showOutlines) loon:::as_hex6color(widget["colorOutline"]) else NA
+
+  colorStackingOrder <- widget['colorStackingOrder']
+  if(length(colorStackingOrder) == 1) {
+    if(colorStackingOrder == "selected") {
+      colorStackingOrder <- c("selected",
+                              levels(as.factor(widget['color'])))
+    }
   }
-  ggObj
+
+  b_bins <- lapply(bins,
+                   function(bin) {
+
+                     nam <- names(bin$count[-1])
+
+                     if (showStackedColors) {
+                       first <- intersect(colorStackingOrder, nam)
+                       rest <- setdiff(nam, c("all", first))
+                       bnames <- c(first, rest)
+                       count <- bin$count
+                       default_fill <- NULL
+                     } else {
+                       count <- list()
+                       if("selected" %in% nam) {
+                         count$selected <- bin$count$selected
+                         count$unselected <- bin$count$all - bin$count$selected
+                       } else count$unselected <- bin$count$all
+                       bnames <- names(count)
+                       default_fill <- loon:::as_hex6color(widget['colorFill'])
+                     }
+
+                     bin_data(count = count,
+                              fills = bnames,
+                              x = bin$x0,
+                              width = bin$x1 - bin$x0,
+                              colour = colorOutline,
+                              default_fill = default_fill)
+                   })
+
+  data <- do.call(rbind, b_bins)
+  return(data2List(data))
+}
+
+data2List <- function(data) {
+  stats::setNames(
+    lapply(1:dim(data)[2],
+           function(i) unlist(data[,i])),
+    colnames(data)
+  )
+
+}
+
+bin_data <- function(count,
+                     fills,
+                     x,
+                     width,
+                     colour,
+                     default_fill = NULL) {
+  y0 <- 0
+  bin_dataFrame <- do.call(rbind,
+                           lapply(1:length(fills),
+                                  function(i) {
+                                    fill <- fills[i]
+                                    height <- count[[fill]]
+
+                                    fill <- if (fill == "selected") {
+                                      loon::l_getOption("select-color")
+                                    } else {
+                                      default_fill %||% loon:::as_hex6color(fill)
+                                    }
+                                    y <- y0
+                                    y0 <<- y0 + height
+
+                                    return(
+                                      list(
+                                        x = x,
+                                        y = y,
+                                        width = width,
+                                        height = height,
+                                        fill = fill,
+                                        colour = colour
+                                      )
+                                    )
+                                  })
+  )
+
+  return(bin_dataFrame)
 }

@@ -1,4 +1,5 @@
-ggplot.loon.l_layer_scatterplot <- function(target, ...) {
+#' @export
+ggplot2.loon.l_layer_scatterplot <- function(target, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   states <- loon:::get_layer_states(widget)
