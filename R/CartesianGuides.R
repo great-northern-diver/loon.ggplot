@@ -29,13 +29,8 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
     y.labels <- ggplotPanel_params$x.labels
 
     # drawing lines
-    x.minor_source <- if(is.null(ggplotPanel_params$y.minor_source)) {
-      x.major_source
-    } else {ggplotPanel_params$y.minor_source}
-
-    y.minor_source <- if(is.null(ggplotPanel_params$x.minor_source)) {
-      y.major_source
-    } else {ggplotPanel_params$x.minor_source}
+    x.minor_source <- ggplotPanel_params$y.minor_source %||% x.major_source
+    y.minor_source <- ggplotPanel_params$x.minor_source %||% y.major_source
 
   } else {
 
@@ -51,13 +46,10 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
     y.labels <- ggplotPanel_params$y.labels
 
     # drawing lines
-    x.minor_source <- if(is.null(ggplotPanel_params$x.minor_source)) {
-      x.major_source
-    } else {ggplotPanel_params$x.minor_source}
+    x.minor_source <- ggplotPanel_params$x.minor_source %||% x.major_source
 
-    y.minor_source <- if(is.null(ggplotPanel_params$y.minor_source)) {
-      y.major_source
-    } else {ggplotPanel_params$y.minor_source}
+    y.minor_source <- ggplotPanel_params$y.minor_source %||% y.major_source
+
 
   }
   extend.xrange <- grDevices::extendrange(x.range)
