@@ -572,6 +572,7 @@ test_that("example works", {
     parent = gLayer, index='end'
   )
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 74
@@ -579,6 +580,7 @@ test_that("example works", {
   l <- l_layer_line(p, x=c(1,2,3,4), y=c(1,3,2,4), color='red', linewidth=2)
   l_scaleto_world(p)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 75
@@ -586,6 +588,7 @@ test_that("example works", {
   l <- l_layer_rectangle(p, x=c(2,3), y=c(1,10), color='steelblue')
   l_scaleto_layer(l)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 76
@@ -593,6 +596,7 @@ test_that("example works", {
   l <- l_layer_oval(p, c(1,5), c(2,12), color='steelblue')
   l_configure(p, panX=0, panY=0, deltaX=20, deltaY=20)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 77
@@ -600,12 +604,14 @@ test_that("example works", {
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
   l_scaleto_world(p)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 78
   p <- l_plot()
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 79
@@ -620,6 +626,7 @@ test_that("example works", {
   )
   l_scaleto_world(p)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 80
@@ -634,6 +641,7 @@ test_that("example works", {
   )
   l_scaleto_world(p)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 81
@@ -647,6 +655,7 @@ test_that("example works", {
   l <- l_layer_lines(p, xcoords, ycoords, itemLabel=names(sUaT), color=region)
   l_scaleto_layer(l)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex 82
@@ -654,18 +663,21 @@ test_that("example works", {
   l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10], size= as.integer(seq(5, 30, length.out = 10)))
   l_scaleto_world(p)
   g <- ggplot2.loon(p)
+  g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex83
   p <- ggplot(data = data.frame(x = 1:3, y = 1:3),
               mapping = aes(x = x, y = y)) +
     geom_pointrangeGlyph(ymin=(1:3)-(1:3)/5, ymax=(1:3)+(1:3)/5)
+  p
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 84
   p <- ggplot(data = data.frame(x = 1:26, y = 1:26),
               mapping = aes(x = x, y = y)) +
     geom_textGlyph(text = LETTERS, size = (1:26)/5)
+  p
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 85
@@ -699,6 +711,7 @@ test_that("example works", {
     geom_polygonGlyph(polygon_x = list(x_star, x_cross, x_hexagon),
                       polygon_y = list(y_star, y_cross, y_hexagon),
                       colour = 'black', fill = 'red')
+  p
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 86
@@ -707,15 +720,30 @@ test_that("example works", {
   p <- ggplot(data = data.frame(x = 1:6, y = 1:6),
               mapping = aes(x = x, y = y)) +
     geom_imageGlyph(images = images, alpha = 0.4)
+  p
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 87
   p <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
     geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = "radial")
+  p
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 88
   p <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
     geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = 'radial')
+  p
   expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 89
+  p <- l_hist(iris, color = iris$Species)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex90
+  ng <- l_navgraph(oliveAcids, color=olive$Area)
+  g <- ggplot2.loon(ng$graph)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
 })

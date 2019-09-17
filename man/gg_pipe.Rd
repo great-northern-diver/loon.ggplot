@@ -4,12 +4,12 @@
 \alias{gg_pipe}
 \title{Pipe ggplot object}
 \usage{
-gg_pipe(data, ggplotObject)
+gg_pipe(data, ggObj)
 }
 \arguments{
 \item{data}{a data frame to use for ggplot}
 
-\item{ggplotObject}{a ggplot object to be passed though}
+\item{ggObj}{a ggplot object to be passed though}
 }
 \value{
 a ggplot evaluate object

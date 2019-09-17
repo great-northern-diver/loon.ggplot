@@ -4,10 +4,10 @@
 \alias{get_activeGeomLayers}
 \title{active geom layers}
 \usage{
-get_activeGeomLayers(ggplotObject)
+get_activeGeomLayers(ggObj)
 }
 \arguments{
-\item{ggplotObject}{a ggplot object}
+\item{ggObj}{a ggplot object}
 }
 \description{
 `get_activeGeomLayers` will return the geom layer index which can be active
