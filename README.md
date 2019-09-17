@@ -63,7 +63,7 @@ hl <- loon.ggplot(h)
 ```
 ![](man/figures/scatterAndHist.gif)
 
-  + Loon "Hello world": Introduction to interctive `loon` plots can be found via  https://cran.r-project.org/web/packages/loon/vignettes/introduction.html. It shows how to create, manipulate (selection, linking and etr) `loon` plots
+  + Loon "Hello world": Introduction to interctive `loon` plots can be found via  https://cran.r-project.org/web/packages/loon/vignettes/introduction.html. It shows how to create, manipulate (selection, linking and etc) `loon` plots
     
   + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in SDSS 2019. Slides can be found in https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html which gives more details.
 
@@ -76,16 +76,27 @@ pg <- ggplot2.loon(pl)
 hg <- ggplot2.loon(hl)
 ```
 
-Note that `pg` and `hg` are `ggplot` objects. Layers, theme adjustification can be piped into
+Note that `pg` and `hg` are `ggplot` objects. 
 
 ```
-pg + geom_smooth() + ggtitle("Mtcars")
+class(pg)
+[1] "gg"     "ggplot"
+class(hg)
+[1] "gg"     "ggplot"
+```
+
+Layers, theme adjustification can be piped into like:
+
+```
+pg + 
+  ggplot2::geom_smooth() + 
+  ggplot2::ggtitle("Mtcars")
 ```
 ![](man/figures/mtcarsAddSmooth.png)
 
 ```
-hg + geom_density(data = mtcars, mapping = aes(x = hp)) + coord_flip()
+hg + 
+  ggplot2::geom_density() + 
+  ggplot2::coord_flip()
 ```
 ![](man/figures/hpAddDensity.png)
-
-So far, only `l_plot` and `l_hist` can be  converted to `ggplot`. More is coming
