@@ -5,7 +5,7 @@ geom_serialAxesGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                                  axesLayout = c("parallel", "radial"),
                                  showAxes = FALSE, showArea = FALSE,  showEnclosing = FALSE,
                                  axesColor = "black", bboxColor = 'black',
-                                 position = 'identity', na.rm = FALSE, show.legend = NA, warningSuppress = FALSE,
+                                 position = 'identity', na.rm = FALSE, show.legend = NA,
                                  inherit.aes = TRUE, ...) {
 
   if(missing(serialAxesData)) stop('no serial axes data exists')
@@ -31,7 +31,6 @@ geom_serialAxesGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
       axesColor = axesColor,
       bboxColor = bboxColor,
       linewidth = linewidth,
-      warningSuppress = warningSuppress,
       na.rm = na.rm,
       ...
     )
@@ -64,7 +63,6 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                                                 data <<- cbind(data, serialAxesData)
                                                               },
                                                               "sequence" = {data$sequence <<- if(is.null(params[[name]])) NULL else paste(params[[name]], collapse = "\\")},
-                                                              "warningSuppress" = NULL,
                                                               {
                                                                 data[, name] <<- params[[name]]
                                                               }
@@ -81,7 +79,7 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                         },
                                         draw_panel = function(data, panel_params, coord,
                                                               serialAxesData, sequence, scaling, axesLayout, showAxes, showArea,
-                                                              showEnclosing,  axesColor, bboxColor, linewidth, warningSuppress, na.rm) {
+                                                              showEnclosing,  axesColor, bboxColor, linewidth, na.rm) {
 
                                           data <- coord$transform(data, panel_params)
 
@@ -91,11 +89,11 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                           # size
                                           size <- data$size
                                           # parallel or radial
-                                          scaledData <- if(warningSuppress) {
-                                            suppressWarnings(get_scaledData(serialAxesData, sequence, scaling))
-                                          } else {
-                                            get_scaledData(serialAxesData, sequence, scaling)
-                                          }
+                                          scaledData <- loon:::get_scaledData(data = serialAxesData,
+                                                                              sequence = sequence,
+                                                                              scaling = scaling,
+                                                                              displayOrder = 1:length(color))
+
                                           dimension <- dim(scaledData)[2]
 
                                           # position
@@ -175,62 +173,6 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                           )
                                         }
 )
-
-get_scaledData <- function(serialAxesData, sequence, scaling) {
-
-  n <- dim(serialAxesData)[1]
-
-  dat <- sapply(serialAxesData,
-                function(x) {
-                  if(is.numeric(x)) x
-                  else if(is.character(x)) {
-                    warning("character column exists and will be converted to numeric",
-                            call. = FALSE)
-                    as.numeric(as.factor(x))
-                  } else if (is.factor(x)) {
-                    warning("factor column exists and will be converted to numeric",
-                            call. = FALSE)
-                    as.numeric(x)
-                  } else if(is.logical(x)) {
-                    warning("logical column exists and will be converted to numeric",
-                            call. = FALSE)
-                    as.numeric(x)
-                  } else stop("unknown data structure")
-                })
-
-  if(n == 1) {
-    dat <- setNames(as.data.frame(matrix(dat, nrow = 1)), names(dat))
-    if(scaling == "variable") {
-      warning("Only one observation in serialAxesData, 'scaling' will be set as 'data' by default")
-      scaling <- 'data'
-    }
-  }
-
-  if(!is.null(sequence)) {
-    if(!all(sequence %in% colnames(dat))) stop("unknown variable names in sequence")
-    dat <-  dat[, sequence]
-  }
-  switch(scaling,
-         "variable" = {
-           minV <- apply(dat, 2, "min")
-           maxV <- apply(dat, 2, "max")
-           t(
-             (t(dat) - minV) / (maxV  - minV)
-           )
-         },
-         "observation" = {
-           minO <- apply(dat, 1, "min")
-           maxO <- apply(dat, 1, "max")
-           (dat - minO) / (maxO - minO)
-         },
-         "data" = {
-           minD <- min(dat)
-           maxD <- max(dat)
-           (dat - minD)/ (maxD - minD)
-         },
-         "none" = NULL)
-
-}
 
 get_gridAesthetic <- function(axesLayout, xpos, ypos, scaleX, scaleY, xaxis, yaxis,
                               dimension, showEnclosing, showAxes, showArea) {
