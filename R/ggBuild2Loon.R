@@ -1,10 +1,10 @@
 # adding labels to ggplot_build points layer
 
-ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
+ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
 
-  len_layers <- length(ggplotObject$layers)
-  ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggplotObject))
-  input <- ggplotObject$data
+  len_layers <- length(ggObj$layers)
+  ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggObj))
+  input <- ggObj$data
 
   ggLayout <- ggBuild$layout
 
@@ -67,7 +67,7 @@ ggBuild2Loon <- function(ggplotObject, linkingKey = NULL, itemLabel = NULL){
 
       layerNames <- lapply(1:len_layers,
                            function(j) {
-                             className <- class(ggplotObject$layers[[j]]$geom)
+                             className <- class(ggObj$layers[[j]]$geom)
                              className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
                            })
 

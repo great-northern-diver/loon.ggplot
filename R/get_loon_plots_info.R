@@ -1,17 +1,17 @@
-get_loon_plots_info <- function(ggplotObject,
-                                buildggplotObject,
+get_loon_plots_info <- function(ggObj,
+                                buildggObj,
                                 args,
                                 envir = parent.frame()) {
 
   # ggplot object
-  dataFrame <- ggplotObject$data
+  dataFrame <- ggObj$data
   linkingKey <- loonLinkingKey(dataFrame, args)
   itemLabel <- loonItemLabel(dataFrame, args)
 
   # ggbuild
-  ggBuild <- buildggplotObject$ggBuild
-  layout_matrix <- buildggplotObject$layout_matrix
-  ggplotPanel_params <- buildggplotObject$ggplotPanel_params
+  ggBuild <- buildggObj$ggBuild
+  layout_matrix <- buildggObj$layout_matrix
+  ggplotPanel_params <- buildggObj$ggplotPanel_params
   panelNum <- dim(layout_matrix)[1]
 
   # active layers
@@ -45,14 +45,14 @@ get_loon_plots_info <- function(ggplotObject,
   rowSubtitles <- c()
 
   # length layers
-  len_layers <- length(ggplotObject$layers)
+  len_layers <- length(ggObj$layers)
   parent <- get("parent", envir = envir)
 
   plots <- lapply(seq_len(panelNum),
                   function(i){
                     # subtitle
                     # if wrap number is larger than 0, multiple facets are displayed
-                    numOfSubtitles <- wrap_num(buildggplotObject$ggLayout,
+                    numOfSubtitles <- wrap_num(buildggObj$ggLayout,
                                                get("is_facet_wrap", envir = envir),
                                                get("is_facet_grid", envir = envir),
                                                get("tkLabels", envir = envir))
@@ -60,7 +60,7 @@ get_loon_plots_info <- function(ggplotObject,
                     subtitle <- get_subtitle(get("layoutByROWS", envir = envir),
                                              get("layoutByCOLS", envir = envir),
                                              layout_matrix = layout_matrix,
-                                             ggLayout = buildggplotObject$ggLayout,
+                                             ggLayout = buildggObj$ggLayout,
                                              numOfSubtitles = numOfSubtitles,
                                              byROWS = get("byROWS", envir = envir),
                                              byCOLS = get("byCOLS", envir = envir),
@@ -93,7 +93,7 @@ get_loon_plots_info <- function(ggplotObject,
 
                     if(isCoordPolar){
                       # theta can be only "x" or "y"
-                      if(ggplotObject$coordinates$theta == "y")  swapAxes <<- TRUE
+                      if(ggObj$coordinates$theta == "y")  swapAxes <<- TRUE
                       showGuides <- FALSE
                       showScales <- FALSE
                     } else {
@@ -109,7 +109,7 @@ get_loon_plots_info <- function(ggplotObject,
                       } else {
                         # set panX, panY, deltaX, deltaY
                         showGuides <- TRUE
-                        showScales <- TRUE
+                        showScales <- get_showScales(ggObj$theme)
                         x.range <- if (swapAxes) {
                           ggplotPanel_params[[i]]$y.range
                         } else {
@@ -132,7 +132,7 @@ get_loon_plots_info <- function(ggplotObject,
                                          rowSubtitle), collapse = "\n")
 
                     if (len_layers != 0) {
-                      importantLayers <- get_importantLayers(len_layers, ggplotObject)
+                      importantLayers <- get_importantLayers(len_layers, ggObj)
 
                       boxplotLayers <- importantLayers$boxplotLayers
                       curveLayers <- importantLayers$curveLayers
@@ -146,24 +146,24 @@ get_loon_plots_info <- function(ggplotObject,
                       boxplot_point_layers <- c(boxplotLayers, activeGeomLayers)
 
                       if (is.data.frame(dataFrame) & !"waiver" %in% class(dataFrame)) {
-                        mapping <- ggplotObject$mapping
+                        mapping <- ggObj$mapping
                       } else {
                         if(length(activeGeomLayers) == 1) {
-                          dataFrame <- ggplotObject$layers[[activeGeomLayers]]$data
+                          dataFrame <- ggObj$layers[[activeGeomLayers]]$data
                           linkingKey <- loonLinkingKey(dataFrame, args)
                           itemLabel <- loonItemLabel(dataFrame, args)
 
-                          mapping <- ggplotObject$layers[[activeGeomLayers]]$mapping
+                          mapping <- ggObj$layers[[activeGeomLayers]]$mapping
                         } else NULL # activeGeomLayers > 1 not implemented so far
                       }
                       column_names <- colnames(dataFrame)
 
                       if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
                         loonPlot <- loonHistogram(ggBuild = ggBuild,
-                                                  ggLayout = buildggplotObject$ggLayout,
+                                                  ggLayout = buildggObj$ggLayout,
                                                   layout_matrix = layout_matrix,
                                                   ggplotPanel_params = ggplotPanel_params,
-                                                  ggplotObject = ggplotObject,
+                                                  ggObj = ggObj,
                                                   activeGeomLayers = activeGeomLayers,
                                                   panelIndex = i,
                                                   column_names = column_names,
@@ -185,7 +185,7 @@ get_loon_plots_info <- function(ggplotObject,
 
                       } else if(activeModel == "l_plot" & length(boxplot_point_layers) != 0) {
                         loonPlot <- loonScatter(ggBuild = ggBuild,
-                                                ggplotObject = ggplotObject,
+                                                ggObj = ggObj,
                                                 ggplotPanel_params = ggplotPanel_params,
                                                 panelIndex = i,
                                                 mapping = mapping,
@@ -219,10 +219,10 @@ get_loon_plots_info <- function(ggplotObject,
                                             function(j){
                                               if(! j %in% activeGeomLayers){
                                                 loonLayer(widget = loonPlot,
-                                                          layerGeom = ggplotObject$layers[[j]],
+                                                          layerGeom = ggObj$layers[[j]],
                                                           data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == i, ],
                                                           ggplotPanel_params = ggplotPanel_params[[i]],
-                                                          ggplotObject = ggplotObject,
+                                                          ggObj = ggObj,
                                                           special = list(curve = list(which_curve = j,
                                                                                       curveLayers = curveLayers))
                                                 )
@@ -296,7 +296,7 @@ get_loon_plots_info <- function(ggplotObject,
                                                              panelIndex = i,
                                                              ggplotPanel_params = ggplotPanel_params,
                                                              swapAxes = swapAxes,
-                                                             theme = ggplotObject$theme,
+                                                             theme = ggObj$theme,
                                                              panX=panX,
                                                              panY=panY,
                                                              deltaX= deltaX,

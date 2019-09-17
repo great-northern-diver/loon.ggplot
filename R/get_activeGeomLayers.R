@@ -1,6 +1,6 @@
 #' @title active geom layers
 #' @description `get_activeGeomLayers` will return the geom layer index which can be active
-#' @param ggplotObject a ggplot object
+#' @param ggObj a ggplot object
 #' @details `loon.ggplot` has an argument called `activeGeomLayers`. It is a vector to determine which geom layers can be active.
 #' The default setting is `integer(0)`, however, `loon.ggplot` will automatically search the first `geom_histogram` or `geom_point` layer
 #' to make it active. `get_activeGeomLayers` is more like a guidance and give us a hint which one can be set as active.
@@ -40,12 +40,13 @@
 #' loon.ggplot(p2, ggGuides = TRUE, activeGeomLayers = agL)
 #'
 #' @export
-get_activeGeomLayers <- function(ggplotObject){
-  if(!is(ggplotObject, c("gg", "ggplot"))) {
-    stop(paste0(deparse(substitute(ggplotObject)), " is not a ggplot object"))
+get_activeGeomLayers <- function(ggObj) {
+
+  if(!ggplot2::is.ggplot(ggObj)) {
+    stop(paste0(deparse(substitute(ggObj)), " is not a ggplot object"))
   }
-  len_layers <- length(ggplotObject$layers)
-  importantLayers <- get_importantLayers(len_layers, ggplotObject)
+  len_layers <- length(ggObj$layers)
+  importantLayers <- get_importantLayers(len_layers, ggObj)
 
   np <- length(importantLayers$pointLayers)
   nh <- length(importantLayers$histogramLayers)
