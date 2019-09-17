@@ -1,5 +1,5 @@
 pack_loon_plots <- function(plots,
-                            ggplotObject,
+                            ggObj,
                             display_info,
                             envir = parent.frame()) {
 
@@ -21,9 +21,9 @@ pack_loon_plots <- function(plots,
   }
 
   # synchronize binding
-  scalesSynchronize(plots,
-                    scales_free_x = if(is.null(ggplotObject$facet$params$free$x)) FALSE else ggplotObject$facet$params$free$x,
-                    scales_free_y = if(is.null(ggplotObject$facet$params$free$y)) FALSE else ggplotObject$facet$params$free$y)
+  synchronize(plots,
+              scales_free_x = if(is.null(ggObj$facet$params$free$x)) FALSE else ggObj$facet$params$free$x,
+              scales_free_y = if(is.null(ggObj$facet$params$free$y)) FALSE else ggObj$facet$params$free$y)
 
   # pack xlabel and ylabel
   if(!is.null(xlabel) & tkLabels){
