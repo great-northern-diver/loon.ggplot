@@ -1,4 +1,4 @@
-loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, mapping, dataFrame,
+loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping, dataFrame,
                         activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
                         itemLabel, showLabels, xlabel, ylabel, loonTitle){
   if(length(activeGeomLayers) > 0) {
@@ -114,7 +114,7 @@ loonScatter <- function(ggBuild, ggplotObject, ggplotPanel_params, panelIndex, m
     }
     if(isCoordPolar) {
       coordPolarxy <- Cartesianxy2Polarxy(NULL,
-                                          coordinates = ggplotObject$coordinates,
+                                          coordinates = ggObj$coordinates,
                                           data = combined.pointsData,
                                           ggplotPanel_params = ggplotPanel_params[[panelIndex]])
       x <- coordPolarxy$x

@@ -1,4 +1,4 @@
-loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, ggplotObject,
+loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, ggObj,
                           activeGeomLayers, panelIndex, column_names, dataFrame, mapping, numOfSubtitles,
                           parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                           xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid){
@@ -88,12 +88,12 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
   color <- hex6to12(hist_data$fill[1])
   colorStackingOrder <- "selected"
   # set stack color
-  if (!is.null(ggplotObject$labels$fill)) {
+  if (!is.null(ggObj$labels$fill)) {
     # fill color bin?
-    if (ggplotObject$labels$fill != "fill") {
+    if (ggObj$labels$fill != "fill") {
 
       color_var <- unlist(
-        dataFrame[, which(stringr::str_detect(ggplotObject$labels$fill, column_names) == TRUE)]
+        dataFrame[, which(stringr::str_detect(ggObj$labels$fill, column_names) == TRUE)]
       )
       panel_i.color_var <- color_var[isPanel_i.hist_x][in_limits]
       fill_color <- hex6to12(unique(hist_data$fill))
@@ -130,7 +130,7 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
                swapAxes = swapAxes,
                colorStackingOrder = colorStackingOrder,
                yshows = get_yshows(mapping,
-                                   layMapping  = ggplotObject$layers[[activeGeomLayers]]$mapping),
+                                   layMapping  = ggObj$layers[[activeGeomLayers]]$mapping),
                linkingKey = linkingKey[isPanel_i.hist_x][in_limits],
                showStackedColors = TRUE,
                xlabel = if(is.null(xlabel)) "" else xlabel,
