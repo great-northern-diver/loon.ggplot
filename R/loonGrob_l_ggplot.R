@@ -16,12 +16,12 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
 
 
   # is_facet_wrap or is_facet_grid
-  facet <- target$facet
+  facet <- target$facet %||% list(is_facet_wrap = FALSE, is_facet_grid = FALSE)
   is_facet_wrap <- facet$is_facet_wrap
   is_facet_grid <- facet$is_facet_grid
 
   # title column subtitle or row subtitle
-  titles <- target$titles
+  titles <- target$titles %||% list(title = "", colSubtitles = NULL, rowSubtitles = NULL)
   title <- titles$title
   colSubtitles <- titles$colSubtitles
   rowSubtitles <- titles$rowSubtitles
