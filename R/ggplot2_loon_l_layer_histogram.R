@@ -1,3 +1,4 @@
+#' @rdname ggplot2.loon
 #' @export
 ggplot2.loon.l_layer_histogram <- function(target, ...) {
 
@@ -7,17 +8,18 @@ ggplot2.loon.l_layer_histogram <- function(target, ...) {
   data <- transform_hist_x(widget)
 
   ggObj <- ggObj +
-    geom_rect(
+    ggplot2::geom_rect(
       data = data.frame(xmin = data$x,
                         ymin = data$y,
                         xmax = data$x + data$width,
                         ymax = data$y + data$height),
-      mapping = aes(xmin = xmin,
-                    ymin = ymin,
-                    xmax = xmax,
-                    ymax = ymax),
+      mapping = ggplot2::aes(xmin = xmin,
+                             ymin = ymin,
+                             xmax = xmax,
+                             ymax = ymax),
       fill = data$fill,
-      colour = data$colour
+      colour = data$colour,
+      inherit.aes = FALSE
     )
   return(ggObj)
 }

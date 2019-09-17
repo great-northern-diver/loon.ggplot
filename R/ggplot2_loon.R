@@ -1,9 +1,43 @@
+#' @title Create a ggplot object from a loon object
+#'
+#' @description Get static ggplots from loon plots
+#'
+#' @param target either an object of class loon or a vector that specifies the
+#' widget, layer, glyph, navigator or context completely.
+#' The widget is specified by the widget path name (e.g. '.l0.plot'),
+#' the remaining objects by their ids.
+#' @param ... arguments used in `ggplot2.loon()`, not for users
+#'
+#' @return a ggplot object
+#'
 #' @export
+#' @examples
+#' library(loon.ggplot)
+#' l <- l_plot(iris, color = iris$Species)
+#' p <- ggplot2.loon(l)
+#' p # a ggplot object
+#' str(p)
+#' # add themes
+#' p + ggtitle("iris") + theme_linedraw()
+#'
 ggplot2.loon <- function(target, ...) {
+
+  if(ggplot2::is.ggplot(target)) {
+    stop(
+      paste0(
+        "Target should be a loon object. ",
+        "Maybe you want to call `loon.ggplot(",
+        deparse(substitute(target)),
+        ")`?"
+      ),
+      call. = FALSE
+    )
+  }
   UseMethod('ggplot2.loon', target)
 }
 
 #' @export
+#' @rdname ggplot2.loon
 ggplot2.loon.default <- function(target, ...) {
   # stop('ggplot2.loon default no valid inheritance')
   # TODO
@@ -11,6 +45,7 @@ ggplot2.loon.default <- function(target, ...) {
   ggObj
 }
 
+#' @rdname ggplot2.loon
 #' @export
 ggplot2.loon.l_plot <- function(target, ...) {
 
@@ -20,6 +55,7 @@ ggplot2.loon.l_plot <- function(target, ...) {
                ggObj = ggplot2.loon(rl))
 }
 
+#' @rdname ggplot2.loon
 #' @export
 ggplot2.loon.l_hist <- function(target, ...) {
 
@@ -38,6 +74,7 @@ ggplot2.loon.l_graph <- function(target, ...) {
                ggObj = ggplot2.loon(rl))
 }
 
+#' @rdname ggplot2.loon
 #' @export
 ggplot2.loon.l_plot3D <- function(target, ...) {
 
@@ -68,27 +105,30 @@ ggplot2.loon.l_plot3D <- function(target, ...) {
         x = c(0.5, 0.5 + 0.08*axes_coords[[1]][1]),
         y = c(0.5, 0.5 + 0.08*axes_coords[[2]][1])
       ),
-      mapping = aes(x = x, y = y),
+      mapping = ggplot2::aes(x = x, y = y),
       colour = x_color,
-      size = 1
+      size = 1,
+      inherit.aes = FALSE
     ) +
     ggplot2::geom_line(
       data = data.frame(
         x = c(0.5, 0.5 + 0.08*axes_coords[[1]][2]),
         y = c(0.5, 0.5 + 0.08*axes_coords[[2]][2])
       ),
-      mapping = aes(x = x, y = y),
+      mapping = ggplot2::aes(x = x, y = y),
       colour = y_color,
-      size = 1
+      size = 1,
+      inherit.aes = FALSE
     ) +
     ggplot2::geom_line(
       data = data.frame(
         x = c(0.5, 0.5 + 0.08*axes_coords[[1]][3]),
         y = c(0.5, 0.5 + 0.08*axes_coords[[2]][3])
       ),
-      mapping = aes(x = x, y = y),
+      mapping = ggplot2::aes(x = x, y = y),
       colour = z_color,
-      size = 1
+      size = 1,
+      inherit.aes = FALSE
     )
 }
 
@@ -113,7 +153,7 @@ cartesian_gg <- function(target, ggObj) {
   showLabels <- widget['showLabels']
   showGuides <- widget['showGuides']
 
-  title <- widget['title']
+  title <- loon_title(widget)
   xlabel <- widget['xlabel']
   ylabel <- widget['ylabel']
 
@@ -145,28 +185,30 @@ cartesian_gg <- function(target, ggObj) {
     ggplot2::xlab(xlabel) +
     ggplot2::ylab(ylabel) +
     ggplot2::theme(
-      axis.ticks = if(showScales) element_line() else element_blank(),
-      axis.title = if(showLabels) element_text(size = titleFont$size, family = titleFont$family, face = titleFont$face) else element_blank(),
-      axis.text.x = if(showScales) element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else element_blank(),
-      axis.text.y = if(showScales) element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else element_blank(),
-      axis.title.x = if(showLabels) element_text(size = xlabelFont$size, family = xlabelFont$family, face = xlabelFont$face) else element_blank(),
-      axis.title.y = if(showLabels) element_text(size = ylabelFont$size, family = ylabelFont$family, face = ylabelFont$face) else element_blank(),
-      plot.background = element_rect(fill = loon:::as_hex6color(widget['background'])),
-      panel.background = element_rect(fill = guidesBackGround),
-      panel.grid.major = element_line(size = 1,
-                                      linetype = 'solid',
-                                      colour = loon:::as_hex6color(widget['guidelines'])),
-      panel.grid.minor = element_line(size = 0.5,
-                                      linetype = 'solid',
-                                      colour = loon:::as_hex6color(widget['guidelines'])),
+      axis.ticks = if(showScales) ggplot2::element_line() else ggplot2::element_blank(),
+      axis.text.x = if(showScales) ggplot2::element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else ggplot2::element_blank(),
+      axis.text.y = if(showScales) ggplot2::element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else ggplot2::element_blank(),
+      axis.title = if(showLabels) ggplot2::element_text(size = titleFont$size, family = titleFont$family, face = titleFont$face) else ggplot2::element_blank(),
+      axis.title.x = if(showLabels) ggplot2::element_text(size = xlabelFont$size, family = xlabelFont$family, face = xlabelFont$face) else ggplot2::element_blank(),
+      axis.title.y = if(showLabels) ggplot2::element_text(size = ylabelFont$size, family = ylabelFont$family, face = ylabelFont$face) else ggplot2::element_blank(),
+      plot.background = ggplot2::element_rect(fill = loon:::as_hex6color(widget['background'])),
+      panel.background = ggplot2::element_rect(fill = guidesBackGround),
+      panel.grid.major = ggplot2::element_line(size = 1,
+                                               linetype = 'solid',
+                                               colour = loon:::as_hex6color(widget['guidelines'])),
+      panel.grid.minor = ggplot2::element_line(size = 0.5,
+                                               linetype = 'solid',
+                                               colour = loon:::as_hex6color(widget['guidelines'])),
       panel.border = if(sum(margins) > 0)
-        element_rect(colour = loon:::as_hex6color(widget['foreground']),
-                     fill = NA,
-                     size = 1) else element_blank()
+        ggplot2::element_rect(colour = loon:::as_hex6color(widget['foreground']),
+                              fill = NA,
+                              size = 1) else ggplot2::element_blank(),
+      plot.margin = grid::unit(margins, "lines")
     )
   if(swapAxes) ggObj <- ggObj + coord_flip()
   return(ggObj)
 }
+
 #' @export
 ggplot2.loon.l_layer_group <- function(target, ...) {
 
@@ -194,10 +236,11 @@ ggplot2.loon.l_layer_group <- function(target, ...) {
                                       y <- states$y
                                     }
                                     ggObj <<- ggplot2::ggplot(data = data.frame(x = x, y = y),
-                                                              mapping = aes(x = x, y = y))
+                                                              mapping = ggplot2::aes(x = x, y = y))
                                   } else if(length(states$y) == 1 && is.na(states$y)) {
                                     # histogram
-                                    ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x))
+                                    ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x),
+                                                              mapping = ggplot2::aes(x = x))
                                   } else NULL
                                 }
 
@@ -229,20 +272,23 @@ ggplot2.loon.l_layer_polygon <- function(target, ...) {
   ggObj <- list(...)$ggObj
 
   if(length(states$x) > 0  & length(states$y) > 0){
-    ggObj <- ggObj + ggplot2::geom_polygon(
-      data = data.frame(
-        x = if(swapAxes) states$y else states$x,
-        y = if(swapAxes) states$x else states$y
-      ),
-      mapping = aes(x = x, y = y),
-      fill = states$color,
-      colour = states$linecolor,
-      size =  as_r_line_size(states$linewidth)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_polygon(
+        data = data.frame(
+          x = if(swapAxes) states$y else states$x,
+          y = if(swapAxes) states$x else states$y
+        ),
+        mapping = ggplot2::aes(x = x, y = y),
+        fill = states$color,
+        colour = states$linecolor,
+        size =  as_r_line_size(states$linewidth),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
 }
+
 #' @export
 ggplot2.loon.l_layer_line <- function(target, ...) {
 
@@ -254,19 +300,22 @@ ggplot2.loon.l_layer_line <- function(target, ...) {
 
   if(length(states$x) > 0  & length(states$y) > 0) {
 
-    ggObj <- ggObj + ggplot2::geom_line(
-      data = data.frame(
-        x = if(swapAxes) states$y else states$x,
-        y = if(swapAxes) states$x else states$y
-      ),
-      mapping = aes(x = x, y = y),
-      colour = states$color,
-      size = as_r_line_size(states$linewidth)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_line(
+        data = data.frame(
+          x = if(swapAxes) states$y else states$x,
+          y = if(swapAxes) states$x else states$y
+        ),
+        mapping = ggplot2::aes(x = x, y = y),
+        colour = states$color,
+        size = as_r_line_size(states$linewidth),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
 }
+
 #' @export
 ggplot2.loon.l_layer_rectangle <- function(target, ...) {
 
@@ -278,16 +327,18 @@ ggplot2.loon.l_layer_rectangle <- function(target, ...) {
 
   if(length(states$x) > 0  & length(states$y) > 0) {
 
-    ggObj <- ggObj + ggplot2::geom_rect(
-      data = data.frame(
-        x = if(swapAxes) states$y else states$x,
-        y = if(swapAxes) states$x else states$y
-      ),
-      mapping = aes(xmin = x[1], xmax = x[2], ymin = y[1], ymax = y[2]),
-      colour = states$linecolor,
-      fill = states$color,
-      size =  as_r_line_size(states$linewidth)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_rect(
+        data = data.frame(
+          x = if(swapAxes) states$y else states$x,
+          y = if(swapAxes) states$x else states$y
+        ),
+        mapping = ggplot2::aes(xmin = x[1], xmax = x[2], ymin = y[1], ymax = y[2]),
+        colour = states$linecolor,
+        fill = states$color,
+        size =  as_r_line_size(states$linewidth),
+        inherit.aes = FALSE
+      )
 
   }
 
@@ -318,16 +369,18 @@ ggplot2.loon.l_layer_oval <- function(target, ...) {
     x <- mean(xcoords) + xRadius * cos(angle)
     y <- mean(ycoords) + yRadius * sin(angle)
 
-    ggObj <- ggObj + ggplot2::geom_polygon(
-      data = data.frame(
-        x = x,
-        y = y
-      ),
-      mapping = aes(x = x, y = y),
-      fill = states$color,
-      colour = states$linecolor,
-      size = as_r_line_size(states$linewidth)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_polygon(
+        data = data.frame(
+          x = x,
+          y = y
+        ),
+        mapping = ggplot2::aes(x = x, y = y),
+        fill = states$color,
+        colour = states$linecolor,
+        size = as_r_line_size(states$linewidth),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
@@ -347,18 +400,20 @@ ggplot2.loon.l_layer_text <- function(target, ...) {
     x <- if(swapAxes) states$y else states$x
     y <- if(swapAxes) states$x else states$y
 
-    ggObj <- ggObj + ggplot2::geom_text(
-      data = data.frame(
-        x = x + textCoords[1],
-        y = y + textCoords[2],
-        label = states$text
-      ),
-      mapping = aes(x = x, y = y, label = label),
-      angle = states$angle,
-      colour = states$color,
-      hjust = get_hjust(states$justify),
-      size = as_r_text_size(states$size)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_text(
+        data = data.frame(
+          x = x + textCoords[1],
+          y = y + textCoords[2],
+          label = states$text
+        ),
+        mapping = ggplot2::aes(x = x, y = y, label = label),
+        angle = states$angle,
+        colour = states$color,
+        hjust = get_hjust(states$justify),
+        size = as_r_text_size(states$size),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
@@ -403,14 +458,16 @@ ggplot2.loon.l_layer_texts <- function(target, ...) {
     df$x <- as.numeric(df$x)
     df$y <- as.numeric(df$y)
 
-    ggObj <- ggObj + ggplot2::geom_text(
-      data = df,
-      mapping = aes(x = x, y = y, label = label),
-      angle = angle,
-      colour = color,
-      hjust = get_hjust(justify),
-      size = as_r_text_size(size)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_text(
+        data = df,
+        mapping = ggplot2::aes(x = x, y = y, label = label),
+        angle = angle,
+        colour = color,
+        hjust = get_hjust(justify),
+        size = as_r_text_size(size),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
@@ -431,13 +488,15 @@ ggplot2.loon.l_layer_points <- function(target, ...) {
     size  <- as_r_point_size(states$size[active])
     color <- states$color[active]
 
-    ggObj <- ggObj + ggplot2::geom_point(
-      data = data.frame(x = x, y = y),
-      mapping = aes(x = x, y = y),
-      colour = color,
-      size = size,
-      pch = 16
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_point(
+        data = data.frame(x = x, y = y),
+        mapping = ggplot2::aes(x = x, y = y),
+        colour = color,
+        size = size,
+        pch = 16,
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
@@ -469,13 +528,15 @@ ggplot2.loon.l_layer_polygons <- function(target, ...) {
       id = as.factor(rep(1:length(len_x), times = len_x))
     )
 
-    ggObj <- ggObj + ggplot2::geom_polygon(
-      data =df,
-      mapping = aes(x = x, y = y, group = id),
-      fill = rep(fill, times = len_x),
-      colour = rep(linecolor, times = len_x),
-      size = rep(linewidth, times = len_x)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_polygon(
+        data =df,
+        mapping = ggplot2::aes(x = x, y = y, group = id),
+        fill = rep(fill, times = len_x),
+        colour = rep(linecolor, times = len_x),
+        size = rep(linewidth, times = len_x),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
@@ -502,13 +563,15 @@ ggplot2.loon.l_layer_rectangles <- function(target, ...) {
       ymax = as.numeric(sapply(y, function(yy) yy[2]))
     )
 
-    ggObj <- ggObj + ggplot2::geom_rect(
-      data =df,
-      mapping = aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-      fill = states$color[active],
-      colour = states$linecolor[active],
-      size = as_r_line_size(states$linewidth[active])
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_rect(
+        data =df,
+        mapping = ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+        fill = states$color[active],
+        colour = states$linecolor[active],
+        size = as_r_line_size(states$linewidth[active]),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
@@ -539,165 +602,15 @@ ggplot2.loon.l_layer_lines <- function(target, ...) {
       id = as.factor(rep(1:length(len_x), times = len_x))
     )
 
-    ggObj <- ggObj + ggplot2::geom_line(
-      data =df,
-      mapping = aes(x = x, y = y, group = id),
-      colour = rep(linecolor, times = len_x),
-      size = rep(linewidth, times = len_x)
-    )
+    ggObj <- ggObj +
+      ggplot2::geom_line(
+        data =df,
+        mapping = ggplot2::aes(x = x, y = y, group = id),
+        colour = rep(linecolor, times = len_x),
+        size = rep(linewidth, times = len_x),
+        inherit.aes = FALSE
+      )
   }
 
   ggObj
 }
-
-get_textCoords <- function(angle, anchor, just) {
-
-  angle <- angle * pi / 180
-
-  switch(anchor,
-         "center" = {
-           hjust <- 0
-           vjust <- 0
-         },
-         "n" = {
-           hjust <- 1/2 * sin(angle)
-           vjust <- -1/2 * cos(angle)
-         },
-         "e" = {
-           hjust <- -1/2 * cos(angle)
-           vjust <- -1/2 * sin(angle)
-         },
-         "s" = {
-           hjust <- - 1/2 * sin(angle)
-           vjust <- 1/2 * cos(angle)
-         },
-         "w" = {
-           hjust <- 1/2 * cos(angle)
-           vjust <- 1/2 * sin(angle)
-         },
-         "sw" = {
-           hjust <- - 1/2 * sin(angle) +
-             1/2 * cos(angle)
-           vjust <- 1/2 * cos(angle) +
-             1/2 * sin(angle)
-         },
-         "nw" = {
-           hjust <- 1/2 * sin(angle) +
-             1/2 * cos(angle)
-           vjust <- -1/2 * cos(angle) +
-             1/2 * sin(angle)
-         },
-         "ne" =  {
-           hjust <-  1/2 * sin(angle)  +
-             (-1/2) * cos(angle)
-           vjust <- -1/2 * cos(angle)  +
-             (-1/2) * sin(angle)
-         },
-         "se" = {
-           hjust <- - 1/2 * sin(angle)  +
-             (-1/2) * cos(angle)
-           vjust <- 1/2 * cos(angle)  +
-             (-1/2) * sin(angle)
-         }
-  )
-  # just can only be "left", "right" and "center"
-  if(just == "left") {
-    hjust <- hjust - 1/2 * cos(angle)
-    vjust <- vjust - 1/2 * sin(angle)
-  } else if(just == "right") {
-    hjust <- hjust + 1/2 * cos(angle)
-    vjust <- vjust + 1/2 * sin(angle)
-  }
-
-  c(hjust, vjust)
-}
-
-get_hjust <- function(just) {
-  sapply(just,
-         function(j){
-           switch(j,
-                  "right" = 0,
-                  "left" = 1,
-                  "center" = 0.5)
-         })
-}
-
-l_layer_getUngroupedChildren <- function(widget, target) {
-
-  loon::l_isLoonWidget(widget) || stop("widget does not seem to exist")
-  children <- loon::l_layer_getChildren(target)
-  layer <- lapply(children,
-                  function(child) {
-                    target <- loon::l_create_handle(c(widget, child))
-                    if(is(target, "l_layer_group")) {
-                      # do recursive
-                      l_layer_getUngroupedChildren(widget, target)
-                    } else {
-                      target
-                    }
-                  }
-  )
-
-  unlist(layer, recursive = TRUE)
-}
-
-as_r_text_size <- function(size) {
-  size/1.76
-}
-
-as_r_point_size <- function(size) {
-  2*log(size)
-}
-
-as_r_line_size <- function(size) {
-  size/.pt
-}
-
-pixels_2_lines <- function(x) {
-  x / 30
-}
-
-
-get_layer_states <- function(target, omit = NULL, native_unit = TRUE) {
-
-  if (!is(target, "loon")) {
-    target <- l_create_handle(target)
-  }
-
-  if (is(target, "l_layer")) {
-    layer <- target
-    widget <- l_create_handle(attr(target, "widget"))
-    obj_states <- target
-  } else {
-    widget <- target
-    layer <- l_create_handle(c(as.vector(widget), "model"))
-    obj_states <- widget
-  }
-
-  states_info <- l_info_states(obj_states)
-  state_names <- setdiff(names(states_info), c(omit, cartesian_model_widget_states))
-
-  states <- setNames(lapply(state_names,
-                            function(state) l_cget(target, state)),
-                     state_names)
-
-  # Add Coordinates
-  if (!is(layer, "l_layer_group")) {
-    states <- c(xy_coords_layer(layer, native_unit = native_unit), states)
-  }
-
-
-  # Deal with color
-  is_color <- vapply(states_info[state_names],
-                     function(s) s$type %in% c("color", "colorOrTransparent"),
-                     logical(1))
-  if (any(is_color)) {
-    for (state_name in state_names[is_color]) {
-      states[[state_name]] <- as_hex6color(states[[state_name]])
-    }
-
-  }
-
-  states
-}
-
