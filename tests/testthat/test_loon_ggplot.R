@@ -731,7 +731,7 @@ test_that("example works", {
 
   # ex 88
   p <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
-    geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = 'radial')
+    geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = 'parallel')
   p
   expect_equal(class(p), c("gg", "ggplot"))
 
