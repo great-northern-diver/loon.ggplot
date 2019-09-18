@@ -17,21 +17,21 @@ ggplot2.loon.l_layer_graph <- function(target, ...) {
   ggObj <- if(length(nav_ids) == 0) {
     # graph no navigators
     ggObj %>%
-      ggAddEdges(states = states) %>%
-      ggAddNodes(states = states) %>%
-      ggAddLabels(states = states)
+      ggEdges(states = states) %>%
+      ggNodes(states = states) %>%
+      ggLabels(states = states)
   } else {
     # graph with navigators
     ggObj %>%
-      ggAddEdges(states = states) %>%
-      ggAddNavPaths(states = states,
-                    nav_ids = nav_ids,
-                    widget = widget) %>%
-      ggAddNodes(states = states) %>%
-      ggAddLabels(states = states) %>%
-      ggAddNavPoints(states = states,
-                     nav_ids = nav_ids,
-                     widget = widget)
+      ggEdges(states = states) %>%
+      ggNavPaths(states = states,
+                 nav_ids = nav_ids,
+                 widget = widget) %>%
+      ggNodes(states = states) %>%
+      ggLabels(states = states) %>%
+      ggNavPoints(states = states,
+                  nav_ids = nav_ids,
+                  widget = widget)
 
   }
 
