@@ -65,15 +65,15 @@ hl <- loon.ggplot(h)
 
 Note that:
 
-  + Loon "Hello world": Introduction to interctive `loon` plots can be found via  [loon](https://cran.r-project.org/web/packages/loon/vignettes/introduction.html). It shows how to create, manipulate (selection, linking and etc) `loon` plots
+  + Loon "Hello World": Introduction to interctive `loon` plots can be found via  [loon](https://cran.r-project.org/web/packages/loon/vignettes/introduction.html). It shows how to create, manipulate (selection, linking and etc) `loon` plots
     
-  + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in SDSS 2019. Slides can be found in [loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
+  + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in [SDSS 2019](https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216). Slides can be found in [SDSS2019/loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
   
-  + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(loon.ggplot)`.
+  + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(loon.ggplot)` for more info.
 
 #### `ggplot2.loon()`: loon --> ggplot
 
-After creating `loon` plots and add programmatic and direct manipulation of the visualizations to effect interactive identification, function `ggplot2.loon` can be applied to return a static `ggplot`
+After creating `loon` plots and adding programmatic and direct manipulation of the visualizations to effect interactive identification, function `ggplot2.loon` can be applied to return a static `ggplot`
 
 ```
 pg <- ggplot2.loon(pl)
@@ -89,7 +89,7 @@ class(hg)
 [1] "gg"     "ggplot"
 ```
 
-Layers, theme adjustification can be piped into like:
+Layers, theme adjustification can be piped though like:
 
 ```
 pg + 
@@ -107,7 +107,7 @@ hg +
 
 Note that:
 
-  + Compound loon widget like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. Ggplot features like `theme`, `labels` can be piped through but by `ggmatrix` rule.
+  + Compound loon widget like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. Ggplot features like `theme`, `labels` can be piped through but by  [`ggmatrix`](https://mran.microsoft.com/snapshot/2016-01-21/web/packages/GGally/vignettes/ggmatrix.html) rule.
   
   + Some functionalities are provided 
     * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonAxesGlyph()`, `geom_imageGlyph()` and etc.
