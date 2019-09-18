@@ -1,25 +1,74 @@
+#' @title Add text glyph on scatter plot
+#' @inheritParams ggplot2::layer
+#' @param text the text strings for each observartion.
+#' If the object is a factor then the labels get extracted with \code{\link{as.character}}.
+#' @param na.rm If FALSE, the default, missing values are removed with a warning.
+#' If TRUE, missing values are silently removed.
+#' @param ... Other arguments passed on to `layer()`.
+#'
+#' @details It is very close to \code{\link{geom_text}} but with `loon` API
+#'
+#' @section Aesthethics:
+#' geom_textGlyph() understands the following aesthetics (required aesthetics are in bold):
+#' \itemize{
+#' \item{\strong{x}}
+#' \item{\strong{y}}
+#' \item{alpha}
+#' \item{colour}
+#' \item{fill}
+#' \item{group}
+#' \item{shape}
+#' \item{size}
+#' \item{stroke}
+#' \item{linetype}
+#' }
 #' @export
+#'
+#' @seealso \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_imageGlyph}}, \code{\link{geom_polygonGlyph}}
+#'
+#' @examples
+#' p <- ggplot(data = data.frame(x = 1:26, y = 1:26),
+#'             mapping = aes(x = x, y = y)) +
+#'   geom_textGlyph(text = LETTERS, size = (1:26)/5)
+#' p
 geom_textGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
-                           text,
-                           position = 'identity', na.rm = FALSE, show.legend = NA,
-                           inherit.aes = TRUE, ...) {
+                           position = 'identity', ..., text,
+                           na.rm = FALSE, show.legend = NA,
+                           inherit.aes = TRUE) {
 
-  if(missing(text)) stop('no texts exist')
 
-  ggplot2::layer(
-    data = data,
-    mapping = mapping,
-    geom = GeomTextGlyph,
-    position = position,
-    stat = stat,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(
-      na.rm = na.rm,
-      text = text,
-      ...
+  if(missing(text)) {
+
+    ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = stat,
+      geom = ggplot2::GeomPoint,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      params = list(
+        na.rm = na.rm,
+        ...
+      )
     )
-  )
+  } else {
+    ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      geom = GeomTextGlyph,
+      position = position,
+      stat = stat,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      params = list(
+        na.rm = na.rm,
+        text = text,
+        ...
+      )
+    )
+  }
 }
 
 

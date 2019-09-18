@@ -1,40 +1,101 @@
+#' @title Add serialaxes glyph on scatter plot
+#' @inheritParams ggplot2::layer
+#' @param serialAxesData a serial axes numerial data set. If not provided, `geom_point()` will be called.
+#' @param sequence vector with variable names that defines the axes sequence
+#' @param linewidth line width of serial axes plot
+#' @param scaling one of 'variable', 'data', 'observation' or 'none' to
+#' specify how the data is scaled. See Details for more information
+#' @param axesLayout either "radial" or "parallel"
+#' @param showAxes boolean to indicate whether axes should be shown or not
+#' @param showArea boolean to indicate whether area should be shown or not
+#' @param showEnclosing boolean to indicate whether enclosing should be shown or not
+#' @param axesColor axes color
+#' @param bboxColor bounding box color
+#' @param na.rm If FALSE, the default, missing values are removed with a warning.
+#' If TRUE, missing values are silently removed.
+#' @param ... Other arguments passed on to `layer()`.
+#' These are often aesthetics, used to set an aesthetic to a fixed value,
+#' like `colour = "red"` or `size = 3`. They may also be parameters to the paired geom/stat.
+#'
+#' @section Aesthethics:
+#' geom_serialAxesGlyph() understands the following aesthetics (required aesthetics are in bold):
+#' \itemize{
+#' \item{\strong{x}}
+#' \item{\strong{y}}
+#' \item{alpha}
+#' \item{colour}
+#' \item{fill}
+#' \item{group}
+#' \item{shape}
+#' \item{size}
+#' \item{stroke}
+#' \item{linetype}
+#' }
+#'
 #' @export
+#'
+#' @seealso \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_polygonGlyph}}, \code{\link{geom_textGlyph}}
+#'
+#' @examples
+#' p <- ggplot(data = iris,
+#'             mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+#'   geom_serialAxesGlyph(serialAxesData = iris[, -5],
+#'                        axesLayout = "radial")
+#' p
+
 geom_serialAxesGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
+                                 position = 'identity', ...,
                                  serialAxesData, sequence = NULL, linewidth = 1,
                                  scaling = c('variable', 'data', 'observation', 'none'),
                                  axesLayout = c("parallel", "radial"),
                                  showAxes = FALSE, showArea = FALSE,  showEnclosing = FALSE,
-                                 axesColor = "black", bboxColor = 'black',
-                                 position = 'identity', na.rm = FALSE, show.legend = NA,
-                                 inherit.aes = TRUE, ...) {
+                                 axesColor = "black", bboxColor = 'black',na.rm = FALSE, show.legend = NA,
+                                 inherit.aes = TRUE) {
 
-  if(missing(serialAxesData)) stop('no serial axes data exists')
-  scaling <- match.arg(scaling)
-  axesLayout <- match.arg(axesLayout)
+  if(missing(serialAxesData)) {
 
-  ggplot2::layer(
-    data = data,
-    mapping = mapping,
-    stat = stat,
-    geom = GeomSerialAxesGlyph,
-    position = position,
-    show.legend = show.legend,
-    inherit.aes = inherit.aes,
-    params = list(
-      serialAxesData = serialAxesData,
-      sequence = sequence,
-      scaling = scaling,
-      axesLayout = axesLayout,
-      showAxes = showAxes,
-      showArea = showArea,
-      showEnclosing = showEnclosing,
-      axesColor = axesColor,
-      bboxColor = bboxColor,
-      linewidth = linewidth,
-      na.rm = na.rm,
-      ...
+    ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = stat,
+      geom = ggplot2::GeomPoint,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      params = list(
+        na.rm = na.rm,
+        ...
+      )
     )
-  )
+  } else {
+    scaling <- match.arg(scaling)
+    axesLayout <- match.arg(axesLayout)
+
+    ggplot2::layer(
+      data = data,
+      mapping = mapping,
+      stat = stat,
+      geom = GeomSerialAxesGlyph,
+      position = position,
+      show.legend = show.legend,
+      inherit.aes = inherit.aes,
+      params = list(
+        serialAxesData = serialAxesData,
+        sequence = sequence,
+        scaling = scaling,
+        axesLayout = axesLayout,
+        showAxes = showAxes,
+        showArea = showArea,
+        showEnclosing = showEnclosing,
+        axesColor = axesColor,
+        bboxColor = bboxColor,
+        linewidth = linewidth,
+        na.rm = na.rm,
+        ...
+      )
+    )
+  }
 }
 
 GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
