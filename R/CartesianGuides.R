@@ -29,13 +29,8 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
     y.labels <- ggplotPanel_params$x.labels
 
     # drawing lines
-    x.minor_source <- if(is.null(ggplotPanel_params$y.minor_source)) {
-      x.major_source
-    } else {ggplotPanel_params$y.minor_source}
-
-    y.minor_source <- if(is.null(ggplotPanel_params$x.minor_source)) {
-      y.major_source
-    } else {ggplotPanel_params$x.minor_source}
+    x.minor_source <- ggplotPanel_params$y.minor_source %||% x.major_source
+    y.minor_source <- ggplotPanel_params$x.minor_source %||% y.major_source
 
   } else {
 
@@ -51,72 +46,69 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
     y.labels <- ggplotPanel_params$y.labels
 
     # drawing lines
-    x.minor_source <- if(is.null(ggplotPanel_params$x.minor_source)) {
-      x.major_source
-    } else {ggplotPanel_params$x.minor_source}
+    x.minor_source <- ggplotPanel_params$x.minor_source %||% x.major_source
 
-    y.minor_source <- if(is.null(ggplotPanel_params$y.minor_source)) {
-      y.major_source
-    } else {ggplotPanel_params$y.minor_source}
+    y.minor_source <- ggplotPanel_params$y.minor_source %||% y.major_source
+
 
   }
   extend.xrange <- grDevices::extendrange(x.range)
   extend.yrange <- grDevices::extendrange(y.range)
 
   # set group
-  guidesGroup <- l_layer_group(widget, "CartesianGuides Guides")
+  guidesGroup <- loon::l_layer_group(widget, "CartesianGuides Guides")
   # draw grey background
-  rectLayer <- l_layer_rectangle(widget,
-                                 x = x.range,
-                                 y = y.range,
-                                 color = panel.background_fill,
-                                 linecolor = "",
-                                 parent = guidesGroup)
+  rectLayer <- loon::l_layer_rectangle(widget,
+                                       x = x.range,
+                                       y = y.range,
+                                       color = panel.background_fill,
+                                       linecolor = "",
+                                       parent = guidesGroup)
   # lines
-  xlinesGroup <- l_layer_group(widget, "x guide lines", parent = guidesGroup)
+  xlinesGroup <- loon::l_layer_group(widget, "x guide lines", parent = guidesGroup)
   xlinesLayer <- lapply(x.minor_source,
                         function(i){
-                          l_layer_line(widget,
-                                       x = rep(i, 2),
-                                       y = y.range,
-                                       color = panel.guideline_color,
-                                       parent = xlinesGroup)
+                          loon::l_layer_line(widget,
+                                             x = rep(i, 2),
+                                             y = y.range,
+                                             color = panel.guideline_color,
+                                             parent = xlinesGroup)
                         })
 
-  ylinesGroup <- l_layer_group(widget, "y guide lines", parent = guidesGroup)
+  ylinesGroup <- loon::l_layer_group(widget, "y guide lines", parent = guidesGroup)
   ylinesLayer <- lapply(y.minor_source,
                         function(i){
-                          l_layer_line(widget,
-                                       x = x.range,
-                                       y = rep(i,2),
-                                       color = panel.guideline_color,
-                                       parent = ylinesGroup)
+                          loon::l_layer_line(widget,
+                                             x = x.range,
+                                             y = rep(i,2),
+                                             color = panel.guideline_color,
+                                             parent = ylinesGroup)
                         })
   # axis
   if(length(theme$axis.text) != 0 | length(theme) == 0) {
-    xlabelGroup <- l_layer_group(widget, "x axis", parent = guidesGroup)
+    xlabelGroup <- loon::l_layer_group(widget, "x axis", parent = guidesGroup)
     xlinesLayer <- lapply(seq_len(length(x.major_source)),
                           function(i){
-                            l_layer_text(widget,
-                                         x = x.major_source[i],
-                                         y = extend.yrange[1],
-                                         color = axis.text_color,
-                                         parent = xlabelGroup,
-                                         text = x.labels[i],
-                                         size = axis.text_size,
-                                         anchor = "s")
+                            loon::l_layer_text(widget,
+                                               x = x.major_source[i],
+                                               y = extend.yrange[1],
+                                               color = axis.text_color,
+                                               parent = xlabelGroup,
+                                               text = x.labels[i],
+                                               size = axis.text_size,
+                                               anchor = "s")
                           })
-    ylabelGroup <- l_layer_group(widget, "y axis", parent = guidesGroup)
+    ylabelGroup <- loon::l_layer_group(widget, "y axis", parent = guidesGroup)
     ylinesLayer <- lapply(seq_len(length(y.major_source)),
                           function(i){
-                            l_layer_text(widget,
-                                         x = extend.xrange[1],
-                                         y = y.major_source[i],
-                                         color = axis.text_color,
-                                         parent = ylabelGroup,
-                                         text = y.labels[i],
-                                         size = axis.text_size,
-                                         anchor = "w")
+                            loon::l_layer_text(widget,
+                                               x = extend.xrange[1],
+                                               y = y.major_source[i],
+                                               color = axis.text_color,
+                                               parent = ylabelGroup,
+                                               text = y.labels[i],
+                                               size = axis.text_size,
+                                               anchor = "w")
                           })
 
   }
@@ -124,12 +116,12 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
   # set border if it has
   if(length(theme$panel.border) != 0) {
     panel.border_color <- hex6to12(theme$panel.border$colour)
-    borderGroup <- l_layer_group(widget, "borders", parent = guidesGroup)
-    borderLayer <- l_layer_lines(widget,
-                                 x = list(rep(x.range[1],2),  x.range, rep(x.range[2],2), rev(x.range)),
-                                 y = list(y.range, rep(y.range[2],2), rev(y.range), rep(y.range[1],2)),
-                                 color = panel.border_color,
-                                 parent = borderGroup)
+    borderGroup <- loon::l_layer_group(widget, "borders", parent = guidesGroup)
+    borderLayer <- loon::l_layer_lines(widget,
+                                       x = list(rep(x.range[1],2),  x.range, rep(x.range[2],2), rev(x.range)),
+                                       y = list(y.range, rep(y.range[2],2), rev(y.range), rep(y.range[1],2)),
+                                       color = panel.border_color,
+                                       parent = borderGroup)
   }
 
   guidesGroup

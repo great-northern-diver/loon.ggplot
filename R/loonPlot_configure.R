@@ -8,41 +8,41 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
       if (ggGuides) {
         polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[panelIndex]], swapAxes, theme)
         # lower to bottom
-        children <- l_layer_getChildren(loonPlot)
+        children <- loon::l_layer_getChildren(loonPlot)
         # the length of children is at least two
         sapply(1:(length(children) - 1),
                function(l){
-                 l_layer_lower(loonPlot, polarGuides)
+                 loon::l_layer_lower(loonPlot, polarGuides)
                })
       } else {
         message("Is it hard to underatand this graphics? Try \"ggGuides = TRUE\"!\n")
       }
 
-      l_scaleto_world(loonPlot)
+      loon::l_scaleto_world(loonPlot)
     }
   } else {
     if (ggGuides) {
       CartesianGuides <- CartesianGuides(loonPlot, ggplotPanel_params[[panelIndex]], swapAxes, theme)
       # lower to bottom
-      children <- l_layer_getChildren(loonPlot)
+      children <- loon::l_layer_getChildren(loonPlot)
       # the length of children is at least two
       sapply(seq_len(length(children) - 1),
              function(l){
-               l_layer_lower(loonPlot, CartesianGuides)
+               loon::l_layer_lower(loonPlot, CartesianGuides)
              })
-      l_scaleto_world(loonPlot)
+      loon::l_scaleto_world(loonPlot)
     }
   }
 
   # in polar coord, scales are fixed; ggGuides do not need to set scales
   if (!isCoordPolar & !ggGuides) {
-    l_configure(loonPlot,
-                panX=panX,
-                panY=panY,
-                deltaX= deltaX,
-                deltaY=deltaY,
-                zoomX = zoomX,
-                zoomY = zoomY)
+    loon::l_configure(loonPlot,
+                      panX=panX,
+                      panY=panY,
+                      deltaX= deltaX,
+                      deltaY=deltaY,
+                      zoomX = zoomX,
+                      zoomY = zoomY)
   }
 
   # set theme
@@ -83,9 +83,9 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
   }
 
 
-  l_configure(loonPlot,
-              background = background.color,
-              foreground = text.color,
-              guidesBackground = panel.background_fill,
-              guidelines = panel.guideline_color)
+  loon::l_configure(loonPlot,
+                    background = background.color,
+                    foreground = text.color,
+                    guidesBackground = panel.background_fill,
+                    guidelines = panel.guideline_color)
 }

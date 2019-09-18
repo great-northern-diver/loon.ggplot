@@ -21,7 +21,7 @@
 #' Hence, we need a function \code{gg_pipe()} to pack the \code{ggplot} object and force operations happen in order.
 #'
 #' @param data a data frame to use for ggplot
-#' @param ggplotObject a ggplot object to be passed though
+#' @param ggObj a ggplot object to be passed though
 #'
 #' @return a ggplot evaluate object
 #'
@@ -42,15 +42,16 @@
 #'       loon.ggplot()
 #' }
 
-gg_pipe <- function(data, ggplotObject){
+gg_pipe <- function(data, ggObj) {
+
   if (!is.data.frame(data)) {
     data <- as.data.frame(data)
   }
-  subs <- substitute(ggplotObject)
+  subs <- substitute(ggObj)
   # convert a call object to a character
   dep <- deparse(subs)
-  if (any(str_detect(dep, "ggplot"))) {
-    ggplot_id <- which(str_detect(dep, "ggplot") == TRUE)
+  if (any(stringr::str_detect(dep, "ggplot"))) {
+    ggplot_id <- which(stringr::str_detect(dep, "ggplot") == TRUE)
     if (length(ggplot_id) > 1) {
       stop("only one ggplot model can be handled")
     } else {

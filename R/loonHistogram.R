@@ -1,12 +1,12 @@
-loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, ggplotObject,
-                          activeGeomLayers, panelIndex, column_names, dataFrame, mapping.x, mapping.y, numOfSubtitles,
+loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, ggObj,
+                          activeGeomLayers, panelIndex, column_names, dataFrame, mapping, numOfSubtitles,
                           parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                           xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid){
   # set binwidth
   hist_data <- ggBuild$data[[activeGeomLayers]]
   binwidth_vec <- hist_data[hist_data$PANEL == panelIndex, ]$xmax - hist_data[hist_data$PANEL == panelIndex, ]$xmin
   binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
-  hist_x <- as.numeric(with(dataFrame, eval(parse(text = mapping.x))))
+  hist_x <- as.numeric(rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame))
   # one facet
   if (numOfSubtitles == 0) {
     isPanel_i.hist_x <- rep(TRUE, length(hist_x))
@@ -88,12 +88,12 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
   color <- hex6to12(hist_data$fill[1])
   colorStackingOrder <- "selected"
   # set stack color
-  if (!is.null(ggplotObject$labels$fill)) {
+  if (!is.null(ggObj$labels$fill)) {
     # fill color bin?
-    if (ggplotObject$labels$fill != "fill") {
+    if (ggObj$labels$fill != "fill") {
 
       color_var <- unlist(
-        dataFrame[, which(stringr::str_detect(ggplotObject$labels$fill, column_names) == TRUE)]
+        dataFrame[, which(stringr::str_detect(ggObj$labels$fill, column_names) == TRUE)]
       )
       panel_i.color_var <- color_var[isPanel_i.hist_x][in_limits]
       fill_color <- hex6to12(unique(hist_data$fill))
@@ -117,34 +117,34 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
     colorOutline <- hex6to12("black")
   }
 
-  # set linkingKey
-  linkingKey <- linkingKey[isPanel_i.hist_x][in_limits]
-  # set yshows
-  yshows <- "frequency"
-  if (length(mapping.y) != 0) {
-    if(any(str_detect(as.character(mapping.y), "density"))) yshows <- "density"
-  }
-  if (!is.null(ggplotObject$layers[[activeGeomLayers]]$mapping$y)) {
-    if(any(str_detect(as.character(ggplotObject$layers[[activeGeomLayers]]$mapping$y), "density"))) yshows <- "density"
-  }
   # loon histogram
-  l_hist(parent = parent,
-         x = hist_values,
-         color = color,
-         binwidth = binwidth + 1e-6, # need more thoughts
-         showLabels = showLabels,
-         showGuides = showGuides,
-         showScales = showScales,
-         showOutlines = showOutlines,
-         colorOutline = colorOutline,
-         swapAxes = swapAxes,
-         colorStackingOrder = colorStackingOrder,
-         yshows = yshows,
-         linkingKey = linkingKey,
-         showStackedColors = TRUE,
-         xlabel = if(is.null(xlabel)) "" else xlabel,
-         ylabel = if(is.null(ylabel)) "" else ylabel,
-         title = loonTitle)
+  loon::l_hist(parent = parent,
+               x = hist_values,
+               color = color,
+               binwidth = binwidth + 1e-6, # need more thoughts
+               showLabels = showLabels,
+               showGuides = showGuides,
+               showScales = showScales,
+               showOutlines = showOutlines,
+               colorOutline = colorOutline,
+               swapAxes = swapAxes,
+               colorStackingOrder = colorStackingOrder,
+               yshows = get_yshows(mapping,
+                                   layMapping  = ggObj$layers[[activeGeomLayers]]$mapping),
+               linkingKey = linkingKey[isPanel_i.hist_x][in_limits],
+               showStackedColors = TRUE,
+               xlabel = if(is.null(xlabel)) "" else xlabel,
+               ylabel = if(is.null(ylabel)) "" else ylabel,
+               title = loonTitle)
 }
 
+get_yshows <- function(mapping, layMapping) {
 
+  if (!is.null(mapping$y)) {
+    if(grepl("density", rlang::expr_text(mapping$y))) return("density")
+  }
+  if (!is.null(layMapping$y)) {
+    if(grepl("density", rlang::expr_text(layMapping$y))) return("density")
+  }
+  return("frequency")
+}

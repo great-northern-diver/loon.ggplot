@@ -21,6 +21,7 @@ Imports:
     grDevices,
     stringr,
     grid,
+    GGally,
     gridExtra
 Suggests:
     dplyr,

@@ -4,12 +4,13 @@ library(dplyr)
 library(lattice)
 library(magrittr)
 library(tidyverse)
+library(GGally)
 
 test_that("example works", {
   # example 1
-  p1 <- ggplot(data = SAheart) + aes( x = age, y = chd, color = famhist) + geom_point()
-  g1 <- loon.ggplot(p1, linkingGroup = "SAheart")
-  expect_equal(class(g1), c("l_plot", "loon"))
+  # p1 <- ggplot(data = SAheart) + aes( x = age, y = chd, color = famhist) + geom_point()
+  # g1 <- loon.ggplot(p1, linkingGroup = "SAheart")
+  # expect_equal(class(g1), c("l_plot", "loon"))
 
   # example 2
   p<- ggplot(mtcars, aes(mpg, wt)) + geom_point( aes(colour = "darkblue"))
@@ -37,13 +38,13 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 4
-  p <- ggplot(data = SAheart, mapping = aes(x = age, y = chd, col = famhist)) +
-
-    geom_smooth(method = "loess", colour = "steelblue") +
-    geom_point(size = 3, alpha = 0.4) +
-    facet_wrap(~famhist)
-  g <- loon.ggplot(p)
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # p <- ggplot(data = SAheart, mapping = aes(x = age, y = chd, col = famhist)) +
+  #
+  #   geom_smooth(method = "loess", colour = "steelblue") +
+  #   geom_point(size = 3, alpha = 0.4) +
+  #   facet_wrap(~famhist)
+  # g <- loon.ggplot(p)
+  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 5
   p <- ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class)
@@ -118,13 +119,13 @@ test_that("example works", {
   expect_equal(length(g$plots), 5)
 
   # example 11
-  mi_counties <- map_data("county", "michigan") %>%
-    select(lon = long, lat, group, id = subregion)
-  poly <- ggplot(mi_counties, aes(lon, lat)) +
-    geom_polygon(aes(group = group)) +
-    coord_quickmap()
-  g <- loon.ggplot(poly)
-  expect_equal(class(g), c("l_plot", "loon"))
+  # mi_counties <- map_data("county", "michigan") %>%
+  #   select(lon = long, lat, group, id = subregion)
+  # poly <- ggplot(mi_counties, aes(lon, lat)) +
+  #   geom_polygon(aes(group = group)) +
+  #   coord_quickmap()
+  # g <- loon.ggplot(poly)
+  # expect_equal(class(g), c("l_plot", "loon"))
 
   # example 12
   df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
@@ -164,10 +165,10 @@ test_that("example works", {
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 17
-  mtlong <- reshape2::melt(mtcars)
-  pp <- ggplot(mtlong, aes(value)) + facet_wrap(~variable, scales = 'free_x') +
-    geom_histogram(binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)))
-  g <- loon.ggplot(pp)
+  # mtlong <- reshape2::melt(mtcars)
+  # pp <- ggplot(mtlong, aes(value)) + facet_wrap(~variable, scales = 'free_x') +
+  #   geom_histogram(binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)))
+  # g <- loon.ggplot(pp)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 18
@@ -182,7 +183,7 @@ test_that("example works", {
   # example 19
   df <- data.frame(trt = c("a", "b", "c"), outcome = c(2.3, 1.9, 3.2))
   p <- ggplot(df, aes(trt, outcome)) +
-       geom_col()
+    geom_col()
   g <- loon.ggplot(p, ggGuides = TRUE)
   expect_equal(class(g), c("l_plot", "loon"))
 
@@ -357,24 +358,24 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 45
-  data(Oats, package = "MEMSS")
-  pg.oats <- ggplot(Oats, aes(nitro, yield)) +
-    geom_line() +
-    geom_point() +
-    ggtitle("foo") +
-    facet_wrap(~Block + Variety, ncol = 3)
-  g <- loon.ggplot(pg.oats, linkingGroup = "A")
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # data(Oats, package = "MEMSS")
+  # pg.oats <- ggplot(Oats, aes(nitro, yield)) +
+  #   geom_line() +
+  #   geom_point() +
+  #   ggtitle("foo") +
+  #   facet_wrap(~Block + Variety, ncol = 3)
+  # g <- loon.ggplot(pg.oats, linkingGroup = "A")
+  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 46
-  SAheart %>%
-    mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
-    filter(age < 50) %>%
-    ggplot(aes(x = ltob, y = lsbp)) +
-    geom_point() +
-    facet_wrap(~chd) -> p
-  g <- loon.ggplot(p)
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # SAheart %>%
+  #   mutate(ltob = log(tobacco), lsbp = log(sbp)) %>%
+  #   filter(age < 50) %>%
+  #   ggplot(aes(x = ltob, y = lsbp)) +
+  #   geom_point() +
+  #   facet_wrap(~chd) -> p
+  # g <- loon.ggplot(p)
+  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 47
   pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density..))
@@ -382,14 +383,14 @@ test_that("example works", {
   expect_equal(class(g), c("l_hist", "loon"))
 
   # example 48
-  h <- ggplot(data = SAheart, mapping = aes(x = adiposity)) +
-    geom_histogram(mapping = aes(y = ..density..),
-                   bins = 10, fill = "steelblue",
-                   col = "black", alpha = 0.5) +
-    geom_density(mapping = aes(y = ..density..),
-                 fill = "grey", alpha = 0.5)
-  g <- loon.ggplot(h)
-  expect_equal(class(g), c("l_hist", "loon"))
+  # h <- ggplot(data = SAheart, mapping = aes(x = adiposity)) +
+  #   geom_histogram(mapping = aes(y = ..density..),
+  #                  bins = 10, fill = "steelblue",
+  #                  col = "black", alpha = 0.5) +
+  #   geom_density(mapping = aes(y = ..density..),
+  #                fill = "grey", alpha = 0.5)
+  # g <- loon.ggplot(h)
+  # expect_equal(class(g), c("l_hist", "loon"))
 
   # example 49 theme
   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
@@ -494,9 +495,9 @@ test_that("example works", {
   )
   df2 <- dplyr::select(df, -z)
   pp <- ggplot(df, aes(x, y)) +
-   geom_point(data = df2, colour = "grey70") +
-   geom_point(aes(colour = z)) +
-   facet_wrap(~z, scales = "free")
+    geom_point(data = df2, colour = "grey70") +
+    geom_point(aes(colour = z)) +
+    facet_wrap(~z, scales = "free")
   g <- loon.ggplot(pp, activeGeomLayers = 2)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
@@ -532,4 +533,265 @@ test_that("example works", {
   p3 <- p + facet_grid(vars(drv), vars(cyl))
   g <- loon.ggplot(p3, tkLabels = TRUE)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+
+  # example 73
+  set.seed(500)
+  x <- rnorm(30)
+  y <- 4 + 3*x + rnorm(30)
+  fit <- lm(y~x)
+  xseq <- seq(min(x)-1, max(x)+1, length.out = 50)
+  fit_line <- predict(fit, data.frame(x=range(xseq)))
+  ci <- predict(fit, data.frame(x=xseq),
+                interval="confidence", level=0.95)
+  pi <- predict(fit, data.frame(x=xseq),
+                interval="prediction", level=0.95)
+
+
+  p <- l_plot(y~x, color='black', showScales=TRUE, showGuides=TRUE)
+  gLayer <- l_layer_group(
+    p, label="simple linear regression",
+    parent="root", index="end"
+  )
+  fitLayer <- l_layer_line(
+    p, x=range(xseq), y=fit_line, color="#04327F",
+    linewidth=4, label="fit", parent=gLayer
+  )
+  ciLayer <- l_layer_polygon(
+    p,
+    x = c(xseq, rev(xseq)),
+    y = c(ci[,'lwr'], rev(ci[,'upr'])),
+    color = "#96BDFF", linecolor="",
+    label = "95 % confidence interval",
+    parent = gLayer, index='end'
+  )
+  piLayer <- l_layer_polygon(
+    p,
+    x = c(xseq, rev(xseq)),
+    y = c(pi[,'lwr'], rev(pi[,'upr'])),
+    color = "#E2EDFF", linecolor="",
+    label = "95 % prediction interval",
+    parent = gLayer, index='end'
+  )
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # example 74
+  p <- l_plot()
+  l <- l_layer_line(p, x=c(1,2,3,4), y=c(1,3,2,4), color='red', linewidth=2)
+  l_scaleto_world(p)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # example 75
+  p <- l_plot()
+  l <- l_layer_rectangle(p, x=c(2,3), y=c(1,10), color='steelblue')
+  l_scaleto_layer(l)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # example 76
+  p <- l_plot()
+  l <- l_layer_oval(p, c(1,5), c(2,12), color='steelblue')
+  l_configure(p, panX=0, panY=0, deltaX=20, deltaY=20)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # example 77
+  p <- l_plot()
+  l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
+  l_scaleto_world(p)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # example 78
+  p <- l_plot()
+  l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex 79
+  p <- l_plot()
+
+  l <- l_layer_polygons(
+    p,
+    x = list(c(1,2,1.5), c(3,4,6,5,2), c(1,3,5,3)),
+    y = list(c(1,1,2), c(1,1.5,1,4,2), c(3,5,6,4)),
+    color = c('red', 'green', 'blue'),
+    linecolor = ""
+  )
+  l_scaleto_world(p)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex 80
+  p <- l_plot()
+
+  l <- l_layer_rectangles(
+    p,
+    x = list(c(0,1), c(1,2), c(2,3), c(5,6)),
+    y = list(c(0,1), c(1,2), c(0,1), c(3,4)),
+    color = c('red', 'blue', 'green', 'orange'),
+    linecolor = "black"
+  )
+  l_scaleto_world(p)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex 81
+  s <- Filter(function(df)nrow(df) > 1, split(UsAndThem, UsAndThem$Country))
+  sUaT <- Map(function(country){country[order(country$Year),]} , s)
+  xcoords <- Map(function(x)x$Year, sUaT)
+  ycoords <- Map(function(x)x$LifeExpectancy, sUaT)
+  region <- sapply(sUaT, function(x)as.character(x$Geographic.Region[1]))
+
+  p <- l_plot(showItemLabels=TRUE)
+  l <- l_layer_lines(p, xcoords, ycoords, itemLabel=names(sUaT), color=region)
+  l_scaleto_layer(l)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex 82
+  p <- l_plot()
+  l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10], size= as.integer(seq(5, 30, length.out = 10)))
+  l_scaleto_world(p)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex83
+  p <- ggplot(data = data.frame(x = 1:3, y = 1:3),
+              mapping = aes(x = x, y = y)) +
+    geom_pointrangeGlyph(ymin=(1:3)-(1:3)/5, ymax=(1:3)+(1:3)/5)
+  p
+  expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 84
+  p <- ggplot(data = data.frame(x = 1:26, y = 1:26),
+              mapping = aes(x = x, y = y)) +
+    geom_textGlyph(text = LETTERS, size = (1:26)/5)
+  p
+  expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 85
+  x_star <-
+    c(-0.000864304235090734, 0.292999135695765, 0.949870354364736,
+      0.474503025064823, 0.586862575626621, -0.000864304235090734,
+      -0.586430423509075, -0.474070872947277, -0.949438202247191,
+      -0.29256698357822)
+  y_star <-
+    c(-1, -0.403630077787381, -0.308556611927398, 0.153846153846154,
+      0.808556611927398, 0.499567847882455, 0.808556611927398,
+      0.153846153846154, -0.308556611927398, -0.403630077787381)
+  x_cross <-
+    c(-0.258931143762604, -0.258931143762604, -0.950374531835206,
+      -0.950374531835206, -0.258931143762604, -0.258931143762604,
+      0.259651397291847, 0.259651397291847, 0.948934024776722,
+      0.948934024776722, 0.259651397291847, 0.259651397291847)
+  y_cross <-
+    c(-0.950374531835206, -0.258931143762604, -0.258931143762604,
+      0.259651397291847, 0.259651397291847, 0.948934024776722,
+      0.948934024776722, 0.259651397291847, 0.259651397291847,
+      -0.258931143762604, -0.258931143762604, -0.950374531835206)
+  x_hexagon <-
+    c(0.773552290406223, 0, -0.773552290406223, -0.773552290406223,
+      0, 0.773552290406223)
+  y_hexagon <-
+    c(0.446917314894843, 0.894194756554307, 0.446917314894843,
+      -0.447637568424085, -0.892754249495822, -0.447637568424085)
+  p <- ggplot(data = data.frame(x = 1:3, y = 1:3),
+              mapping = aes(x = x, y = y)) +
+    geom_polygonGlyph(polygon_x = list(x_star, x_cross, x_hexagon),
+                      polygon_y = list(y_star, y_cross, y_hexagon),
+                      colour = 'black', fill = 'red')
+  p
+  expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 86
+  img_paths <- list.files(file.path(find.package(package = 'loon'), "images"), full.names = TRUE)
+  images <- lapply(img_paths, function(path) png::readPNG(path))
+  p <- ggplot(data = data.frame(x = 1:6, y = 1:6),
+              mapping = aes(x = x, y = y)) +
+    geom_imageGlyph(images = images, alpha = 0.4)
+  p
+  expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 87
+  p <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+    geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = "radial")
+  p
+  expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 88
+  p <- ggplot(data = iris, mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+    geom_serialAxesGlyph(serialAxesData = iris[, -5], axesLayout = 'parallel')
+  p
+  expect_equal(class(p), c("gg", "ggplot"))
+
+  # ex 89
+  p <- l_hist(iris, color = iris$Species)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex90
+  ng <- l_navgraph(oliveAcids, color=olive$Area)
+  g <- ggplot2.loon(ng$graph)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex91
+  p <- l_pairs(iris, showHistograms = TRUE)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggmatrix"))
+
+  # ex92
+  plotList <- list()
+  for (i in 1:6) {
+    plotList[[i]] <- ggally_text(paste("Plot #", i, sep = ""))
+  }
+  pm <- ggmatrix(
+    plotList,
+    2, 3,
+    c("A", "B", "C"),
+    c("D", "E"),
+    byrow = TRUE
+  )
+  g <- loon.ggplot(pm)
+  expect_equal(class(g), c("l_ggmatrix", "l_ggplot", "l_compound", "loon"))
+
+  # ex93
+  co2_stl <- stl(co2, "per")
+  p <- l_plot(co2_stl, title = "Atmospheric carbon dioxide over Mauna Loa")
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggmatrix"))
+
+  # ex94
+  s <- l_serialaxes(iris)
+  g <- ggplot2.loon(s)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex95
+  s['axesLayout'] <- "parallel"
+  g <- ggplot2.loon(s)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex95
+  g <- ggplot(iris,
+         mapping = aes(colour = as.factor(Species))) %>%
+    ggSerialAxes()
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
 })

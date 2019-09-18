@@ -4,7 +4,7 @@ loonLayer.GeomViolin <- function(widget,
                                  layerGeom,
                                  data,
                                  ggplotPanel_params,
-                                 ggplotObject,
+                                 ggObj,
                                  special,
                                  parent = "root",
                                  label = NULL,
@@ -15,8 +15,8 @@ loonLayer.GeomViolin <- function(widget,
     seqLength <- 20
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "violins" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "violins")
     }
 
     m <- length(uniGroup)
@@ -30,9 +30,9 @@ loonLayer.GeomViolin <- function(widget,
                                               label = label,
                                               i = if(m == 1) NULL else i)
 
-             violinGroup <- l_layer_group(widget,
-                                          label = mappingLabel,
-                                          parent = parent)
+             violinGroup <- loon::l_layer_group(widget,
+                                                label = mappingLabel,
+                                                parent = parent)
 
              group_i_data <- data[data$group == uniGroup[i], ]
              group_i_revdata <- group_i_data
@@ -56,7 +56,7 @@ loonLayer.GeomViolin <- function(widget,
                                    layerGeom,
                                    group_i_newdata,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = violinGroup,
                                    label = paste(c("density", method)))
@@ -88,7 +88,7 @@ loonLayer.GeomViolin <- function(widget,
                                      layerGeom,
                                      linesData,
                                      ggplotPanel_params,
-                                     ggplotObject,
+                                     ggObj,
                                      special,
                                      parent = violinGroup,
                                      label = "quantile")
@@ -101,7 +101,7 @@ loonLayer.GeomRug <- function(widget,
                               layerGeom,
                               data,
                               ggplotPanel_params,
-                              ggplotObject,
+                              ggObj,
                               special,
                               parent = "root",
                               label = NULL,
@@ -112,8 +112,8 @@ loonLayer.GeomRug <- function(widget,
     yranges <- ggplotPanel_params$y.range
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "rugs" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "rugs")
     }
 
     # 30 is an arbitrary choice
@@ -125,7 +125,7 @@ loonLayer.GeomRug <- function(widget,
                             layerGeom,
                             data,
                             ggplotPanel_params,
-                            ggplotObject,
+                            ggObj,
                             special,
                             parent = parent,
                             label = label)
@@ -138,7 +138,7 @@ loonLayer.GeomRug <- function(widget,
                             layerGeom,
                             data,
                             ggplotPanel_params,
-                            ggplotObject,
+                            ggObj,
                             special,
                             parent = parent,
                             label = label)
@@ -151,7 +151,7 @@ loonLayer.GeomRug <- function(widget,
                             layerGeom,
                             data,
                             ggplotPanel_params,
-                            ggplotObject,
+                            ggObj,
                             special,
                             parent = parent,
                             label = label)
@@ -164,7 +164,7 @@ loonLayer.GeomRug <- function(widget,
                             layerGeom,
                             data,
                             ggplotPanel_params,
-                            ggplotObject,
+                            ggObj,
                             special,
                             parent = parent,
                             label = label)
@@ -191,7 +191,7 @@ loonLayer.GeomBoxplot <- function(widget,
                                   layerGeom,
                                   data,
                                   ggplotPanel_params,
-                                  ggplotObject,
+                                  ggObj,
                                   special,
                                   parent = "root",
                                   label = NULL,
@@ -201,8 +201,8 @@ loonLayer.GeomBoxplot <- function(widget,
     n <- dim(data)[1]
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "boxplots" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "boxplots")
     }
 
     lapply(1:n,
@@ -212,9 +212,9 @@ loonLayer.GeomBoxplot <- function(widget,
                                               label = label,
                                               i = if(n == 1) NULL else i)
 
-             boxplotGroup <- l_layer_group(widget,
-                                           label = mappingLabel,
-                                           parent = parent)
+             boxplotGroup <- loon::l_layer_group(widget,
+                                                 label = mappingLabel,
+                                                 parent = parent)
              # rectangulars
              rectData <- data[i, ]
              rectData$ymin <- data[i, ]$lower
@@ -224,7 +224,7 @@ loonLayer.GeomBoxplot <- function(widget,
                                 layerGeom,
                                 rectData,
                                 ggplotPanel_params,
-                                ggplotObject,
+                                ggObj,
                                 special,
                                 parent = boxplotGroup,
                                 label = "box")
@@ -250,7 +250,7 @@ loonLayer.GeomBoxplot <- function(widget,
                                    layerGeom,
                                    linesData,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = boxplotGroup,
                                    label = paste(c("quantile", method)))
@@ -268,7 +268,7 @@ loonLayer.GeomBoxplot <- function(widget,
                                    layerGeom,
                                    pointsData,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = boxplotGroup,
                                    label = "points")
@@ -283,7 +283,7 @@ loonLayer.GeomLinerange <- function(widget,
                                     layerGeom,
                                     data,
                                     ggplotPanel_params,
-                                    ggplotObject,
+                                    ggObj,
                                     special,
                                     parent = "root",
                                     label = NULL,
@@ -291,8 +291,8 @@ loonLayer.GeomLinerange <- function(widget,
   if(dim(data)[1] != 0) {
 
     if (parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "lineranges" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "lineranges")
     }
 
     n <- dim(data)[1]
@@ -313,7 +313,7 @@ loonLayer.GeomLinerange <- function(widget,
                           layerGeom,
                           data,
                           ggplotPanel_params,
-                          ggplotObject,
+                          ggObj,
                           special,
                           parent = parent,
                           label = mappingLabel)
@@ -326,7 +326,7 @@ loonLayer.GeomPointrange <- function(widget,
                                      layerGeom,
                                      data,
                                      ggplotPanel_params,
-                                     ggplotObject,
+                                     ggObj,
                                      special,
                                      parent = "root",
                                      label = NULL,
@@ -334,8 +334,8 @@ loonLayer.GeomPointrange <- function(widget,
   if(dim(data)[1] != 0) {
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "pointranges" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "pointranges")
     }
     n <- dim(data)[1]
 
@@ -346,15 +346,15 @@ loonLayer.GeomPointrange <- function(widget,
                                               label = label,
                                               i = if(n == 1) NULL else i)
 
-             pointrangeGroup <- l_layer_group(widget,
-                                              label = mappingLabel,
-                                              parent = parent)
+             pointrangeGroup <- loon::l_layer_group(widget,
+                                                    label = mappingLabel,
+                                                    parent = parent)
 
              loonLayer.GeomLinerange(widget,
                                      layerGeom,
                                      data[i, ],
                                      ggplotPanel_params,
-                                     ggplotObject,
+                                     ggObj,
                                      special,
                                      parent = pointrangeGroup,
                                      label  = "range")
@@ -363,7 +363,7 @@ loonLayer.GeomPointrange <- function(widget,
                                  layerGeom,
                                  data[i, ],
                                  ggplotPanel_params,
-                                 ggplotObject,
+                                 ggObj,
                                  special,
                                  parent = pointrangeGroup,
                                  label = "point")
@@ -377,7 +377,7 @@ loonLayer.GeomCrossbar <- function(widget,
                                    layerGeom,
                                    data,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = "root",
                                    label = NULL,
@@ -385,8 +385,8 @@ loonLayer.GeomCrossbar <- function(widget,
   if(dim(data)[1] != 0) {
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "crossbars" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "crossbars")
     }
     n <- dim(data)[1]
 
@@ -397,15 +397,15 @@ loonLayer.GeomCrossbar <- function(widget,
                                               label = label,
                                               i = if(n == 1) NULL else i)
 
-             crossbarGroup <- l_layer_group(widget,
-                                            label = mappingLabel,
-                                            parent = parent)
+             crossbarGroup <- loon::l_layer_group(widget,
+                                                  label = mappingLabel,
+                                                  parent = parent)
 
              loonLayer.GeomRect(widget,
                                 layerGeom,
                                 data[i, ],
                                 ggplotPanel_params,
-                                ggplotObject,
+                                ggObj,
                                 special,
                                 parent = crossbarGroup,
                                 label = "bar")
@@ -422,7 +422,7 @@ loonLayer.GeomCrossbar <- function(widget,
                                    layerGeom,
                                    nd,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = crossbarGroup,
                                    label = "cross")
@@ -436,7 +436,7 @@ loonLayer.GeomErrorbar <- function(widget,
                                    layerGeom,
                                    data,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = "root",
                                    label = NULL,
@@ -444,8 +444,8 @@ loonLayer.GeomErrorbar <- function(widget,
   if(dim(data)[1] != 0) {
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "errorbars" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "errorbars")
     }
     n <- dim(data)[1]
 
@@ -456,15 +456,15 @@ loonLayer.GeomErrorbar <- function(widget,
                                               label = label,
                                               i = if(n == 1) NULL else i)
 
-             errorbarGroup <- l_layer_group(widget,
-                                            label = mappingLabel,
-                                            parent = parent)
+             errorbarGroup <- loon::l_layer_group(widget,
+                                                  label = mappingLabel,
+                                                  parent = parent)
 
              loonLayer.GeomLinerange(widget,
                                      layerGeom,
                                      data[i, ],
                                      ggplotPanel_params,
-                                     ggplotObject,
+                                     ggObj,
                                      special,
                                      parent = errorbarGroup,
                                      label = "range")
@@ -483,7 +483,7 @@ loonLayer.GeomErrorbar <- function(widget,
                                    layerGeom,
                                    newdata,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = errorbarGroup,
                                    label = "error")
@@ -497,7 +497,7 @@ loonLayer.GeomErrorbarh <- function(widget,
                                     layerGeom,
                                     data,
                                     ggplotPanel_params,
-                                    ggplotObject,
+                                    ggObj,
                                     special,
                                     parent = "root",
                                     label = NULL,
@@ -505,7 +505,8 @@ loonLayer.GeomErrorbarh <- function(widget,
   if(dim(data)[1] != 0) {
 
     if(parent == "root") {
-      parent <- l_layer_group(widget, label = if(is.null(label)) "errorbarhs" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||%  "errorbarhs")
     }
     n <- dim(data)[1]
 
@@ -516,9 +517,9 @@ loonLayer.GeomErrorbarh <- function(widget,
                                               label = label,
                                               i = if(n == 1) NULL else i)
 
-             errorbarhGroup <- l_layer_group(widget,
-                                             label = mappingLabel,
-                                             parent = parent)
+             errorbarhGroup <- loon::l_layer_group(widget,
+                                                   label = mappingLabel,
+                                                   parent = parent)
 
              newdata <- data[rep(i, 3), ]
              newdata$xend <- NA
@@ -540,7 +541,7 @@ loonLayer.GeomErrorbarh <- function(widget,
                                    layerGeom,
                                    newdata,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = errorbarhGroup,
                                    label = "barh")
@@ -555,7 +556,7 @@ loonLayer.GeomPath <- function(widget,
                                layerGeom,
                                data,
                                ggplotPanel_params,
-                               ggplotObject,
+                               ggObj,
                                special,
                                parent = "root",
                                label = NULL,
@@ -564,11 +565,11 @@ loonLayer.GeomPath <- function(widget,
     isCoordPolar <- is.CoordPolar(ggplotPanel_params)
     # path group
     if (parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "paths" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "paths")
     }
 
-    coordinates <- ggplotObject$coordinates
+    coordinates <- ggObj$coordinates
     uniGroup <- unique(data$group)
 
     m <- length(uniGroup)
@@ -595,11 +596,11 @@ loonLayer.GeomPath <- function(widget,
                method <- get_stat_param(layerGeom, "type", "level", "line.p", ...)
 
                mappingLabel <- get_mappingLabel(layerGeom,
-                                                name = if(is.null(method)) "path" else method,
+                                                name = method %||% "path",
                                                 label = label,
                                                 i = if(m == 1) NULL else i)
 
-               l_layer_line(
+               loon::l_layer_line(
                  widget,
                  x = x, y = y,
                  linewidth = linesWidth[1],
@@ -621,7 +622,7 @@ loonLayer.GeomPath <- function(widget,
                method <- get_stat_param(layerGeom, ...)
 
                mappingLabel <- get_mappingLabel(layerGeom,
-                                                name = if(is.null(method)) "path" else method,
+                                                name = method %||% "path",
                                                 label = label,
                                                 i = if(m == 1) NULL else i)
 
@@ -629,7 +630,7 @@ loonLayer.GeomPath <- function(widget,
                                    layerGeom,
                                    newdata,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = parent,
                                    label = mappingLabel)
@@ -639,27 +640,27 @@ loonLayer.GeomPath <- function(widget,
 }
 
 loonLayer.GeomContour <- function(widget,
-                                   layerGeom,
-                                   data,
-                                   ggplotPanel_params,
-                                   ggplotObject,
-                                   special,
-                                   parent = "root",
-                                   label = NULL,
-                                   ...) {
+                                  layerGeom,
+                                  data,
+                                  ggplotPanel_params,
+                                  ggObj,
+                                  special,
+                                  parent = "root",
+                                  label = NULL,
+                                  ...) {
 
   method <- get_stat_param(layerGeom, "contours", ...)
 
   if (parent == "root") {
-    parent <- l_layer_group(widget,
-                            label = if(is.null(method)) "contours" else method)
+    parent <- loon::l_layer_group(widget,
+                                  label = method %||% "contours")
   }
 
   loonLayer.GeomPath(widget,
                      layerGeom,
                      data,
                      ggplotPanel_params,
-                     ggplotObject,
+                     ggObj,
                      special,
                      parent = parent,
                      label = "contour")
@@ -669,7 +670,7 @@ loonLayer.GeomQuantile <- function(widget,
                                    layerGeom,
                                    data,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = "root",
                                    label = NULL,
@@ -678,15 +679,15 @@ loonLayer.GeomQuantile <- function(widget,
   method <- get_stat_param(layerGeom, "quantiles", ...)
 
   if (parent == "root") {
-    parent <- l_layer_group(widget,
-                            label = if(is.null(method)) "quantile" else method)
+    parent <- loon::l_layer_group(widget,
+                                  label = method %||% "quantile")
   }
 
   loonLayer.GeomPath(widget,
                      layerGeom,
                      data,
                      ggplotPanel_params,
-                     ggplotObject,
+                     ggObj,
                      special,
                      parent = parent,
                      label = "quantile",
@@ -697,7 +698,7 @@ loonLayer.GeomCurve <- function(widget,
                                 layerGeom,
                                 data,
                                 ggplotPanel_params,
-                                ggplotObject,
+                                ggObj,
                                 special,
                                 parent = "root",
                                 label = NULL,
@@ -705,8 +706,8 @@ loonLayer.GeomCurve <- function(widget,
   if(dim(data)[1] != 0) {
     # curve group
     if (parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "curves" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "curves")
     }
 
     n <- dim(data)[1]
@@ -723,12 +724,12 @@ loonLayer.GeomCurve <- function(widget,
     if(answer == 1) {
       answer <- TRUE
       if (which_curve == curveLayers[1]) {
-        grid.draw(ggplotObject)
+        grid.draw(ggObj)
         grid.force()
       }
       gridList <- grid.ls(print = FALSE)
       gridList.name <- gridList$name
-      xspline.name <- gridList.name[which(str_detect(gridList.name, "curve") == TRUE)]
+      xspline.name <- gridList.name[which(stringr::str_detect(gridList.name, "curve") == TRUE)]
       # xspline.len <- length(xspline.name)
 
       lapply(1:n,
@@ -768,7 +769,7 @@ loonLayer.GeomCurve <- function(widget,
                method <- get_stat_param(layerGeom, ...)
 
                mappingLabel <- get_mappingLabel(layerGeom,
-                                                name = if(is.null(method)) "curve" else method,
+                                                name = method %||% "curve",
                                                 label = label,
                                                 i = if(n == 1) NULL else i)
 
@@ -777,7 +778,7 @@ loonLayer.GeomCurve <- function(widget,
                                   nd,
                                   ggplotPanel_params,
                                   special,
-                                  ggplotObject,
+                                  ggObj,
                                   parent,
                                   label = mappingLabel)
              })
@@ -791,7 +792,7 @@ loonLayer.GeomCurve <- function(widget,
       method <- get_stat_param(layerGeom, ...)
 
       mappingLabel <- get_mappingLabel(layerGeom,
-                                       name = if(is.null(method)) "curve" else method,
+                                       name = method %||% "curve",
                                        label = label,
                                        i = NULL)
 
@@ -800,7 +801,7 @@ loonLayer.GeomCurve <- function(widget,
                             data,
                             ggplotPanel_params,
                             special,
-                            ggplotObject,
+                            ggObj,
                             parent,
                             label = mappingLabel)
     }
@@ -812,7 +813,7 @@ loonLayer.GeomRibbon <- function(widget,
                                  layerGeom,
                                  data,
                                  ggplotPanel_params,
-                                 ggplotObject,
+                                 ggObj,
                                  special,
                                  parent = "root",
                                  label = NULL,
@@ -821,8 +822,8 @@ loonLayer.GeomRibbon <- function(widget,
   if(dim(data)[1] != 0) {
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "ribbons" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "ribbons")
     }
 
     uniGroup <- unique(data$group)
@@ -840,7 +841,7 @@ loonLayer.GeomRibbon <- function(widget,
              method <- get_stat_param(layerGeom, ...)
 
              mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = if(is.null(method)) "ribbon" else method,
+                                              name = method %||% "ribbon",
                                               label = label,
                                               i = if(m == 1) NULL else i)
 
@@ -848,7 +849,7 @@ loonLayer.GeomRibbon <- function(widget,
                                    layerGeom,
                                    nd,
                                    ggplotPanel_params,
-                                   ggplotObject,
+                                   ggObj,
                                    special,
                                    parent = parent,
                                    label = mappingLabel)
@@ -860,7 +861,7 @@ loonLayer.GeomDensity <- function(widget,
                                   layerGeom,
                                   data,
                                   ggplotPanel_params,
-                                  ggplotObject,
+                                  ggObj,
                                   special,
                                   parent = "root",
                                   label = NULL,
@@ -868,15 +869,15 @@ loonLayer.GeomDensity <- function(widget,
 
   method <- get_stat_param(layerGeom, "kernel", ...)
   if(parent == "root") {
-    parent <- l_layer_group(widget,
-                            label = paste(c("density", method)))
+    parent <- loon::l_layer_group(widget,
+                                  label = paste(c("density", method)))
   }
 
   loonLayer.GeomRibbon(widget,
                        layerGeom,
                        data,
                        ggplotPanel_params,
-                       ggplotObject,
+                       ggObj,
                        special,
                        parent = parent,
                        label = label,
@@ -888,7 +889,7 @@ loonLayer.GeomSmooth <- function(widget,
                                  layerGeom,
                                  data,
                                  ggplotPanel_params,
-                                 ggplotObject,
+                                 ggObj,
                                  special,
                                  parent = "root",
                                  label = NULL,
@@ -897,8 +898,8 @@ loonLayer.GeomSmooth <- function(widget,
 
     uniGroup <- unique(data$group)
     m <- length(uniGroup)
-    parent <- l_layer_group(widget,
-                            label = if(is.null(label)) "smooths" else label)
+    parent <- loon::l_layer_group(widget,
+                                  label = label %||% "smooths")
 
     # the only difference bewteen loonLayer.GeomRibbon is the polygon border colour. NA is set here
     seqLength <- 20
@@ -910,9 +911,9 @@ loonLayer.GeomSmooth <- function(widget,
                                               label = label,
                                               i = if(m == 1) NULL else i)
 
-             smoothGroup <- l_layer_group(widget,
-                                          label = mappingLabel,
-                                          parent = parent)
+             smoothGroup <- loon::l_layer_group(widget,
+                                                label = mappingLabel,
+                                                parent = parent)
 
              if(!is.null(data$se)) {
 
@@ -936,21 +937,21 @@ loonLayer.GeomSmooth <- function(widget,
                                                    layerGeom,
                                                    group_i_newdata,
                                                    ggplotPanel_params,
-                                                   ggplotObject,
+                                                   ggObj,
                                                    special,
                                                    parent = smoothGroup,
                                                    label = "se polygon")
-               l_layer_hide(widget, se_polygon)
+               loon::l_layer_hide(widget, se_polygon)
                # draw se path
                group_i_newdata$colour <- group_i_newdata$fill
                loonLayer.GeomPath(widget,
-                                     layerGeom,
-                                     group_i_newdata,
-                                     ggplotPanel_params,
-                                     ggplotObject,
-                                     special,
-                                     parent = smoothGroup,
-                                     label = "se")
+                                  layerGeom,
+                                  group_i_newdata,
+                                  ggplotPanel_params,
+                                  ggObj,
+                                  special,
+                                  parent = smoothGroup,
+                                  label = "se")
              }
 
              smooth_method <- get_stat_param(layerGeom, ...)
@@ -959,10 +960,10 @@ loonLayer.GeomSmooth <- function(widget,
                                 layerGeom,
                                 data[data$group == uniGroup[i], ],
                                 ggplotPanel_params,
-                                ggplotObject,
+                                ggObj,
                                 special,
                                 parent = smoothGroup,
-                                label = if(is.null(smooth_method)) "line" else smooth_method)
+                                label = smooth_method %||% "line")
            })
   }
 }
@@ -971,7 +972,7 @@ loonLayer.GeomStep <- function(widget,
                                layerGeom,
                                data,
                                ggplotPanel_params,
-                               ggplotObject,
+                               ggObj,
                                special,
                                parent = "root",
                                label = NULL,
@@ -979,8 +980,8 @@ loonLayer.GeomStep <- function(widget,
   if(dim(data)[1] != 0) {
 
     if(parent == "root") {
-      parent <- l_layer_group(widget,
-                              label = if(is.null(label)) "steps" else label)
+      parent <- loon::l_layer_group(widget,
+                                    label = label %||% "steps")
     }
 
     direction <- layerGeom$geom_params$direction
@@ -1011,7 +1012,7 @@ loonLayer.GeomStep <- function(widget,
              method <- get_stat_param(layerGeom, ...)
 
              mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = if(is.null(method)) "step" else method,
+                                              name = method %||% "step",
                                               label = label,
                                               i = if(m == 1) NULL else i)
 
@@ -1019,7 +1020,7 @@ loonLayer.GeomStep <- function(widget,
                                 layerGeom,
                                 newdata,
                                 ggplotPanel_params,
-                                ggplotObject,
+                                ggObj,
                                 special,
                                 parent = parent,
                                 label = mappingLabel)
@@ -1033,7 +1034,7 @@ loonLayer.GeomRaster <- function(widget,
                                  layerGeom,
                                  data,
                                  ggplotPanel_params,
-                                 ggplotObject,
+                                 ggObj,
                                  special,
                                  parent = "root",
                                  label = NULL,
@@ -1048,12 +1049,12 @@ loonLayer.GeomRaster <- function(widget,
     xrange <- ggplotPanel_params$x.range
     yrange <- ggplotPanel_params$y.range
 
-    coordinates <- ggplotObject$coordinates
+    coordinates <- ggObj$coordinates
 
     method <- get_stat_param(layerGeom, ...)
 
     mappingLabel <- get_mappingLabel(layerGeom,
-                                     name = if(is.null(method)) "raster" else method,
+                                     name = method %||% "raster",
                                      label = label,
                                      i = NULL)
 
@@ -1063,7 +1064,7 @@ loonLayer.GeomRaster <- function(widget,
         coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, coordinates, data, ggplotPanel_params)
         x <- coordPolarxy$x
         y <- coordPolarxy$y
-        l_layer_polygon(
+        loon::l_layer_polygon(
           widget, x = x, y = y,
           color = fillColor,
           linecolor = linesColor,
@@ -1075,7 +1076,7 @@ loonLayer.GeomRaster <- function(widget,
 
         x <- c(data$xmin, data$xmax)
         y <- c(data$ymin, data$ymax)
-        l_layer_rectangle(
+        loon::l_layer_rectangle(
           widget,
           x = x, y = y,
           color = fillColor,
@@ -1099,7 +1100,7 @@ loonLayer.GeomRaster <- function(widget,
                }
         )
 
-        l_layer_polygons(
+        loon::l_layer_polygons(
           widget,
           x = x,
           y = y,
@@ -1134,7 +1135,7 @@ loonLayer.GeomRaster <- function(widget,
                }
         )
 
-        l_layer_rectangles(
+        loon::l_layer_rectangles(
           widget,
           x = x, y = y,
           color = fillColor,
