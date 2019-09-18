@@ -63,9 +63,13 @@ hl <- loon.ggplot(h)
 ```
 ![](man/figures/scatterAndHist.gif)
 
-  + Loon "Hello world": Introduction to interctive `loon` plots can be found via  https://cran.r-project.org/web/packages/loon/vignettes/introduction.html. It shows how to create, manipulate (selection, linking and etc) `loon` plots
+Note that:
+
+  + Loon "Hello world": Introduction to interctive `loon` plots can be found via  [loon](https://cran.r-project.org/web/packages/loon/vignettes/introduction.html). It shows how to create, manipulate (selection, linking and etc) `loon` plots
     
-  + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in SDSS 2019. Slides can be found in https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html which gives more details.
+  + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in SDSS 2019. Slides can be found in [loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
+  
+  + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(loon.ggplot)`.
 
 #### `ggplot2.loon()`: loon --> ggplot
 
@@ -100,3 +104,11 @@ hg +
   ggplot2::coord_flip()
 ```
 ![](man/figures/hpAddDensity.png)
+
+Note that:
+
+  + Compound loon widget like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. Ggplot features like `theme`, `labels` can be piped through but by `ggmatrix` rule.
+  
+  + Some functionalities are provided 
+    * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonAxesGlyph()`, `geom_imageGlyph()` and etc.
+    * Providing serial axes plots (parallel coordinate and radial coordinate) via `ggSerialAxes()`
