@@ -1,4 +1,4 @@
-ggAddEdges <- function(ggObj, states) {
+ggEdges <- function(ggObj, states) {
 
   active <- states$active
   activeNode <- states$nodes[active]
@@ -38,7 +38,7 @@ ggAddEdges <- function(ggObj, states) {
   return(ggObj)
 }
 
-ggAddLabels <- function(ggObj, states) {
+ggLabels <- function(ggObj, states) {
 
   active <- states$active
   activeNode <- states$nodes[active]
@@ -72,7 +72,7 @@ ggAddLabels <- function(ggObj, states) {
   return(ggObj)
 }
 
-ggAddNodes <- function(ggObj, states) {
+ggNodes <- function(ggObj, states) {
 
   active <- states$active
   # add nodes
@@ -100,7 +100,7 @@ ggAddNodes <- function(ggObj, states) {
   return(ggObj)
 }
 
-ggAddNavPaths <- function(ggObj, states, nav_ids, widget) {
+ggNavPaths <- function(ggObj, states, nav_ids, widget) {
 
   # navigator path
   ## navigators are always active
@@ -205,7 +205,7 @@ ggAddNavPaths <- function(ggObj, states, nav_ids, widget) {
   return(ggObj)
 }
 
-ggAddNavPoints <- function(ggObj, states, nav_ids, widget) {
+ggNavPoints <- function(ggObj, states, nav_ids, widget) {
 
   activeNavigator <- widget["activeNavigator"]
 

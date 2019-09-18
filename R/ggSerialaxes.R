@@ -28,16 +28,16 @@
 #' @examples
 #' library(loon.ggplot)
 #' p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) %>%
-#'        ggAddSerialAxes()
+#'        ggSerialAxes()
 #' p
 #' p +
 #'   theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
 #'   scale_colour_manual(values = c("4" = "red", "6" = "blue", "8" = "green"))
 #'
-ggAddSerialAxes <- function(ggObj,
-                            scaling = c("variable", "observation", "data", "none"),
-                            layout = c("parallel", "radial"),
-                            ...) {
+ggSerialAxes <- function(ggObj,
+                         scaling = c("variable", "observation", "data", "none"),
+                         layout = c("parallel", "radial"),
+                         ...) {
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
@@ -59,14 +59,14 @@ ggAddSerialAxes <- function(ggObj,
     layout,
     "parallel" = {
       ggObj %>%
-        ggAddParallelAes(
+        ggParallelAes(
           axesLabels = args$axesLabels,
           title = args$title %||% "",
           showLabels = args$showLabels %||% TRUE,
           showAxesLabels = args$showAxesLabels %||% TRUE,
           showGuides = args$showGuides %||% TRUE,
           showAxes = args$showAxes %||% TRUE) %>%
-        ggAddParallelSerialAxes(
+        ggParallelSerialAxes(
           data = data,
           mapping = mapping,
           axesLabels = args$axesLabels,
@@ -78,14 +78,14 @@ ggAddSerialAxes <- function(ggObj,
     },
     "radial" = {
       ggObj %>%
-        ggAddRadialAes(
+        ggRadialAes(
           axesLabels = args$axesLabels,
           title = args$title %||% "",
           showLabels = args$showLabels %||% TRUE,
           showAxesLabels = args$showAxesLabels %||% TRUE,
           showGuides = args$showGuides %||% TRUE,
           showAxes = args$showAxes %||% TRUE) %>%
-        ggAddRadialSerialAxes(
+        ggRadialSerialAxes(
           data = data,
           mapping = mapping,
           axesLabels = args$axesLabels,
@@ -102,13 +102,13 @@ ggAddSerialAxes <- function(ggObj,
 }
 
 ############## parallel ######################
-ggAddParallelAes <- function(ggObj,
-                             axesLabels = NULL,
-                             title = "",
-                             showLabels = TRUE,
-                             showAxesLabels = TRUE,
-                             showGuides = TRUE,
-                             showAxes = TRUE) {
+ggParallelAes <- function(ggObj,
+                          axesLabels = NULL,
+                          title = "",
+                          showLabels = TRUE,
+                          showAxesLabels = TRUE,
+                          showGuides = TRUE,
+                          showAxes = TRUE) {
 
   stopifnot(
     exprs = {
@@ -175,15 +175,15 @@ ggAddParallelAes <- function(ggObj,
   return(ggObj)
 }
 
-ggAddParallelSerialAxes <- function(ggObj,
-                                    data = NULL,
-                                    mapping = ggplot2::aes(),
-                                    axesLabels = NULL,
-                                    displayOrder = NULL,
-                                    scaling = c("variable", "observation", "data", "none"),
-                                    color = NULL,
-                                    lineWidth = 0.5,
-                                    showArea = FALSE) {
+ggParallelSerialAxes <- function(ggObj,
+                                 data = NULL,
+                                 mapping = ggplot2::aes(),
+                                 axesLabels = NULL,
+                                 displayOrder = NULL,
+                                 scaling = c("variable", "observation", "data", "none"),
+                                 color = NULL,
+                                 lineWidth = 0.5,
+                                 showArea = FALSE) {
 
   stopifnot(
     exprs = {
@@ -247,13 +247,13 @@ ggAddParallelSerialAxes <- function(ggObj,
 }
 
 ############## radial ######################
-ggAddRadialAes <- function(ggObj,
-                           axesLabels = NULL,
-                           title = "",
-                           showLabels = TRUE,
-                           showAxesLabels = TRUE,
-                           showGuides = TRUE,
-                           showAxes = TRUE) {
+ggRadialAes <- function(ggObj,
+                        axesLabels = NULL,
+                        title = "",
+                        showLabels = TRUE,
+                        showAxesLabels = TRUE,
+                        showGuides = TRUE,
+                        showAxes = TRUE) {
 
   stopifnot(
     exprs = {
@@ -354,15 +354,15 @@ ggAddRadialAes <- function(ggObj,
   return(ggObj)
 }
 
-ggAddRadialSerialAxes <- function(ggObj,
-                                  data = NULL,
-                                  mapping = ggplot2::aes(),
-                                  axesLabels = NULL,
-                                  displayOrder = NULL,
-                                  scaling = c("variable", "observation", "data", "none"),
-                                  color = NULL,
-                                  lineWidth = 1,
-                                  showArea = FALSE) {
+ggRadialSerialAxes <- function(ggObj,
+                               data = NULL,
+                               mapping = ggplot2::aes(),
+                               axesLabels = NULL,
+                               displayOrder = NULL,
+                               scaling = c("variable", "observation", "data", "none"),
+                               color = NULL,
+                               lineWidth = 1,
+                               showArea = FALSE) {
 
   stopifnot(
     exprs = {
