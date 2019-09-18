@@ -4,6 +4,7 @@ library(dplyr)
 library(lattice)
 library(magrittr)
 library(tidyverse)
+library(GGally)
 
 test_that("example works", {
   # example 1
@@ -744,6 +745,53 @@ test_that("example works", {
   # ex90
   ng <- l_navgraph(oliveAcids, color=olive$Area)
   g <- ggplot2.loon(ng$graph)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex91
+  p <- l_pairs(iris, showHistograms = TRUE)
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggmatrix"))
+
+  # ex92
+  plotList <- list()
+  for (i in 1:6) {
+    plotList[[i]] <- ggally_text(paste("Plot #", i, sep = ""))
+  }
+  pm <- ggmatrix(
+    plotList,
+    2, 3,
+    c("A", "B", "C"),
+    c("D", "E"),
+    byrow = TRUE
+  )
+  g <- loon.ggplot(pm)
+  expect_equal(class(g), c("l_ggmatrix", "l_ggplot", "l_compound", "loon"))
+
+  # ex93
+  co2_stl <- stl(co2, "per")
+  p <- l_plot(co2_stl, title = "Atmospheric carbon dioxide over Mauna Loa")
+  g <- ggplot2.loon(p)
+  g
+  expect_equal(class(g), c("gg", "ggmatrix"))
+
+  # ex94
+  s <- l_serialaxes(iris)
+  g <- ggplot2.loon(s)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex95
+  s['axesLayout'] <- "parallel"
+  g <- ggplot2.loon(s)
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+
+  # ex95
+  g <- ggplot(iris,
+         mapping = aes(colour = as.factor(Species))) %>%
+    ggSerialAxes()
   g
   expect_equal(class(g), c("gg", "ggplot"))
 })
