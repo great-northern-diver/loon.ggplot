@@ -2,11 +2,26 @@ sudo: false
 
 language: r
 
+before_install:
+  - cd R
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
 addons:
   apt:
     packages:
     - tcl8.5-dev
     - tk8.5-dev
+    - libtk-img
+    - mesa-common-dev
+    - libglu1-mesa-dev
+    - freeglut3-dev
+    - libssl-dev
+    - libcurl4-gnutls-dev
+    - libxml2-dev
+    - xvfb
+
+cache: packages
 
 r:
  - release
