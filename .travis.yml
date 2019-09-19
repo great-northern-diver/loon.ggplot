@@ -12,6 +12,8 @@ addons:
 
 sudo: false
 
+install: travis_wait mvn install
+
 language: r
 before_install:
   - cd R
