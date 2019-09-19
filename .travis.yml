@@ -12,7 +12,7 @@ addons:
 
 sudo: false
 
-install: travis_wait loon.ggplot install
+install: travis_wait mvn install
 
 language: r
 before_install:
