@@ -19,3 +19,10 @@ reference:
     - gg_pipe
     - get_activeGeomLayers
     - layout_matrix
+    - ggplot2.loon
+    - geom_imageGlyph
+    - geom_pointrangeGlyph
+    - geom_polygonGlyph
+    - geom_serialAxesGlyph
+    - geom_textGlyph
+    - ggSerialAxes

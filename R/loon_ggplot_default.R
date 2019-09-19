@@ -24,7 +24,7 @@
 #' @param ... named arguments to modify loon plot states
 #'
 #'
-#' @import ggplot2 loon tcltk methods grid rlang
+#' @import ggplot2 tcltk loon methods grid rlang
 #' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange

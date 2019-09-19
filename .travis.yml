@@ -2,6 +2,12 @@ sudo: false
 
 language: r
 
+addons:
+  apt:
+    packages:
+    - tcl8.5-dev
+    - tk8.5-dev
+
 r:
  - release
  - devel

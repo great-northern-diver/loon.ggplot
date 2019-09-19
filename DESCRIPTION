@@ -11,8 +11,9 @@ Description: Interactive loon plots from ggplots.
 License: GPL-2
 Depends:
     R (>= 3.4.0),
-    loon,
+    tcltk,
     methods,
+    loon,
     ggplot2
 Imports:
     stats,
