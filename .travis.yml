@@ -16,8 +16,7 @@ language: r
 before_install:
   - cd R
   - export DISPLAY=':99.0'
-  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-  - R -q -e 'install.packages(c("testthat","knitr","rmarkdown"))'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1
 
 cache: packages
 
