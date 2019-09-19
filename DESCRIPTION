@@ -12,7 +12,6 @@ License: GPL-2
 Depends:
     R (>= 3.4.0),
     loon,
-    tcltk,
     methods,
     ggplot2
 Imports:
