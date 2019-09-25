@@ -12,7 +12,6 @@
 #'
 #' @export
 #' @examples
-#' library(loon.ggplot)
 #' l <- l_plot(iris, color = iris$Species)
 #' p <- ggplot2.loon(l)
 #' p # a ggplot object
