@@ -230,11 +230,12 @@ l_layer_getUngroupedChildren <- function(widget, target) {
 #    lg <- loon.ggplot(pm)
 #    grid.loon(lg)
 #    ```
-#    No strips for static plot, but it may be not worthy to do
+#    Do not build loonGrob.l_ggmatrix(), so there are no strips for static plot. It may be not worthy to do
 # 4. So far, pip serialaxes is like following:
 #    ```
 #    p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) %>%
 #           ggSerialAxes()
 #    ```
-#    Is it neccesary to build geom_serialaxes()? May take too much effort and no meaningful x y axes
-# 5. Unknown bug...
+#    Is it neccesary to build `geom_serialaxes()` (May take too much effort and no meaningful x y axes)
+#    or just set `data` and `mapping` args in `ggSerialAxes()` instead of receive `ggplot` object?
+# 5. Unknown bugs...
