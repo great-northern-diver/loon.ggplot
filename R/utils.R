@@ -94,15 +94,6 @@ wrap_num <- function(ggLayout, is_facet_wrap, is_facet_grid, tkLabels){
   } else 0
 }
 
-# 1. l_layer_lines does not work well on "dash" (l_layer_line is fine) *
-# 2. arrow for every l_layer_line and l_layer_lines need to be added *
-# 3. legend
-# 4. transparent color (maybe impossible to do) *
-# 5. specfic TODOs (before some loonLayer functions)
-# 6. ggplot_build: need to rebuild for some specific data (eg: ts data) *
-# 7. geom_histogram: transform to l_hist() or just leave it as l_plot() adding l_layer_rectangles() *
-# 8. bar labels *
-
 as_r_text_size <- function(size) {
   size/1.76
 }
@@ -210,3 +201,41 @@ l_layer_getUngroupedChildren <- function(widget, target) {
   unlist(layer, recursive = TRUE)
 }
 
+################################ TODO List ################################
+
+## loon.ggplot
+# 1. l_layer_lines does not work well on "dash" (l_layer_line is fine) *
+# 2. arrow for every l_layer_line and l_layer_lines need to be added *
+# 3. legend
+# 4. transparent color (maybe impossible to do) *
+# 5. specfic TODOs (before some loonLayer functions, random guess numbers)
+# 6. ggplot_build: need to rebuild for some specific data (eg: ts data) *
+# 7. geom_histogram: transform to l_hist() or just leave it as l_plot() adding l_layer_rectangles() *
+# 8. bar labels *
+
+## ggplot2.loon
+# 1. point, line size needs to be modified more correctly
+# 2. ```
+#    p <- l_pairs(iris, showSerialAxes = TRUE);
+#    g <- ggplot2.loon(p)
+#    ```
+#    the serialaxes at left bottom corner; The reason is `ggmatrix` cannot set different layout size for each object.
+#    https://stackoverflow.com/questions/57958684/create-a-matrix-of-ggplot-objects-with-different-layout-size-by-ggmatrix
+# 3. If we try
+#    ```
+#    library(GGally)
+#    data(flea)
+#    ggpairs(flea, columns = 2:4)
+#    pm <- ggpairs(flea, columns = 2:4, ggplot2::aes(colour=species))
+#    lg <- loon.ggplot(pm)
+#    grid.loon(lg)
+#    ```
+#    Do not build loonGrob.l_ggmatrix(), so there are no strips for static plot. It may be not worthy to do
+# 4. So far, pip serialaxes is like following:
+#    ```
+#    p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) %>%
+#           ggSerialAxes()
+#    ```
+#    Is it neccesary to build `geom_serialaxes()` (May take too much effort and no meaningful x y axes)
+#    or just set `data` and `mapping` args in `ggSerialAxes()` instead of receive `ggplot` object?
+# 5. Unknown bugs...

@@ -24,7 +24,7 @@
 #' @param ... named arguments to modify loon plot states
 #'
 #'
-#' @import ggplot2 loon tcltk methods grid rlang
+#' @import ggplot2 tcltk loon methods grid rlang
 #' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange
@@ -229,18 +229,14 @@ loon.ggplot.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NU
     args[['minimumMargins']] <- c(20, 20, 10, 10)
   }
 
-  # wrap long codes in a function
-  plots_info <- get_loon_plots_info(ggObj = ggObj,
-                                    buildggObj = buildggObj,
-                                    args = args)
-  # pack labels
-  if(pack)
-    pack_loon_plots(plots = plots_info$plots,
-                    ggObj = ggObj,
-                    display_info = plots_info$display_info)
+  ## too many args to pass in `get_loon_plots_info`, `pack_loon_plots` and `modify_loon_plots`;
+  ## args will be called from environment
 
-  plots <- modify_loon_plots(plots = plots_info$plots,
-                             display_info = plots_info$display_info,
-                             args = args)
+  plots_info <- get_loon_plots_info()
+  # pack labels
+  if(pack) pack_loon_plots()
+  # modify plots
+  plots <- modify_loon_plots()
+
   return(invisible(plots))
 }

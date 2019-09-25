@@ -1,12 +1,14 @@
-get_loon_plots_info <- function(ggObj,
-                                buildggObj,
-                                args,
-                                envir = parent.frame()) {
+get_loon_plots_info <- function(envir = parent.frame()) {
+
+  ggObj <- get("ggObj", envir = envir)
+  buildggObj <- get("buildggObj", envir = envir)
+  args <- get("args", envir = envir)
+
 
   # ggplot object
   dataFrame <- ggObj$data
-  linkingKey <- loonLinkingKey(dataFrame, args)
-  itemLabel <- loonItemLabel(dataFrame, args)
+  linkingKey <- get("linkingKey", envir = envir)
+  itemLabel <- get("itemLabel", envir = envir)
 
   # ggbuild
   ggBuild <- buildggObj$ggBuild

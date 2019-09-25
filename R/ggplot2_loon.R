@@ -6,13 +6,12 @@
 #' widget, layer, glyph, navigator or context completely.
 #' The widget is specified by the widget path name (e.g. '.l0.plot'),
 #' the remaining objects by their ids.
-#' @param ... arguments used in `ggplot2.loon()`, not for users
+#' @param ... arguments used in `ggplot2.loon()`, not used by this method
 #'
 #' @return a ggplot object
 #'
 #' @export
 #' @examples
-#' library(loon.ggplot)
 #' l <- l_plot(iris, color = iris$Species)
 #' p <- ggplot2.loon(l)
 #' p # a ggplot object

@@ -12,7 +12,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
   if(is_devtools_ggplot2()){
     layout_matrix <- ggLayout$layout
     # panel_params
-    ggplotPanel_params <- ggBuild$layout$panel_params
+    ggplotPanel_params <- reset_panel_params(ggBuild$layout$panel_params)
   } else {
     layout_matrix <- ggLayout$panel_layout
     # panel_params
@@ -218,6 +218,33 @@ cum_multiply <- function(vec) {
     }
   }
   rev(output)
+}
+
+reset_panel_params <- function(panel_params) {
+  lapply(panel_params,
+         function(panel_param) {
+           # x
+           x.major_source <- panel_param$x.major_source %||% panel_param$x$breaks
+           x.minor_source <- panel_param$x.minor_source %||% panel_param$x$minor_breaks
+           x.labels <- panel_param$x.labels %||% panel_param$x$labels
+           # y
+           y.major_source <- panel_param$y.major_source %||% panel_param$y$breaks
+           y.minor_source <- panel_param$y.minor_source %||% panel_param$y$minor_breaks
+           y.labels <- panel_param$y.labels %||% panel_param$y$labels
+           # adjust major source
+           if(!is.numeric(x.major_source)) x.major_source <- attr(x.major_source, "pos")
+           if(!is.numeric(y.major_source)) y.major_source <- attr(y.major_source, "pos")
+
+           c(
+             panel_param,
+             list(x.major_source = x.major_source,
+                  x.minor_source = x.minor_source,
+                  x.labels = x.labels,
+                  y.major_source = y.major_source,
+                  y.minor_source = y.minor_source,
+                  y.labels = y.labels)
+           )
+         })
 }
 
 # many names are changed after version 2.2.1

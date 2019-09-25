@@ -1,6 +1,28 @@
+addons:
+  apt:
+    packages:
+     - libtk-img
+     - mesa-common-dev
+     - libglu1-mesa-dev
+     - freeglut3-dev
+     - libssl-dev
+     - libcurl4-gnutls-dev
+     - libxml2-dev
+     - xvfb
+
 sudo: false
 
+install:
+  - travis_wait mvn install
+
 language: r
+before_install:
+  - cd R
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1  &
+  - R -q -e 'install.packages(c("loon","ggplot2","stringr","GGally","gridExtra","magrittr","rlang","testthat","knitr","rmarkdown"))'
+
+cache: packages
 
 r:
  - release

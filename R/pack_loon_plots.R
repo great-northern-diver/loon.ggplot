@@ -1,7 +1,10 @@
-pack_loon_plots <- function(plots,
-                            ggObj,
-                            display_info,
-                            envir = parent.frame()) {
+pack_loon_plots <- function(envir = parent.frame()) {
+
+  plots_info <- get("plots_info", envir = envir)
+  ggObj <- get("ggObj", envir = envir)
+
+  plots <- plots_info$plots
+  display_info <- plots_info$display_info
 
   # get from environment
   xlabel <- get("xlabel", envir = envir)

@@ -26,13 +26,22 @@
 #' }
 #' @export
 #' @examples
-#' library(loon.ggplot)
 #' p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) %>%
 #'        ggSerialAxes()
 #' p
 #' p +
 #'   theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
 #'   scale_colour_manual(values = c("4" = "red", "6" = "blue", "8" = "green"))
+#'
+#' library(PairViz)
+#' ordSeq <- eulerian(4)
+#' ordSeq
+#' # [1] 1 2 3 1 4 2 3 4
+#' g <- ggSerialAxes(
+#'   ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+#'   axesLabels = colnames(iris)[ordSeq],
+#'   layout = "radial"
+#' )
 #'
 ggSerialAxes <- function(ggObj,
                          scaling = c("variable", "observation", "data", "none"),
@@ -522,7 +531,7 @@ set_data_group <- function(data = NULL,
   if(any(is.na(grouped_data$fill))) grouped_data$fill <- NULL
 
   quo_color <- mapping$colour
-  column_names <- colnames(data)
+  column_names <- colnames(originalData) %||% colnames(data)
 
   if(!rlang::is_empty(quo_color) && !is.null(column_names) && !is.null(originalData)) {
     quo_text <- rlang::expr_text(quo_color)
