@@ -26,7 +26,6 @@
 #' }
 #' @export
 #' @examples
-#' library(loon.ggplot)
 #' p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) %>%
 #'        ggSerialAxes()
 #' p

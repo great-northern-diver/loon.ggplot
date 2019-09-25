@@ -41,7 +41,7 @@ widget, layer, glyph, navigator or context completely.
 The widget is specified by the widget path name (e.g. '.l0.plot'),
 the remaining objects by their ids.}
 
-\item{...}{arguments used in `ggplot2.loon()`, not for users}
+\item{...}{arguments used in `ggplot2.loon()`, not used by this method}
 }
 \value{
 a ggplot object
