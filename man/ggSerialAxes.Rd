@@ -53,7 +53,8 @@ ordSeq
 # [1] 1 2 3 1 4 2 3 4
 g <- ggSerialAxes(
   ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
-  axesLabels = colnames(iris)[ordSeq]
+  axesLabels = colnames(iris)[ordSeq],
+  layout = "radial"
 )
 
 }
