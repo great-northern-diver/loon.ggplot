@@ -13,7 +13,7 @@ The `ggplot2` graphics package (part of the `tidyverse` package collection) uses
 
 The `loon` graphics package provides **interactive** graphics especially valuable in any **exploratory data analysis**.  This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, `loon` also provides publication quality static graphics in `grid` via loon's functions `grid.loon()` and `loonGrob()`.
 
-The `loon.ggplot` package **brings both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics with many facets and layers will also value the ease with which **ggplots can be turned into interactive loon plots** through a simple translation function `loon.ggplot()`; vice versa, analysts can produce interactive `loon` graphics and enjoy the direct manipulaion, then convert the display to `ggplot2` by function `ggplot2.loon()`.
+The `loon.ggplot` package **brings both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics with many facets and layers will also value the ease with which **ggplots can be turned into interactive loon plots** through a simple translation function `ggplot2loon()`; vice versa, analysts can produce interactive `loon` graphics and enjoy the direct manipulaion, then convert the display to `ggplot2` by function `loon2ggplot()`.
 
 ### Install
 
@@ -32,7 +32,7 @@ install.packages("loon")
 
 ### Basic
 
-#### `loon.ggplot()`: ggplot --> loon
+#### `ggplot2loon()`: ggplot --> loon
 
 * Construct `ggplot`
 
@@ -54,12 +54,12 @@ h
 
 * To `loon`
 
-the `"ggplot"` data structures `p` and `h` can be **turned into an interactive loon plot** using the `loon.ggplot()` function:
+the `"ggplot"` data structures `p` and `h` can be **turned into an interactive loon plot** using the `ggplot2loon()` function:
 
 ```
 library(loon.ggplot)
-pl <- loon.ggplot(p)
-hl <- loon.ggplot(h)
+pl <- ggplot2loon(p)
+hl <- ggplot2loon(h)
 ```
 ![](man/figures/scatterAndHist.gif)
 
@@ -71,13 +71,13 @@ Note that:
   
   + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(loon.ggplot)` for more info.
 
-#### `ggplot2.loon()`: loon --> ggplot
+#### `loon2ggplot()`: loon --> ggplot
 
-After creating `loon` plots and adding programmatic and direct manipulation of the visualizations to effect interactive identification, function `ggplot2.loon` can be applied to return a static `ggplot`
+After creating `loon` plots and adding programmatic and direct manipulation of the visualizations to effect interactive identification, function `loon2ggplot` can be applied to return a static `ggplot`
 
 ```
-pg <- ggplot2.loon(pl)
-hg <- ggplot2.loon(hl)
+pg <- loon2ggplot(pl)
+hg <- loon2ggplot(hl)
 ```
 
 Note that `pg` and `hg` are `ggplot` objects. 
@@ -112,3 +112,17 @@ Note that:
   + Some functionalities are provided 
     * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonAxesGlyph()`, `geom_imageGlyph()` and etc.
     * Providing serial axes plots (parallel coordinate and radial coordinate) via `ggSerialAxes()`
+
+#### `loon.ggplot()`: loon <--> ggplot 
+
+`loon.ggplot()` gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and force.
+
+```
+p <- l_plot(iris)
+# `loon` to `gg`
+g <- loon.ggplot(p)
+g <- g + geom_smooth(method = "lm") + theme_bw() 
+g
+# `gg` to `loon`
+l <- loon.ggplot(g)
+```
