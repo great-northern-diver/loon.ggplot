@@ -1,8 +1,8 @@
-#' @title Create a loon plot from a ggplot2 object
+#' @title \code{ggplot} to \code{loon}
 #'
-#' @description Interactive loon plots from ggplots
+#' @description Create an interactive `loon` widget from a \code{ggplot} object
 #'
-#' @param ggObj a `ggplot` or `ggmatrix` object
+#' @param ggObj a \code{ggplot} or \code{ggmatrix} object
 #' @param activeGeomLayers to determine which geom layer is active. Only \code{geom_point()}
 #'             and \code{geom_histogram()} can be set as active geom layer(s).
 #'            (Notice, more than one \code{geom_point()} layers can be set as active layers,
@@ -30,22 +30,22 @@
 #' @importFrom grDevices extendrange
 #' @importFrom stringr str_detect
 #' @importFrom gridExtra arrangeGrob tableGrob
+#' @importFrom GGally ggmatrix
 #'
 #' @export
-#'
 #' @examples
 #' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
-#' g <- loon.ggplot(p)
+#' g <- ggplot2loon(p)
 #'
 #' # show ggGuides
 #' p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
-#' g <- loon.ggplot(p, ggGuides = TRUE)
+#' g <- ggplot2loon(p, ggGuides = TRUE)
 #'
 #' # tkLabels
 #' p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
 #'    colour = factor(gear))) + facet_wrap(~am)
-#' g1 <- loon.ggplot(p)
-#' g2 <- loon.ggplot(p, tkLabels = FALSE)
+#' g1 <- ggplot2loon(p)
+#' g2 <- ggplot2loon(p, tkLabels = FALSE)
 #'
 #' \dontrun{
 #' df <- data.frame(
@@ -62,7 +62,7 @@
 #' # We can select the first geom_point layer to be
 #' # the active layer as in
 #' suppressWarnings(
-#'   lp_scatterplots_active1 <- loon.ggplot(scatterplots,
+#'   lp_scatterplots_active1 <- ggplot2loon(scatterplots,
 #'                                activeGeomLayers = 1,
 #'                                linkingGroup = "test")
 #' )
@@ -70,43 +70,47 @@
 #'
 #' # We can select the second geom_point layer to be
 #' # the active layer as in
-#' lp_scatterplots_active2 <- loon.ggplot(scatterplots, activeGeomLayers = 2)
+#' lp_scatterplots_active2 <- ggplot2loon(scatterplots, activeGeomLayers = 2)
 #' # Here the colour points are linked
 #'
 #' # We can also select the both geom_point layers to be
 #' # the active layer as in
 #' suppressWarnings(
-#'  lp_scatterplots_active12 <- loon.ggplot(scatterplots, activeGeomLayers = c(1,2))
+#'  lp_scatterplots_active12 <- ggplot2loon(scatterplots, activeGeomLayers = c(1,2))
 #' )
 #' # Here the colour points and grey points are both linked
 #' }
 #'
-
-loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
+#' pm <- GGally::ggpairs(iris, column = 1:4, ggplot2::aes(colour=Species))
+#' lg <- ggplot2loon(pm)
+#'
+ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
                         pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
                         canvasHeight = 700, canvasWidth = 850, ...) {
-  UseMethod("loon.ggplot", ggObj)
+  UseMethod("ggplot2loon", ggObj)
 }
 
 #' @export
-loon.ggplot.default <- function(ggObj, ...) {
+ggplot2loon.default <- function(ggObj, ...) {
   stop(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"))
 }
 
 #' @export
-#' @rdname loon.ggplot
-# the second 'ggplot' is the class name
-loon.ggplot.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
+ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
                                pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
                                canvasHeight = 700, canvasWidth = 850, ...) {
 
   if(inherits(ggObj, "loon")) {
+    error_info <- deparse(substitute(ggObj))
     stop(
       paste0(
         "'ggObj' should be a ggplot object. ",
-        "Maybe you want to call `ggplot2.loon(",
-        deparse(substitute(ggObj)),
-        ")`?"
+        "Maybe you want to call `loon2ggplot(",
+        error_info,
+        ")`?",
+        "Or, just call `loon.ggplot(`",
+        error_info,
+        ")` for simplification."
       ),
       call. = FALSE
     )

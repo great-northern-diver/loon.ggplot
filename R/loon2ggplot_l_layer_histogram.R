@@ -1,6 +1,6 @@
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @export
-ggplot2.loon.l_layer_histogram <- function(target, ...) {
+loon2ggplot.l_layer_histogram <- function(target, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj

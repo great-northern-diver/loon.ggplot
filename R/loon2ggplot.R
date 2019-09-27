@@ -1,81 +1,85 @@
-#' @title Create a ggplot object from a loon object
+#' @title \code{loon} to \code{ggplot}
 #'
-#' @description Get static ggplots from loon plots
+#' @description Create a \code{ggplot} object from a \code{loon} widget
 #'
-#' @param target either an object of class loon or a vector that specifies the
+#' @param target either an object of class \code{loon} or a vector that specifies the
 #' widget, layer, glyph, navigator or context completely.
 #' The widget is specified by the widget path name (e.g. '.l0.plot'),
 #' the remaining objects by their ids.
-#' @param ... arguments used in `ggplot2.loon()`, not used by this method
+#' @param ... arguments used in \code{loon2ggplot()}, not used by this method
 #'
 #' @return a ggplot object
 #'
 #' @export
 #' @examples
 #' l <- l_plot(iris, color = iris$Species)
-#' p <- ggplot2.loon(l)
+#' p <- loon2ggplot(l)
 #' p # a ggplot object
 #' str(p)
 #' # add themes
-#' p + ggtitle("iris") + theme_linedraw()
+#' p + geom_smooth() + theme_linedraw()
 #'
-ggplot2.loon <- function(target, ...) {
+loon2ggplot <- function(target, ...) {
 
-  if(ggplot2::is.ggplot(target)) {
+  if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
+    error_info <- deparse(substitute(target))
     stop(
       paste0(
         "Target should be a loon object. ",
-        "Maybe you want to call `loon.ggplot(",
-        deparse(substitute(target)),
-        ")`?"
+        "Maybe you want to call `ggplot2loon(",
+        error_info,
+        ")`?\n",
+        "Or, just call `loon.ggplot(`",
+        error_info,
+        ")` for simplification."
       ),
       call. = FALSE
     )
   }
-  UseMethod('ggplot2.loon', target)
+  UseMethod('loon2ggplot', target)
 }
 
 #' @export
-#' @rdname ggplot2.loon
-ggplot2.loon.default <- function(target, ...) {
-  # stop('ggplot2.loon default no valid inheritance')
+#' @rdname loon2ggplot
+loon2ggplot.default <- function(target, ...) {
+  # stop('loon2ggplot default no valid inheritance')
   # TODO
   ggObj <- list(...)$ggObj
   ggObj
 }
 
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @export
-ggplot2.loon.l_plot <- function(target, ...) {
+loon2ggplot.l_plot <- function(target, ...) {
 
   loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = ggplot2.loon(rl))
+               ggObj = loon2ggplot(rl))
 }
 
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @export
-ggplot2.loon.l_hist <- function(target, ...) {
+loon2ggplot.l_hist <- function(target, ...) {
 
   loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = ggplot2.loon(rl))
+               ggObj = loon2ggplot(rl))
 }
 
 #' @export
-ggplot2.loon.l_graph <- function(target, ...) {
+loon2ggplot.l_graph <- function(target, ...) {
 
   loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = ggplot2.loon(rl))
+               ggObj = loon2ggplot(rl))
 }
 
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @export
-ggplot2.loon.l_plot3D <- function(target, ...) {
+loon2ggplot.l_plot3D <- function(target, ...) {
 
   loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
@@ -98,7 +102,7 @@ ggplot2.loon.l_plot3D <- function(target, ...) {
   z_color <- adjust_brightness(axes_coords[[3]][3], 0, 255, 0)
 
   cartesian_gg(target = target,
-               ggObj = ggplot2.loon(rl)) +
+               ggObj = loon2ggplot(rl)) +
     ggplot2::geom_line(
       data = data.frame(
         x = c(0.5, 0.5 + 0.08*axes_coords[[1]][1]),
@@ -209,7 +213,7 @@ cartesian_gg <- function(target, ggObj) {
 }
 
 #' @export
-ggplot2.loon.l_layer_group <- function(target, ...) {
+loon2ggplot.l_layer_group <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   ggObj <- ggplot2::ggplot()
@@ -254,7 +258,7 @@ ggplot2.loon.l_layer_group <- function(target, ...) {
   lapply(l_visible_children_layer,
          function(layer) {
 
-           ggObj <<- ggplot2.loon(layer, ggObj = ggObj)
+           ggObj <<- loon2ggplot(layer, ggObj = ggObj)
          })
 
   ggObj
@@ -262,7 +266,7 @@ ggplot2.loon.l_layer_group <- function(target, ...) {
 
 # primitive ggplot layers
 #' @export
-ggplot2.loon.l_layer_polygon <- function(target, ...) {
+loon2ggplot.l_layer_polygon <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -289,7 +293,7 @@ ggplot2.loon.l_layer_polygon <- function(target, ...) {
 }
 
 #' @export
-ggplot2.loon.l_layer_line <- function(target, ...) {
+loon2ggplot.l_layer_line <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -316,7 +320,7 @@ ggplot2.loon.l_layer_line <- function(target, ...) {
 }
 
 #' @export
-ggplot2.loon.l_layer_rectangle <- function(target, ...) {
+loon2ggplot.l_layer_rectangle <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -344,7 +348,7 @@ ggplot2.loon.l_layer_rectangle <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_oval <- function(target, ...) {
+loon2ggplot.l_layer_oval <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -385,7 +389,7 @@ ggplot2.loon.l_layer_oval <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_text <- function(target, ...) {
+loon2ggplot.l_layer_text <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -418,7 +422,7 @@ ggplot2.loon.l_layer_text <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_texts <- function(target, ...) {
+loon2ggplot.l_layer_texts <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -472,7 +476,7 @@ ggplot2.loon.l_layer_texts <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_points <- function(target, ...) {
+loon2ggplot.l_layer_points <- function(target, ...) {
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
   states <- loon:::get_layer_states(target, native_unit = FALSE)
@@ -501,7 +505,7 @@ ggplot2.loon.l_layer_points <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_polygons <- function(target, ...) {
+loon2ggplot.l_layer_polygons <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -541,7 +545,7 @@ ggplot2.loon.l_layer_polygons <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_rectangles <- function(target, ...) {
+loon2ggplot.l_layer_rectangles <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -576,7 +580,7 @@ ggplot2.loon.l_layer_rectangles <- function(target, ...) {
   ggObj
 }
 #' @export
-ggplot2.loon.l_layer_lines <- function(target, ...) {
+loon2ggplot.l_layer_lines <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]

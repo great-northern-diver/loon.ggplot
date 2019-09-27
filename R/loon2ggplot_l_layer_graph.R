@@ -1,7 +1,7 @@
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @importFrom magrittr '%>%'
 #' @export
-ggplot2.loon.l_layer_graph <- function(target, ...) {
+loon2ggplot.l_layer_graph <- function(target, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj

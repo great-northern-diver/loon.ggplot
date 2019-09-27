@@ -1,6 +1,6 @@
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @export
-ggplot2.loon.l_serialaxes <- function(target, ...) {
+loon2ggplot.l_serialaxes <- function(target, ...) {
 
   widget <- target
   remove(target)
