@@ -15,7 +15,7 @@ gg_pipe(data, ggObj)
 a ggplot evaluate object
 }
 \description{
-Pack a \code{ggplot} object forward to \code{loon.ggplot} expressions
+Pack a \code{ggplot} object forward to \code{ggplot2loon} expressions
 via a pipe-operator "\%>\%".
 }
 \details{
@@ -24,11 +24,11 @@ When "+" and "\%>\%" both appear in pipe operations, "\%>\%" takes the priority 
 \code{mtcars \%>\%
    ggplot(aes(mpg, wt, colour = cyl)) +
    geom_point() \%>\%
-   loon.ggplot()},
+   ggplot2loon()},
 
 error would occure. The reason is
 
-\code{geom_point() \%>\% loon.ggplot()}
+\code{geom_point() \%>\% ggplot2loon()}
 
 would run before
 
@@ -42,12 +42,12 @@ g <- mtcars \%>\%
    gg_pipe(
      ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
    ) \%>\%
-   loon.ggplot()
+   ggplot2loon()
 \dontrun{
    # Error
    g <- mtcars \%>\%
       ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
       \%>\%
-      loon.ggplot()
+      ggplot2loon()
 }
 }
