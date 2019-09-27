@@ -16,10 +16,11 @@ reference:
     desc:  Functions for changing ggplot structures into loon
     contents:
     - loon.ggplot
+    - ggplot2loon
     - gg_pipe
     - get_activeGeomLayers
     - layout_matrix
-    - ggplot2.loon
+    - loon2ggplot
     - geom_imageGlyph
     - geom_pointrangeGlyph
     - geom_polygonGlyph
