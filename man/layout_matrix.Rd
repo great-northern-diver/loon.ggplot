@@ -7,7 +7,7 @@
 layout_matrix(target)
 }
 \arguments{
-\item{target}{an object `loon.ggplot()` returns}
+\item{target}{an object `ggplot2loon()` returns}
 }
 \description{
 return the layout matrix of a list of loon plots
@@ -15,7 +15,7 @@ return the layout matrix of a list of loon plots
 \examples{
 p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
  facet_grid(rows = vars(drv))
-g <- loon.ggplot(p)
+g <- ggplot2loon(p)
 layout_matrix(g)
 # l_getLocations(g)
 

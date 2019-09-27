@@ -2,6 +2,10 @@
   if (!is.null(a)) a else b
 }
 
+is.ggmatrix <- function(x) {
+  inherits(x, "ggmatrix")
+}
+
 default_radius <- function() 0.5
 
 is.color <- function(colors) {
@@ -201,6 +205,22 @@ l_layer_getUngroupedChildren <- function(widget, target) {
   unlist(layer, recursive = TRUE)
 }
 
+################################ Unexported functions in `loon` but used in `loon.ggplot` ################################
+# as_r_polygonGlyph_size
+# get_scaledData
+# as_r_serialaxesGlyph_size
+# glyph_to_pch
+# get_display_color
+# as_hex6color
+# get_font_info_from_tk
+# get_layer_states
+# getBinData
+# get_display_color
+# get_model_display_order
+# char2num.data.frame
+# hex12tohex6
+# tcl_img_2_r_raster
+
 ################################ TODO List ################################
 
 ## loon.ggplot
@@ -213,11 +233,11 @@ l_layer_getUngroupedChildren <- function(widget, target) {
 # 7. geom_histogram: transform to l_hist() or just leave it as l_plot() adding l_layer_rectangles() *
 # 8. bar labels *
 
-## ggplot2.loon
+## loon2ggplot
 # 1. point, line size needs to be modified more correctly
 # 2. ```
 #    p <- l_pairs(iris, showSerialAxes = TRUE);
-#    g <- ggplot2.loon(p)
+#    g <- loon2ggplot(p)
 #    ```
 #    the serialaxes at left bottom corner; The reason is `ggmatrix` cannot set different layout size for each object.
 #    https://stackoverflow.com/questions/57958684/create-a-matrix-of-ggplot-objects-with-different-layout-size-by-ggmatrix
@@ -227,7 +247,7 @@ l_layer_getUngroupedChildren <- function(widget, target) {
 #    data(flea)
 #    ggpairs(flea, columns = 2:4)
 #    pm <- ggpairs(flea, columns = 2:4, ggplot2::aes(colour=species))
-#    lg <- loon.ggplot(pm)
+#    lg <- ggplot2loon(pm)
 #    grid.loon(lg)
 #    ```
 #    Do not build loonGrob.l_ggmatrix(), so there are no strips for static plot. It may be not worthy to do

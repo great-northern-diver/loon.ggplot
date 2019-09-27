@@ -125,13 +125,16 @@ get_subtitle <- function(layoutByROWS, layoutByCOLS, layout_matrix, ggLayout, nu
 
 
 get_showScales <- function(theme) {
+
   # do not set theme, default showScales is TRUE
   if(length(theme) == 0) return(TRUE)
-  else {
-    if(any(names(theme) %in% c("axis.text.x", "axis.text.y", "axis.ticks"))) {
-      if(inherits(theme$axis.text.x, "element_blank") || inherits(theme$axis.text.y, "element_blank") || inherits(theme$axis.ticks, "element_blank"))
-        return(FALSE)
-    } else return(TRUE)
-  }
+
+  if(any(names(theme) %in% c("axis.text.x", "axis.text.y", "axis.ticks"))) {
+    !(
+      inherits(theme$axis.text.x, "element_blank") ||
+        inherits(theme$axis.text.y, "element_blank") ||
+        inherits(theme$axis.ticks, "element_blank")
+    )
+  } else TRUE
 }
 

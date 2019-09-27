@@ -13,8 +13,8 @@ get_activeGeomLayers(ggObj)
 `get_activeGeomLayers` will return the geom layer index which can be active
 }
 \details{
-`loon.ggplot` has an argument called `activeGeomLayers`. It is a vector to determine which geom layers can be active.
-The default setting is `integer(0)`, however, `loon.ggplot` will automatically search the first `geom_histogram` or `geom_point` layer
+`ggplot2loon` has an argument called `activeGeomLayers`. It is a vector to determine which geom layers can be active.
+The default setting is `integer(0)`, however, `ggplot2loon` will automatically search the first `geom_histogram` or `geom_point` layer
 to make it active. `get_activeGeomLayers` is more like a guidance and give us a hint which one can be set as active.
 }
 \examples{
@@ -29,7 +29,7 @@ p1 <- ggplot(data = df, aes(x, y, colour = colour)) +
   geom_line(interp, mapping = aes(x, y, colour = colour), size = 2) +
   geom_point(size = 5)
 agL <- get_activeGeomLayers(p1)
-loon.ggplot(p1, activeGeomLayers = agL)
+ggplot2loon(p1, activeGeomLayers = agL)
 
 
 p2 <- ggplot(economics) +
@@ -47,9 +47,9 @@ p2 <- ggplot(economics) +
 # none can be active
 agL <- get_activeGeomLayers(p2)
 #transparency is not allowed in tcltk
-loon.ggplot(p2, ggGuides = TRUE, activeGeomLayers = agL)
+ggplot2loon(p2, ggGuides = TRUE, activeGeomLayers = agL)
 
 }
 \seealso{
-\code{\link{loon.ggplot}}
+\code{\link{ggplot2loon}}
 }

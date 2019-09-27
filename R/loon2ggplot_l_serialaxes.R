@@ -1,13 +1,15 @@
-#' @rdname ggplot2.loon
+#' @rdname loon2ggplot
 #' @export
-ggplot2.loon.l_serialaxes <- function(target, ...) {
+loon2ggplot.l_serialaxes <- function(target, ...) {
 
   widget <- target
   remove(target)
   data <- loon:::char2num.data.frame(widget['data'])
 
   # active or not
-  active_displayOrder <- loon:::get_model_display_order(widget)
+  displayOrder <- loon:::get_model_display_order(widget)
+  active <- widget['active'][displayOrder]
+  active_displayOrder <- displayOrder[active]
 
   ggObj <- ggplot2::ggplot(data = data) %>%
     ggSerialAxes(scaling = widget['scaling'],

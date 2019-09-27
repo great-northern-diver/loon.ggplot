@@ -1,14 +1,5 @@
-#' @rdname loon.ggplot
 #' @export
-#' @importFrom GGally ggmatrix
-#' @examples
-#' library(GGally)
-#' data(flea)
-#' ggpairs(flea, columns = 2:4)
-#' pm <- ggpairs(flea, columns = 2:4, ggplot2::aes(colour=species))
-#' lg <- loon.ggplot(pm)
-
-loon.ggplot.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
+ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
                                  pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
                                  canvasHeight = 700, canvasWidth = 850, ...) {
   # default args
@@ -25,7 +16,7 @@ loon.ggplot.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = 
   )
 
   parent <- parent %||% tcltk::tktoplevel(background = loon::l_getOption("background"))
-  tcltk::tktitle(parent) <- paste0("loon.GGally", as.character(tcltk::tktitle(parent)))
+  tcltk::tktitle(parent) <- paste0("loon.ggplot", as.character(tcltk::tktitle(parent)))
 
   nrow <- ggObj$nrow
   ncol <- ggObj$ncol
@@ -108,7 +99,7 @@ loon.ggplot.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = 
         args$pack <- FALSE
 
         lp <- do.call(
-          loon.ggplot.ggplot,
+          ggplot2loon.ggplot,
           c(list(ggObj = ggplots[[plotId]]), args)
         )
 

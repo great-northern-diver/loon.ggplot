@@ -9,12 +9,12 @@ library(GGally)
 test_that("example works", {
   # example 1
   # p1 <- ggplot(data = SAheart) + aes( x = age, y = chd, color = famhist) + geom_point()
-  # g1 <- loon.ggplot(p1, linkingGroup = "SAheart")
+  # g1 <- ggplot2loon(p1, linkingGroup = "SAheart")
   # expect_equal(class(g1), c("l_plot", "loon"))
 
   # example 2
   p<- ggplot(mtcars, aes(mpg, wt)) + geom_point( aes(colour = "darkblue"))
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # examle 3
@@ -34,7 +34,7 @@ test_that("example works", {
   datapoly <- merge(values, positions, by = c("id"))
   p <- ggplot(datapoly, aes(x = x, y = y)) +
     geom_polygon(aes(fill = value, group = id))
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 4
@@ -43,12 +43,12 @@ test_that("example works", {
   #   geom_smooth(method = "loess", colour = "steelblue") +
   #   geom_point(size = 3, alpha = 0.4) +
   #   facet_wrap(~famhist)
-  # g <- loon.ggplot(p)
+  # g <- ggplot2loon(p)
   # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 5
   p <- ggplot(mpg, aes(displ, hwy)) + geom_point() + facet_wrap(~class)
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(length(g$plots), 7)
 
   # example 6
@@ -62,14 +62,14 @@ test_that("example works", {
     theme(plot.title = element_text(size = 12))+ geom_point() + ggtitle("point") +
     geom_tile()+ geom_polygon() + geom_text()+
     geom_bar(stat = "identity")+ ggtitle("polygon")+ geom_path()
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 7
   p <- ggplot(economics_long, aes(date, value)) +
     geom_line() +
     facet_wrap(~variable, scales = "free_y", ncol = 1)
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 8
@@ -90,7 +90,7 @@ test_that("example works", {
     ) +
     geom_line(aes(date, unemploy)) +
     scale_fill_manual(values = c("blue", "red"))
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 9
@@ -104,7 +104,7 @@ test_that("example works", {
     annotate("text", x = xrng[1], y = yrng[2], label = caption,
              hjust = 0, vjust = 1, size = 4
     )
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 10
@@ -115,7 +115,7 @@ test_that("example works", {
                 colour = "white", size = 1) +
     facet_wrap(~cut, nrow = 1)
 
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(length(g$plots), 5)
 
   # example 11
@@ -124,7 +124,7 @@ test_that("example works", {
   # poly <- ggplot(mi_counties, aes(lon, lat)) +
   #   geom_polygon(aes(group = group)) +
   #   coord_quickmap()
-  # g <- loon.ggplot(poly)
+  # g <- ggplot2loon(poly)
   # expect_equal(class(g), c("l_plot", "loon"))
 
   # example 12
@@ -138,37 +138,37 @@ test_that("example works", {
   p <- ggplot(interp, aes(x, y, colour = colour)) +
     geom_line(size = 2) +
     geom_point(data = df, size = 5)
-  g <- loon.ggplot(p)
+  g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 13
   p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
   pp <- p + geom_abline(intercept = 37, slope = -5) + coord_polar(theta = "x")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 14
   pp <- p + geom_abline(intercept = 10, slope = 2.5) + coord_polar(theta = "y")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 15
   pp <- ggplot(diamonds, aes((carat))) +
     geom_histogram()
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_hist", "loon"))
 
   # example 16
   pp <- ggplot(diamonds, aes(price, fill = cut)) +
     geom_histogram(binwidth = 500) + geom_freqpoly()+ facet_wrap(~color)
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 17
   # mtlong <- reshape2::melt(mtcars)
   # pp <- ggplot(mtlong, aes(value)) + facet_wrap(~variable, scales = 'free_x') +
   #   geom_histogram(binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)))
-  # g <- loon.ggplot(pp)
+  # g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 18
@@ -177,14 +177,14 @@ test_that("example works", {
     geom_bar(aes(fill = drv), position = position_stack(reverse = TRUE)) +
     coord_flip() +
     theme(legend.position = "top")
-  gg <- loon.ggplot(pp, ggGuides = TRUE)
+  gg <- ggplot2loon(pp, ggGuides = TRUE)
   expect_equal(class(gg), c("l_plot", "loon"))
 
   # example 19
   df <- data.frame(trt = c("a", "b", "c"), outcome = c(2.3, 1.9, 3.2))
   p <- ggplot(df, aes(trt, outcome)) +
     geom_col()
-  g <- loon.ggplot(p, ggGuides = TRUE)
+  g <- ggplot2loon(p, ggGuides = TRUE)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 20
@@ -193,7 +193,7 @@ test_that("example works", {
     geom_step(data=d, mapping=aes(x=x, y=y)) +
     geom_step(data=d, mapping=aes(x=x, y=y), direction="vh", linetype=3) +
     geom_point(data=d, mapping=aes(x=x, y=y), color="red")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 21
@@ -202,7 +202,7 @@ test_that("example works", {
   pp <- ggplot(huron, aes(year)) +
     geom_ribbon(aes(ymin = level - 1, ymax = level + 1), fill = "grey70", colour = "black") +
     geom_line(aes(y = level))
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 22
@@ -213,26 +213,26 @@ test_that("example works", {
   pp <- ggplot(df,aes(x = Time,y = Acres,fill=WUClass)) +
     geom_area( position = 'stack') +
     geom_area( position = 'stack', colour="black", show.legend=FALSE)
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 23
   p <- ggplot(data = SAheart, mapping = aes(x = tobacco, y = sbp))
   pp <- p + geom_point() + geom_density_2d(lwd = 1.5, col = "steelblue")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 24
   pp <- ggplot(diamonds, aes(depth, colour = cut)) +
     geom_density(na.rm = TRUE) +
     xlim(55, 70)
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 25
   pp <- ggplot(diamonds, aes(carat, fill = cut)) +
     geom_density(position = "stack")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 26
@@ -245,19 +245,19 @@ test_that("example works", {
   )
   p <- ggplot(df, aes(trt, resp, colour = group))
   pp <- p + geom_linerange(aes(ymin = lower, ymax = upper))
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 27
   pp <- p + geom_pointrange(aes(ymin = lower, ymax = upper))
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 28
   pp <- p + geom_crossbar(aes(ymin = lower, ymax = upper), width = 0.2)
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 29
   pp <- p + geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2)
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 30
   df <- data.frame(
@@ -269,75 +269,75 @@ test_that("example works", {
   p <- ggplot(df, aes(resp, trt, colour = group))
   pp <- p +
     geom_errorbarh(aes(xmax = resp + se, xmin = resp - se))
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 31
   # skip_on_cran()
   # pp <- ggplot(faithfuld, aes(waiting, eruptions)) +
   #   geom_raster(aes(fill = density))
-  # expect_equal(class(loon.ggplot(pp)), c("l_hist", "loon"))
+  # expect_equal(class(ggplot2loon(pp)), c("l_hist", "loon"))
 
   # example 32
   pp <- ggplot(mtcars, aes(x = mpg)) + geom_dotplot(binwidth = 1.5)
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 33
   p <- ggplot(mpg, aes(class, hwy))
   pp <- p + geom_boxplot()
-  expect_equal(class(loon.ggplot(pp, ggGuides = TRUE)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp, ggGuides = TRUE)), c("l_plot", "loon"))
 
   # # example 34
   # pp <- ggplot(diamonds, aes(carat, price)) +
   #   geom_boxplot(aes(group = cut_width(carat, 0.25)), outlier.alpha = 0.1)
-  # expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  # expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 35
   p <- ggplot(mtcars, aes(factor(cyl), mpg))
   pp <- p + geom_violin(draw_quantiles = c(0.25, 0.5, 0.75))
-  expect_equal(class(loon.ggplot(pp)), c("l_plot", "loon"))
+  expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
 
   # example 36
   df <- data.frame(y = rt(200, df = 5))
   p <- ggplot(df, aes(sample = y))
   pp <- p + stat_qq() + stat_qq_line()
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 37
   d <- ggplot(diamonds, aes(x, y)) + xlim(4, 10) + ylim(4, 10)
   pp <- d + geom_bin2d(na.rm = TRUE)
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 38
   d <- ggplot(diamonds, aes(carat, price))
   pp <- d + geom_hex()
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 39
   v <- ggplot(faithfuld, aes(waiting, eruptions, z = density))
   pp <- v + geom_contour()
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 40
   p <- ggplot(mtcars, aes(as.numeric(wt), mpg)) +
     geom_point()
   pp <- p + geom_rug()
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 41
   pie <- ggplot(mtcars, aes(x = factor(1), fill = factor(cyl))) +
     geom_bar(width = 1)
   pp <- pie + coord_polar(theta = "x")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 42
   pp <- pie + coord_polar(theta = "y")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 43
@@ -348,13 +348,13 @@ test_that("example works", {
     geom_line(data = line) +
     xlab(NULL) + ylab(NULL)
   pp <- base + coord_polar("x")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 44
   pp <- ggplot(SAheart, aes(obesity, adiposity)) + geom_point() + geom_smooth() +
     coord_polar(theta = "y")
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 45
@@ -364,7 +364,7 @@ test_that("example works", {
   #   geom_point() +
   #   ggtitle("foo") +
   #   facet_wrap(~Block + Variety, ncol = 3)
-  # g <- loon.ggplot(pg.oats, linkingGroup = "A")
+  # g <- ggplot2loon(pg.oats, linkingGroup = "A")
   # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 46
@@ -374,12 +374,12 @@ test_that("example works", {
   #   ggplot(aes(x = ltob, y = lsbp)) +
   #   geom_point() +
   #   facet_wrap(~chd) -> p
-  # g <- loon.ggplot(p)
+  # g <- ggplot2loon(p)
   # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 47
   pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density..))
-  g <- loon.ggplot(pp)
+  g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_hist", "loon"))
 
   # example 48
@@ -389,53 +389,53 @@ test_that("example works", {
   #                  col = "black", alpha = 0.5) +
   #   geom_density(mapping = aes(y = ..density..),
   #                fill = "grey", alpha = 0.5)
-  # g <- loon.ggplot(h)
+  # g <- ggplot2loon(h)
   # expect_equal(class(g), c("l_hist", "loon"))
 
   # example 49 theme
   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
                                        colour = factor(gear))) + facet_wrap(~am)
-  g <- loon.ggplot(p, ggGuides = T)
+  g <- ggplot2loon(p, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 50
   p1 <- p + theme_gray() # the default
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # exmaple 51
   p1 <- p + theme_bw()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # exmaple 52
   p1 <- p + theme_linedraw()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 53
   p1 <- p + theme_light()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 54
   p1 <- p + theme_dark()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # exmaple 55
   p1 <- p + theme_minimal()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 56
   p1 <- p + theme_classic()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 57
   p1 <- p + theme_void()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 58 theme polar cood
@@ -444,47 +444,47 @@ test_that("example works", {
                    colour = factor(gear))) +
     facet_wrap(~am) +
     coord_polar()
-  g <- loon.ggplot(p, ggGuides = T)
+  g <- ggplot2loon(p, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 59
   p1 <- p + theme_gray() # the default
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # exmaple 60
   p1 <- p + theme_bw()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # exmaple 61
   p1 <- p + theme_linedraw()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 62
   p1 <- p + theme_light()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 63
   p1 <- p + theme_dark()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # exmaple 64
   p1 <- p + theme_minimal()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 65
   p1 <- p + theme_classic()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 66
   p1 <- p + theme_void()
-  g <- loon.ggplot(p1, ggGuides = T)
+  g <- ggplot2loon(p1, ggGuides = T)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 67
@@ -498,7 +498,7 @@ test_that("example works", {
     geom_point(data = df2, colour = "grey70") +
     geom_point(aes(colour = z)) +
     facet_wrap(~z, scales = "free")
-  g <- loon.ggplot(pp, activeGeomLayers = 2)
+  g <- ggplot2loon(pp, activeGeomLayers = 2)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 68
@@ -506,7 +506,7 @@ test_that("example works", {
     geom_point(data = df2, colour = "grey70") +
     geom_point(aes(colour = z)) +
     facet_wrap(~z, scales = "free_x")
-  g <- loon.ggplot(pp, activeGeomLayers = 1)
+  g <- ggplot2loon(pp, activeGeomLayers = 1)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 69
@@ -514,24 +514,24 @@ test_that("example works", {
     geom_point(data = df2, colour = "grey70") +
     geom_point(aes(colour = z)) +
     facet_wrap(~z, scales = "free_y")
-  g <- loon.ggplot(pp, activeGeomLayers = c(1,2))
+  g <- ggplot2loon(pp, activeGeomLayers = c(1,2))
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 70
   p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo")
   # Use vars() to supply variables from the dataset:
   p1 <- p + facet_grid(rows = vars(drv))
-  g <- loon.ggplot(p1)
+  g <- ggplot2loon(p1)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 71
   p2 <- p + facet_grid(cols = vars(cyl))
-  g <- loon.ggplot(p2)
+  g <- ggplot2loon(p2)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 72
   p3 <- p + facet_grid(vars(drv), vars(cyl))
-  g <- loon.ggplot(p3, tkLabels = TRUE)
+  g <- ggplot2loon(p3, tkLabels = TRUE)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 73
@@ -572,7 +572,7 @@ test_that("example works", {
     label = "95 % prediction interval",
     parent = gLayer, index='end'
   )
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -580,7 +580,7 @@ test_that("example works", {
   p <- l_plot()
   l <- l_layer_line(p, x=c(1,2,3,4), y=c(1,3,2,4), color='red', linewidth=2)
   l_scaleto_world(p)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -588,7 +588,7 @@ test_that("example works", {
   p <- l_plot()
   l <- l_layer_rectangle(p, x=c(2,3), y=c(1,10), color='steelblue')
   l_scaleto_layer(l)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -596,7 +596,7 @@ test_that("example works", {
   p <- l_plot()
   l <- l_layer_oval(p, c(1,5), c(2,12), color='steelblue')
   l_configure(p, panX=0, panY=0, deltaX=20, deltaY=20)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -604,14 +604,14 @@ test_that("example works", {
   p <- l_plot()
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
   l_scaleto_world(p)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # example 78
   p <- l_plot()
   l <- l_layer_points(p, x = 1:10, y = 1:10, size = seq(4, 30, length.out = 10))
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -626,7 +626,7 @@ test_that("example works", {
     linecolor = ""
   )
   l_scaleto_world(p)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -641,7 +641,7 @@ test_that("example works", {
     linecolor = "black"
   )
   l_scaleto_world(p)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -655,7 +655,7 @@ test_that("example works", {
   p <- l_plot(showItemLabels=TRUE)
   l <- l_layer_lines(p, xcoords, ycoords, itemLabel=names(sUaT), color=region)
   l_scaleto_layer(l)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -663,7 +663,7 @@ test_that("example works", {
   p <- l_plot()
   l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10], size= as.integer(seq(5, 30, length.out = 10)))
   l_scaleto_world(p)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
@@ -738,19 +738,19 @@ test_that("example works", {
 
   # ex 89
   p <- l_hist(iris, color = iris$Species)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex90
   ng <- l_navgraph(oliveAcids, color=olive$Area)
-  g <- ggplot2.loon(ng$graph)
+  g <- loon2ggplot(ng$graph)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex91
   p <- l_pairs(iris, showHistograms = TRUE)
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggmatrix"))
 
@@ -766,25 +766,25 @@ test_that("example works", {
     c("D", "E"),
     byrow = TRUE
   )
-  g <- loon.ggplot(pm)
+  g <- ggplot2loon(pm)
   expect_equal(class(g), c("l_ggmatrix", "l_ggplot", "l_compound", "loon"))
 
   # ex93
   co2_stl <- stl(co2, "per")
   p <- l_plot(co2_stl, title = "Atmospheric carbon dioxide over Mauna Loa")
-  g <- ggplot2.loon(p)
+  g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggmatrix"))
 
   # ex94
   s <- l_serialaxes(iris)
-  g <- ggplot2.loon(s)
+  g <- loon2ggplot(s)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 
   # ex95
   s['axesLayout'] <- "parallel"
-  g <- ggplot2.loon(s)
+  g <- loon2ggplot(s)
   g
   expect_equal(class(g), c("gg", "ggplot"))
 

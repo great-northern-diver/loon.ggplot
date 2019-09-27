@@ -1,11 +1,11 @@
 #' @title layout matrix
 #' @description return the layout matrix of a list of loon plots
-#' @param target an object `loon.ggplot()` returns
+#' @param target an object `ggplot2loon()` returns
 #'
 #' @examples
 #' p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
 #'  facet_grid(rows = vars(drv))
-#' g <- loon.ggplot(p)
+#' g <- ggplot2loon(p)
 #' layout_matrix(g)
 #' # l_getLocations(g)
 #'

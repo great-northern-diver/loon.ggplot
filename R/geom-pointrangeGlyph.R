@@ -92,7 +92,7 @@ GeomPointrangeGlyph <- ggplot2::ggproto('GeomPointrangeGlyph', Geom,
                                                      function(name) {
                                                        data[, name] <<- params[[name]]
                                                      })
-                                            }, error = function(e) warning("welcome to report issues in https://github.com/z267xu/loon.ggplot")
+                                            }, error = function(e) warning("welcome to report issues in https://github.com/great-northern-diver/loon.ggplot")
                                           )
 
                                           data

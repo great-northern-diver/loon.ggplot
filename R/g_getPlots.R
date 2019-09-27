@@ -1,47 +1,82 @@
-#' @rdname ggplot2.loon
+#' @title get \code{ggplot}s
+#' @description For the target compound loon plot, determines all the \code{loon} plots
+#' in that compound plot.
+#'
+#' @param target the (compound) loon  plot to be laid out.
+#' @return a list of \code{ggplot}s.
+#'
+#' @seealso \code{\link{l_getPlots}}
+#'
 #' @export
-#' @examples
-#' library(GGally)
-#' p <- l_pairs(iris, showHistograms = TRUE)
-#' g <- ggplot2.loon(p)
-#' g + ggtitle("Iris pairs plot")
-ggplot2.loon.l_pairs <- function(target, ...) {
+g_getPlots <- function(target) {
+  UseMethod('g_getPlots', target)
+}
 
-  widget <- target
-  remove(target)
+#' @export
+#' @rdname g_getPlots
+g_getPlots.default <- function(target) {
 
-  locations <- loon::l_getLocations(widget)
+  # locations
+  locations <- g_getLocations(target)
   nrow <- locations$nrow
   ncol <- locations$ncol
   layout_matrix <- locations$layout_matrix
 
+  # plots
   ggplots <- suppressMessages(
-    lapply(1:length(widget),
+    lapply(1:length(target),
            function(i) {
-             ggplot2.loon(widget[[i]])
+             loon2ggplot(target[[i]])
            })
   )
 
-  gm <- GGally::ggmatrix(
-    plots = wrap_paris_plots(
-      ggplots = ggplots,
-      layout_matrix,
-      nrow,
-      ncol,
-      texts = pairs_text(widget)
-    ),
-    nrow = nrow,
-    ncol = ncol,
-    byrow = FALSE,
-    showXAxisPlotLabels = FALSE,
-    showYAxisPlotLabels = FALSE) +
-    theme(plot.background = ggplot2::element_rect(fill = loon::l_getOption("canvas_bg_guides")))
-  return(gm)
+  layout_matrix <- as.vector(layout_matrix)
+
+  plots <- lapply(1:(nrow * ncol),
+                  function(i) {
+                    plot_id <- layout_matrix[i]
+                    if(is.na(plot_id)) {
+                      NULL
+                    } else {
+                      ggplots[[plot_id]]
+                    }
+                  }
+  )
+
+  return(plots)
 }
 
+#' @export
+#' @rdname g_getPlots
+g_getPlots.l_pairs <- function(target) {
 
-wrap_paris_plots <- function(ggplots, layout_matrix,
-                             nrow = NULL, ncol = NULL,
+  # locations
+  locations <- g_getLocations(target)
+  nrow <- locations$nrow
+  ncol <- locations$ncol
+  layout_matrix <- locations$layout_matrix
+
+  # plots
+  ggplots <- suppressMessages(
+    lapply(1:length(target),
+           function(i) {
+             loon2ggplot(target[[i]])
+           })
+  )
+
+  wrap_paris_plots(
+    ggplots = ggplots,
+    layout_matrix = layout_matrix,
+    nrow = nrow,
+    ncol = ncol,
+    texts = pairs_text(target)
+  )
+}
+
+wrap_paris_plots <- function(ggplots,
+                             layout_matrix,
+                             nrow = NULL,
+                             ncol = NULL,
                              texts = NULL) {
 
   stopifnot(
@@ -66,10 +101,9 @@ wrap_paris_plots <- function(ggplots, layout_matrix,
     }
   }
 
-  layout_matrix <- as.vector(layout_matrix)
-
   nrow <- nrow %||% dim(layout_matrix)[1]
   ncol <- ncol %||% dim(layout_matrix)[2]
+  layout_matrix <- as.vector(layout_matrix)
 
   plots <- lapply(1:(nrow * ncol),
                   function(i) {
@@ -84,7 +118,7 @@ wrap_paris_plots <- function(ggplots, layout_matrix,
                           ggplot2::ggplot() +
                             ggplot2::geom_text(
                               data = data.frame(x = 0, y = 0, label = texts[texts_pos %in% i]),
-                              mapping = aes(
+                              mapping = ggplot2::aes(
                                 x = x,
                                 y = y,
                                 label = label
@@ -116,7 +150,7 @@ wrap_paris_plots <- function(ggplots, layout_matrix,
                           ggplot2::ggplot() +
                             ggplot2::geom_text(
                               data = data.frame(x = 0, y = 0, label = texts[texts_pos %in% i]),
-                              mapping = aes(
+                              mapping = ggplot2::aes(
                                 x = x,
                                 y = y,
                                 label = label
@@ -134,13 +168,12 @@ wrap_paris_plots <- function(ggplots, layout_matrix,
 
                   }
   )
-
-
+  return(plots)
 }
 
-pairs_text <- function(widget) {
+pairs_text <- function(target) {
 
-  texts <- lapply(widget,
+  texts <- lapply(target,
                   function(w) {
                     if(inherits(w, "l_plot")) {
                       c(w['ylabel'], w['xlabel'])
