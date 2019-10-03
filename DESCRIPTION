@@ -22,10 +22,11 @@ Imports:
     stringr,
     grid,
     GGally,
-    gridExtra
+    gridExtra,
+    magrittr,
+    rlang
 Suggests:
     dplyr,
-    magrittr,
     tools,
     testthat,
     knitr,
