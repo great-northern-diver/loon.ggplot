@@ -6,6 +6,10 @@ is.ggmatrix <- function(x) {
   inherits(x, "ggmatrix")
 }
 
+is.ggmatrix_plot_obj <- function(x) {
+  inherits(x, "ggmatrix_plot_obj")
+}
+
 default_radius <- function() 0.5
 
 is.color <- function(colors) {
@@ -218,7 +222,6 @@ l_layer_getUngroupedChildren <- function(widget, target) {
 # get_display_color
 # get_model_display_order
 # char2num.data.frame
-# hex12tohex6
 # tcl_img_2_r_raster
 
 ################################ TODO List ################################

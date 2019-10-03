@@ -104,8 +104,8 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                   showAxes = gh['showAxes'],
                                   showArea = gh['showArea'],
                                   showEnclosing = gh['showEnclosing'],
-                                  axesColor = loon:::hex12tohex6(gh['axesColor']),
-                                  bboxColor = loon:::hex12tohex6(gh['bboxColor']),
+                                  axesColor = loon:::as_hex6color(gh['axesColor']),
+                                  bboxColor = loon:::as_hex6color(gh['bboxColor']),
                                   linewidth = gh['linewidth'][aesthetic$index],
                                   colour = aesthetic$color,
                                   inherit.aes = FALSE
