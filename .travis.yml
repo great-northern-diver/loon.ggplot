@@ -12,9 +12,6 @@ addons:
 
 sudo: false
 
-install:
-  - travis_wait mvn install
-
 language: r
 before_install:
   - export DISPLAY=':99.0'
