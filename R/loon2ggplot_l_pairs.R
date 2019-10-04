@@ -1,8 +1,5 @@
 #' @rdname loon2ggplot
 #' @export
-#' @examples
-#' p <- l_pairs(iris, showHistograms = TRUE)
-#' g <- loon2ggplot(p)
 loon2ggplot.l_pairs <- function(target, ...) {
 
   locations <- g_getLocations(target)
