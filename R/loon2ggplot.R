@@ -89,11 +89,11 @@ loon2ggplot.l_plot3D <- function(target, ...) {
   adjust_brightness <- function(z_coord, r, g, b) {
     change <- as.integer(100 + 80 * z_coord)
     if (change < 0) {
-      rgb(0,0,0)
+      grDevices::rgb(0,0,0)
     } else if (change <= 100) {
-      rgb((r/256) * change/100, (g/256) * change/100, (b/256) * change/100)
+      grDevices::rgb((r/256) * change/100, (g/256) * change/100, (b/256) * change/100)
     } else {
-      rgb(r,g,b, maxColorValue=255)
+      grDevices::rgb(r,g,b, maxColorValue=255)
     }
   }
 
@@ -101,12 +101,15 @@ loon2ggplot.l_plot3D <- function(target, ...) {
   y_color <- adjust_brightness(axes_coords[[3]][2], 0, 0, 255)
   z_color <- adjust_brightness(axes_coords[[3]][3], 0, 255, 0)
 
+  x <- c(0.5, 0.5 + 0.08*axes_coords[[1]][1])
+  y <- c(0.5, 0.5 + 0.08*axes_coords[[2]][1])
+
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl)) +
     ggplot2::geom_line(
       data = data.frame(
-        x = c(0.5, 0.5 + 0.08*axes_coords[[1]][1]),
-        y = c(0.5, 0.5 + 0.08*axes_coords[[2]][1])
+        x = x,
+        y = y
       ),
       mapping = ggplot2::aes(x = x, y = y),
       colour = x_color,
@@ -176,12 +179,12 @@ cartesian_gg <- function(target, ggObj) {
   # loon pixel margin to grid margin
   margins <- pixels_2_lines(margins)
 
-  xlabelFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-xlabel"))
-  ylabelFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-ylabel"))
-  titleFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-title"))
-  scalesFont <- loon:::get_font_info_from_tk(loon::l_getOption("font-scales"))
+  xlabelFont <- get_font_info_from_tk(loon::l_getOption("font-xlabel"))
+  ylabelFont <- get_font_info_from_tk(loon::l_getOption("font-ylabel"))
+  titleFont <- get_font_info_from_tk(loon::l_getOption("font-title"))
+  scalesFont <- get_font_info_from_tk(loon::l_getOption("font-scales"))
 
-  guidesBackGround <- if(showGuides) loon:::as_hex6color(widget['guidesBackground']) else loon:::as_hex6color(widget['background'])
+  guidesBackGround <- if(showGuides) as_hex6color(widget['guidesBackground']) else as_hex6color(widget['background'])
 
   ggObj <- ggObj +
     ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
@@ -194,16 +197,16 @@ cartesian_gg <- function(target, ggObj) {
       axis.title = if(showLabels) ggplot2::element_text(size = titleFont$size, family = titleFont$family, face = titleFont$face) else ggplot2::element_blank(),
       axis.title.x = if(showLabels) ggplot2::element_text(size = xlabelFont$size, family = xlabelFont$family, face = xlabelFont$face) else ggplot2::element_blank(),
       axis.title.y = if(showLabels) ggplot2::element_text(size = ylabelFont$size, family = ylabelFont$family, face = ylabelFont$face) else ggplot2::element_blank(),
-      plot.background = ggplot2::element_rect(fill = loon:::as_hex6color(widget['background'])),
+      plot.background = ggplot2::element_rect(fill = as_hex6color(widget['background'])),
       panel.background = ggplot2::element_rect(fill = guidesBackGround),
       panel.grid.major = ggplot2::element_line(size = 1,
                                                linetype = 'solid',
-                                               colour = loon:::as_hex6color(widget['guidelines'])),
+                                               colour = as_hex6color(widget['guidelines'])),
       panel.grid.minor = ggplot2::element_line(size = 0.5,
                                                linetype = 'solid',
-                                               colour = loon:::as_hex6color(widget['guidelines'])),
+                                               colour = as_hex6color(widget['guidelines'])),
       panel.border = if(sum(margins) > 0)
-        ggplot2::element_rect(colour = loon:::as_hex6color(widget['foreground']),
+        ggplot2::element_rect(colour = as_hex6color(widget['foreground']),
                               fill = NA,
                               size = 1) else ggplot2::element_blank(),
       plot.margin = grid::unit(margins, "lines")
@@ -226,7 +229,7 @@ loon2ggplot.l_layer_group <- function(target, ...) {
 
                                 if(layerid == 'model') {
 
-                                  states <- loon:::get_layer_states(widget, native_unit = FALSE)
+                                  states <- get_layer_states(widget, native_unit = FALSE)
 
                                   if (length(states$x) == length(states$y)) {
                                     # scatter plot
@@ -270,16 +273,19 @@ loon2ggplot.l_layer_polygon <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   ggObj <- list(...)$ggObj
 
-  if(length(states$x) > 0  & length(states$y) > 0){
+  if(length(states$x) > 0  & length(states$y) > 0) {
+
+    x <- if(swapAxes) states$y else states$x
+    y <- if(swapAxes) states$x else states$y
+
     ggObj <- ggObj +
       ggplot2::geom_polygon(
         data = data.frame(
-          x = if(swapAxes) states$y else states$x,
-          y = if(swapAxes) states$x else states$y
+          x = x, y = y
         ),
         mapping = ggplot2::aes(x = x, y = y),
         fill = states$color,
@@ -297,17 +303,20 @@ loon2ggplot.l_layer_line <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   ggObj <- list(...)$ggObj
 
   if(length(states$x) > 0  & length(states$y) > 0) {
 
+    x <- if(swapAxes) states$y else states$x
+    y <- if(swapAxes) states$x else states$y
+
     ggObj <- ggObj +
       ggplot2::geom_line(
         data = data.frame(
-          x = if(swapAxes) states$y else states$x,
-          y = if(swapAxes) states$x else states$y
+          x = x,
+          y = y
         ),
         mapping = ggplot2::aes(x = x, y = y),
         colour = states$color,
@@ -324,17 +333,20 @@ loon2ggplot.l_layer_rectangle <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   ggObj <- list(...)$ggObj
 
   if(length(states$x) > 0  & length(states$y) > 0) {
 
+    x <- if(swapAxes) states$y else states$x
+    y <- if(swapAxes) states$x else states$y
+
     ggObj <- ggObj +
       ggplot2::geom_rect(
         data = data.frame(
-          x = if(swapAxes) states$y else states$x,
-          y = if(swapAxes) states$x else states$y
+          x = x,
+          y = y
         ),
         mapping = ggplot2::aes(xmin = x[1], xmax = x[2], ymin = y[1], ymax = y[2]),
         colour = states$linecolor,
@@ -352,7 +364,7 @@ loon2ggplot.l_layer_oval <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   ggObj <- list(...)$ggObj
 
@@ -393,7 +405,7 @@ loon2ggplot.l_layer_text <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
   textCoords <- get_textCoords(angle = states$angle, anchor = states$anchor, just = states$just)
 
   ggObj <- list(...)$ggObj
@@ -402,13 +414,14 @@ loon2ggplot.l_layer_text <- function(target, ...) {
 
     x <- if(swapAxes) states$y else states$x
     y <- if(swapAxes) states$x else states$y
+    label <- states$text
 
     ggObj <- ggObj +
       ggplot2::geom_text(
         data = data.frame(
           x = x + textCoords[1],
           y = y + textCoords[2],
-          label = states$text
+          label =label
         ),
         mapping = ggplot2::aes(x = x, y = y, label = label),
         angle = states$angle,
@@ -426,7 +439,7 @@ loon2ggplot.l_layer_texts <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
@@ -436,20 +449,20 @@ loon2ggplot.l_layer_texts <- function(target, ...) {
 
   if(length(x) > 0  & length(y) > 0){
 
-    text  <- states$text[active]
+    label  <- states$text[active]
     size  <- as_r_text_size(states$size[active])
     angle  <- states$angle[active]
     anchor  <- states$anchor[active]
     justify  <- states$justify[active]
     color <- states$color[active]
 
-    data <- lapply(1:length(text),
+    data <- lapply(1:length(label),
                    function(i){
                      textCoords <- get_textCoords(angle = angle[i],
                                                   anchor = anchor[i],
                                                   just = justify[i])
 
-                     c(label = text[i],
+                     c(label = label[i],
                        x = x[i] + textCoords[1],
                        y = y[i] + textCoords[2])
                    })
@@ -479,7 +492,7 @@ loon2ggplot.l_layer_texts <- function(target, ...) {
 loon2ggplot.l_layer_points <- function(target, ...) {
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
@@ -509,7 +522,7 @@ loon2ggplot.l_layer_polygons <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
@@ -525,16 +538,17 @@ loon2ggplot.l_layer_polygons <- function(target, ...) {
 
     len_x <- lengths(x)
 
+    group <- as.factor(rep(1:length(len_x), times = len_x))
     df <- data.frame(
       x = as.numeric(unlist(x)),
       y = as.numeric(unlist(y)),
-      id = as.factor(rep(1:length(len_x), times = len_x))
+      group = group
     )
 
     ggObj <- ggObj +
       ggplot2::geom_polygon(
         data =df,
-        mapping = ggplot2::aes(x = x, y = y, group = id),
+        mapping = ggplot2::aes(x = x, y = y, group = group),
         fill = rep(fill, times = len_x),
         colour = rep(linecolor, times = len_x),
         size = rep(linewidth, times = len_x),
@@ -549,7 +563,7 @@ loon2ggplot.l_layer_rectangles <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
@@ -557,13 +571,18 @@ loon2ggplot.l_layer_rectangles <- function(target, ...) {
 
   ggObj <- list(...)$ggObj
 
-  if(length(x) > 0  & length(y) > 0){
+  if(length(x) > 0  & length(y) > 0) {
+
+    xmin <- as.numeric(sapply(x, function(xx) xx[1]))
+    xmax <- as.numeric(sapply(x, function(xx) xx[2]))
+    ymin <- as.numeric(sapply(y, function(yy) yy[1]))
+    ymax <- as.numeric(sapply(y, function(yy) yy[2]))
 
     df <- data.frame(
-      xmin = as.numeric(sapply(x, function(xx) xx[1])),
-      xmax = as.numeric(sapply(x, function(xx) xx[2])),
-      ymin = as.numeric(sapply(y, function(yy) yy[1])),
-      ymax = as.numeric(sapply(y, function(yy) yy[2]))
+      xmin = xmin,
+      xmax = xmax,
+      ymin = ymin,
+      ymax = ymax
     )
 
     ggObj <- ggObj +
@@ -584,7 +603,7 @@ loon2ggplot.l_layer_lines <- function(target, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
-  states <- loon:::get_layer_states(target, native_unit = FALSE)
+  states <- get_layer_states(target, native_unit = FALSE)
 
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
@@ -599,16 +618,18 @@ loon2ggplot.l_layer_lines <- function(target, ...) {
 
     len_x <- lengths(x)
 
+    group <- as.factor(rep(1:length(len_x), times = len_x))
+
     df <- data.frame(
       x = as.numeric(unlist(x)),
       y = as.numeric(unlist(y)),
-      id = as.factor(rep(1:length(len_x), times = len_x))
+      group = group
     )
 
     ggObj <- ggObj +
       ggplot2::geom_line(
         data =df,
-        mapping = ggplot2::aes(x = x, y = y, group = id),
+        mapping = ggplot2::aes(x = x, y = y, group = group),
         colour = rep(linecolor, times = len_x),
         size = rep(linewidth, times = len_x),
         inherit.aes = FALSE

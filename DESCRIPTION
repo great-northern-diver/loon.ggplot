@@ -27,6 +27,7 @@ Imports:
     rlang
 Suggests:
     dplyr,
+    png,
     tools,
     testthat,
     knitr,

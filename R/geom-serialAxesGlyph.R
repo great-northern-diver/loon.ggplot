@@ -150,10 +150,10 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                           # size
                                           size <- data$size
                                           # parallel or radial
-                                          scaledData <- loon:::get_scaledData(data = serialAxesData,
-                                                                              sequence = sequence,
-                                                                              scaling = scaling,
-                                                                              displayOrder = 1:length(color))
+                                          scaledData <- get_scaledData(data = serialAxesData,
+                                                                       sequence = sequence,
+                                                                       scaling = scaling,
+                                                                       displayOrder = 1:length(color))
 
                                           dimension <- dim(scaledData)[2]
 
@@ -163,8 +163,8 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
 
                                           if(axesLayout == "parallel") {
 
-                                            scaleX <- loon:::as_r_serialaxesGlyph_size(data$size, "x", "parallel")
-                                            scaleY <- loon:::as_r_serialaxesGlyph_size(data$size, "y", "parallel")
+                                            scaleX <- as_r_serialaxesGlyph_size(data$size, "x", "parallel")
+                                            scaleY <- as_r_serialaxesGlyph_size(data$size, "y", "parallel")
 
                                             xaxis <- t(sapply(scaleX, function(x) seq(-0.5 * x, 0.5 * x, length.out = dimension)))
                                             yaxis <- (scaledData - 0.5) * scaleY
@@ -176,8 +176,8 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                                                                dimension = dimension, showArea = showArea)
 
                                           } else if(axesLayout == 'radial') {
-                                            scaleX <- loon:::as_r_serialaxesGlyph_size(data$size, "x", "radial")
-                                            scaleY <- loon:::as_r_serialaxesGlyph_size(data$size, "y", "radial")
+                                            scaleX <- as_r_serialaxesGlyph_size(data$size, "x", "radial")
+                                            scaleY <- as_r_serialaxesGlyph_size(data$size, "y", "radial")
 
                                             angle <- seq(0, 2*base::pi, length.out = dimension + 1)[1:dimension]
 

@@ -6,7 +6,7 @@ loon2ggplot.l_layer_graph <- function(target, ...) {
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
 
-  states <- loon:::get_layer_states(widget, native_unit = FALSE)
+  states <- get_layer_states(widget, native_unit = FALSE)
 
   # no active nodes
   active <- states$active

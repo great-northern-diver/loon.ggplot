@@ -33,16 +33,14 @@
 #'   theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
 #'   scale_colour_manual(values = c("4" = "red", "6" = "blue", "8" = "green"))
 #'
-#' library(PairViz)
-#' ordSeq <- eulerian(4)
-#' ordSeq
-#' # [1] 1 2 3 1 4 2 3 4
+#' # ordSeq <- PairViz::eulerian(4)
+#' ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
 #' g <- ggSerialAxes(
-#'   ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
-#'   axesLabels = colnames(iris)[ordSeq],
-#'   layout = "radial"
+#'        ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+#'        axesLabels = colnames(iris)[ordSeq],
+#'        layout = "radial"
 #' )
-#'
+
 ggSerialAxes <- function(ggObj,
                          scaling = c("variable", "observation", "data", "none"),
                          layout = c("parallel", "radial"),
@@ -216,10 +214,10 @@ ggParallelSerialAxes <- function(ggObj,
 
   if(length(displayOrder) == 0) return(ggObj)
 
-  grouped_data <- loon:::get_scaledData(data = data,
-                                        sequence = axesLabels,
-                                        scaling = scaling,
-                                        displayOrder = displayOrder) %>%
+  grouped_data <- get_scaledData(data = data,
+                                 sequence = axesLabels,
+                                 scaling = scaling,
+                                 displayOrder = displayOrder) %>%
     set_data_group(
       mapping = mapping,
       showArea = showArea,
@@ -227,6 +225,10 @@ ggParallelSerialAxes <- function(ggObj,
       lineWidth = lineWidth,
       axesLayout = "parallel",
       originalData = data)
+
+  x <- grouped_data$x
+  y <- grouped_data$y
+  group <- grouped_data$group
 
   args <- if(showArea) {
     list(
@@ -314,11 +316,15 @@ ggRadialAes <- function(ggObj,
     ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
 
   if (showGuides) {
+
+    x <- xpos + radius * cos(seq(0, 2 * base::pi, length=101))
+    y <- ypos + radius * sin(seq(0, 2 * base::pi, length=101))
+
     ggObj <- ggObj +
       ggplot2::geom_path(
         data = data.frame(
-          x = xpos + radius * cos(seq(0, 2 * base::pi, length=101)),
-          y = ypos + radius * sin(seq(0, 2 * base::pi, length=101))
+          x = x,
+          y = y
         ),
         mapping = ggplot2::aes(x = x, y = y),
         color = loon::l_getOption("guidelines"),
@@ -328,12 +334,17 @@ ggRadialAes <- function(ggObj,
   }
 
   if(showAxes) {
+
+    x <- xpos + c(rep(0, len.xaxis) ,radius * cos(angle))
+    y <- ypos + c(rep(0, len.xaxis) ,radius * sin(angle))
+    group <- rep(1:len.xaxis, 2)
+
     ggObj <- ggObj +
       ggplot2::geom_path(
         data = data.frame(
-          x = xpos + c(rep(0, len.xaxis) ,radius * cos(angle)),
-          y = ypos + c(rep(0, len.xaxis) ,radius * sin(angle)),
-          group = rep(1:len.xaxis, 2)
+          x = x,
+          y = y,
+          group = group
         ),
         mapping = ggplot2::aes(x = x, y = y, group = group),
         color = line_color,
@@ -348,12 +359,17 @@ ggRadialAes <- function(ggObj,
   }
 
   if(showAxesLabels) {
+
+    x <- (radius + 0.1) * cos(angle) + xpos
+    y <- (radius + 0.1) * sin(angle) + ypos
+    label <- axesLabels
+
     ggObj <- ggObj +
       ggplot2::geom_text(
         data = data.frame(
-          x = (radius + 0.1) * cos(angle) + xpos,
-          y = (radius + 0.1) * sin(angle) + ypos,
-          label = axesLabels
+          x = x,
+          y = y,
+          label = label
         ),
         mapping = ggplot2::aes(x = x, y = y, label = label),
         inherit.aes = FALSE
@@ -401,10 +417,10 @@ ggRadialSerialAxes <- function(ggObj,
 
   if(length(displayOrder) == 0) return(ggObj)
 
-  grouped_data <- loon:::get_scaledData(data = data,
-                                        sequence = axesLabels,
-                                        scaling = scaling,
-                                        displayOrder = displayOrder) %>%
+  grouped_data <- get_scaledData(data = data,
+                                 sequence = axesLabels,
+                                 scaling = scaling,
+                                 displayOrder = displayOrder) %>%
     set_data_group(
       mapping = mapping,
       showArea = showArea,
@@ -412,6 +428,10 @@ ggRadialSerialAxes <- function(ggObj,
       lineWidth = lineWidth,
       axesLayout = "radial",
       originalData = data)
+
+  x <- grouped_data$x
+  y <- grouped_data$y
+  group <- grouped_data$group
 
   args <- if(showArea) {
     list(
