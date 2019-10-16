@@ -7,12 +7,17 @@ loon2ggplot.l_layer_histogram <- function(target, ...) {
 
   data <- transform_hist_x(widget)
 
+  xmin <- data$x
+  ymin <- data$y
+  xmax <- data$x + data$width
+  ymax <- data$y + data$height
+
   ggObj <- ggObj +
     ggplot2::geom_rect(
-      data = data.frame(xmin = data$x,
-                        ymin = data$y,
-                        xmax = data$x + data$width,
-                        ymax = data$y + data$height),
+      data = data.frame(xmin = xmin,
+                        ymin = ymin,
+                        xmax = xmax,
+                        ymax = ymax),
       mapping = ggplot2::aes(xmin = xmin,
                              ymin = ymin,
                              xmax = xmax,
@@ -28,11 +33,11 @@ loon2ggplot.l_layer_histogram <- function(target, ...) {
 transform_hist_x <- function(widget) {
 
   yshows <- widget['yshows']
-  bins <- loon:::getBinData(widget)
+  bins <- getBinData(widget)
 
   showStackedColors <- widget['showStackedColors']
   showOutlines <- widget['showOutlines']
-  colorOutline <- if(showOutlines) loon:::as_hex6color(widget["colorOutline"]) else NA
+  colorOutline <- if(showOutlines) as_hex6color(widget["colorOutline"]) else NA
 
   colorStackingOrder <- widget['colorStackingOrder']
   if(length(colorStackingOrder) == 1) {
@@ -60,7 +65,7 @@ transform_hist_x <- function(widget) {
                          count$unselected <- bin$count$all - bin$count$selected
                        } else count$unselected <- bin$count$all
                        bnames <- names(count)
-                       default_fill <- loon:::as_hex6color(widget['colorFill'])
+                       default_fill <- as_hex6color(widget['colorFill'])
                      }
 
                      bin_data(count = count,
@@ -100,7 +105,7 @@ bin_data <- function(count,
                                     fill <- if (fill == "selected") {
                                       loon::l_getOption("select-color")
                                     } else {
-                                      default_fill %||% loon:::as_hex6color(fill)
+                                      default_fill %||% as_hex6color(fill)
                                     }
                                     y <- y0
                                     y0 <<- y0 + height

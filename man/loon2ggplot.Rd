@@ -64,7 +64,4 @@ str(p)
 # add themes
 p + geom_smooth() + theme_linedraw()
 
-p <- l_pairs(iris, showHistograms = TRUE)
-g <- loon2ggplot(p)
-g + ggtitle("Iris pairs plot")
 }

@@ -78,13 +78,14 @@ geom_imageGlyph() understands the following aesthetics (required aesthetics are 
 }
 
 \examples{
-img_paths <- list.files(file.path(find.package(package = 'loon.ggplot'),
-                        "images"), full.names = TRUE)
-images <- lapply(img_paths, function(path) png::readPNG(path))
-p <- ggplot(data = data.frame(x = 1:6, y = 1:6),
-            mapping = aes(x = x, y = y)) +
-       geom_imageGlyph(images = images, alpha = 0.4, width = 2, height = 1.5)
-p
+if(requireNamespace("png")) {
+  img_paths <- list.files(file.path(find.package(package = 'loon'), "images"), full.names = TRUE)
+  images <- lapply(img_paths, function(path) png::readPNG(path))
+  p <- ggplot(data = data.frame(x = 1:6, y = 1:6),
+              mapping = aes(x = x, y = y)) +
+         geom_imageGlyph(images = images, alpha = 0.4, width = 2, height = 1.5)
+  p
+}
 
 }
 \seealso{

@@ -17,12 +17,16 @@ ggEdges <- function(ggObj, states) {
              nodeTo_CoordId <- which(activeNode %in% nodeTo)
              numNodesTo <- length(nodeTo_CoordId)
 
+             x <- c(rep(activeX[i], numNodesTo), activeX[nodeTo_CoordId])
+             y <- c(rep(activeY[i], numNodesTo), activeY[nodeTo_CoordId])
+             id <- rep(nodeTo_CoordId, 2)
+
              ggObj <<- ggObj +
                ggplot2::geom_path(
                  data = data.frame(
-                   x = c(rep(activeX[i], numNodesTo), activeX[nodeTo_CoordId]),
-                   y = c(rep(activeY[i], numNodesTo), activeY[nodeTo_CoordId]),
-                   id = rep(nodeTo_CoordId, 2)
+                   x = x,
+                   y = y,
+                   id = id
                  ),
                  mapping = ggplot2::aes(x = x, y = y, group = id, colour = as.factor(id)),
                  colour = rep(states$colorEdge[isActiveEdge][nodeFrom_EdgeId][nodeTo %in% activeNode], 2),
@@ -52,12 +56,18 @@ ggLabels <- function(ggObj, states) {
          function(i) {
            # labels
            if(states$showOrbit) {
+
+
+             x <- activeX[i] + mm2native(orbitDistance) * cos(activeAngle[i])
+             y <- activeY[i] + mm2native(orbitDistance) * sin(activeAngle[i])
+             label <- activeNode[i]
+
              ggObj <<- ggObj +
                ggplot2::geom_text(
                  data = data.frame(
-                   x = activeX[i] + mm2native(orbitDistance) * cos(activeAngle[i]),
-                   y = activeY[i] + mm2native(orbitDistance) * sin(activeAngle[i]),
-                   label = activeNode[i]
+                   x = x,
+                   y = y,
+                   label = label
                  ),
                  mapping = ggplot2::aes(x = x, y = y, label = label),
                  colour= loon::l_getOption("foreground"),
@@ -77,8 +87,8 @@ ggNodes <- function(ggObj, states) {
   active <- states$active
   # add nodes
   # is there a fill colour?
-  pch <- loon:::glyph_to_pch(states$glyph[active])
-  colour <- loon:::get_display_color(states$color[active],
+  pch <- glyph_to_pch(states$glyph[active])
+  colour <- get_display_color(states$color[active],
                                      states$selected[active])
   fill <- rep(NA, length(colour))
 
@@ -86,9 +96,12 @@ ggNodes <- function(ggObj, states) {
   fill[pch %in% 21:24] <- colour[pch %in% 21:24]
   colour[pch %in% 21:24] <- loon::l_getOption("foreground")
 
+  x <- states$x[active]
+  y <- states$y[active]
+
   ggObj <- ggObj +
     ggplot2::geom_point(
-      data = data.frame(x = states$x[active], y = states$y[active]),
+      data = data.frame(x = x, y = y),
       mapping = ggplot2::aes(x = x, y = y),
       shape = pch,
       colour = colour,
@@ -118,7 +131,7 @@ ggNavPaths <- function(ggObj, states, nav_ids, widget) {
 
            navigator <- loon::l_create_handle(c(widget, nav_id))
 
-           color <- loon:::as_hex6color(navigator['color'])
+           color <- as_hex6color(navigator['color'])
            from <- navigator['from']
            to <- navigator['to']
            prop <- navigator['proportion']
@@ -232,7 +245,7 @@ ggNavPoints <- function(ggObj, states, nav_ids, widget) {
 
            navigator <- loon::l_create_handle(c(widget, nav_id))
 
-           color <- loon:::as_hex6color(navigator['color'])
+           color <- as_hex6color(navigator['color'])
            from <- navigator['from']
            to <- navigator['to']
            prop <- navigator['proportion']

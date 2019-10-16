@@ -28,9 +28,9 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = 
   # modify ggplot
   ggplots <- lapply(ggplots,
                     function(plot){
-                      if(inherits(plot, "gg") && inherits(plot, "ggplot")) {
+                      if(ggplot2::is.ggplot(plot)) {
                         plot
-                      } else if(inherits(plot, "ggmatrix_plot_obj")) {
+                      } else if(is.ggmatrix_plot_obj(plot)) {
                         plot$fn(ggObj$data, plot$mapping)
                       } else {
                         stop("not implemented so far")

@@ -1,10 +1,10 @@
 context("test examples")
 library(ElemStatLearn)
 library(dplyr)
-library(lattice)
 library(magrittr)
 library(tidyverse)
 library(GGally)
+library(png)
 
 test_that("example works", {
   # example 1

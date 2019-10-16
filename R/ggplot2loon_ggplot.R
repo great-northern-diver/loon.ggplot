@@ -27,7 +27,7 @@
 #' @import ggplot2 tcltk loon methods grid rlang
 #' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
-#' @importFrom grDevices extendrange
+#' @importFrom grDevices extendrange rgb as.raster
 #' @importFrom stringr str_detect
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @importFrom GGally ggmatrix

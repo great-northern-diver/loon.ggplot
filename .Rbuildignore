@@ -5,3 +5,5 @@
 .travis.yml
 _pkgdown.yml
 docs/*
+^doc$
+^Meta$

@@ -115,9 +115,12 @@ wrap_paris_plots <- function(ggplots,
 
                       if(is.na(plot_id)) {
                         if(i %in% texts_pos) {
+                          x <- 0
+                          y <- 0
+                          label <- texts[texts_pos %in% i]
                           ggplot2::ggplot() +
                             ggplot2::geom_text(
-                              data = data.frame(x = 0, y = 0, label = texts[texts_pos %in% i]),
+                              data = data.frame(x = x, y = y, label = label),
                               mapping = ggplot2::aes(
                                 x = x,
                                 y = y,
@@ -147,9 +150,14 @@ wrap_paris_plots <- function(ggplots,
 
                       if(is.na(plot_id)) {
                         if(i %in% texts_pos) {
+
+                          x <- 0
+                          y <- 0
+                          label <- texts[texts_pos %in% i]
+
                           ggplot2::ggplot() +
                             ggplot2::geom_text(
-                              data = data.frame(x = 0, y = 0, label = texts[texts_pos %in% i]),
+                              data = data.frame(x = x, y = y, label = label),
                               mapping = ggplot2::aes(
                                 x = x,
                                 y = y,

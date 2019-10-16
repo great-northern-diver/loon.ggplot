@@ -161,10 +161,10 @@ GeomPolygonGlyph <- ggplot2::ggproto('GeomPolygonGlyph', Geom,
                                                         function(i) {
                                                           if(showArea) {
                                                             grid::unit(data$x[i], 'native') +
-                                                              grid::unit(polygon_x[[i]] * loon:::as_r_polygonGlyph_size(data$size[i]), "mm")
+                                                              grid::unit(polygon_x[[i]] * as_r_polygonGlyph_size(data$size[i]), "mm")
                                                           } else {
                                                             grid::unit(data$x[i], 'native') +
-                                                              grid::unit(c(polygon_x[[i]], polygon_x[[i]][1]) * loon:::as_r_polygonGlyph_size(data$size[i]), "mm")
+                                                              grid::unit(c(polygon_x[[i]], polygon_x[[i]][1]) * as_r_polygonGlyph_size(data$size[i]), "mm")
                                                           }
 
                                                         })
@@ -173,12 +173,12 @@ GeomPolygonGlyph <- ggplot2::ggproto('GeomPolygonGlyph', Geom,
                                                           if(showArea) {
 
                                                             grid::unit(data$y[i], 'native') +
-                                                              grid::unit(-polygon_y[[i]] * loon:::as_r_polygonGlyph_size(data$size[i]), "mm")
+                                                              grid::unit(-polygon_y[[i]] * as_r_polygonGlyph_size(data$size[i]), "mm")
 
                                                           } else {
 
                                                             grid::unit(data$y[i], 'native') +
-                                                              grid::unit(c(polygon_y[[i]], polygon_y[[i]][1]) * loon:::as_r_polygonGlyph_size(data$size[i]), "mm")
+                                                              grid::unit(c(polygon_y[[i]], polygon_y[[i]][1]) * as_r_polygonGlyph_size(data$size[i]), "mm")
                                                           }
                                                         })
 
