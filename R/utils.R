@@ -93,8 +93,6 @@ set_lineSize <- function(data, mapping, size) {
 }
 
 wrap_num <- function(ggLayout, is_facet_wrap, is_facet_grid, tkLabels){
-  # dim2layout_matrix <- dim(layout_matrix)[2]
-  # dim2layout_matrix - 5
   if(is_facet_wrap | !tkLabels) {
     length(names(ggLayout$facet_params$facets))
   } else if(is_facet_grid) {
