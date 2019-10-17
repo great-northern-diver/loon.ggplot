@@ -88,13 +88,13 @@ get_activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
        activeGeomLayers = activeGeomLayers)
 }
 
-get_subtitle <- function(layoutByROWS, layoutByCOLS, layout_matrix, ggLayout, numOfSubtitles,
+get_subtitle <- function(layoutByROWS, layoutByCOLS, layout, ggLayout, numOfSubtitles,
                          byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid, tkLabels){
   if(is_facet_wrap | !tkLabels) {
     colSubtitle <- if (numOfSubtitles > 0) {
       paste(
         sapply(
-          layout_matrix[panelNum, names(ggLayout$facet_params$facets)],
+          layout[panelNum, names(ggLayout$facet_params$facets)],
           as.character
         ),
         collapse = "\n"
@@ -103,14 +103,14 @@ get_subtitle <- function(layoutByROWS, layoutByCOLS, layout_matrix, ggLayout, nu
     rowSubtitle <- NULL
   } else if(is_facet_grid) {
     if(byROWS & !byCOLS) {
-      rowSubtitle <- paste(sapply(layout_matrix[panelNum, layoutByROWS], as.character), collapse = "\n")
+      rowSubtitle <- paste(sapply(layout[panelNum, layoutByROWS], as.character), collapse = "\n")
       colSubtitle <- NULL
     } else if(!byROWS & byCOLS){
       rowSubtitle <- NULL
-      colSubtitle <- paste(sapply(layout_matrix[panelNum, layoutByCOLS], as.character), collapse = "\n")
+      colSubtitle <- paste(sapply(layout[panelNum, layoutByCOLS], as.character), collapse = "\n")
     } else if(byROWS & byCOLS){
-      rowSubtitle <- paste(sapply(layout_matrix[panelNum, layoutByROWS], as.character), collapse = "\n")
-      colSubtitle <- paste(sapply(layout_matrix[panelNum, layoutByCOLS], as.character), collapse = "\n")
+      rowSubtitle <- paste(sapply(layout[panelNum, layoutByROWS], as.character), collapse = "\n")
+      colSubtitle <- paste(sapply(layout[panelNum, layoutByCOLS], as.character), collapse = "\n")
     } else {
       rowSubtitle <- NULL
       colSubtitle <- NULL

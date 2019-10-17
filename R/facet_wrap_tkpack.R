@@ -1,6 +1,6 @@
 facet_wrap_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, numofCOL, byrow, start.ypos,
                               start.xpos, rowspan, columnspan, span, rownames, colnames, i, j, ncol, nrow,
-                              parent, layout_matrix) {
+                              parent, layout) {
   if(is.null(showStrips)) showStrips <- TRUE
   # column subtitle names
   numOfSubtitles <- 0
@@ -17,8 +17,8 @@ facet_wrap_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
     lapply(1:length(lplots),
            function(k){
              lplot <- lplots[[k]]
-             theRow <- layout_matrix$ROW[k] - 1
-             theCOL <- layout_matrix$COL[k] - 1
+             theRow <- layout$ROW[k] - 1
+             theCOL <- layout$COL[k] - 1
              row.start <- if(byrow) {
                (i - 1) *  rowspan + start.ypos + theRow * span + numOfSubtitles
              } else {
@@ -52,8 +52,8 @@ facet_wrap_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
            function(k) {
              colname <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                                                 text= colnames[k], background = "grey80"))
-             theRow <- layout_matrix$ROW[k] - 1
-             theCOL <- layout_matrix$COL[k] - 1
+             theRow <- layout$ROW[k] - 1
+             theCOL <- layout$COL[k] - 1
              tcltk::tkgrid(colname,
                            row = if(byrow) {
                              (i - 1) * rowspan + start.ypos + theRow * span
@@ -76,8 +76,8 @@ facet_wrap_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
     lapply(1:length(lplots),
            function(k){
              lplot <- lplots[[k]]
-             theRow <- layout_matrix$ROW[k] - 1
-             theCOL <- layout_matrix$COL[k] - 1
+             theRow <- layout$ROW[k] - 1
+             theCOL <- layout$COL[k] - 1
              row.start <- if(byrow) {
                (i - 1) *  rowspan + start.ypos + theRow * span
              } else {

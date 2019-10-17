@@ -10,11 +10,11 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
 
   # different ggplot2 versions have different names
   if(is_devtools_ggplot2()){
-    layout_matrix <- ggLayout$layout
+    layout <- ggLayout$layout
     # panel_params
     ggplotPanel_params <- reset_panel_params(ggBuild$layout$panel_params)
   } else {
-    layout_matrix <- ggLayout$panel_layout
+    layout <- ggLayout$panel_layout
     # panel_params
     ggplotPanel_params <- ggBuild$layout$panel_ranges
     message(
@@ -200,7 +200,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
   }
   list(ggBuild = ggBuild,
        ggLayout = ggLayout,
-       layout_matrix = layout_matrix,
+       layout = layout,
        ggplotPanel_params = ggplotPanel_params,
        is_facet_wrap = is_facet_wrap,
        is_facet_grid = is_facet_grid

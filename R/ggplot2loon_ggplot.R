@@ -160,10 +160,10 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
   # ggplot_build
   buildggObj <-  ggBuild2Loon(ggObj, linkingKey, itemLabel)
-  layout_matrix <- buildggObj$layout_matrix
+  layout <- buildggObj$layout
   ggBuild <- buildggObj$ggBuild
   # number of panels
-  panelNum <- dim(layout_matrix)[1]
+  panelNum <- dim(layout)[1]
 
   # labels
   title <- ggObj$labels$title
@@ -216,8 +216,8 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
     tktitle(parent) <- paste0("loon.ggplot", as.character(tktitle(parent)))
   }
 
-  column <- max(layout_matrix$COL)
-  row <- max(layout_matrix$ROW)
+  column <- max(layout$COL)
+  row <- max(layout$ROW)
   row.span <- span * row
   column.span <- span * column
 

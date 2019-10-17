@@ -143,7 +143,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
 
           # show strips?
           showStrips <- ggObj$showStrips
-          layout_matrix <- ggLayout[[plotId]]$layout
+          layout <- ggLayout[[plotId]]$layout
 
           is_facet_wrap <- !is.null(ggLayout[[plotId]]$facet_params$facets)
           is_facet_grid <- !is.null(ggLayout[[plotId]]$facet_params$cols) & !is.null(ggLayout[[plotId]]$facet_params$rows)
@@ -178,7 +178,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
               ncol = ncol,
               nrow = nrow,
               parent = parent,
-              layout_matrix = layout_matrix
+              layout = layout
             )
           )
         }
