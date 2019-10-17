@@ -737,7 +737,7 @@ test_that("example works", {
   expect_equal(class(p), c("gg", "ggplot"))
 
   # ex 89
-  p <- l_hist(iris, color = iris$Species)
+  p <- l_hist(iris$Sepal.Length, color = iris$Species)
   g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
