@@ -31,7 +31,6 @@ Suggests:
     tools,
     testthat,
     knitr,
-    PairViz,
     rmarkdown,
     ElemStatLearn,
     tidyverse,
