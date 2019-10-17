@@ -1,4 +1,4 @@
-#' @title ggplot with serialaxes
+#' @title ggplot serialaxes
 #'
 #' @description The ggplot serialaxes graphics displays multivariate data either as
 #' a stacked star glyph plot, or as a parallel coordinate plot.

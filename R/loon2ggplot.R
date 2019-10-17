@@ -2,11 +2,11 @@
 #'
 #' @description Create a \code{ggplot} object from a \code{loon} widget
 #'
-#' @param target either an object of class \code{loon} or a vector that specifies the
+#' @param target a\code{loon} or a vector that specifies the
 #' widget, layer, glyph, navigator or context completely.
 #' The widget is specified by the widget path name (e.g. '.l0.plot'),
 #' the remaining objects by their ids.
-#' @param ... arguments used in \code{loon2ggplot()}, not used by this method
+#' @param ... arguments used inside \code{loon2ggplot()}, not used by this method
 #'
 #' @return a ggplot object
 #'

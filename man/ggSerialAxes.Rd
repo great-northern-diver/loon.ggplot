@@ -2,7 +2,7 @@
 % Please edit documentation in R/ggSerialaxes.R
 \name{ggSerialAxes}
 \alias{ggSerialAxes}
-\title{ggplot with serialaxes}
+\title{ggplot serialaxes}
 \usage{
 ggSerialAxes(ggObj, data = NULL, axesLabels = NULL, showAxes = TRUE,
   showAxesLabels = TRUE, scaling = c("variable", "observation", "data",

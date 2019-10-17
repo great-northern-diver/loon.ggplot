@@ -4,22 +4,24 @@
 \alias{ggplot2loon}
 \title{\code{ggplot} to \code{loon}}
 \usage{
-ggplot2loon(ggObj, activeGeomLayers = integer(0), parent = NULL,
-  ggGuides = FALSE, pack = TRUE, tkLabels = NULL,
+ggplot2loon(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
+  ..., parent = NULL, pack = TRUE, tkLabels = NULL,
   exteriorLabelProportion = 1/5, canvasHeight = 700,
-  canvasWidth = 850, ...)
+  canvasWidth = 850)
 }
 \arguments{
 \item{ggObj}{a \code{ggplot} or \code{ggmatrix} object}
 
 \item{activeGeomLayers}{to determine which geom layer is active. Only \code{geom_point()}
- and \code{geom_histogram()} can be set as active geom layer(s).
+ and \code{geom_histogram()} can be set as active geom layer(s) so far.
 (Notice, more than one \code{geom_point()} layers can be set as active layers,
  but only one \code{geom_histogram()} can be set as an active geom layer)}
 
-\item{parent}{parent widget path (Tk toplevel)}
-
 \item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
+
+\item{...}{named arguments to modify loon plot states}
+
+\item{parent}{parent widget path (Tk toplevel)}
 
 \item{pack}{logical (default \code{TRUE}) to pack widgets.
 If \code{FALSE}, widgets will be produced but won't be packed and so will not appear in the display.}
@@ -37,8 +39,6 @@ This is translated to a row/column span = 1 / exteriorLabelProportion for the pl
 \item{canvasHeight}{the height of canvas}
 
 \item{canvasWidth}{the width of canvas}
-
-\item{...}{named arguments to modify loon plot states}
 }
 \description{
 Create an interactive `loon` widget from a \code{ggplot} object
