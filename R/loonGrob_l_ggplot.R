@@ -26,10 +26,10 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
   colSubtitles <- titles$colSubtitles
   rowSubtitles <- titles$rowSubtitles
 
-  layout.matrix <- layout_matrix(target)
-  layoutDim <- apply(layout.matrix, 2, max)
-  numofROW <- layoutDim[1]
-  numofCOL <- layoutDim[2]
+  layout <- layout_coords(target)
+  layoutDim <- apply(layout, 2, max)
+  nrow <- layoutDim[1]
+  ncol <- layoutDim[2]
 
   # ttheme_default will give the background with light grey and dark grey, one by one
   # tt <- gridExtra::ttheme_default(base_size = 8)
@@ -43,9 +43,9 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     subtitle <- c(colSubtitles, rowSubtitles)
     # loon grobs
     lgrobs <- do.call(gList,
-                      lapply(1:numofROW,
+                      lapply(1:nrow,
                              function(i){
-                               rowi_columnIds <- which(layout.matrix$ROW == i)
+                               rowi_columnIds <- which(layout$row == i)
                                if(length(rowi_columnIds) > 0){
                                  lgrob <- lapply(rowi_columnIds,
                                                  function(rowi_columnId){
@@ -55,7 +55,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
 
                                  aGrob <- gridExtra::arrangeGrob(grobs = lgrob,
                                                                  nrow = 1,
-                                                                 # ncol = numofCOL,
+                                                                 # ncol = ncol,
                                                                  ncol = length(rowi_columnIds),
                                                                  name = paste(c("row", i, "arrangeGrob"), collapse = " ")
                                  )
@@ -70,11 +70,11 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
                       )
     )
     # layout matrix
-    layout_matrix <- matrix(rep(1:numofROW, each = numofCOL), nrow = numofROW, byrow = TRUE)
+    layout_matrix <- matrix(rep(1:nrow, each = ncol), nrow = nrow, byrow = TRUE)
     # last row
-    lastRowFacets <- length(which(layout.matrix$ROW == numofROW))
-    if(lastRowFacets != numofCOL) {
-      layout_matrix[numofROW, ] <- c(rep(numofROW, lastRowFacets) , rep(NA, (numofCOL - lastRowFacets)))
+    lastRowFacets <- length(which(layout$row == nrow))
+    if(lastRowFacets != ncol) {
+      layout_matrix[nrow, ] <- c(rep(nrow, lastRowFacets) , rep(NA, (ncol - lastRowFacets)))
     }
 
   } else if(is_facet_grid & length(colSubtitles) + length(rowSubtitles) > 0) {
@@ -131,7 +131,10 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
 
       tG_row <- gridExtra::tableGrob(matrix(uniqueRowSubtitles, nrow = length(uniqueRowSubtitles)), theme = tt)
       lgrobs_row <- cbind(aGrob, tG_row, size = "first")
-      tG_col <- gridExtra::tableGrob(matrix(c(uniqueColSubtitles, ""), ncol = length(uniqueColSubtitles) + 1), theme = tt)
+      tG_col <- gridExtra::tableGrob(
+        matrix(c(uniqueColSubtitles, ""),
+               ncol = length(uniqueColSubtitles) + 1),
+        theme = tt)
 
       lgrobs <- gList(
         rbind(tG_col, lgrobs_row, size = "last")
@@ -150,11 +153,11 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     )
 
     # layout matrix
-    layout_matrix <- matrix(rep(NA, numofROW * numofCOL), nrow = numofROW)
+    layout_matrix <- matrix(rep(NA, nrow * ncol), nrow = nrow)
     for(i in 1:len_plots) {
-      layout.matrixi <- unlist(layout.matrix[i, ])
+      layout_i <- unlist(layout[i, ])
       # set layout matrix
-      layout_matrix[layout.matrixi[1], layout.matrixi[2]] <- i
+      layout_matrix[layout_i[1], layout_i[2]] <- i
     }
     ylabel <- if(length(plots) == 1) {
       if(plots$x1y1['showLabels']) NULL else ylabel
@@ -187,17 +190,17 @@ l_getPlots.l_ggplot <- function(target){
 #' @export
 l_getLocations.l_ggplot <-  function(target){
   plots <- target$plots
-  layout.matrix <- layout_matrix(target)
-  layoutDim <- apply(layout.matrix, 2, max)
-  numofROW <- layoutDim[1]
-  numofCOL <- layoutDim[2]
+  layout <- layout_coords(target)
+  layoutDim <- apply(layout, 2, max)
+  nrow <- layoutDim[1]
+  ncol <- layoutDim[2]
 
   # layout matrix
-  layout_matrix <- matrix(rep(NA, numofROW * numofCOL), nrow = numofROW)
+  layout_matrix <- matrix(rep(NA, nrow * ncol), nrow = nrow)
   for(i in 1:length(plots)) {
-    layout.matrixi <- unlist(layout.matrix[i, ])
+    layout_i <- unlist(layout[i, ])
     # set layout matrix
-    layout_matrix[layout.matrixi[1], layout.matrixi[2]] <- i
+    layout_matrix[layout_i[1], layout_i[2]] <- i
   }
   layout_matrix
 }

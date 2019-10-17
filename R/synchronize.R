@@ -145,10 +145,10 @@ synchronize.l_ggmatrix <- function(target, ...) {
     }
   }
 
-  layout.matrix <- layout_matrix(target)
+  layout <- layout_coords(target)
 
-  for(row in unique(layout.matrix$ROW)) {
-    loonplots <- plots[which(layout.matrix$ROW == row)]
+  for(row in unique(layout$row)) {
+    loonplots <- plots[which(layout$row == row)]
     lapply(loonplots,
            function(loonplot) {
              bindingY(loonplot, synchronizeBindingsY)
@@ -156,8 +156,8 @@ synchronize.l_ggmatrix <- function(target, ...) {
     )
   }
 
-  for(column in unique(layout.matrix$COL)) {
-    loonplots <-plots[which(layout.matrix$COL == column)]
+  for(column in unique(layout$col)) {
+    loonplots <-plots[which(layout$col == column)]
     lapply(loonplots,
            function(loonplot) {
              bindingX(loonplot, synchronizeBindingsX)
