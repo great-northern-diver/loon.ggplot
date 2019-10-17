@@ -24,7 +24,6 @@ layout_coords.l_hist <- function(target) {
   ggLayout
 }
 
-#' @export
 layout_coords.l_ggplot <- function(target) {
   plots <- target$plots
   ggLayout <- as.data.frame(
