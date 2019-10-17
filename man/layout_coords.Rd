@@ -12,9 +12,3 @@ layout_coords(target)
 \description{
 return the layout matrix of a list of loon plots
 }
-\examples{
-p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
- facet_grid(rows = vars(drv))
-g <- ggplot2loon(p)
-loon.ggplot:::layout_coords(g)
-}

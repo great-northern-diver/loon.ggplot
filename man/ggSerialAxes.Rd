@@ -57,14 +57,12 @@ g +
   theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
   scale_colour_manual(values = c("4" = "red", "6" = "blue", "8" = "green"))
 
-if(requireNamespace("PairViz")) {
-  # An eulerian path of iris variables
-  ordSeq <- PairViz::eulerian(4)
-  # ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
-  g <- ggSerialAxes(
-         ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
-         axesLabels = colnames(iris)[ordSeq],
-         layout = "radial"
-  )
-}
+# An eulerian path of iris variables
+# ordSeq <- PairViz::eulerian(4)
+ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
+g <- ggSerialAxes(
+       ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+       axesLabels = colnames(iris)[ordSeq],
+       layout = "radial"
+)
 }
