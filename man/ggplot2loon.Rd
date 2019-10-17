@@ -89,9 +89,11 @@ suppressWarnings(
  lp_scatterplots_active12 <- ggplot2loon(scatterplots, activeGeomLayers = c(1,2))
 )
 # Here the colour points and grey points are both linked
-}
 
+########### ggmatrix to loon ###########
 pm <- GGally::ggpairs(iris, column = 1:4, ggplot2::aes(colour=Species))
 lg <- ggplot2loon(pm)
+}
+
 
 }

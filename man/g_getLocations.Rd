@@ -22,8 +22,8 @@ is an \code{nrow} by \code{ncol} matrix whose entries identify the location
 of each plot in \code{g_getPlots()} by their index.
 }
 \description{
-For the target compound loon plot, determines location in \code{ggmatrix}
+For the target compound \code{loon} plot, determines location in \code{ggmatrix}
 }
 \seealso{
-\code{\link{l_getLocations}}
+\code{\link{l_getLocations}}, \code{\link{g_getPlots}}
 }

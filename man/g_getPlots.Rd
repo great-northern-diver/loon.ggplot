@@ -19,9 +19,9 @@ g_getPlots(target)
 a list of \code{ggplot}s.
 }
 \description{
-For the target compound loon plot, determines all the \code{loon} plots
-in that compound plot.
+For the target compound loon plot, determines all the \code{ggplot}s based on
+the compound \code{loon} plot.
 }
 \seealso{
-\code{\link{l_getPlots}}
+\code{\link{l_getPlots}}, \code{\link{g_getLocations}}
 }

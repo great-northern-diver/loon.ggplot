@@ -4,18 +4,41 @@
 \alias{ggSerialAxes}
 \title{ggplot with serialaxes}
 \usage{
-ggSerialAxes(ggObj, scaling = c("variable", "observation", "data",
-  "none"), layout = c("parallel", "radial"), ...)
+ggSerialAxes(ggObj, data = NULL, axesLabels = NULL, showAxes = TRUE,
+  showAxesLabels = TRUE, scaling = c("variable", "observation", "data",
+  "none"), layout = c("parallel", "radial"), displayOrder = NULL,
+  title = "", showLabels = TRUE, color = NULL, size = NULL,
+  showGuides = TRUE, showArea = FALSE)
 }
 \arguments{
 \item{ggObj}{A `ggplot` object}
+
+\item{data}{A data frame for serialaxes. If `NULL`, data must be set in `ggObj`}
+
+\item{axesLabels}{A vector with variable names that defines the axes sequence.}
+
+\item{showAxes}{Logical value to indicate whether axes should be shown or not}
+
+\item{showAxesLabels}{Logical value to indicate whether axes labels should be shown or not}
 
 \item{scaling}{one of 'variable', 'data', 'observation' or 'none' to
 specify how the data is scaled. See Details for more information}
 
 \item{layout}{either "radial" or "parallel"}
 
-\item{...}{state arguments, see details}
+\item{displayOrder}{The display order of the observations.}
+
+\item{title}{title of the display}
+
+\item{showLabels}{Logical value to indicate whether label (mainly **title**) should be shown or not}
+
+\item{color}{Line color}
+
+\item{size}{Line width}
+
+\item{showGuides}{Logical value to indicate whether guides should be shown or not}
+
+\item{showArea}{Logical value to indicate whether to display lines or area}
 }
 \value{
 a ggplot object
@@ -24,34 +47,24 @@ a ggplot object
 The ggplot serialaxes graphics displays multivariate data either as
 a stacked star glyph plot, or as a parallel coordinate plot.
 }
-\details{
-Available names set in `...`:
-\itemize{
- \item{data: }{A data frame for serialaxes. If `NULL`, data must be set in `ggObj`}
- \item{axesLabels: }{A vector with variable names that defines the axes sequence.}
- \item{title: }{title of the display}
- \item{displayOrder: }{The display order of the observations}
- \item{color: }{Line color}
- \item{size: }{Line width}
- \item{showAxesLabels: }{Logical value to indicate whether axes labels should be shown or not}
- \item{showGuides: }{Logical value to indicate whether guides should be shown or not}
- \item{showAxes: }{Logical value to indicate whether axes should be shown or not}
- \item{showArea: }{Logical value to indicate whether to display lines or area}
-}
-}
 \examples{
-p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) \%>\%
-       ggSerialAxes()
-p
-p +
+# Blank plot
+p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl)))
+# Add serial axes (returns a ggplot object)
+g <- ggSerialAxes(p)
+# modify categorical variable color and legend background
+g +
   theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
   scale_colour_manual(values = c("4" = "red", "6" = "blue", "8" = "green"))
 
-# ordSeq <- PairViz::eulerian(4)
-ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
-g <- ggSerialAxes(
-       ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
-       axesLabels = colnames(iris)[ordSeq],
-       layout = "radial"
-)
+if(requireNamespace("PairViz")) {
+  # An eulerian path of iris variables
+  ordSeq <- PairViz::eulerian(4)
+  # ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
+  g <- ggSerialAxes(
+         ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+         axesLabels = colnames(iris)[ordSeq],
+         layout = "radial"
+  )
+}
 }
