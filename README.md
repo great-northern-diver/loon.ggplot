@@ -2,6 +2,8 @@
 ## loon.ggplot  <img src="man/figures/logo.png" align="right" width="120" />
 
 [![Build Status](https://travis-ci.org/z267xu/loon.ggplot.svg?branch=master)](https://travis-ci.org/z267xu/loon.ggplot)
+[![Codecov test coverage](https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/z267xu/loon.ggplot?branch=master)
+
 An R package to turn ggplot graphic data structures into interactive loon plots
 
 
@@ -13,7 +15,8 @@ The `ggplot2` graphics package (part of the `tidyverse` package collection) uses
 
 The `loon` graphics package provides **interactive** graphics especially valuable in any **exploratory data analysis**.  This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, `loon` also provides publication quality static graphics in `grid` via loon's functions `grid.loon()` and `loonGrob()`.
 
-The `loon.ggplot` package **brings both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics with many facets and layers will also value the ease with which **ggplots can be turned into interactive loon plots** through a simple translation function `ggplot2loon()`; vice versa, analysts can produce interactive `loon` graphics and enjoy the direct manipulaion, then convert the display to `ggplot2` by function `loon2ggplot()`.
+
+The loon.ggplot package brings **both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics can now turn these `ggplot`s into interactive `loon` plots for more dynamic interaction with their data.  Conversely,  data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s.   The former is accomplished by the simple translation function **`ggplot2loon()`** and the latter by the simple translation function **`loon2ggplot()`**.
 
 ### Install
 
@@ -69,7 +72,7 @@ Note that:
     
   + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in [SDSS 2019](https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216). Slides can be found in [SDSS2019/loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
   
-  + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(loon.ggplot)` for more info.
+  + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(ggplot2loon)` for more info.
 
 #### `loon2ggplot()`: loon --> ggplot
 
@@ -115,7 +118,7 @@ Note that:
 
 #### `loon.ggplot()`: loon <--> ggplot 
 
-`loon.ggplot()` gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and force.
+`loon.ggplot()` gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and forth.
 
 ```
 p <- l_plot(iris)
