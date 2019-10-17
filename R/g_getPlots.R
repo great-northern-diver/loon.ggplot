@@ -1,11 +1,11 @@
 #' @title get \code{ggplot}s
-#' @description For the target compound loon plot, determines all the \code{loon} plots
-#' in that compound plot.
+#' @description For the target compound loon plot, determines all the \code{ggplot}s based on
+#' the compound \code{loon} plot.
 #'
 #' @param target the (compound) loon  plot to be laid out.
 #' @return a list of \code{ggplot}s.
 #'
-#' @seealso \code{\link{l_getPlots}}
+#' @seealso \code{\link{l_getPlots}}, \code{\link{g_getLocations}}
 #'
 #' @export
 g_getPlots <- function(target) {
@@ -24,7 +24,7 @@ g_getPlots.default <- function(target) {
 
   # plots
   ggplots <- suppressMessages(
-    lapply(1:length(target),
+    lapply(seq(length(target)),
            function(i) {
              loon2ggplot(target[[i]])
            })
