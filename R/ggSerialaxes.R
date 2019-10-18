@@ -1,38 +1,38 @@
-#' @title ggplot with serialaxes
+#' @title ggplot serialaxes
 #'
 #' @description The ggplot serialaxes graphics displays multivariate data either as
 #' a stacked star glyph plot, or as a parallel coordinate plot.
 #'
 #' @param ggObj A `ggplot` object
+#' @param data A data frame for serialaxes. If `NULL`, data must be set in `ggObj`
+#' @param axesLabels A vector with variable names that defines the axes sequence.
+#' @param showAxes Logical value to indicate whether axes should be shown or not
+#' @param showAxesLabels Logical value to indicate whether axes labels should be shown or not
 #' @param scaling one of 'variable', 'data', 'observation' or 'none' to
 #' specify how the data is scaled. See Details for more information
 #' @param layout either "radial" or "parallel"
-#' @param ... state arguments, see details
+#' @param displayOrder The display order of the observations.
+#' @param title title of the display
+#' @param showLabels Logical value to indicate whether label (mainly **title**) should be shown or not
+#' @param color Line color
+#' @param size Line width
+#' @param showGuides Logical value to indicate whether guides should be shown or not
+#' @param showArea Logical value to indicate whether to display lines or area
 #'
 #' @return a ggplot object
 #'
-#' @details Available names set in `...`:
-#' \itemize{
-#'  \item{data: }{A data frame for serialaxes. If `NULL`, data must be set in `ggObj`}
-#'  \item{axesLabels: }{A vector with variable names that defines the axes sequence.}
-#'  \item{title: }{title of the display}
-#'  \item{displayOrder: }{The display order of the observations}
-#'  \item{color: }{Line color}
-#'  \item{size: }{Line width}
-#'  \item{showAxesLabels: }{Logical value to indicate whether axes labels should be shown or not}
-#'  \item{showGuides: }{Logical value to indicate whether guides should be shown or not}
-#'  \item{showAxes: }{Logical value to indicate whether axes should be shown or not}
-#'  \item{showArea: }{Logical value to indicate whether to display lines or area}
-#' }
 #' @export
 #' @examples
-#' p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl))) %>%
-#'        ggSerialAxes()
-#' p
-#' p +
+#' # Blank plot
+#' p <- ggplot(data = mtcars, mapping = aes(colour = as.factor(cyl)))
+#' # Add serial axes (returns a ggplot object)
+#' g <- ggSerialAxes(p)
+#' # modify categorical variable color and legend background
+#' g +
 #'   theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
 #'   scale_colour_manual(values = c("4" = "red", "6" = "blue", "8" = "green"))
 #'
+#' # An eulerian path of iris variables
 #' # ordSeq <- PairViz::eulerian(4)
 #' ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
 #' g <- ggSerialAxes(
@@ -42,9 +42,13 @@
 #' )
 
 ggSerialAxes <- function(ggObj,
+                         data = NULL, axesLabels = NULL,
+                         showAxes = TRUE, showAxesLabels = TRUE,
                          scaling = c("variable", "observation", "data", "none"),
-                         layout = c("parallel", "radial"),
-                         ...) {
+                         layout = c("parallel", "radial"), displayOrder = NULL,
+                         title = "", showLabels = TRUE,
+                         color = NULL, size = NULL,
+                         showGuides = TRUE, showArea = FALSE) {
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
@@ -54,53 +58,51 @@ ggSerialAxes <- function(ggObj,
   scaling <- match.arg(scaling)
   layout <- match.arg(layout)
 
-  args <- list(...)
-
-  data <- args$data %||% ggObj$data %||% stop("No data found", call. = FALSE)
+  data <- data %||% ggObj$data %||% stop("No data found", call. = FALSE)
 
   mapping <- ggObj$mapping
   lineWidth <- set_lineSize(data,
                             mapping = mapping,
-                            size = args$size)
+                            size = size)
   ggObj <- switch(
     layout,
     "parallel" = {
       ggObj %>%
         ggParallelAes(
-          axesLabels = args$axesLabels,
-          title = args$title %||% "",
-          showLabels = args$showLabels %||% TRUE,
-          showAxesLabels = args$showAxesLabels %||% TRUE,
-          showGuides = args$showGuides %||% TRUE,
-          showAxes = args$showAxes %||% TRUE) %>%
+          axesLabels = axesLabels,
+          title = title,
+          showLabels = showLabels,
+          showAxesLabels = showAxesLabels,
+          showGuides = showGuides,
+          showAxes = showAxes) %>%
         ggParallelSerialAxes(
           data = data,
           mapping = mapping,
-          axesLabels = args$axesLabels,
-          displayOrder = args$displayOrder,
+          axesLabels = axesLabels,
+          displayOrder = displayOrder,
           scaling = scaling,
-          color = args$color %||% args$colour,
+          color = color,
           lineWidth = lineWidth,
-          showArea = args$showArea %||% FALSE)
+          showArea = showArea)
     },
     "radial" = {
       ggObj %>%
         ggRadialAes(
-          axesLabels = args$axesLabels,
-          title = args$title %||% "",
-          showLabels = args$showLabels %||% TRUE,
-          showAxesLabels = args$showAxesLabels %||% TRUE,
-          showGuides = args$showGuides %||% TRUE,
-          showAxes = args$showAxes %||% TRUE) %>%
+          axesLabels = axesLabels,
+          title = title,
+          showLabels = showLabels,
+          showAxesLabels = showAxesLabels,
+          showGuides = showGuides,
+          showAxes = showAxes) %>%
         ggRadialSerialAxes(
           data = data,
           mapping = mapping,
-          axesLabels = args$axesLabels,
-          displayOrder = args$displayOrder,
+          axesLabels = axesLabels,
+          displayOrder = displayOrder,
           scaling = scaling,
-          color = args$color %||% args$colour,
+          color = color,
           lineWidth = lineWidth,
-          showArea = args$showArea %||% FALSE)
+          showArea = showArea)
     },
     {NULL}
   )

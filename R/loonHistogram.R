@@ -1,4 +1,4 @@
-loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, ggObj,
+loonHistogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
                           activeGeomLayers, panelIndex, column_names, dataFrame, mapping, numOfSubtitles,
                           parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                           xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid){
@@ -12,14 +12,14 @@ loonHistogram <- function(ggBuild, ggLayout, layout_matrix, ggplotPanel_params, 
     isPanel_i.hist_x <- rep(TRUE, length(hist_x))
   } else {
     mapping.names_pos <-   if(is_facet_wrap) {
-      which(colnames(layout_matrix) == names(ggLayout$facet_params$facets))
+      which(colnames(layout) == names(ggLayout$facet_params$facets))
     } else if(is_facet_grid) {
-      which(colnames(layout_matrix) == c(names(ggLayout$facet_params$rows),names(ggLayout$facet_params$cols)))
+      which(colnames(layout) == c(names(ggLayout$facet_params$rows),names(ggLayout$facet_params$cols)))
     } else NULL
 
     panel_i.list <- lapply(mapping.names_pos,
                            function(j) {
-                             c(names(layout_matrix[panelIndex, ])[j], as.character(layout_matrix[panelIndex, j]))
+                             c(names(layout[panelIndex, ])[j], as.character(layout[panelIndex, j]))
                            }
     )
     isPanel_i.hist_x_TorF <- lapply(seq_len(length(panel_i.list)),

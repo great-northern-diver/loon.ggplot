@@ -1,7 +1,8 @@
 #' @export
-ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
-                                 pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
-                                 canvasHeight = 700, canvasWidth = 850, ...) {
+ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
+                                 ..., parent = NULL, pack = TRUE,
+                                 tkLabels = NULL, exteriorLabelProportion = 1/5,
+                                 canvasHeight = 700, canvasWidth = 850) {
   # default args
   args <- c(
     list(activeGeomLayers = activeGeomLayers,
@@ -142,7 +143,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = 
 
           # show strips?
           showStrips <- ggObj$showStrips
-          layout_matrix <- ggLayout[[plotId]]$layout
+          layout <- ggLayout[[plotId]]$layout
 
           is_facet_wrap <- !is.null(ggLayout[[plotId]]$facet_params$facets)
           is_facet_grid <- !is.null(ggLayout[[plotId]]$facet_params$cols) & !is.null(ggLayout[[plotId]]$facet_params$rows)
@@ -177,7 +178,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), parent = 
               ncol = ncol,
               nrow = nrow,
               parent = parent,
-              layout_matrix = layout_matrix
+              layout = layout
             )
           )
         }

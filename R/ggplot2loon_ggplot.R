@@ -4,11 +4,12 @@
 #'
 #' @param ggObj a \code{ggplot} or \code{ggmatrix} object
 #' @param activeGeomLayers to determine which geom layer is active. Only \code{geom_point()}
-#'             and \code{geom_histogram()} can be set as active geom layer(s).
+#'             and \code{geom_histogram()} can be set as active geom layer(s) so far.
 #'            (Notice, more than one \code{geom_point()} layers can be set as active layers,
 #'             but only one \code{geom_histogram()} can be set as an active geom layer)
-#' @param parent parent widget path (Tk toplevel)
 #' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
+#' @param ... named arguments to modify loon plot states
+#' @param parent parent widget path (Tk toplevel)
 #' @param pack logical (default \code{TRUE}) to pack widgets.
 #'             If \code{FALSE}, widgets will be produced but won't be packed and so will not appear in the display.
 #' @param tkLabels logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped with
@@ -21,7 +22,6 @@
 #'          \code{tkgrid()}.
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
-#' @param ... named arguments to modify loon plot states
 #'
 #'
 #' @import ggplot2 tcltk loon methods grid rlang
@@ -79,14 +79,17 @@
 #'  lp_scatterplots_active12 <- ggplot2loon(scatterplots, activeGeomLayers = c(1,2))
 #' )
 #' # Here the colour points and grey points are both linked
-#' }
 #'
+#' ########### ggmatrix to loon ###########
 #' pm <- GGally::ggpairs(iris, column = 1:4, ggplot2::aes(colour=Species))
 #' lg <- ggplot2loon(pm)
+#' }
 #'
-ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
-                        pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
-                        canvasHeight = 700, canvasWidth = 850, ...) {
+#'
+ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
+                        ..., parent = NULL, pack = TRUE,
+                        tkLabels = NULL, exteriorLabelProportion = 1/5,
+                        canvasHeight = 700, canvasWidth = 850) {
   UseMethod("ggplot2loon", ggObj)
 }
 
@@ -96,9 +99,10 @@ ggplot2loon.default <- function(ggObj, ...) {
 }
 
 #' @export
-ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NULL, ggGuides = FALSE,
-                               pack = TRUE, tkLabels = NULL, exteriorLabelProportion = 1/5,
-                               canvasHeight = 700, canvasWidth = 850, ...) {
+ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
+                               ..., parent = NULL, pack = TRUE,
+                               tkLabels = NULL, exteriorLabelProportion = 1/5,
+                               canvasHeight = 700, canvasWidth = 850) {
 
   if(inherits(ggObj, "loon")) {
     error_info <- deparse(substitute(ggObj))
@@ -156,10 +160,10 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NU
 
   # ggplot_build
   buildggObj <-  ggBuild2Loon(ggObj, linkingKey, itemLabel)
-  layout_matrix <- buildggObj$layout_matrix
+  layout <- buildggObj$layout
   ggBuild <- buildggObj$ggBuild
   # number of panels
-  panelNum <- dim(layout_matrix)[1]
+  panelNum <- dim(layout)[1]
 
   # labels
   title <- ggObj$labels$title
@@ -212,8 +216,8 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), parent = NU
     tktitle(parent) <- paste0("loon.ggplot", as.character(tktitle(parent)))
   }
 
-  column <- max(layout_matrix$COL)
-  row <- max(layout_matrix$ROW)
+  column <- max(layout$COL)
+  row <- max(layout$ROW)
   row.span <- span * row
   column.span <- span * column
 

@@ -1,36 +1,24 @@
 #' @title layout matrix
 #' @description return the layout matrix of a list of loon plots
 #' @param target an object `ggplot2loon()` returns
-#'
-#' @examples
-#' p <- ggplot(mpg, aes(displ, cty)) + geom_point() + ggtitle("foo") +
-#'  facet_grid(rows = vars(drv))
-#' g <- ggplot2loon(p)
-#' layout_matrix(g)
-#' # l_getLocations(g)
-#'
-#'
-#' @export
-layout_matrix <- function(target) {
-  UseMethod("layout_matrix", target)
+
+layout_coords <- function(target) {
+  UseMethod("layout_coords", target)
 }
 
-#' @export
-layout_matrix.l_plot <- function(target) {
+layout_coords.l_plot <- function(target) {
   ggLayout <- matrix(c(1,1), nrow = 1)
-  colnames(ggLayout) <- c("ROW", "COL")
+  colnames(ggLayout) <- c("row", "col")
   ggLayout
 }
 
-#' @export
-layout_matrix.l_hist <- function(target) {
+layout_coords.l_hist <- function(target) {
   ggLayout <- matrix(c(1,1), nrow = 1)
-  colnames(ggLayout) <- c("ROW", "COL")
+  colnames(ggLayout) <- c("row", "col")
   ggLayout
 }
 
-#' @export
-layout_matrix.l_ggplot <- function(target) {
+layout_coords.l_ggplot <- function(target) {
   plots <- target$plots
   ggLayout <- as.data.frame(
     t(sapply(strsplit(names(plots), split = ""),
@@ -43,6 +31,6 @@ layout_matrix.l_ggplot <- function(target) {
              })
     )
   )
-  colnames(ggLayout) <- c("ROW", "COL")
+  colnames(ggLayout) <- c("row", "col")
   ggLayout
 }

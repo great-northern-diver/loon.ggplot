@@ -15,30 +15,31 @@ loon.ggplot(x, ...)
 \arguments{
 \item{x}{A \code{loon} widget or a \code{ggplot} object.}
 
-\item{...}{arguments used in \code{loon2ggplot()} or \code{ggplot2loon()}}
+\item{...}{arguments used in either \code{loon2ggplot()} or \code{ggplot2loon()}}
 }
 \value{
-If the input is a \code{ggplot} object, the output would be a \code{loon} widget; vice versa
+If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversly, if the
+input is a \code{loon} widget, then it returns a \code{ggplot} object.
 }
 \description{
-A bridge between \code{loon} widgets and \code{ggplot} objects. It can take either a \code{loon} widget
+A bridge between \code{loon} widgets and \code{gg} objects. It can take either a \code{loon} widget
 or a \code{gg} object (\code{ggplot} or \code{ggmatrix}), then create a corresponding \code{gg} (or \code{loon}) graphics.
 }
 \examples{
-# loon --> gg
-## loon 3D plot
+######### loon --> gg #########
+# loon 3D plot
 l <- with(quakes,
   l_plot3D(long, lat, depth, linkingGroup = "quakes")
 )
-## equivalent to `loon2ggplot(l)`
+# equivalent to `loon2ggplot(l)`
 g <- loon.ggplot(l)
 g # a ggplot object
 
-# gg --> loon
-## ggplot histogram
+######### gg --> loon #########
+# ggplot histogram
 g <- ggplot(iris, mapping = aes(Sepal.Length, fill = Species)) +
   geom_histogram()
-## equivalent to `ggplot2loon(g)`
+# equivalent to `ggplot2loon(g)`
 l <- loon.ggplot(g)
 l # a loon widget
 }

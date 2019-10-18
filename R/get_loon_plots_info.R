@@ -12,9 +12,9 @@ get_loon_plots_info <- function(envir = parent.frame()) {
 
   # ggbuild
   ggBuild <- buildggObj$ggBuild
-  layout_matrix <- buildggObj$layout_matrix
+  layout <- buildggObj$layout
   ggplotPanel_params <- buildggObj$ggplotPanel_params
-  panelNum <- dim(layout_matrix)[1]
+  panelNum <- dim(layout)[1]
 
   # active layers
   activeGeomLayers <- get("activeGeomLayers", envir = envir)
@@ -61,7 +61,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
 
                     subtitle <- get_subtitle(get("layoutByROWS", envir = envir),
                                              get("layoutByCOLS", envir = envir),
-                                             layout_matrix = layout_matrix,
+                                             layout = layout,
                                              ggLayout = buildggObj$ggLayout,
                                              numOfSubtitles = numOfSubtitles,
                                              byROWS = get("byROWS", envir = envir),
@@ -80,8 +80,8 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                                                      as.character(loon::l_subwin(parent,'label')),
                                                      text= colSubtitle, background = "grey90"))
                       tcltk::tkgrid(sub,
-                                    row = (layout_matrix[i,]$ROW - 1) * span + start.ypos,
-                                    column = (layout_matrix[i,]$COL - 1) * span + start.xpos,
+                                    row = (layout[i,]$ROW - 1) * span + start.ypos,
+                                    column = (layout[i,]$COL - 1) * span + start.xpos,
                                     rowspan = numOfSubtitles,
                                     columnspan = span,
                                     sticky="nesw")
@@ -163,7 +163,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                       if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
                         loonPlot <- loonHistogram(ggBuild = ggBuild,
                                                   ggLayout = buildggObj$ggLayout,
-                                                  layout_matrix = layout_matrix,
+                                                  layout = layout,
                                                   ggplotPanel_params = ggplotPanel_params,
                                                   ggObj = ggObj,
                                                   activeGeomLayers = activeGeomLayers,
@@ -274,8 +274,8 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                                          width = get("canvasWidth", envir = envir)/get("column", envir = envir),
                                          height = get("canvasHeight", envir = envir)/get("row", envir = envir))
                       # tk pack
-                      row.start <- (layout_matrix[i,]$ROW - 1) * span + start.subtitlepos
-                      col.start <- (layout_matrix[i,]$COL - 1) * span + start.xpos
+                      row.start <- (layout[i,]$ROW - 1) * span + start.subtitlepos
+                      col.start <- (layout[i,]$COL - 1) * span + start.xpos
 
                       tcltk::tkgrid(loonPlot,
                                     row = row.start,
@@ -313,8 +313,8 @@ get_loon_plots_info <- function(envir = parent.frame()) {
     function(j){
       paste0(
         c("x", "y"),
-        layout_matrix[j, c(which(colnames(layout_matrix) == "ROW"),
-                           which(colnames(layout_matrix) == "COL"))],
+        layout[j, c(which(colnames(layout) == "ROW"),
+                    which(colnames(layout) == "COL"))],
         collapse = ""
       )
     }

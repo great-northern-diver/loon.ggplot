@@ -19,7 +19,6 @@ reference:
     - ggplot2loon
     - gg_pipe
     - get_activeGeomLayers
-    - layout_matrix
     - loon2ggplot
     - geom_imageGlyph
     - geom_pointrangeGlyph
@@ -27,3 +26,5 @@ reference:
     - geom_serialAxesGlyph
     - geom_textGlyph
     - ggSerialAxes
+    - g_getPlots
+    - g_getLocations

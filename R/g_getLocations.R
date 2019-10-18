@@ -1,5 +1,5 @@
 #' @title get locations for \code{ggmatrix}
-#' @description  For the target compound loon plot, determines location in \code{ggmatrix}
+#' @description  For the target compound \code{loon} plot, determines location in \code{ggmatrix}
 #'
 #' @param target the (compound) loon plot whose locations are needed to lay out.
 #' @return a list of an appropriate subset of the named location arguments
@@ -7,7 +7,7 @@
 #' is an \code{nrow} by \code{ncol} matrix whose entries identify the location
 #' of each plot in \code{g_getPlots()} by their index.
 #'
-#' @seealso \code{\link{l_getLocations}}
+#' @seealso \code{\link{l_getLocations}}, \code{\link{g_getPlots}}
 #'
 g_getLocations <- function(target) {
   UseMethod('g_getLocations', target)

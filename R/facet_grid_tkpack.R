@@ -1,6 +1,6 @@
 facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, numofCOL, byrow,
                               start.ypos, start.xpos, rowspan, columnspan, span, rownames, colnames,
-                              i, j, ncol, nrow, parent, layout_matrix) {
+                              i, j, ncol, nrow, parent, layout) {
   rownames <- unique(
     as.character(
       ggLayout[[plotId]]$layout[, names(ggLayout[[plotId]]$facet_params$rows)]
@@ -20,8 +20,8 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
     lapply(1:length(lplots),
            function(k){
              lplot <- lplots[[k]]
-             theRow <- layout_matrix$ROW[k] - 1
-             theCOL <- layout_matrix$COL[k] - 1
+             theRow <- layout$ROW[k] - 1
+             theCOL <- layout$COL[k] - 1
              row.start <- if(byrow) {
                if(theRow == 0 & i == 1) {
                  (i - 1) *  rowspan + start.ypos + theRow * span + 1
@@ -46,9 +46,9 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
                if(theRow == 0 & j == 1) span - 1 else span
              }
              col.span <- if(byrow) {
-               if(theCOL == max(layout_matrix$COL - 1) & j == ncol) span - 1 else span
+               if(theCOL == max(layout$COL - 1) & j == ncol) span - 1 else span
              } else {
-               if(theCOL == max(layout_matrix$COL - 1) & j == ncol) span - 1 else span
+               if(theCOL == max(layout$COL - 1) & j == ncol) span - 1 else span
              }
              tcltk::tkgrid(lplot,
                            row = row.start,
@@ -154,8 +154,8 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
       lapply(1:length(lplots),
              function(k){
                lplot <- lplots[[k]]
-               theRow <- layout_matrix$ROW[k] - 1
-               theCOL <- layout_matrix$COL[k] - 1
+               theRow <- layout$ROW[k] - 1
+               theCOL <- layout$COL[k] - 1
                row.start <- if(byrow) {
                  if(theRow == 0) {
                    (i - 1) *  rowspan + start.ypos + theRow * span + 1
@@ -175,7 +175,7 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
                  (i - 1) * columnspan + start.xpos + theCOL * span
                }
                row.span <- if(theRow == 0) span - 1 else span
-               col.span <- if(theCOL == max(layout_matrix$COL - 1)) span - 1 else span
+               col.span <- if(theCOL == max(layout$COL - 1)) span - 1 else span
                tcltk::tkgrid(lplot,
                              row = row.start,
                              column= col.start,
@@ -244,8 +244,8 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
       lapply(1:length(lplots),
              function(k){
                lplot <- lplots[[k]]
-               theRow <- layout_matrix$ROW[k] - 1
-               theCOL <- layout_matrix$COL[k] - 1
+               theRow <- layout$ROW[k] - 1
+               theCOL <- layout$COL[k] - 1
                row.start <- if(byrow) {
                  (i - 1) *  rowspan + start.ypos + theRow * span
                } else {
