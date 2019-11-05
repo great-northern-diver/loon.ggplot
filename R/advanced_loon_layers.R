@@ -1157,7 +1157,7 @@ get_mappingLabel <- function(layerGeom, name, label = NULL, i = NULL) {
     } else {
       m <- length(layerGeom$mapping)
       names <- paste(
-        sapply(1:m,
+        sapply(seq(m),
                function(j){
                  mapping <- as.character(layerGeom$mapping[[j]])
                  mapping <- mapping[-which("~" %in% mapping)]
