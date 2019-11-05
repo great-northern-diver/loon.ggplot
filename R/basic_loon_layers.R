@@ -35,7 +35,7 @@ loonLayer.GeomPoint <- function(widget,
 
     lineColor <- hex6to12(data$colour)
     pointsColor <- if(!is.null(data$shape)) {
-      sapply(1:dim(data)[1],
+      sapply(seq(dim(data)[1]),
              function(j){
                if(data$shape[j] %in% 21:24){
                  hex6to12(data$fill[j])
@@ -727,7 +727,7 @@ loonLayer.GeomDotplot <- function(widget,
     stackRatio <- layerGeom$geom_params$stackratio
     countId <- data$countidx
     n <- dim(data)[1]
-    stackPos <- sapply(1:n,
+    stackPos <- sapply(seq(n),
                        function(i) {
                          if(i == 1) data$stackpos[i] else {
                            data$stackpos[i - countId[i] + 1] + (countId[i] - 1) * stackRatio

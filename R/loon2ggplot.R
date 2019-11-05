@@ -190,6 +190,7 @@ cartesian_gg <- function(target, ggObj) {
     ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
     ggplot2::xlab(xlabel) +
     ggplot2::ylab(ylabel) +
+    ggplot2::ggtitle(label = if(title == "") NULL else title) +
     ggplot2::theme(
       axis.ticks = if(showScales) ggplot2::element_line() else ggplot2::element_blank(),
       axis.text.x = if(showScales) ggplot2::element_text(size = scalesFont$size, family = scalesFont$family, face = scalesFont$face) else ggplot2::element_blank(),
@@ -198,6 +199,7 @@ cartesian_gg <- function(target, ggObj) {
       axis.title.x = if(showLabels) ggplot2::element_text(size = xlabelFont$size, family = xlabelFont$family, face = xlabelFont$face) else ggplot2::element_blank(),
       axis.title.y = if(showLabels) ggplot2::element_text(size = ylabelFont$size, family = ylabelFont$family, face = ylabelFont$face) else ggplot2::element_blank(),
       plot.background = ggplot2::element_rect(fill = as_hex6color(widget['background'])),
+      plot.title = ggplot2::element_text(hjust = 0.5),
       panel.background = ggplot2::element_rect(fill = guidesBackGround),
       panel.grid.major = ggplot2::element_line(size = 1,
                                                linetype = 'solid',

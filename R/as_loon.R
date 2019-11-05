@@ -15,7 +15,7 @@ as_loon_hvjust <- function(hjust, vjust) {
   if(length(hjust) != length(vjust) ) NULL
   else {
     len <- length(hjust)
-    sapply(1:len,
+    sapply(seq(len),
            function(i){
              if(hjust[i] == 0.5 & vjust[i] == 0.5) "center"
              else if(hjust[i] == 0.5 & vjust[i] > 0.5) "n"
