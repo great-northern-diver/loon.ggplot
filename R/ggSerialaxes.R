@@ -163,6 +163,7 @@ ggParallelAes <- function(ggObj,
       panel.background = ggplot2::element_rect(fill = panel_bg_fill),
       plot.margin = grid::unit(c(5,12,5,12), "mm"),
       plot.background = ggplot2::element_rect(fill = panel_bg_fill),
+      plot.title = ggplot2::element_text(hjust = 0.5),
       legend.background = element_rect(fill = panel_bg_fill)
     ) +
     ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
@@ -313,6 +314,7 @@ ggRadialAes <- function(ggObj,
       plot.margin = grid::unit(c(5,12,5,12), "mm"),
       panel.background = ggplot2::element_rect(fill = panel_bg_fill),
       plot.background = ggplot2::element_rect(fill = panel_bg_fill),
+      plot.title = ggplot2::element_text(hjust = 0.5),
       legend.background = ggplot2::element_rect(fill = panel_bg_fill)
     ) +
     ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
