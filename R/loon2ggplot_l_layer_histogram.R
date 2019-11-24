@@ -11,21 +11,27 @@ loon2ggplot.l_layer_histogram <- function(target, ...) {
   ymin <- data$y
   xmax <- data$x + data$width
   ymax <- data$y + data$height
+  fill <- data$fill
+
+  uni_fill <- unique(fill)
 
   ggObj <- ggObj +
     ggplot2::geom_rect(
       data = data.frame(xmin = xmin,
                         ymin = ymin,
                         xmax = xmax,
-                        ymax = ymax),
+                        ymax = ymax,
+                        fill = fill),
       mapping = ggplot2::aes(xmin = xmin,
                              ymin = ymin,
                              xmax = xmax,
-                             ymax = ymax),
-      fill = data$fill,
+                             ymax = ymax,
+                             fill = fill),
       colour = data$colour,
       inherit.aes = FALSE
-    )
+    ) +
+    ggplot2::scale_fill_manual(values = stats::setNames(uni_fill, nm = uni_fill),
+                               labels = stats::setNames(selection_color_labels(uni_fill), nm = uni_fill))
   return(ggObj)
 }
 

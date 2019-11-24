@@ -100,20 +100,20 @@ wrap_num <- function(ggLayout, is_facet_wrap, is_facet_grid, tkLabels){
   } else 0
 }
 
-as_r_text_size <- function(size) {
-  size/1.76
+as_r_text_size <- function(size, digits = 2) {
+  round(size/1.76, digits)
 }
 
-as_r_point_size <- function(size) {
-  2*log(size)
+as_r_point_size <- function(size, digits = 2) {
+  round(2*log(size), digits)
 }
 
-as_r_line_size <- function(size) {
-  size/.pt
+as_r_line_size <- function(size, digits = 2) {
+  round(size/.pt, digits)
 }
 
-pixels_2_lines <- function(x) {
-  x / 100
+pixels_2_lines <- function(x, digits = 2) {
+  round(x / 100, digits)
 }
 
 get_textCoords <- function(angle, anchor, just) {
@@ -209,14 +209,14 @@ l_layer_getUngroupedChildren <- function(widget, target) {
 
 ################################ Unexported functions in `loon` but used in `loon.ggplot` ################################
 # Since `Unexported objects imported by ':::' calls` will cause a NOTE in R CMD check
-as_r_polygonGlyph_size <- function(size){
+as_r_polygonGlyph_size <- function(size, digits = 2){
   if (is.numeric(size)) {
     # trial and error to choose scale for size
     size <- size/1.25
     size[size < 0.01] <- 0.01
     size
   }
-  size
+  round(size, digits)
 }
 
 get_scaledData <- function(data,
@@ -296,7 +296,7 @@ get_scaledData <- function(data,
 
 }
 
-as_r_serialaxesGlyph_size <- function(size, coord, axesLayout){
+as_r_serialaxesGlyph_size <- function(size, coord, axesLayout, digits = 2){
   if (is.numeric(size)) {
     # trial and error to choose scale for size
     if (axesLayout == "radial") {
@@ -310,7 +310,7 @@ as_r_serialaxesGlyph_size <- function(size, coord, axesLayout){
     } else size <- NA
     size[size == 0] <- 0.01
   }
-  size
+  round(size, digits)
 }
 
 glyph_to_pch <- function(glyph) {
@@ -352,7 +352,7 @@ as_hex6color <- function(color) {
 
   if(length(color) > 0){
     col <- vapply(color, function(x) {
-      if (x == "") "" else l_hexcolor(x)
+      if (x == "") "" else loon::l_hexcolor(x)
     }, character(1))
     col <- suppressWarnings(hex12tohex6(col))
     col[color == ""] <- NA
@@ -388,9 +388,9 @@ xy_coords_layer <- function(layer, native_unit = TRUE) {
 
   if (!is(layer, "l_layer")) stop("layer argument needs to be an l_layer")
 
-  widget <- l_create_handle(attr(layer, "widget"))
+  widget <- loon::l_create_handle(attr(layer, "widget"))
 
-  type <- l_layer_getType(attr(layer, "widget"), layer)
+  type <- loon::l_layer_getType(attr(layer, "widget"), layer)
 
   xy <- if (type %in% c("scatterplot", "graph") ) {
 
@@ -402,12 +402,12 @@ xy_coords_layer <- function(layer, native_unit = TRUE) {
   } else if (type %in% c('polygon', 'line', 'rectangle', 'text', 'oval',
                          'points', 'texts', 'polygons', 'rectangles', 'lines')) {
     list(
-      x = l_cget(layer, "x"),
-      y = l_cget(layer, "y")
+      x = loon::l_cget(layer, "x"),
+      y = loon::l_cget(layer, "y")
     )
   } else if(type == "histogram"){
     list(
-      x = l_cget(widget, "x"),
+      x = loon::l_cget(widget, "x"),
       y = NA
     )
   } else {
@@ -420,10 +420,10 @@ xy_coords_layer <- function(layer, native_unit = TRUE) {
 
   if (native_unit & length(xy$x) != 0 & length(xy$y) != 0) {
     xy <- if (type %in% c('polygons', 'rectangles', 'lines')) {
-      list(x = lapply(xy$x, function(xi)unit(xi, "native")),
-           y = lapply(xy$y, function(yi)unit(yi, "native")))
+      list(x = lapply(xy$x, function(xi) grid::unit(xi, "native")),
+           y = lapply(xy$y, function(yi) grid::unit(yi, "native")))
     } else {
-      list(x = unit(xy$x, "native"), y = unit(xy$y, "native"))
+      list(x = grid::unit(xy$x, "native"), y = grid::unit(xy$y, "native"))
     }
 
   }
@@ -433,25 +433,25 @@ xy_coords_layer <- function(layer, native_unit = TRUE) {
 get_layer_states <- function(target, omit = NULL, native_unit = TRUE) {
 
   if (!is(target, "loon")) {
-    target <- l_create_handle(target)
+    target <- loon::l_create_handle(target)
   }
 
   if (is(target, "l_layer")) {
     layer <- target
-    widget <- l_create_handle(attr(target, "widget"))
+    widget <- loon::l_create_handle(attr(target, "widget"))
     obj_states <- target
   } else {
     widget <- target
-    layer <- l_create_handle(c(as.vector(widget), "model"))
+    layer <- loon::l_create_handle(c(as.vector(widget), "model"))
     obj_states <- widget
   }
 
-  states_info <- l_info_states(obj_states)
+  states_info <- loon::l_info_states(obj_states)
   state_names <- setdiff(names(states_info), c(omit, cartesian_model_widget_states))
 
-  states <- setNames(lapply(state_names,
-                            function(state) l_cget(target, state)),
-                     state_names)
+  states <- stats::setNames(lapply(state_names,
+                                   function(state) l_cget(target, state)),
+                            state_names)
 
   # Add Coordinates
   if (!is(layer, "l_layer_group")) {
@@ -467,7 +467,6 @@ get_layer_states <- function(target, omit = NULL, native_unit = TRUE) {
     for (state_name in state_names[is_color]) {
       states[[state_name]] <- as_hex6color(states[[state_name]])
     }
-
   }
 
   states
@@ -493,7 +492,7 @@ getBinData <- function(widget) {
   }
 
 
-  l_throwErrorIfNotLoonWidget(widget)
+  loon::l_throwErrorIfNotLoonWidget(widget)
 
   tclbins <- tcl_obj_varname(widget, "bins")
 
@@ -518,7 +517,7 @@ getBinData <- function(widget) {
 
 get_model_display_order <- function(widget) {
 
-  n <- l_cget(widget, "n")
+  n <- loon::l_cget(widget, "n")
 
   if (n == 0) {
     numeric(0)
@@ -592,8 +591,7 @@ tcl_img_2_r_raster <- function(img) {
   img_data <- unlist(strsplit(toupper(as.character(tcl(img, 'data'))), " "))
   img_mat <- matrix(img_data, nrow = height, byrow = TRUE)
 
-  as.raster(img_mat)
-
+  grDevices::as.raster(img_mat)
 }
 
 ################################ TODO List ################################
