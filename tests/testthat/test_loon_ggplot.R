@@ -173,12 +173,12 @@ test_that("example works", {
 
   # example 18
   g <- ggplot(mpg, aes(class))
-  pp <- g + geom_bar(aes(fill = drv)) +
+  pp <- g +
     geom_bar(aes(fill = drv), position = position_stack(reverse = TRUE)) +
     coord_flip() +
     theme(legend.position = "top")
   gg <- ggplot2loon(pp, ggGuides = TRUE)
-  expect_equal(class(gg), c("l_plot", "loon"))
+  expect_equal(class(gg), c("l_hist", "loon"))
 
   # example 19
   df <- data.frame(trt = c("a", "b", "c"), outcome = c(2.3, 1.9, 3.2))
