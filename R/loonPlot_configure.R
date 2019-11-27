@@ -15,7 +15,7 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
                  loon::l_layer_lower(loonPlot, polarGuides)
                })
       } else {
-        message("Is it hard to underatand this graphics? Try \"ggGuides = TRUE\"!\n")
+        message("Is it hard to understand this graphics? Try \"ggGuides = TRUE\"!\n")
       }
 
       loon::l_scaleto_world(loonPlot)
@@ -81,7 +81,6 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
       } else hex6to12(theme$panel.grid$colour)
     }
   }
-
 
   loon::l_configure(loonPlot,
                     background = background.color,
