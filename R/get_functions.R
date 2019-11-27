@@ -1,4 +1,4 @@
-get_importantLayers <- function(len_layers, ggObj){
+get_importantLayers <- function(len_layers, ggObj, isCoordPolar){
   layerNames <- lapply(seq_len(len_layers),
                        function(j) {
                          className <- class(ggObj$layers[[j]]$geom)
@@ -12,14 +12,14 @@ get_importantLayers <- function(len_layers, ggObj){
                               }) == TRUE
   )
 
-  # take the histogram layer as l_hist
-  histogramLayers <- which(sapply(seq_len(length(layerNames)),
-                                  function(j){
-                                    # it could be bar plot
-                                    is.histogram_condition1 <- all(c("GeomBar", "GeomRect") %in% layerNames[[j]])
-                                    # stat class of geom_bar is StatCount
-                                    is.histogram_condition2 <- "StatBin" %in% class(ggObj$layers[[j]]$stat)
-                                    is.histogram_condition1 & is.histogram_condition2
+  histogramLayers <- which(sapply(layerNames,
+                                  function(layerName){
+                                    if("GeomBar" %in% layerName) {
+                                      if(isCoordPolar) {
+                                        warning("loon `l_hist` is built on top of Cartesian coordinates and does not accept polar coordinates. \n If polar coords are detected, histogram or bar plots \n will be considered as polygons and will **not** be active.", call. = FALSE)
+                                        FALSE
+                                      } else TRUE
+                                    } else FALSE
                                   }) == TRUE
   )
 
