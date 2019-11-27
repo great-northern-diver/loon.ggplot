@@ -237,11 +237,13 @@ ggParallelSerialAxes <- function(ggObj,
 
     fill <- grouped_data$fill
 
-    args <- list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group, fill = fill),
-      inherit.aes = TRUE
-    ) %>% Filter(Negate(is.null), .)
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, fill = fill),
+                     inherit.aes = TRUE
+                   )
+    )
 
     uni_fill <- unique(fill)
 
@@ -262,11 +264,13 @@ ggParallelSerialAxes <- function(ggObj,
     size <- grouped_data$size
     grouped_data$size <- factor(size)
 
-    args <- list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group, color = color, size = size),
-      inherit.aes = TRUE
-    ) %>%  Filter(Negate(is.null), .)
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, color = color, size = size),
+                     inherit.aes = TRUE
+                   )
+    )
 
     uni_color <- unique(color)
     uni_size <- unique(size)
@@ -471,12 +475,13 @@ ggRadialSerialAxes <- function(ggObj,
 
     fill <- grouped_data$fill
 
-    args <- list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group, fill = fill),
-      inherit.aes = TRUE
-    ) %>%
-      Filter(Negate(is.null), .)
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, fill = fill),
+                     inherit.aes = TRUE
+                   )
+    )
 
     uni_fill <- unique(fill)
 
@@ -497,12 +502,13 @@ ggRadialSerialAxes <- function(ggObj,
     size <- grouped_data$size
     grouped_data$size <- factor(size)
 
-    args <- list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group, color = color, size = size),
-      inherit.aes = TRUE
-    ) %>%
-      Filter(Negate(is.null), .)
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, color = color, size = size),
+                     inherit.aes = TRUE
+                   )
+    )
 
     uni_color <- unique(color)
     uni_size <- unique(size)
