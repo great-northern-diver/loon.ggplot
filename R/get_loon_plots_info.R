@@ -134,7 +134,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                                          rowSubtitle), collapse = "\n")
 
                     if (len_layers != 0) {
-                      importantLayers <- get_importantLayers(len_layers, ggObj)
+                      importantLayers <- get_importantLayers(len_layers, ggObj, isCoordPolar)
 
                       boxplotLayers <- importantLayers$boxplotLayers
                       curveLayers <- importantLayers$curveLayers
