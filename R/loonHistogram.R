@@ -230,7 +230,6 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
   }
 
   position <- ggObj$layers[[activeGeomLayers]]$position
-  reverse <- position$reverse
   operations <- position_operation(position,
                                    hist_values,
                                    sep = "&",
@@ -266,10 +265,6 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
     in_limits <- in_y.limits & in_x.limits
     hist_values <- hist_values[in_limits]
     fill_var <- fill_var[in_limits]
-    fill_levels <- levels(as.factor(fill_var))
-    if(is.null(reverse) || !reverse) {
-      fill_levels <- rev(fill_levels)
-    }
 
   } else {
 
@@ -282,25 +277,17 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
     }
     in_limits <- in_y.limits & in_x.limits
     hist_values <- hist_values[in_limits]
-    fill_levels <- levels(as.factor(fill_var))
-    if(!is.null(reverse) && reverse) {
-      fill_levels <- rev(fill_levels)
-    }
   }
 
-  uni_fill <- hex6to12(unique(hist_data$fill))
+  ggFill <- match_fill(hist_values, fill_var, hist_data)
+  fill_levels <- names(ggFill)
 
-  if(length(uni_fill) == length(fill_levels)) {
-
-    fill <- rep(NA, length(hist_values))
-    for(j in seq_len(length(fill_levels))){
-      fill[which(fill_var %in% fill_levels[j])] <- uni_fill[j]
-    }
-  } else {
-    fill <- rep(uni_fill, length(hist_values))
+  fill <- rep(NA, length(hist_values))
+  for(j in seq_len(length(fill_levels))){
+    fill[which(fill_var %in% fill_levels[j])] <- ggFill[j]
   }
 
-  colorStackingOrder <- c("selected", uni_fill)
+  colorStackingOrder <- c("selected", rev(unique(ggFill)))
 
   list(
     fill = fill,
@@ -421,6 +408,20 @@ catch_facet_id <- function(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
   }
 
   facet_id
+}
+
+
+match_fill <- function(hist_values, fill_var, hist_data) {
+
+  aWeirdSymbol <- "<&&>"
+
+  group <- hist_data$group
+  fill <- hist_data$fill
+  level <- levels(factor(paste(fill_var, hist_values, sep = aWeirdSymbol)))
+
+  x <- stats::setNames(fill[order(group)],
+                       vapply(strsplit(level, aWeirdSymbol), function(x) x[1], character(1)))
+  x[!duplicated(names(x))]
 }
 
 # density or frequency?
