@@ -46,7 +46,9 @@ get_activeGeomLayers <- function(ggObj) {
     stop(paste0(deparse(substitute(ggObj)), " is not a ggplot object"))
   }
   len_layers <- length(ggObj$layers)
-  importantLayers <- get_importantLayers(len_layers, ggObj)
+
+  importantLayers <- get_importantLayers(len_layers, ggObj,
+                                         isCoordPolar = (!is.null(ggObj$coordinates$r)) && (!is.null(ggObj$coordinates$theta)))
 
   np <- length(importantLayers$pointLayers)
   nh <- length(importantLayers$histogramLayers)

@@ -233,30 +233,64 @@ ggParallelSerialAxes <- function(ggObj,
   y <- grouped_data$y
   group <- grouped_data$group
 
-  args <- if(showArea) {
-    list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group),
-      fill = grouped_data$fill,
-      inherit.aes = TRUE
+  if(showArea) {
+
+    fill <- grouped_data$fill
+
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, fill = fill),
+                     inherit.aes = TRUE
+                   )
     )
+
+    uni_fill <- unique(fill)
+
+    ggObj <- ggObj +
+      do.call(
+        what = ggplot2::geom_polygon,
+        args
+      ) +
+      ggplot2::scale_fill_manual(values = stats::setNames(uni_fill, nm = uni_fill),
+                                 labels = stats::setNames(selection_color_labels(uni_fill), nm = uni_fill))
+
+    if(length(uni_fill) == 1)
+      ggObj <- ggObj + ggplot2::guides(fill = FALSE)
+
   } else {
-    list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group),
-      color = grouped_data$color,
-      size = grouped_data$size,
-      inherit.aes = TRUE
+
+    color <- grouped_data$color
+    size <- grouped_data$size
+    grouped_data$size <- factor(size)
+
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, color = color, size = size),
+                     inherit.aes = TRUE
+                   )
     )
+
+    uni_color <- unique(color)
+    uni_size <- unique(size)
+
+    ggObj <- ggObj +
+      do.call(
+        what = ggplot2::geom_path,
+        args
+      ) +
+      ggplot2::scale_color_manual(values = stats::setNames(uni_color, nm = uni_color),
+                                  labels = stats::setNames(selection_color_labels(uni_color), nm = uni_color)) +
+      ggplot2::scale_size_manual(values = stats::setNames(uni_size, nm = uni_size))
+
+    if(length(uni_color) == 1)
+      ggObj <- ggObj + ggplot2::guides(color = FALSE)
+
+    if(length(uni_size) == 1)
+      ggObj <- ggObj + ggplot2::guides(size = FALSE)
   }
 
-  args <- Filter(Negate(is.null), args)
-
-  ggObj <- ggObj +
-    do.call(
-      what = if(showArea) ggplot2::geom_polygon else ggplot2::geom_path,
-      args
-    )
   return(ggObj)
 }
 
@@ -437,30 +471,64 @@ ggRadialSerialAxes <- function(ggObj,
   y <- grouped_data$y
   group <- grouped_data$group
 
-  args <- if(showArea) {
-    list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group),
-      fill = grouped_data$fill,
-      inherit.aes = TRUE
+  if(showArea) {
+
+    fill <- grouped_data$fill
+
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, fill = fill),
+                     inherit.aes = TRUE
+                   )
     )
+
+    uni_fill <- unique(fill)
+
+    ggObj <- ggObj +
+      do.call(
+        what = ggplot2::geom_polygon,
+        args
+      ) +
+      ggplot2::scale_fill_manual(values = stats::setNames(uni_fill, nm = uni_fill),
+                                 labels = stats::setNames(selection_color_labels(uni_fill), nm = uni_fill))
+
+    if(length(uni_fill) == 1)
+      ggObj <- ggObj + ggplot2::guides(fill = FALSE)
+
   } else {
-    list(
-      data = grouped_data,
-      mapping = ggplot2::aes(x = x, y = y, group = group),
-      color = grouped_data$color,
-      size = grouped_data$size,
-      inherit.aes = TRUE
+
+    color <- grouped_data$color
+    size <- grouped_data$size
+    grouped_data$size <- factor(size)
+
+    args <- Filter(Negate(is.null),
+                   list(
+                     data = grouped_data,
+                     mapping = ggplot2::aes(x = x, y = y, group = group, color = color, size = size),
+                     inherit.aes = TRUE
+                   )
     )
+
+    uni_color <- unique(color)
+    uni_size <- unique(size)
+
+    ggObj <- ggObj +
+      do.call(
+        what = ggplot2::geom_path,
+        args
+      ) +
+      ggplot2::scale_color_manual(values = stats::setNames(uni_color, nm = uni_color),
+                                  labels = stats::setNames(selection_color_labels(uni_color), nm = uni_color)) +
+      ggplot2::scale_size_manual(values = stats::setNames(uni_size, nm = uni_size))
+
+    if(length(uni_color) == 1)
+      ggObj <- ggObj + ggplot2::guides(color = FALSE)
+
+    if(length(uni_size) == 1)
+      ggObj <- ggObj + ggplot2::guides(size = FALSE)
   }
 
-  args <- Filter(Negate(is.null), args)
-
-  ggObj <- ggObj +
-    do.call(
-      what = if(showArea) ggplot2::geom_polygon else ggplot2::geom_path,
-      args
-    )
   return(ggObj)
 }
 
@@ -502,7 +570,8 @@ set_data_group <- function(data = NULL,
                      x = c(xaxis, rev(xaxis)),
                      y = as.numeric(c(data[i, ], rep(0, p))),
                      group = rep(i, 2 * p),
-                     fill = rep(color[i], 2 * p)
+                     fill = rep(color[i], 2 * p),
+                     stringsAsFactors = FALSE
                    )
                  } else {
                    data.frame(
@@ -510,7 +579,8 @@ set_data_group <- function(data = NULL,
                      y = as.numeric(data[i, ]),
                      group = rep(i, p),
                      size = rep(lineWidth[i], p),
-                     color = rep(color[i], p)
+                     color = rep(color[i], p),
+                     stringsAsFactors = FALSE
                    )
                  }
                })
@@ -534,7 +604,8 @@ set_data_group <- function(data = NULL,
                      x = xpos + c(radialxais, radialxais[1]),
                      y = ypos + c(radialyais, radialyais[1]),
                      group = rep(i, p + 1),
-                     fill = rep(color[i], p + 1)
+                     fill = rep(color[i], p + 1),
+                     stringsAsFactors = FALSE
                    )
                  } else {
                    data.frame(
@@ -542,7 +613,8 @@ set_data_group <- function(data = NULL,
                      y = ypos + c(radialyais, radialyais[1]),
                      group = rep(i, p + 1),
                      color = rep(color[i], p + 1),
-                     size = rep(lineWidth[i], p + 1)
+                     size = rep(lineWidth[i], p + 1),
+                     stringsAsFactors = FALSE
                    )
                  }
                })
