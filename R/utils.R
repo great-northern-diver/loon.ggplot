@@ -20,6 +20,42 @@ is.color <- function(colors) {
          })
 }
 
+rearrangePolygonData <- function(data) {
+  na_x <- is.na(data$x)
+  na_y <- is.na(data$y)
+  if (all(na_x != na_y)) {
+    data <- data[!union(na_x, na_y), ]
+    return(data)
+  }
+
+  pos <- c(which(na_x), dim(data)[1])
+  npolygons <- length(pos)
+
+  if(npolygons > 1) {
+    group <- c()
+
+    for(i in 1:npolygons) {
+      if(i == 1)
+        group <- c(group, rep(i, pos[i]))
+      else
+        group <- c(group, rep(i, pos[i] - pos[i-1]))
+    }
+
+    data$group <- group
+    data <- data[!na_x, ]
+  }
+
+  return(data)
+}
+
+group_id <- function(data, uniGroup) {
+  group <- data$group
+  vapply(uniGroup,
+         function(x) {
+           which(group == x)[1]
+         }, numeric(1))
+}
+
 set_lineColor <- function(data, mapping, color) {
 
   gg_color <- function(color, check = TRUE) {
