@@ -1,7 +1,7 @@
 #' @importFrom dplyr group_by summarise n
 
 loonHistogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
-                          activeGeomLayers, panelIndex, column_names, dataFrame, mapping, numOfSubtitles,
+                          activeGeomLayers, panelIndex, dataFrame, mapping, numOfSubtitles,
                           parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                           xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
   x <- ggObj$layers[[activeGeomLayers]]$stat
@@ -11,7 +11,7 @@ loonHistogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
 
 
 loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
-                                  activeGeomLayers, panelIndex, column_names, dataFrame,
+                                  activeGeomLayers, panelIndex, dataFrame,
                                   mapping, numOfSubtitles,
                                   parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                                   xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
@@ -31,7 +31,7 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
   y.limits <- ggBuild$layout$panel_scales_y[[1]]$limits
 
   bin_info <- catch_bin_info(hist_values, hist_data, x.limits, y.limits,
-                             facet_id, in_limits, dataFrame, ggObj, column_names,
+                             facet_id, in_limits, dataFrame, ggObj,
                              activeGeomLayers,
                              panelIndex = panelIndex,
                              ggplotPanel_params = ggplotPanel_params,
@@ -45,16 +45,16 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
   # show outline color or not
   if (any(!hex6to12(hist_data$colour) %in% "" )) {
     showOutlines <- TRUE
-    colorOutline <- hex6to12(Filter(function(k) k != "", unique(hex6to12(hist_data$colour)))[1])
+    colorOutline <- Filter(function(k) k != "", unique(hex6to12(hist_data$colour)))[1]
   } else {
     showOutlines <- FALSE
-    colorOutline <- hex6to12("black")
+    colorOutline <- ("black")
   }
 
   # loon histogram
   loon::l_hist(parent = parent,
                x = hist_values,
-               color = fill,
+               color = hex6to12(fill),
                binwidth = binwidth + 1e-6, # need more thoughts
                showLabels = showLabels,
                showGuides = showGuides,
@@ -73,7 +73,7 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
 }
 
 loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
-                                    activeGeomLayers, panelIndex, column_names, dataFrame,
+                                    activeGeomLayers, panelIndex, dataFrame,
                                     mapping, numOfSubtitles,
                                     parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                                     xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
@@ -93,7 +93,7 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
   y.limits <- ggBuild$layout$panel_scales_y[[1]]$limits
 
   bin_info <- catch_bin_info(hist_values, hist_data, x.limits, y.limits,
-                             facet_id, in_limits, dataFrame, ggObj, column_names,
+                             facet_id, in_limits, dataFrame, ggObj,
                              activeGeomLayers)
 
   hist_values <- bin_info$hist_values
@@ -102,18 +102,18 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
   in_limits <- bin_info$in_limits
 
   # show outline color or not
-  if (any(!hex6to12(hist_data$colour) %in% "" )) {
+  if (any(!(hist_data$colour) %in% "" )) {
     showOutlines <- TRUE
-    colorOutline <- hex6to12(Filter(function(k) k != "", unique(hex6to12(hist_data$colour)))[1])
+    colorOutline <- Filter(function(k) k != "", hex6to12(unique(hist_data$colour)))[1]
   } else {
     showOutlines <- FALSE
-    colorOutline <- hex6to12("black")
+    colorOutline <- ("black")
   }
 
   # loon histogram
   loon::l_hist(parent = parent,
                x = hist_values,
-               color = fill,
+               color = hex6to12(fill),
                showLabels = showLabels,
                showGuides = showGuides,
                showScales = showScales,
@@ -135,7 +135,7 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
 # when users set ylim or xlim, the bins would change.
 catch_bin_info <- function(hist_values, hist_data, x.limits, y.limits,
                            facet_id, in_limits, dataFrame,
-                           ggObj, column_names, activeGeomLayers, ...) {
+                           ggObj, activeGeomLayers, ...) {
 
   x <- ggObj$layers[[activeGeomLayers]]$stat
   UseMethod("catch_bin_info", x)
@@ -143,7 +143,7 @@ catch_bin_info <- function(hist_values, hist_data, x.limits, y.limits,
 
 catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
                                    facet_id, in_limits, dataFrame,
-                                   ggObj, column_names, activeGeomLayers, ...) {
+                                   ggObj, activeGeomLayers, ...) {
   args <- list(...)
   panelIndex <- args$panelIndex
   ggplotPanel_params <- args$ggplotPanel_params
@@ -191,13 +191,14 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
   hist_values[which(hist_values == min(hist_values))[1]] <- start_value
 
   # bin fills
-  uni_fill <- hex6to12(unique(hist_data$fill))
-  fill <- rep(uni_fill, length(hist_values))
+  uni_fill <- unique(hist_data$fill)
+  fill <- rep(uni_fill[1], length(hist_values))
   # set stack color
   if (!is.null(ggObj$labels$fill)) {
     # fill: panel i && in limits
+    fill_quo <- ggObj$layers[[activeGeomLayers]]$mapping$fill %||% ggObj$mapping$fill
     fill_var <- unlist(
-      dataFrame[, which(stringr::str_detect(ggObj$labels$fill, column_names) == TRUE)]
+      rlang::eval_tidy(rlang::quo(!!fill_quo),  dataFrame)
     )[facet_id][in_limits]
     levels <- rev(levels(as.factor(fill_var)))
     if (length(uni_fill) == length(levels)) {
@@ -208,7 +209,7 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
     }
   }
 
-  colorStackingOrder <- c("selected", uni_fill)
+  colorStackingOrder <- c("selected", hex6to12(uni_fill))
 
   list(
     fill = fill,
@@ -220,7 +221,7 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
 
 catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
                                      facet_id, in_limits, dataFrame,
-                                     ggObj, column_names, activeGeomLayers, ...) {
+                                     ggObj, activeGeomLayers, ...) {
 
   in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
   colorStackingOrder <- 'selected'
@@ -232,10 +233,10 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
   position <- ggObj$layers[[activeGeomLayers]]$position
   operations <- position_operation(position,
                                    hist_values,
+                                   activeGeomLayers,
                                    sep = "&",
                                    ggObj = ggObj,
                                    dataFrame = dataFrame,
-                                   column_names = column_names,
                                    facet_id = facet_id)
 
   fill_var <- operations$fill_var
@@ -287,7 +288,7 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
     fill[which(fill_var %in% fill_levels[j])] <- ggFill[j]
   }
 
-  colorStackingOrder <- c("selected", rev(unique(ggFill)))
+  colorStackingOrder <- c("selected", hex6to12(rev(unique(ggFill))))
 
   list(
     fill = fill,
@@ -300,20 +301,20 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
 # bar position operation
 # PositionStack is stack the colored bins
 # PositionDodge is place the stacked bar side by side
-position_operation <- function(position, hist_values, sep = "&", ...) {
+position_operation <- function(position, hist_values, activeGeomLayers, sep = "&", ...) {
   UseMethod("position_operation", position)
 }
-position_operation.PositionStack <- function(position, hist_values, sep = "&", ...) {
+position_operation.PositionStack <- function(position, hist_values, activeGeomLayers, sep = "&", ...) {
   args <- list(...)
   ggObj <- args$ggObj
   dataFrame <- args$dataFrame
-  column_names <- args$column_names
   facet_id <- args$facet_id
 
   if(!is.null(ggObj$labels$fill) && ggObj$labels$fill != ggObj$labels$x) {
 
+    fill_quo <- ggObj$layers[[activeGeomLayers]]$mapping$fill %||% ggObj$mapping$fill
     fill_var <- unlist(
-      dataFrame[, which(stringr::str_detect(ggObj$labels$fill, column_names) == TRUE)]
+      rlang::eval_tidy(rlang::quo(!!fill_quo),  dataFrame)
     )[facet_id]
 
   } else {
@@ -326,18 +327,19 @@ position_operation.PositionStack <- function(position, hist_values, sep = "&", .
   )
 }
 
-position_operation.PositionDodge <- function(position, hist_values, sep = "&", ...) {
+position_operation.PositionDodge <- function(position, hist_values, activeGeomLayers, sep = "&", ...) {
 
   args <- list(...)
   ggObj <- args$ggObj
   dataFrame <- args$dataFrame
-  column_names <- args$column_names
   facet_id <- args$facet_id
 
   if(!is.null(ggObj$labels$fill) && ggObj$labels$fill != ggObj$labels$x) {
 
+
+    fill_quo <- ggObj$layers[[activeGeomLayers]]$mapping$fill %||% ggObj$mapping$fill
     fill_var <- unlist(
-      dataFrame[, which(stringr::str_detect(ggObj$labels$fill, column_names) == TRUE)]
+      rlang::eval_tidy(rlang::quo(!!fill_quo),  dataFrame)
     )[facet_id]
 
     if(length(hist_values) == length(fill_var)) {
