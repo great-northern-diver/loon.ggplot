@@ -262,7 +262,6 @@ ggParallelSerialAxes <- function(ggObj,
 
     color <- grouped_data$color
     size <- grouped_data$size
-    grouped_data$size <- factor(size)
 
     args <- Filter(Negate(is.null),
                    list(
@@ -281,8 +280,8 @@ ggParallelSerialAxes <- function(ggObj,
         args
       ) +
       ggplot2::scale_color_manual(values = stats::setNames(uni_color, nm = uni_color),
-                                  labels = stats::setNames(selection_color_labels(uni_color), nm = uni_color)) +
-      ggplot2::scale_size_manual(values = stats::setNames(uni_size, nm = uni_size))
+                                  labels = stats::setNames(selection_color_labels(uni_color), nm = uni_color))+
+      ggplot2::scale_size(range = range(size))
 
     if(length(uni_color) == 1)
       ggObj <- ggObj + ggplot2::guides(color = FALSE)
@@ -500,7 +499,6 @@ ggRadialSerialAxes <- function(ggObj,
 
     color <- grouped_data$color
     size <- grouped_data$size
-    grouped_data$size <- factor(size)
 
     args <- Filter(Negate(is.null),
                    list(
@@ -520,7 +518,7 @@ ggRadialSerialAxes <- function(ggObj,
       ) +
       ggplot2::scale_color_manual(values = stats::setNames(uni_color, nm = uni_color),
                                   labels = stats::setNames(selection_color_labels(uni_color), nm = uni_color)) +
-      ggplot2::scale_size_manual(values = stats::setNames(uni_size, nm = uni_size))
+      ggplot2::scale_size(range = range(size))
 
     if(length(uni_color) == 1)
       ggObj <- ggObj + ggplot2::guides(color = FALSE)
