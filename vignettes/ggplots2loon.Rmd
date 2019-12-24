@@ -45,8 +45,11 @@ header-includes:
 - \newcommand{\permpause}{\pause}
 - \newcommand{\suchthat}{~:~}
 - \newcommand{\st}{~:~}
-vignette: |
-  %\VignetteIndexEntry{ggplots2loon} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
+
+vignette: >
+  %\VignetteIndexEntry{ggplots2loon}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include=FALSE}
