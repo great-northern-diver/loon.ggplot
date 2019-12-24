@@ -7,7 +7,7 @@ Authors@R: c(
   person('Zehao', 'Xu', email = 'z267xu@uwaterloo.ca', role = c('aut', 'cre')),
   person('R. Wayne', 'Oldford', email = 'rwoldford@uwaterloo.ca', role = c('aut'))
   )
-Description: Interactive loon plots from ggplots.
+Description: Convert ggplot object to interactive loon widgets, vice versa.
 License: GPL-2
 Depends:
     R (>= 3.4.0),
@@ -34,8 +34,10 @@ Suggests:
     rmarkdown,
     ElemStatLearn,
     tidyverse,
-    covr
+    covr,
+    spelling
 LazyData: true
 RoxygenNote: 6.1.1
 Encoding: UTF-8
 VignetteBuilder: knitr
+Language: en-US

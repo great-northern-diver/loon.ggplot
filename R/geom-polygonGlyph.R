@@ -10,7 +10,7 @@
 #' If TRUE, missing values are silently removed.
 #' @param ... Other arguments passed on to `layer()`.
 #'
-#' @section Aesthethics:
+#' @section Aesthetics:
 #' geom_polygonGlyph() understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
 #' \item{\strong{x}}

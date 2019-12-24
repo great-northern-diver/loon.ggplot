@@ -68,7 +68,7 @@ hl <- ggplot2loon(h)
 
 Note that:
 
-  + Loon "Hello World": Introduction to interctive `loon` plots can be found via  [loon](https://cran.r-project.org/web/packages/loon/vignettes/introduction.html). It shows how to create, manipulate (selection, linking and etc) `loon` plots
+  + Loon "Hello World": Introduction to interactive `loon` plots can be found via  [loon](https://cran.r-project.org/web/packages/loon/vignettes/introduction.html). It shows how to create, manipulate (selection, linking and etc) `loon` plots
     
   + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in [SDSS 2019](https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216). Slides can be found in [SDSS2019/loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
   
@@ -92,7 +92,7 @@ class(hg)
 [1] "gg"     "ggplot"
 ```
 
-Layers, theme adjustification can be piped though like:
+Layers, theme adjustment can be piped though like:
 
 ```
 pg + 

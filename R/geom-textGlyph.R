@@ -1,6 +1,6 @@
 #' @title Add text glyph on scatter plot
 #' @inheritParams ggplot2::layer
-#' @param text the text strings for each observartion.
+#' @param text the text strings for each observation
 #' If the object is a factor then the labels get extracted with \code{\link{as.character}}.
 #' @param na.rm If FALSE, the default, missing values are removed with a warning.
 #' If TRUE, missing values are silently removed.
@@ -8,7 +8,7 @@
 #'
 #' @details It is very close to \code{\link{geom_text}} but with `loon` API
 #'
-#' @section Aesthethics:
+#' @section Aesthetics:
 #' geom_textGlyph() understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
 #' \item{\strong{x}}

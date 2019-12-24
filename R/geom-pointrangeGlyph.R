@@ -1,7 +1,7 @@
 #' @title Add pointrange glyph on scatter plot
 #' @inheritParams ggplot2::layer
-#' @param ymin vector with lower y-yalue of the point range. If not provided, `geom_point()` will be called.
-#' @param ymax vector with upper y-yalue of the point range. If not provided, `geom_point()` will be called.
+#' @param ymin vector with lower y-value of the point range. If not provided, `geom_point()` will be called.
+#' @param ymax vector with upper y-value of the point range. If not provided, `geom_point()` will be called.
 #' @param linewidth line with in pixel.
 #' @param showArea boolean, show a filled point or just the outline point
 #' @param na.rm If FALSE, the default, missing values are removed with a warning.
@@ -10,7 +10,7 @@
 #'
 #' @details It is very close to \code{\link{geom_pointrange}} but with `loon` API
 #'
-#' @section Aesthethics:
+#' @section Aesthetics:
 #' geom_pointrangeGlyph() understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
 #' \item{\strong{x}}

@@ -1,6 +1,6 @@
 #' @title Add serialaxes glyph on scatter plot
 #' @inheritParams ggplot2::layer
-#' @param serialAxesData a serial axes numerial data set. If not provided, `geom_point()` will be called.
+#' @param serialAxesData a serial axes numerical data set. If not provided, `geom_point()` will be called.
 #' @param sequence vector with variable names that defines the axes sequence
 #' @param linewidth line width of serial axes plot
 #' @param scaling one of 'variable', 'data', 'observation' or 'none' to
@@ -17,7 +17,7 @@
 #' These are often aesthetics, used to set an aesthetic to a fixed value,
 #' like `colour = "red"` or `size = 3`. They may also be parameters to the paired geom/stat.
 #'
-#' @section Aesthethics:
+#' @section Aesthetics:
 #' geom_serialAxesGlyph() understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
 #' \item{\strong{x}}
