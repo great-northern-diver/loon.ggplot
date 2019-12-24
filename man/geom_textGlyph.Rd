@@ -37,7 +37,7 @@ a call to a position adjustment function.}
 
 \item{...}{Other arguments passed on to `layer()`.}
 
-\item{text}{the text strings for each observartion.
+\item{text}{the text strings for each observation
 If the object is a factor then the labels get extracted with \code{\link{as.character}}.}
 
 \item{na.rm}{If FALSE, the default, missing values are removed with a warning.
@@ -60,7 +60,7 @@ Add text glyph on scatter plot
 \details{
 It is very close to \code{\link{geom_text}} but with `loon` API
 }
-\section{Aesthethics}{
+\section{Aesthetics}{
 
 geom_textGlyph() understands the following aesthetics (required aesthetics are in bold):
 \itemize{

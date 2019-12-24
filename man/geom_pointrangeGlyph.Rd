@@ -38,9 +38,9 @@ a call to a position adjustment function.}
 
 \item{...}{Other arguments passed on to `layer()`.}
 
-\item{ymin}{vector with lower y-yalue of the point range. If not provided, `geom_point()` will be called.}
+\item{ymin}{vector with lower y-value of the point range. If not provided, `geom_point()` will be called.}
 
-\item{ymax}{vector with upper y-yalue of the point range. If not provided, `geom_point()` will be called.}
+\item{ymax}{vector with upper y-value of the point range. If not provided, `geom_point()` will be called.}
 
 \item{linewidth}{line with in pixel.}
 
@@ -66,7 +66,7 @@ Add pointrange glyph on scatter plot
 \details{
 It is very close to \code{\link{geom_pointrange}} but with `loon` API
 }
-\section{Aesthethics}{
+\section{Aesthetics}{
 
 geom_pointrangeGlyph() understands the following aesthetics (required aesthetics are in bold):
 \itemize{

@@ -113,7 +113,7 @@ Note that:
   + Compound loon widget like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. Ggplot features like `theme`, `labels` can be piped through but by  [`ggmatrix`](https://mran.microsoft.com/snapshot/2016-01-21/web/packages/GGally/vignettes/ggmatrix.html) rule.
   
   + Some functionalities are provided 
-    * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonAxesGlyph()`, `geom_imageGlyph()` and etc.
+    * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonGlyph()`, `geom_imageGlyph()` and etc.
     * Providing serial axes plots (parallel coordinate and radial coordinate) via `ggSerialAxes()`
 
 #### `loon.ggplot()`: loon <--> ggplot 

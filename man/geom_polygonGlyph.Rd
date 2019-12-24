@@ -65,7 +65,7 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \description{
 Add polygon glyph on scatter plot
 }
-\section{Aesthethics}{
+\section{Aesthetics}{
 
 geom_polygonGlyph() understands the following aesthetics (required aesthetics are in bold):
 \itemize{

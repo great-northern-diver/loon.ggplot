@@ -43,7 +43,7 @@ a call to a position adjustment function.}
 These are often aesthetics, used to set an aesthetic to a fixed value,
 like `colour = "red"` or `size = 3`. They may also be parameters to the paired geom/stat.}
 
-\item{serialAxesData}{a serial axes numerial data set. If not provided, `geom_point()` will be called.}
+\item{serialAxesData}{a serial axes numerical data set. If not provided, `geom_point()` will be called.}
 
 \item{sequence}{vector with variable names that defines the axes sequence}
 
@@ -81,7 +81,7 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \description{
 Add serialaxes glyph on scatter plot
 }
-\section{Aesthethics}{
+\section{Aesthetics}{
 
 geom_serialAxesGlyph() understands the following aesthetics (required aesthetics are in bold):
 \itemize{

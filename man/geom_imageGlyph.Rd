@@ -60,7 +60,7 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \description{
 Add image glyph on scatter plot
 }
-\section{Aesthethics}{
+\section{Aesthetics}{
 
 geom_imageGlyph() understands the following aesthetics (required aesthetics are in bold):
 \itemize{

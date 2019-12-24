@@ -1,29 +1,7 @@
 ---
-title: "ggplots -> interactive loon plots"
+title: "Ggplots <--> interactive loon plots"
 author: "Wayne Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
-output:
-  html_notebook: default
-  html_document:
-    fig_caption: yes
-    number_sections: no
-    toc: yes
-  html_vignette:
-    fig_caption: yes
-    number_sections: no
-    toc: yes
-  pdf_document:
-    keep_tex: no
-    fig_caption: yes
-    latex_engine: xelatex
-    number_sections: no
-    toc: yes
-  word_document: default
-vignette: >
-  %\VignetteIndexEntry{Creating interactive loon plots from ggplots}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteDepends{grid}
-  %\VignetteEngine{knitr::rmarkdown}
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{epic}
@@ -66,9 +44,11 @@ header-includes:
 - \DeclareMathOperator*{\Ave}{Ave\,}
 - \newcommand{\permpause}{\pause}
 - \newcommand{\suchthat}{~:~}
-- \newcommand{\st}{~:~} 
+- \newcommand{\st}{~:~}
+vignette: |
+  %\VignetteIndexEntry{ggplots2loon} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8}
 ---
-  
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
@@ -82,38 +62,20 @@ knitr::opts_chunk$set(
 )
 ```
 
----
-
-$\renewcommand{\tr}[1]{{#1}^{\mkern-1.5mu\mathsf{T}}}$
-$\renewcommand{\ve}[1]{\mathbf{#1}}$
-$\renewcommand{\sv}[1]{\boldsymbol{#1}}$
-$\renewcommand{\pop}[1]{\mathcal{#1}}$
-$\renewcommand{\samp}[1]{\mathcal{#1}}$
-$\renewcommand{\imply}{\Longrightarrow}$
-$\renewcommand{\given}{~\vert~}$
-$\renewcommand{\suchthat}{~:~}$
-$\renewcommand{\widebar}[1]{\overline{#1}}$
-$\renewcommand{\wig}[1]{\tilde{#1}}$
-$\renewcommand{\bigwig}[1]{\widetilde{#1}}$
-$\renewcommand{\field}[1]{\mathbb{#1}}$
-$\renewcommand{\Reals}{\field{R}}$
-$\renewcommand{\abs}[1]{\left\lvert ~{#1} ~\right\rvert}$
-$\renewcommand{\size}[1]{\left\lvert {#1} \right\rvert}$
-$\renewcommand{\tr}[1]{{#1}^{\mkern-1.5mu\mathsf{T}}}$
-$\renewcommand{\norm}[1]{\left|\left|{#1}\right|\right|}$
-$\renewcommand{\intersect}{\cap}$
-$\renewcommand{\union}{\cup}$
-
 The `ggplot2` graphics package (part of the `tidyverse` package collection) uses the base `grid` graphics package to produce publication quality graphics for data analysis.  Based on a grammar for graphics, `ggplot2` also provides a lot of functionality (e.g. `facet`s) that can be extremely useful in data analysis.
 
 The `loon` graphics package provides **interactive** graphics especially valuable in any **exploratory data analysis**.  This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays.  Of course, `loon` also provides publication quality static graphics in `grid` via loon's functions `grid.loon()` and `loonGrob()`.  In particular, the standard `R` `plot()` function has been specialized to produce a `grid` version of any `loon` plot.
 
-The `loon.ggplot` package **brings both these packages together**.  Data analysts who value the ease with which `ggplot2` can create meaningful graphics with many facets and layers will also value the ease with which **ggplots can be turned into interactive loon plots** through a simple translation function `loon.ggplot()`.
+
+The loon.ggplot package **brings both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics can now **turn these `ggplot`s into interactive `loon` plots** for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s. The former is accomplished by the simple translation function `ggplot2loon()` and the latter by the simple translation function `loon2ggplot()`.
 
 
-# Basics
+# Ggplot -> Loon
+Ggplots to interactive loon plots.
 
-## ggplot()
+## Basics
+
+### ggplot()
 Consider the `mtcars` data set and suppose we draw a scatterplot of the mileage `mpg` (miles per US gallon) versus the weight of the car `wt` in thousands of pounds.  In `ggplot2` this would be constructed as
 
 ```{r mpg_vs_wt, message = FALSE, warning = FALSE}
@@ -135,14 +97,14 @@ and displayed as
 h1
 ```
 
-## `loon.ggplot()` and `grid.loon()` or `plot.loon()`
+### `ggplot2loon()` and `grid.loon()` or `plot.loon()`
 
-Using the `loon.ggplot` package, the `"ggplot"` data structures `p1` and `h1` can be **turned into interactive loon plots** using the `loon.ggplot()` function:
+Using the `loon.ggplot` package, the `"ggplot"` data structures `p1` and `h1` can be **turned into interactive loon plots** using the `ggplot2loon()` function:
 
 ```{r mpg_vs_wt_loon_display, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
 library(loon.ggplot)
-l_p1 <- loon.ggplot(p1)  # the scatterplot
-l_h1 <- loon.ggplot(h1)  # the histogram
+l_p1 <- ggplot2loon(p1)  # the scatterplot
+l_h1 <- ggplot2loon(h1)  # the histogram
 ```
 
 These loon plots should look very much (though not exactly) like the ggplot from which it was constructed.  Using `grid.loon()`  `grid` graphics versions of the loon plots can be created for static display, printing, and incorporation into documents:
@@ -155,7 +117,7 @@ Alternatively, and more simply, we can use the usual `plot` function in `R` whic
 plot(l_h1)   # equivalent to grid.loon(l_h1)
 ```
 
-## interaction - direct manipulation
+### interaction - direct manipulation
 
 Unlike `p1` and `h1`, the loon counterparts `l_p1` and `l_h1` are both **interactive**; their displays can be changed by **direct manipulation** using the mouse and/or each loon plot's  **loon inspector**. 
 
@@ -171,7 +133,7 @@ Similarly, the loon histogram `l_h1` has many interactions and a specialized loo
 
 Many, many, more interactions are possible.  You might want to experiment with the plot and the inspector to see some of the possibilities. (**Recommended:** explore the vignettes given in the `loon` package).
 
-### linking
+#### linking
 
 One of the basic features of interactive statistical graphics is the ability to **link displays**.  In loon this is most easily accomplished via the loon inspector.
 
@@ -183,7 +145,7 @@ Once the both plots are in the same linking group (i.e. "mtcars"), selections in
 
 Linking is one way to condition on the values in one plot and observe their effect in the others.  Try this with "brushing" in either plot.
 
-## interaction - programmatic
+### interaction - programmatic
 
 The loon plot, `l_p1` is itself a data structure of class `"l_plot"` and `"loon"`
 ```{r loon_data_structure, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
@@ -274,7 +236,7 @@ l_p1["title"] <- "All points again"
 plot(l_p1)
 ```
 
-### linking
+#### linking
 
 In loon, plots are linked only if they are in the same `linkingGroup` (which can be any string that meaningfully identifies the group of plots).
 The `linkingGroup` can also be set programmatically. 
@@ -298,7 +260,7 @@ plot(l_h1)
 ```
 
 
-### linking with loon.ggplot()
+#### linking with ggplot2loon()
 
 It is possible to declare the linking group of the loon plot at the time it is created from the ggplot.  
 
@@ -315,7 +277,7 @@ p2
 
 The corresponding loon plot can be linked immediately when it is created
 ```{r stacked_colours_linking, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-l_p2 <- loon.ggplot(p2, 
+l_p2 <- ggplot2loon(p2, 
                     linkingGroup = "Motor Trend 1974",
                     title = "Acceleration measures", 
                     xlabel = "Drive axle ratio",
@@ -324,7 +286,6 @@ l_p2 <- loon.ggplot(p2,
 ```
 
 as can any other state of a loon plot, such as `title`, `xlabel`, `ylabel, or `itemLabel` as shown here.   
-
 The points in the loon plot inherit their colours from the linking group "Motor Trend 1974":
 ```{r loon_plot_l_p2, message = FALSE, warning = FALSE,  fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 plot(l_p2)
@@ -332,7 +293,7 @@ plot(l_p2)
 
 Note that `l_p2` did not inherit the shapes of its points from the `l_p1`.  That is because only those states that have been defined as `linkedStates` are shared by any given plot.
 
-### linked states
+#### linked states
 
 The `linkedStates` of any plot are those which that plot will share (and hence update) with any other plot in the same `linkingGroup`.  The default states that are linked for an `l_plot` like `l_p1` are
 ```{r default_linked_states_l_plot, message = FALSE, warning = FALSE, fig.width = 6, fig.height = 5, fig.align = "center", out.width = "50%"}
@@ -372,7 +333,7 @@ and propagated to `l_p2`
 plot(l_p2)
 ```
 
-# Layers
+## Layers
 
 Rather complex plots can be built up in `ggplot2` by adding *layers*.  For example,
 ```{r mtcars_smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -382,7 +343,7 @@ p_fit
 
 The **corresponding interactive** loon plot is
 ```{r loon_mtcars_smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-l_p_fit <- loon.ggplot(p_fit)
+l_p_fit <- ggplot2loon(p_fit)
 ```
 
 As with ggplots (and grid graphics plots), loon plots have layers.  These can be identified (and manipulated) by selecting the "Layers" tab of the inspector.
@@ -412,14 +373,14 @@ Note that the scatterplot layer identified by its "layer id", namely the string 
 Reading left to right, the remaining buttons on the bottom of the layers tab on the inspector allow a (selected) layer to be moved out of a group, into a group, made visible, or made invisible, and add a new group layer, delete any layer, or scale the plot to the selected layer.
 All of these can also be achieved programmatically and numerous other functions exist in loon to add new layers --  see `help("l_layer")` or `l_help("learn_R_layer")` for the range of possibilities.
 
-## the model layer
+### the model layer
 
 There is always one layer in loon that is the **active layer** which at present is always identified as the "model" layer.  It is this layer which fields mouse events such as selection and brushing; it is also the layer that reacts to changes in linking states.
 
 In loon, scatterplots and histograms can be identified as the "model" layer (the former produced via the `l_plot()` function, the latter via `l_hist()`).
 
 A loon `l_plot()` corresponds to a ggplot `geom_point()` and  a loon `l_hist()` to a ggplot `geom_histogram()`.  
-In `ggplot2` several `geom`s might appear in the construction of a plot, each one providing a layer.  But in `loon`  only one layer, namely the `"model"` layer, can be active. This means which of the ggplot layers are intended to be the active `"model"` layer in loon must be determined at the time of construction (the call to `loon.ggplot()`).
+In `ggplot2` several `geom`s might appear in the construction of a plot, each one providing a layer.  But in `loon`  only one layer, namely the `"model"` layer, can be active. This means which of the ggplot layers are intended to be the active `"model"` layer in loon must be determined at the time of construction (the call to `ggplot2loon()`).
 
 Consider the following example where three `geom`s are created as layers in the ggplot. Here a histogram (on a density scale) is overlaid with a scatter of points along the horizontal axis, and then with a curve from a density estimate.
 ```{r multiple_geoms, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -437,28 +398,27 @@ p_hdp
 
 To render this in loon, which layer will be interactive needs to be determined.  By default, this will be the first layer appearing in the construction of the ggplot -- in this case the the histogram.  The scatter of points will not be interactive and there are presently no interactive curves in a loon plot.
 
-### specifying the active `geom` layer
+#### specifying the active `geom` layer
 
 The default active layer is the first `geom` having a "model" layer counterpart in a loon plot.  In this way, the order of construction of the ggplot implicitly determines the `geom` to be active in loon.
 Alternatively, the active layer can be explicitly specified when creating the loon plot via the `activeGeomLayers` argument.
 
 ```{r active_selected_geoms, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 # To have the the histogram active (the first geom in p_hdp)
-l_p_Hdp <- loon.ggplot(p_hdp, activeGeomLayers = 1,
+l_p_Hdp <- ggplot2loon(p_hdp, activeGeomLayers = 1,
                        linkingGroup = "Motor Trend 1974")
-
 # The following creates an error because the line for the density
 # is not currently a possible model layer in loon
-# loon.ggplot(p_hdp, activeGeomLayers = 2,
+# ggplot2loon(p_hdp, activeGeomLayers = 2,
 #              linkingGroup = "Motor Trend 1974")
 # 
 # To have the points be active (the third geom in p_hdp)
-l_p_hdP <- loon.ggplot(p_hdp, activeGeomLayers = 3,
+l_p_hdP <- ggplot2loon(p_hdp, activeGeomLayers = 3,
                        linkingGroup = "Motor Trend 1974")
 ```
 Note that the colouring will reflect the linking and indicate which layer is actually the active model layer.  Check also the layers tab in each of these to see the distinction.  
 
-### multiple active layers with `geom_point()`
+#### multiple active layers with `geom_point()`
 
 When there are two or more `geom_point()` layers in the ggplot, it might sometime be of interest to have two or more of these merged into a single active layer.
 
@@ -473,10 +433,10 @@ pgps
 
 To create the interactive plot, any of the `geom_point` layers could contribute to the active scatterplot model layer.
 ```{r loon_multiple geom_points, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-l_pgps.1 <- loon.ggplot(pgps, linkingGroup = "Motor Trend 1974")
-l_pgps.13 <- loon.ggplot(pgps, activeGeomLayers = c(1,3),
+l_pgps.1 <- ggplot2loon(pgps, linkingGroup = "Motor Trend 1974")
+l_pgps.13 <- ggplot2loon(pgps, activeGeomLayers = c(1,3),
                          linkingGroup = "Motor Trend 1974")
-l_pgps.123 <- loon.ggplot(pgps, activeGeomLayers = c(1, 2, 3),
+l_pgps.123 <- ggplot2loon(pgps, activeGeomLayers = c(1, 2, 3),
                          linkingGroup = "Motor Trend 1974")
 ```
 These plots now have different subsets of the points as their scatterplot "model" or active layer.  
@@ -484,7 +444,7 @@ These plots now have different subsets of the points as their scatterplot "model
 **WARNING** The linking works as expected *between these three* plots but **not** with any of the other plots in the same linking group.
 With a little extra care/work, this too is possible.
 
-### Forcing the correct linking -- `linkingKey`
+#### Forcing the correct linking -- `linkingKey`
 One solution to getting the linking correct is to force the `linkingKey` of any new plot to match the keys already defined by the other plots in the linking group.
 
 The linking key of a loon plot is simply a character vector (default here)
@@ -517,12 +477,11 @@ l_configure(l_pgps.123,
                            groupKeys[dataGeom2],
                            groupKeys[dataGeom3]), 
             sync = "pull")
-
 ```
 
 **Alternatively**, the linking keys could be set up correctly when the loon plot was created
 ```{r linking_Key_initialized, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-l_pgps.23 <- loon.ggplot(pgps, 
+l_pgps.23 <- ggplot2loon(pgps, 
                          linkingGroup = "Motor Trend 1974",
                          activeGeomLayers = c(2,3),
                          linkingKey = c(groupKeys[dataGeom2],
@@ -530,7 +489,7 @@ l_pgps.23 <- loon.ggplot(pgps,
                          )
 ```
 
-# Facets and `l_compound` plots
+## Facets and `l_compound` plots
 
 A significant data analytic feature in the ggplot pipeline is the notion of facetting the plots, for example, via `facet_wrap()`
 ```{r fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -541,7 +500,7 @@ fwrap
 ```
 Facetted plots can also be rendered interactive in the same way as any other ggplot:
 ```{r l_fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-l_fwrap <- loon.ggplot(fwrap, linkingGroup = "Motor Trend 1974")
+l_fwrap <- ggplot2loon(fwrap, linkingGroup = "Motor Trend 1974")
 ```
 which will look like
 ```{r linking_Key_fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -567,7 +526,7 @@ expressed as a matrix of the location of the plots in the order in which they ap
 
 Each plot in `l_fwrap` is an independent loon plot which can be interacted with either through the inspector or programmatically.
 
-# Pipes
+## Pipes
 
 THe `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
 ```{r pipes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -607,17 +566,17 @@ Second, in either case the `ggplot` is **not** itself displayed (or rendered) un
 p1_piped
 ```
 
-Once built, as happens when the plot has been displayed as above,  an interactive loon plot can be had as always, simply by calling `loon.ggplot()` on the built `ggplot`:
+Once built, as happens when the plot has been displayed as above,  an interactive loon plot can be had as always, simply by calling `ggplot2loon()` on the built `ggplot`:
 ```{r loon_p1_piped, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-loon.ggplot(p1_piped, linkingGroup = "Motor Trend 1974")
+ggplot2loon(p1_piped, linkingGroup = "Motor Trend 1974")
 ```
 Again, the additional specification here of the `linkingGroup` will cause display attributes to be pulled from the plots in that linking group.
 
-## Using `gg_pipe(data, ggplotObj)`
+### Using `gg_pipe(data, ggplotObj)`
 
 Note that before a `ggplot` can be displayed, a number of steps are performed so as to prepare the plot object for rendering (e.g. see `ggplot2::ggplot_build`).
 Unfortunately, this delay in completing the preparation of the `ggplot` can make it difficult to attach further operations in the `%>%` pipeline after the `ggplot` itself -- apart of course from further `ggplot2` additions via the `+` operator.
-For example, one cannot simply add `%>% loon.ggplot()` at the end of the pipeline used to construct the `ggplot`.  That is,
+For example, one cannot simply add `%>% ggplot2loon()` at the end of the pipeline used to construct the `ggplot`.  That is,
 ```{r fail_pipeline, eval = FALSE }
 mtcars %>%
   rename(transmission = am, weight = wt) %>%
@@ -627,11 +586,11 @@ mtcars %>%
   geom_point() +
   ylab("Litres per 100 kilometres") +
   ggtitle("Gas usage") %>% 
-  loon.ggplot()
+  ggplot2loon()
 ```
 would produce neither a `ggplot` or an interactive `loon` plot.
 
-To get around this problem, in the `loon.ggplot` the function `gg_pipe()` is provided to encapsulate the `ggplot` construction in any pipeline and force the `ggplot` to be built (though not rendered in a display).  The output of this function can then be passed on to `loon.ggplot()`. 
+To get around this problem, in `loon.ggplot` the function `gg_pipe()` is provided to encapsulate the `ggplot` construction in any pipeline and force the `ggplot` to be built (though not rendered in a display).  The output of this function can then be passed on to `ggplot2loon()`. 
 
 For example,
 ```{r gg_pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -646,11 +605,11 @@ mtcars %>%
             ggtitle("Gas usage")
           )  %>% 
   # and pass the built plot on
-  loon.ggplot(linkingGroup = "Motor Trend 1974")
+  ggplot2loon(linkingGroup = "Motor Trend 1974")
 ```
 constructs the interactive plot which could have been assigned to a variable as was done with the original `ggplot` construction.
 
-From here, the pipeline can be grown as before, recognizing of course that the output of `loon.ggplot()` is a `loon` plot of some sort.
+From here, the pipeline can be grown as before, recognizing of course that the output of `ggplot2loon()` is a `loon` plot of some sort.
 This means that functions that operate on `loon` plots (as their first argument can be used.  As with any piping operation, attention must be given to the first argument of the functions in the pipeline as well as to what the input and outputs are of any function.
 
 For example, 
@@ -667,14 +626,14 @@ mtcars %>%
             ylab("Litres per 100 kilometres") +
             ggtitle("Gas usage") )  %>% 
   # and pass the built plot on
-  loon.ggplot(linkingGroup = "Motor Trend 1974") %>%  # pipe the loon plot on
+  ggplot2loon(linkingGroup = "Motor Trend 1974") %>%  # pipe the loon plot on
   l_cget('color')  # Gets and returns the vector of point colours
 ```
 
 In the `magrittr` package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful -- not just `%>%`.
 
 
-## just use loon for built-in interactive plots
+### just use loon for built-in interactive plots
 
 Of course, for plots already existing in `loon`,  `ggplot()` and hence `gg_pipe()` could be avoided entirely:
 ```{r loon_only_pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -701,10 +660,71 @@ mtcars %>%
   l_pairs(showHistograms = TRUE,
           linkingGroup = "Motor Trend 1974") ->  # and assign the result.
   l_pp
-
 ```
 
 
 produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well).
 
+# Loon -> Ggplot
+Loon plots to ggplot objects
 
+## Turn loon static via `loon2ggplot()` 
+
+Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be transformed to other systems. 
+
+`Ggplot` provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes adventage of that, transforming `loon` widgets to `ggplot` objects.
+
+```{r p1_piped_staic  ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+g <- loon2ggplot(l_pp)
+g
+```
+
+Add a smooth line on `lp100km vs weight` scatterplot and density curve on `weight` histogram. Also, modify the theme of this compound plot.
+
+```{r p1_piped_modification  ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+# Modify theme
+g <- g + theme_light()
+# Add a smooth line on g[2,2]
+# the index of `lp100km vs weight` scatterplot is 
+# 1 * 4 + 2
+g$plots[[6]] <- g$plots[[6]] + geom_smooth()
+# Add a density curve on g[1,2]
+# the index of `weight` histogram is 
+# 1 * 4 + 1
+g$plots[[5]] <- g$plots[[5]] + geom_density()
+g
+```
+
+Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `loon2ggplot`) is simpler and more creative. 
+
+Note that:
+
++ Compound loon widget (the previous example) like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. `Ggplot` features like `theme`, `labels` can be piped through but by `ggmatrix` rule. The single `ggplot` object can be extracted by `...$plots[[id]]`, where "id" is the index of such object. To `M[x, y]`, $id = (y-1) \times nrow + x$, $nrow$ is the number of rows.
+
++ Some functionalities are provided
+
+  * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonGlyph()`, `geom_imageGlyph()` and etc.
+  
+    ```{r serialaxesGlyph, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+    ggplot(data = iris,
+           mapping = aes(x = Sepal.Length, 
+                         y = Sepal.Width, 
+                         color = Species)) +
+      geom_serialAxesGlyph(serialAxesData = iris[, -5],
+                           axesLayout = "radial")
+    ```
+  
+  * Providing serial axes plots (parallel coordinate and radial coordinate) via `ggSerialAxes()`
+  
+    ```{r serialaxes, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+    # parallel axes plot
+    ggSerialAxes(
+      ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+      axesLabels = colnames(iris)
+    )
+    ```
+
+`loon.ggplot()` function in `loon.ggplot` package is a S3 method and gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and forth. 
+
+* Ggplot to loon `loon.ggplot(gg)` is equivalent to `ggplot2loon(gg)`.
+* Loon to ggplot `loon.ggplot(loon)` is equivalent to `loon2ggplot(loon)`.
