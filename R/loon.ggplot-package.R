@@ -1,4 +1,5 @@
-# #' @keywords internal
-# "_PACKAGE"
-#
-# NULL
+#' @keywords internal
+#' @aliases loon.ggplot-package
+"_PACKAGE"
+
+NULL

@@ -7,8 +7,9 @@ Authors@R: c(
   person('Zehao', 'Xu', email = 'z267xu@uwaterloo.ca', role = c('aut', 'cre')),
   person('R. Wayne', 'Oldford', email = 'rwoldford@uwaterloo.ca', role = c('aut'))
   )
-Description: Convert ggplot object to interactive loon widgets, vice versa.
+Description: The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{ggplot}s into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot}s. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.
 License: GPL-2
+BugReports: https://github.com/z267xu/loon.ggplot/issues
 Depends:
     R (>= 3.4.0),
     tcltk,
