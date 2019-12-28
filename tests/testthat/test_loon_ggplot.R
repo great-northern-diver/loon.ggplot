@@ -794,4 +794,75 @@ test_that("example works", {
     ggSerialAxes()
   g
   expect_equal(class(g), c("gg", "ggplot"))
+  # ggserialaxes
+  ###### parallel
+  ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(colour = Species, size = Sepal.Length)),
+    axesLabels = colnames(iris)[ordSeq]
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+    size = 0.1
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(size = Sepal.Length)),
+    color = "pink"
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris),
+    color = "pink",
+    size = 2
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+    showArea = TRUE
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  ###### radial
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(colour = Species, size = Sepal.Length)),
+    axesLabels = colnames(iris)[ordSeq],
+    layout = "radial"
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+    layout = "radial",
+    size = 0.1
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(size = Sepal.Length)),
+    layout = "radial",
+    color = "pink"
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris),
+    layout = "radial",
+    color = "pink",
+    size = 2
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
+  g <- ggSerialAxes(
+    ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
+    layout = "radial",
+    showArea = TRUE
+  )
+  g
+  expect_equal(class(g), c("gg", "ggplot"))
 })
