@@ -20,6 +20,22 @@ is.color <- function(colors) {
          })
 }
 
+valid_color <- function(x) {
+  if(any(!is.color(x)))
+    gg_color_hue(length(x))
+  else
+    x
+}
+
+remove_null <- function(..., as_list = TRUE) {
+  if(as_list)
+    Filter(Negate(is.null),
+           list(...)
+    )
+  else
+    Filter(Negate(is.null), ...)
+}
+
 rearrangePolygonData <- function(data) {
   na_x <- is.na(data$x)
   na_y <- is.na(data$y)
