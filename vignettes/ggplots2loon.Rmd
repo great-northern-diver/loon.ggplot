@@ -702,30 +702,54 @@ Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `
 
 Note that:
 
-+ Compound loon widget (the previous example) like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. `Ggplot` features like `theme`, `labels` can be piped through but by `ggmatrix` rule. The single `ggplot` object can be extracted by `...$plots[[id]]`, where "id" is the index of such object. To `M[x, y]`, $id = (y-1) \times nrow + x$, $nrow$ is the number of rows.
+Compound loon widget (the previous example) like `l_ts` and `l_pairs` are created by `GGally::ggmatrix`. Features like `theme`, `labels` can be piped through but by `ggmatrix` rule. The single `ggplot` object can be extracted by `...$plots[[id]]`, where `id` is the index of such object. To `M[x, y]`, $id = (y-1) \times nrow + x$, $nrow$ is the number of rows.
 
-+ Some functionalities are provided
+## Geom layers
 
-  * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonGlyph()`, `geom_imageGlyph()` and etc.
+  * Adding glyphs on scatterplot
   
-    ```{r serialaxesGlyph, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-    ggplot(data = iris,
-           mapping = aes(x = Sepal.Length, 
-                         y = Sepal.Width, 
-                         color = Species)) +
-      geom_serialAxesGlyph(serialAxesData = iris[, -5],
-                           axesLayout = "radial")
-    ```
+  `Loon.ggplot` package also provides glyph point layer to create scatterplots with a variety glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of nyc flights in 2013. All destinations have a "airplane" polygon glyph and LA is highlighted by a magenta star.
+
+```{r glyph_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(nycflights13)
+library(dplyr)
+destinations <- nycflights13::airports %>% 
+  dplyr::rename(dest = faa) %>% 
+  dplyr::semi_join(nycflights13::flights, by = "dest") %>% 
+  dplyr::filter(lon > -151, 
+                lat < 55)
+LA <- data.frame(
+  lon = -118.243683,
+  lat = 34.052235
+)
+map_data("state") %>% 
+  ggplot(aes(long, lat, group = group)) +
+  geom_polygon(color="black", fill="lightblue") + 
+  geom_polygonGlyph(data = destinations,
+                    mapping = aes(x = lon, y = lat), 
+                    inherit.aes = FALSE,
+                    polygon_x = x_airplane,
+                    polygon_y = y_airplane, 
+                    size = 2,
+                    alpha = 0.5, 
+                    fill = "firebrick") + 
+  geom_polygonGlyph(data = LA,
+                    mapping = aes(x = lon, y = lat), 
+                    inherit.aes = FALSE,
+                    polygon_x = x_star,
+                    polygon_y = y_star, 
+                    fill = "magenta")
+```
   
-  * Providing serial axes plots (parallel coordinate and radial coordinate) via `ggSerialAxes()`
+  * Providing serial axes plots (parallel coordinate or radial coordinate) via `ggSerialAxes()`
   
-    ```{r serialaxes, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+    ```{r serialaxes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
     # parallel axes plot
-    ggSerialAxes(
-      ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
-      axesLabels = colnames(iris)
-    )
+    ggplot(data = iris, mapping = aes(colour = Species)) %>% 
+      ggSerialAxes()
     ```
+
+# Function `loon.ggplot()`
 
 `loon.ggplot()` function in `loon.ggplot` package is a S3 method and gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and forth. 
 
