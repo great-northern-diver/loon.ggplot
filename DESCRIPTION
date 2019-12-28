@@ -36,7 +36,8 @@ Suggests:
     ElemStatLearn,
     tidyverse,
     covr,
-    spelling
+    spelling,
+    nycflights13
 LazyData: true
 RoxygenNote: 6.1.1
 Encoding: UTF-8
