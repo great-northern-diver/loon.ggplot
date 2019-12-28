@@ -1,17 +1,18 @@
-#' @title Add polygon glyph on scatter plot
+#' @title Add glyph on scatter plot
+#' @description The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.
+#' @name glyphGeoms
+#'
 #' @inheritParams ggplot2::layer
 #' @param polygon_x nested list of x-coordinates of polygons, one list element for each scatterplot point.
 #' If not provided, `geom_point()` will be called.
 #' @param polygon_y nested list of y-coordinates of polygons, one list element for each scatterplot point.
 #' If not provided, `geom_point()` will be called.
-#' @param showArea boolean, show a filled polygon or just the outline
-#' @param linewidth linewidth of outline.
 #' @param na.rm If FALSE, the default, missing values are removed with a warning.
 #' If TRUE, missing values are silently removed.
 #' @param ... Other arguments passed on to `layer()`.
 #'
 #' @section Aesthetics:
-#' geom_polygonGlyph() understands the following aesthetics (required aesthetics are in bold):
+#' geom_...Glyph() understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
 #' \item{\strong{x}}
 #' \item{\strong{y}}
@@ -25,39 +26,13 @@
 #' \item{linetype}
 #' }
 #' @export
-#'
-#' @seealso \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_pointrangeGlyph}},
-#' \code{\link{geom_imageGlyph}}, \code{\link{geom_textGlyph}}
-#'
+#' @seealso \link{polygonGlyph}
 #' @examples
-#' x_star <-
-#'   c(-0.000864304235090734, 0.292999135695765, 0.949870354364736,
-#'     0.474503025064823, 0.586862575626621, -0.000864304235090734,
-#'     -0.586430423509075, -0.474070872947277, -0.949438202247191, -0.29256698357822)
-#' y_star <-
-#'   c(-1, -0.403630077787381, -0.308556611927398, 0.153846153846154,
-#'     0.808556611927398, 0.499567847882455, 0.808556611927398,
-#'     0.153846153846154, -0.308556611927398, -0.403630077787381)
-#' x_cross <-
-#'   c(-0.258931143762604, -0.258931143762604, -0.950374531835206,
-#'     -0.950374531835206, -0.258931143762604, -0.258931143762604,
-#'     0.259651397291847, 0.259651397291847, 0.948934024776722,
-#'     0.948934024776722, 0.259651397291847, 0.259651397291847)
-#' y_cross <-
-#'   c(-0.950374531835206, -0.258931143762604, -0.258931143762604,
-#'     0.259651397291847, 0.259651397291847, 0.948934024776722,
-#'     0.948934024776722, 0.259651397291847, 0.259651397291847,
-#'     -0.258931143762604, -0.258931143762604, -0.950374531835206)
-#' x_hexagon <-
-#'   c(0.773552290406223, 0, -0.773552290406223, -0.773552290406223,
-#'     0, 0.773552290406223)
-#' y_hexagon <-
-#'   c(0.446917314894843, 0.894194756554307, 0.446917314894843,
-#'     -0.447637568424085, -0.892754249495822, -0.447637568424085)
-#' p <- ggplot(data = data.frame(x = 1:3, y = 1:3),
+#' # polygon glyph
+#' p <- ggplot(data = data.frame(x = 1:4, y = 1:4),
 #'             mapping = aes(x = x, y = y)) +
-#'   geom_polygonGlyph(polygon_x = list(x_star, x_cross, x_hexagon),
-#'                     polygon_y = list(y_star, y_cross, y_hexagon),
+#'   geom_polygonGlyph(polygon_x = list(x_star, x_cross, x_hexagon, -x_airplane),
+#'                     polygon_y = list(y_star, y_cross, y_hexagon, y_airplane),
 #'                     colour = 'black', fill = 'red')
 #' p
 geom_polygonGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
@@ -108,56 +83,28 @@ GeomPolygonGlyph <- ggplot2::ggproto('GeomPolygonGlyph', Geom,
                                                        linetype = 1, alpha = 1,
                                                        shape = 19, stroke = 0.5),
                                      draw_key = ggplot2::draw_key_point,
-                                     setup_data = function(data, params) {
-
-                                       n <- dim(data)[1]
-
-                                       if(is.list(params$polygon_x) && is.list(params$polygon_y)) {
-                                         stopifnot(exprs = {
-                                           n == length(params$polygon_x)
-                                           n == length(params$polygon_y)
-                                         })
-                                       }
-
-                                       tryCatch(
-                                         {
-                                           lapply(names(params),
-                                                  function(name) {
-
-                                                    switch(name,
-                                                           "polygon_x" = {
-                                                             polygon_x <- params[[name]]
-
-                                                             data[, "polygon_x"] <<- if(is.list(polygon_x) && length(polygon_x) == n) {
-                                                               sapply(polygon_x, function(x) paste0(x, collapse = "\\"))
-                                                             } else {
-                                                               paste0(polygon_x, collapse = "\\")
-                                                             }
-                                                           },
-                                                           "polygon_y" = {
-                                                             polygon_y <- params[[name]]
-
-                                                             data[, "polygon_y"] <<- if(is.list(polygon_y) && length(polygon_y) == n) {
-                                                               sapply(polygon_y, function(y) paste0(y, collapse = "\\"))
-                                                             } else {
-                                                               paste0(polygon_y, collapse = "\\")
-                                                             }
-                                                           },
-                                                           {
-                                                             data[, name] <<- params[[name]]
-                                                           }
-                                                    )
-                                                  })
-                                         }, error = function(e) warning("Try to set a list for polygon_x and polygon_y")
-                                       )
-                                       data
-                                     },
                                      draw_panel = function(data, panel_params, coord,
                                                            polygon_x, polygon_y, showArea, linewidth, na.rm) {
 
-
                                        data <- coord$transform(data, panel_params)
-                                       poly_x <- lapply(1:length(polygon_x),
+                                       n <- dim(data)[1]
+
+                                       if(is.list(polygon_x)) {
+                                         if(n != length(polygon_x)) {
+                                           polygon_x <- rep(polygon_x, n)[1:n]
+                                         }
+                                       } else {
+                                         polygon_x <- lapply(1:n, function(i) polygon_x)
+                                       }
+                                       if(is.list(polygon_y)) {
+                                         if(n != length(polygon_y)) {
+                                           polygon_y <- rep(polygon_y, n)[1:n]
+                                         }
+                                       } else {
+                                         polygon_y <- lapply(1:n, function(i) polygon_y)
+                                       }
+
+                                       poly_x <- lapply(seq_len(n),
                                                         function(i) {
                                                           if(showArea) {
                                                             grid::unit(data$x[i], 'native') +
@@ -168,7 +115,7 @@ GeomPolygonGlyph <- ggplot2::ggproto('GeomPolygonGlyph', Geom,
                                                           }
 
                                                         })
-                                       poly_y <- lapply(1:length(polygon_y),
+                                       poly_y <- lapply(seq_len(n),
                                                         function(i) {
                                                           if(showArea) {
 

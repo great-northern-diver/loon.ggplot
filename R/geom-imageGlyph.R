@@ -1,32 +1,11 @@
-#' @title Add image glyph on scatter plot
-#' @inheritParams ggplot2::layer
+#' @inherit glyphGeoms
+#' @rdname glyphGeoms
 #' @param images a list of images (a raster object, bitmap image). If not provided, `geom_point()` will be called.
 #' @param width width of image
 #' @param height height of image
-#' @param na.rm If FALSE, the default, missing values are removed with a warning.
-#' If TRUE, missing values are silently removed.
-#' @param ... Other arguments passed on to `layer()`.
-#'
-#' @section Aesthetics:
-#' geom_imageGlyph() understands the following aesthetics (required aesthetics are in bold):
-#' \itemize{
-#' \item{\strong{x}}
-#' \item{\strong{y}}
-#' \item{alpha}
-#' \item{colour}
-#' \item{fill}
-#' \item{group}
-#' \item{shape}
-#' \item{size}
-#' \item{stroke}
-#' \item{linetype}
-#' }
 #' @export
-#'
-#' @seealso \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_pointrangeGlyph}},
-#' \code{\link{geom_polygonGlyph}}, \code{\link{geom_textGlyph}}
-#'
 #' @examples
+#' # image glyph
 #' if(requireNamespace("png")) {
 #'   img_paths <- list.files(file.path(find.package(package = 'loon'), "images"), full.names = TRUE)
 #'   images <- lapply(img_paths, function(path) png::readPNG(path))
