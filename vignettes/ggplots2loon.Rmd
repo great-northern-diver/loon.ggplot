@@ -673,7 +673,7 @@ Loon plots to ggplot objects
 
 ## Turn loon static via `loon2ggplot()` 
 
-Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be transformed to other systems. 
+Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be extended to other systems. 
 
 `Ggplot` provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes adventage of that, transforming `loon` widgets to `ggplot` objects.
 
@@ -745,7 +745,8 @@ map_data("state") %>%
   
     ```{r serialaxes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
     # parallel axes plot
-    ggplot(data = iris, mapping = aes(colour = Species)) %>% 
+    ggplot(data = iris, 
+           mapping = aes(colour = Species)) %>% 
       ggSerialAxes()
     ```
 

@@ -93,10 +93,12 @@ set_data_group <- function(data = NULL,
   quo_color <- mapping$colour
 
   if(!rlang::is_empty(quo_color) && !is.null(originalData)) {
-
     grouped_data <- cbind(
       grouped_data,
-      color = rlang::eval_tidy(rlang::quo(!!quo_color),  originalData)
+      color = rep(
+        rlang::eval_tidy(rlang::quo(!!quo_color),  originalData),
+        each = switch(axesLayout, "parallel" = p, "radial" = p + 1)
+      )
     )
   }
 
