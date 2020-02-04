@@ -8,3 +8,4 @@ docs/*
 ^doc$
 ^Meta$
 ^codecov\.yml$
+^\.travis\.yml$

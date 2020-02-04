@@ -45,7 +45,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                           y = y,
                           color = color,
                           pch = factor(pch),
-                          size = factor(size)),
+                          size = size),
         mapping = ggplot2::aes(x = x, y = y, color = color, size = size,
                                pch = pch),
         inherit.aes = FALSE
@@ -61,7 +61,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                           y = y,
                           pch = factor(pch),
                           fill = color,
-                          size = factor(size)),
+                          size = size),
         mapping = ggplot2::aes(x = x, y = y, fill = fill, size = size,
                                pch = pch),
         color = loon::l_getOption("foreground"),
@@ -95,7 +95,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                                     y = aesthetic$y,
                                                     fill = aesthetic$color,
                                                     color = aesthetic$color,
-                                                    size = factor(aesthetic$size)),
+                                                    size = aesthetic$size),
                                   mapping = ggplot2::aes(x = x,
                                                          y = y,
                                                          fill = fill,
@@ -117,7 +117,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                   data = data.frame(x = aesthetic$x,
                                                     y = aesthetic$y,
                                                     color = aesthetic$color,
-                                                    size = factor(aesthetic$size)),
+                                                    size = aesthetic$size),
                                   mapping = ggplot2::aes(x = x, y = y, color = color, size = size),
                                   serialAxesData = char2num.data.frame(gh['data'][aesthetic$index, ]),
                                   sequence = gh['sequence'],
@@ -143,7 +143,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                   data = data.frame(x = aesthetic$x,
                                                     y = aesthetic$y,
                                                     color = aesthetic$color,
-                                                    size = factor(text_size)),
+                                                    size = text_size),
                                   mapping = ggplot2::aes(x = x, y = y, color = color, size = size),
                                   text = gh["text"][aesthetic$index],
                                   inherit.aes = FALSE
@@ -168,7 +168,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                                       y = y[bounded_id],
                                                       fill = aesthetic$color[bounded_id],
                                                       pch = factor(pch[bounded_id]),
-                                                      size = factor(point_size)),
+                                                      size = point_size),
                                     mapping = ggplot2::aes(x = x,
                                                            y = y,
                                                            fill = fill,
@@ -190,7 +190,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                                       y = y[!bounded_id],
                                                       color = aesthetic$color[!bounded_id],
                                                       pch = factor(pch[!bounded_id]),
-                                                      size = factor(point_size)),
+                                                      size = point_size),
                                     mapping = ggplot2::aes(x = x,
                                                            y = y,
                                                            color = color,
@@ -213,7 +213,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                                   data = data.frame(x = aesthetic$x,
                                                     y = aesthetic$y,
                                                     color = aesthetic$color,
-                                                    size = factor(point_size)),
+                                                    size = point_size),
                                   mapping = ggplot2::aes(x = x, y = y, color = color, size = size),
                                   showArea = gh["showArea"],
                                   ymin = gh["ymin"][aesthetic$index],
@@ -287,7 +287,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
     ggplot2::scale_fill_manual(values = stats::setNames(uni_color, nm = uni_color),
                                labels = stats::setNames(selection_color_labels(uni_color), nm = uni_color)) +
     ggplot2::scale_shape_manual(values = stats::setNames(uni_pch, nm = uni_pch)) +
-    ggplot2::scale_size_manual(values = stats::setNames(uni_size, nm = uni_size))
+    ggplot2::scale_size(range = range(size[!is.na(size)]))
 
   if(length(uni_color) == 1)
     ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)

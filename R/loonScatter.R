@@ -20,9 +20,9 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                       color <- sapply(1:dim(data)[1],
                                                       function(j){
                                                         if(data$shape[j] %in% 21:24 ){
-                                                          hex6to12(data$fill[j])
+                                                          data$fill[j]
                                                         }else {
-                                                          hex6to12(data$colour[j])
+                                                          data$colour[j]
                                                         }
                                                       })
                                       glyph <- pch_to_glyph(data$shape, data$alpha)
@@ -130,7 +130,7 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                  x = x,
                  y = y,
                  size = combined.pointsData$size,
-                 color = combined.pointsData$color,
+                 color = hex6to12(combined.pointsData$color),
                  glyph = combined.pointsData$glyph,
                  itemLabel = combined.pointsData$itemLabel,
                  linkingKey = combined.pointsData$linkingKey,
@@ -153,7 +153,6 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                  ylabel = if(is.null(ylabel)) "" else ylabel,
                  title = loonTitle)
   }
-
 }
 
 

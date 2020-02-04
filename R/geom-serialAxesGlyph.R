@@ -1,6 +1,6 @@
-#' @title Add serialaxes glyph on scatter plot
-#' @inheritParams ggplot2::layer
-#' @param serialAxesData a serial axes numerial data set. If not provided, `geom_point()` will be called.
+#' @rdname glyphGeoms
+#' @inherit glyphGeoms
+#' @param serialAxesData a serial axes numerical data set. If not provided, `geom_point()` will be called.
 #' @param sequence vector with variable names that defines the axes sequence
 #' @param linewidth line width of serial axes plot
 #' @param scaling one of 'variable', 'data', 'observation' or 'none' to
@@ -11,33 +11,10 @@
 #' @param showEnclosing boolean to indicate whether enclosing should be shown or not
 #' @param axesColor axes color
 #' @param bboxColor bounding box color
-#' @param na.rm If FALSE, the default, missing values are removed with a warning.
-#' If TRUE, missing values are silently removed.
-#' @param ... Other arguments passed on to `layer()`.
-#' These are often aesthetics, used to set an aesthetic to a fixed value,
-#' like `colour = "red"` or `size = 3`. They may also be parameters to the paired geom/stat.
-#'
-#' @section Aesthethics:
-#' geom_serialAxesGlyph() understands the following aesthetics (required aesthetics are in bold):
-#' \itemize{
-#' \item{\strong{x}}
-#' \item{\strong{y}}
-#' \item{alpha}
-#' \item{colour}
-#' \item{fill}
-#' \item{group}
-#' \item{shape}
-#' \item{size}
-#' \item{stroke}
-#' \item{linetype}
-#' }
-#'
 #' @export
 #'
-#' @seealso \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
-#' \code{\link{geom_polygonGlyph}}, \code{\link{geom_textGlyph}}
-#'
 #' @examples
+#' # serial axes glyph
 #' p <- ggplot(data = iris,
 #'             mapping = aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 #'   geom_serialAxesGlyph(serialAxesData = iris[, -5],

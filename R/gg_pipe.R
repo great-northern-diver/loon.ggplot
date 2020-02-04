@@ -10,7 +10,7 @@
 #'    geom_point() \%>\%
 #'    ggplot2loon()},
 #'
-#' error would occure. The reason is
+#' error would occur. The reason is
 #'
 #' \code{geom_point() \%>\% ggplot2loon()}
 #'

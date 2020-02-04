@@ -18,7 +18,7 @@ loon.ggplot(x, ...)
 \item{...}{arguments used in either \code{loon2ggplot()} or \code{ggplot2loon()}}
 }
 \value{
-If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversly, if the
+If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversely, if the
 input is a \code{loon} widget, then it returns a \code{ggplot} object.
 }
 \description{

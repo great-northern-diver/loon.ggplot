@@ -577,7 +577,7 @@ loonLayer.GeomPath <- function(widget,
     lapply(1:m,
            function(i){
              groupData <- data[data$group == uniGroup[i], ]
-             linesColor <- hex6to12(groupData$colour)
+             linesColor <- groupData$colour
              len_uni_col <- length(unique(groupData$colour))
 
              linesWidth <- as_loon_size(groupData$size, "lines")
@@ -604,7 +604,7 @@ loonLayer.GeomPath <- function(widget,
                  widget,
                  x = x, y = y,
                  linewidth = linesWidth[1],
-                 color = linesColor[1],
+                 color = hex6to12(linesColor[1]),
                  dash = linesDash[[1]],
                  parent = parent,
                  label = mappingLabel
@@ -1043,8 +1043,8 @@ loonLayer.GeomRaster <- function(widget,
   if(dim(data)[1] != 0) {
     isCoordPolar <- is.CoordPolar(ggplotPanel_params)
     n <- dim(data)[1]
-    fillColor <- hex6to12(data$fill)
-    linesColor <- hex6to12(data$colour)
+    fillColor <- data$fill
+    linesColor <- data$colour
     linesWidth <- as_loon_size(data$size, "lines")
     xrange <- ggplotPanel_params$x.range
     yrange <- ggplotPanel_params$y.range
@@ -1066,8 +1066,8 @@ loonLayer.GeomRaster <- function(widget,
         y <- coordPolarxy$y
         loon::l_layer_polygon(
           widget, x = x, y = y,
-          color = fillColor,
-          linecolor = linesColor,
+          color = hex6to12(fillColor),
+          linecolor = hex6to12(linesColor),
           linewidth = linesWidth,
           parent = parent,
           label = mappingLabel
@@ -1079,8 +1079,8 @@ loonLayer.GeomRaster <- function(widget,
         loon::l_layer_rectangle(
           widget,
           x = x, y = y,
-          color = fillColor,
-          linecolor = linesColor,
+          color = hex6to12(fillColor),
+          linecolor = hex6to12(linesColor),
           linewidth = linesWidth,
           parent = parent,
           label = mappingLabel
@@ -1159,8 +1159,8 @@ get_mappingLabel <- function(layerGeom, name, label = NULL, i = NULL) {
       names <- paste(
         sapply(seq(m),
                function(j){
-                 mapping <- as.character(layerGeom$mapping[[j]])
-                 mapping <- mapping[-which("~" %in% mapping)]
+                 mapping <- rlang::as_label(layerGeom$mapping[[j]])
+                 mapping
                }
         ), collapse = ";")
       paste(c(names, i), collapse = " ")

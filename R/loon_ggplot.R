@@ -6,7 +6,7 @@
 #' @param x A \code{loon} widget or a \code{ggplot} object.
 #' @param ... arguments used in either \code{loon2ggplot()} or \code{ggplot2loon()}
 #'
-#' @return If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversly, if the
+#' @return If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversely, if the
 #' input is a \code{loon} widget, then it returns a \code{ggplot} object.
 #'
 #' @seealso \code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}

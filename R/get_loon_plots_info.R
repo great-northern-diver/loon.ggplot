@@ -158,7 +158,6 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                           mapping <- ggObj$layers[[activeGeomLayers]]$mapping
                         } else NULL # activeGeomLayers > 1 not implemented so far
                       }
-                      column_names <- colnames(dataFrame)
 
                       if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
                         loonPlot <- loonHistogram(ggBuild = ggBuild,
@@ -168,7 +167,6 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                                                   ggObj = ggObj,
                                                   activeGeomLayers = activeGeomLayers,
                                                   panelIndex = i,
-                                                  column_names = column_names,
                                                   dataFrame = dataFrame,
                                                   mapping = mapping,
                                                   numOfSubtitles = numOfSubtitles,
