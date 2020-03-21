@@ -1,7 +1,6 @@
-modify_loon_plots <- function(envir = parent.frame()) {
+modify_loon_plots <- function(plots_info = list()) {
 
-  plots_info <- get("plots_info", envir = envir)
-  args <- get("args", envir = envir)
+  args <- plots_info$args
 
   plots <- plots_info$plots
   display_info <- plots_info$display_info
@@ -10,23 +9,23 @@ modify_loon_plots <- function(envir = parent.frame()) {
   lapply(plots,
          function(plot){
            loon::l_configure(plot, linkingGroup = args$linkingGroup,
-                             sync = get("sync", envir = envir))
+                             sync = plots_info$sync)
          }
   )
 
-  if (get("panelNum", envir = envir) == 1) {
+  if (plots_info$panelNum == 1) {
     gp <- plots$x1y1
   } else {
     gp <- list(
       plots = plots,
       facet = list(
-        is_facet_wrap = get("is_facet_wrap", envir = envir),
-        is_facet_grid = get("is_facet_grid", envir = envir),
-        byCOLS = get("byCOLS", envir = envir),
-        byROWS = get("byROWS", envir = envir)
+        is_facet_wrap = plots_info$is_facet_wrap,
+        is_facet_grid = plots_info$is_facet_grid,
+        byCOLS = plots_info$byCOLS,
+        byROWS = plots_info$byROWS
       ),
       titles = list(
-        title = get("title", envir = envir),
+        title = plots_info$title,
         colSubtitles = display_info$colSubtitles,
         rowSubtitles = display_info$rowSubtitles
       )

@@ -1,14 +1,21 @@
-get_loon_plots_info <- function(envir = parent.frame()) {
+get_loon_plots_info <- function(plots_info = list(),
+                                ggObj,
+                                parent = NULL,
+                                activeGeomLayers = integer(0),
+                                ggGuides = FALSE,
+                                pack = FALSE,
+                                tkLabels = NULL,
+                                canvasHeight = 700,
+                                canvasWidth = 850) {
 
-  ggObj <- get("ggObj", envir = envir)
-  buildggObj <- get("buildggObj", envir = envir)
-  args <- get("args", envir = envir)
+  buildggObj <- plots_info$buildggObj
+  args <- plots_info$args
 
 
   # ggplot object
   dataFrame <- ggObj$data
-  linkingKey <- get("linkingKey", envir = envir)
-  itemLabel <- get("itemLabel", envir = envir)
+  linkingKey <- plots_info$linkingKey
+  itemLabel <- plots_info$itemLabel
 
   # ggbuild
   ggBuild <- buildggObj$ggBuild
@@ -16,14 +23,11 @@ get_loon_plots_info <- function(envir = parent.frame()) {
   ggplotPanel_params <- buildggObj$ggplotPanel_params
   panelNum <- dim(layout)[1]
 
-  # active layers
-  activeGeomLayers <- get("activeGeomLayers", envir = envir)
-
   # facet and location
-  span <- get("span", envir = envir)
-  start.ypos <- get("start.ypos", envir = envir)
-  start.xpos <- get("start.xpos", envir = envir)
-  start.subtitlepos <- get("start.subtitlepos", envir = envir)
+  span <- plots_info$span
+  start.ypos <- plots_info$start.ypos
+  start.xpos <- plots_info$start.xpos
+  start.subtitlepos <- plots_info$start.subtitlepos
   newspan <- span
 
   # loon setting
@@ -40,42 +44,41 @@ get_loon_plots_info <- function(envir = parent.frame()) {
     args[['zoomY']]
   }
   # labels
-  xlabel <- get("xlabel", envir = envir)
-  ylabel <- get("ylabel", envir = envir)
-  title <- get("title", envir = envir)
+  xlabel <- plots_info$xlabel
+  ylabel <- plots_info$ylabel
+  title <- plots_info$title
   colSubtitles <- c()
   rowSubtitles <- c()
 
   # length layers
   len_layers <- length(ggObj$layers)
-  parent <- get("parent", envir = envir)
 
   plots <- lapply(seq_len(panelNum),
                   function(i){
                     # subtitle
                     # if wrap number is larger than 0, multiple facets are displayed
                     numOfSubtitles <- wrap_num(buildggObj$ggLayout,
-                                               get("is_facet_wrap", envir = envir),
-                                               get("is_facet_grid", envir = envir),
-                                               get("tkLabels", envir = envir))
+                                               plots_info$is_facet_wrap,
+                                               plots_info$is_facet_grid,
+                                               tkLabels)
 
-                    subtitle <- get_subtitle(get("layoutByROWS", envir = envir),
-                                             get("layoutByCOLS", envir = envir),
+                    subtitle <- get_subtitle(plots_info$layoutByROWS,
+                                             plots_info$layoutByCOLS,
                                              layout = layout,
                                              ggLayout = buildggObj$ggLayout,
                                              numOfSubtitles = numOfSubtitles,
-                                             byROWS = get("byROWS", envir = envir),
-                                             byCOLS = get("byCOLS", envir = envir),
+                                             byROWS = plots_info$byROWS,
+                                             byCOLS = plots_info$byCOLS,
                                              panelNum = i,
-                                             is_facet_wrap = get("is_facet_wrap", envir = envir),
-                                             is_facet_grid = get("is_facet_grid", envir = envir),
-                                             tkLabels = get("tkLabels", envir = envir))
+                                             is_facet_wrap = plots_info$is_facet_wrap,
+                                             is_facet_grid = plots_info$is_facet_grid,
+                                             tkLabels = tkLabels)
                     colSubtitle <- subtitle$colSubtitle
                     rowSubtitle <- subtitle$rowSubtitle
                     colSubtitles <<- c(colSubtitles, colSubtitle)
                     rowSubtitles <<- c(rowSubtitles, rowSubtitle)
 
-                    if(!is.null(colSubtitle) & !get("is_facet_grid", envir = envir) & get("tkLabels", envir = envir) & get("pack", envir = envir)) {
+                    if(!is.null(colSubtitle) & !plots_info$is_facet_grid & tkLabels & pack) {
                       sub <- as.character(tcltk::tcl('label',
                                                      as.character(loon::l_subwin(parent,'label')),
                                                      text= colSubtitle, background = "grey90"))
@@ -104,7 +107,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                       if( which( names(ggplotPanel_params[[i]]) %in% "y.range"  == TRUE ) <
                           which( names(ggplotPanel_params[[i]]) %in% "x.range"  == TRUE ) ) swapAxes <<- TRUE
                       # show ggGuides or not
-                      if (get("ggGuides", envir = envir)) {
+                      if (ggGuides) {
                         showGuides <- FALSE
                         showScales <- FALSE
 
@@ -175,12 +178,12 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                                                   showScales = showScales,
                                                   swapAxes = swapAxes,
                                                   linkingKey = linkingKey,
-                                                  showLabels = get("showLabels", envir = envir),
+                                                  showLabels = plots_info$showLabels,
                                                   xlabel = xlabel,
                                                   ylabel = ylabel,
                                                   loonTitle = loonTitle,
-                                                  is_facet_wrap = get("is_facet_wrap", envir = envir),
-                                                  is_facet_grid = get("is_facet_grid", envir = envir))
+                                                  is_facet_wrap = plots_info$is_facet_wrap,
+                                                  is_facet_grid = plots_info$is_facet_grid)
 
 
                       } else if(activeModel == "l_plot" & length(boxplot_point_layers) != 0) {
@@ -198,7 +201,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                                                 swapAxes = swapAxes,
                                                 linkingKey = linkingKey,
                                                 itemLabel = itemLabel,
-                                                showLabels = get("showLabels", envir = envir),
+                                                showLabels = plots_info$showLabels,
                                                 xlabel = xlabel,
                                                 ylabel = ylabel,
                                                 loonTitle = loonTitle)
@@ -207,7 +210,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                         loonPlot <- loon::l_plot(parent = parent,
                                                  showGuides = showGuides,
                                                  showScales = showScales,
-                                                 showLabels = get("showLabels", envir = envir),
+                                                 showLabels = plots_info$showLabels,
                                                  swapAxes = swapAxes,
                                                  xlabel = if(is.null(xlabel)) "" else xlabel,
                                                  ylabel = if(is.null(ylabel)) "" else ylabel,
@@ -259,18 +262,18 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                     } else loonPlot <- loon::l_plot(parent = parent,
                                                     showGuides = showGuides,
                                                     showScales = showScales,
-                                                    showLabels = get("showLabels", envir = envir),
+                                                    showLabels = plots_info$showLabels,
                                                     swapAxes = swapAxes,
                                                     xlabel = if(is.null(xlabel)) "" else xlabel,
                                                     ylabel = if(is.null(ylabel)) "" else ylabel,
                                                     title = loonTitle)
 
                     # resize loon plot
-                    if(get("pack", envir = envir)) {
+                    if(pack) {
 
                       tcltk::tkconfigure(paste(loonPlot,'.canvas',sep=''),
-                                         width = get("canvasWidth", envir = envir)/get("column", envir = envir),
-                                         height = get("canvasHeight", envir = envir)/get("row", envir = envir))
+                                         width = canvasWidth/plots_info$column,
+                                         height = canvasHeight/plots_info$row)
                       # tk pack
                       row.start <- (layout[i,]$ROW - 1) * span + start.subtitlepos
                       col.start <- (layout[i,]$COL - 1) * span + start.xpos
@@ -292,7 +295,7 @@ get_loon_plots_info <- function(envir = parent.frame()) {
                     # loonPlot_configure does not produce anything but just configure the loon plot
                     loonPlot_configure <- loonPlot_configure(isCoordPolar = isCoordPolar,
                                                              loonPlot = loonPlot,
-                                                             ggGuides = get("ggGuides", envir = envir),
+                                                             ggGuides = ggGuides,
                                                              panelIndex = i,
                                                              ggplotPanel_params = ggplotPanel_params,
                                                              swapAxes = swapAxes,
