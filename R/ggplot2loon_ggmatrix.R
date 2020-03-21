@@ -16,8 +16,12 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
     ...
   )
 
-  parent <- parent %||% tcltk::tktoplevel(background = loon::l_getOption("background"))
-  tcltk::tktitle(parent) <- paste0("loon.ggplot", as.character(tcltk::tktitle(parent)))
+  if(is.null(parent)) {
+    parent <- l_toplevel()
+    subwin <- loon::l_subwin(parent, 'ggplot')
+    tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
+    parent <- as.character(tcltk::tcl('frame', subwin))
+  }
 
   nrow <- ggObj$nrow
   ncol <- ggObj$ncol
@@ -202,14 +206,13 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
                        showYAxisPlotLabels = showYAxisPlotLabels)
 
   names(loonplots) <- names
-  gp <- structure(
+  structure(
     list(
       plots = loonplots,
       ggObj = ggObj
     ),
     class = c("l_ggmatrix", "l_ggplot", "l_compound", "loon")
   )
-  return(invisible(gp))
 }
 
 ##################################### modify loon tk labels #####################################
@@ -309,4 +312,6 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
                   columnspan = 1,
                   sticky="nesw")
   }
+
+  tkpack(parent, fill="both", expand=TRUE)
 }
