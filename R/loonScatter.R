@@ -48,10 +48,6 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                           paste0("item", thisLayer_linkingKey)
                                         }
                                         count <<- count + num
-                                        # give warning once
-                                        # if(activeGeomLayer == activeGeomLayers[length(activeGeomLayers)]) {
-                                        #   warning("linkingKey and itemLabel may not match and will be set as the default loon one.")
-                                        # }
                                       }
                                     }
 
@@ -107,11 +103,7 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
   combined.pointsData <- na.omit(combined.pointsData)
 
   if(dim(combined.pointsData)[1] > 0) {
-    # TODO a loon bug cannot handle a single point
-    if(dim(combined.pointsData)[1] == 1) {
-      combined.pointsData <- combined.pointsData[rep(1,2), ]
-      combined.pointsData[1, ]$linkingKey <- combined.pointsData[1, ]$itemLabel <- dim(do.call(rbind, ggBuild$data))[1] + panelIndex
-    }
+
     if(isCoordPolar) {
       coordPolarxy <- Cartesianxy2Polarxy(NULL,
                                           coordinates = ggObj$coordinates,
