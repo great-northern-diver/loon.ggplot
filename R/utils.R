@@ -13,11 +13,31 @@ is.ggmatrix_plot_obj <- function(x) {
 default_radius <- function() 0.5
 
 is.color <- function(colors) {
-  sapply(colors,
-         function(color) {
-           tryCatch(is.matrix(grDevices::col2rgb(color)),
-                    error = function(e) FALSE)
-         })
+
+  colors <- as.character(colors)
+
+  # get rid of numerical values and NAs
+  if(any(is.na(colors))) is_color <- FALSE
+  else {
+
+    suppressWarnings(
+      {
+        is_color <- all(is.na(as.numeric(colors)))
+      }
+    )
+
+    if(is_color) {
+      is_color <- all(
+        sapply(colors,
+               function(color) {
+                 tryCatch(is.matrix(col2rgb(color)),
+                          error = function(e) FALSE)
+               })
+      )
+    }
+  }
+
+  is_color
 }
 
 valid_color <- function(x) {
