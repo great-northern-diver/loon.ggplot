@@ -17,8 +17,10 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
                                   xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
 
   # set binwidth
+  ## panel i hist values
   hist_data <- ggBuild$data[[activeGeomLayers]]
-  binwidth_vec <- hist_data[hist_data$PANEL == panelIndex, ]$xmax - hist_data[hist_data$PANEL == panelIndex, ]$xmin
+  hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
+  binwidth_vec <- hist_data$xmax - hist_data$xmin
   binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
   hist_x <- as.numeric(rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame))
   # facet index
@@ -79,6 +81,7 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
                                     xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
 
   hist_data <- ggBuild$data[[activeGeomLayers]]
+  hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
   hist_x <- rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame)
   # grab the facet index
   facet_id <- catch_facet_id(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
@@ -150,9 +153,9 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
   binwidth <- args$binwidth
 
   # histogram start value, end value
-  start_value <- min(hist_data[hist_data$PANEL == panelIndex, ]$xmin[hist_data[hist_data$PANEL == panelIndex, ]$ymax != 0],
+  start_value <- min(hist_data$xmin[hist_data$ymax != 0],
                      na.rm = TRUE)
-  end_value <- max(hist_data[hist_data$PANEL == panelIndex, ]$xmax, na.rm = TRUE)
+  end_value <- max(hist_data$xmax, na.rm = TRUE)
   in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
 
   if (!is.null(x.limits)) {
