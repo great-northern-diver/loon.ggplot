@@ -1,5 +1,4 @@
 context("test examples")
-library(ElemStatLearn)
 library(dplyr)
 library(magrittr)
 library(tidyverse)
@@ -222,7 +221,7 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 23
-  p <- ggplot(data = SAheart, mapping = aes(x = tobacco, y = sbp))
+  p <- ggplot(data = mtcars, mapping = aes(x = mpg, y = hp))
   pp <- p + geom_point() + geom_density_2d(lwd = 1.5, col = "steelblue")
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
@@ -357,7 +356,7 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 44
-  pp <- ggplot(SAheart, aes(obesity, adiposity)) + geom_point() + geom_smooth() +
+  pp <- ggplot(data = mtcars, mapping = aes(x = mpg, y = hp)) + geom_point() + geom_smooth() +
     coord_polar(theta = "y")
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
