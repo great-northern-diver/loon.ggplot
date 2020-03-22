@@ -1,5 +1,4 @@
 context("test examples")
-library(ElemStatLearn)
 library(dplyr)
 library(magrittr)
 library(tidyverse)
@@ -14,8 +13,9 @@ test_that("example works", {
 
   # example 2
   p<- ggplot(mtcars, aes(mpg, wt)) + geom_point( aes(colour = "darkblue"))
+  expect_equal(get_activeGeomLayers(p), c(geom_point = 1))
   g <- ggplot2loon(p)
-  expect_equal(class(g), c("l_plot", "loon"))
+  expect_is(g, c("l_plot", "loon"))
 
   # examle 3
   ids <- factor(c("1.1", "2.1", "1.2", "2.2", "1.3", "2.3"))
@@ -34,7 +34,10 @@ test_that("example works", {
   datapoly <- merge(values, positions, by = c("id"))
   p <- ggplot(datapoly, aes(x = x, y = y)) +
     geom_polygon(aes(fill = value, group = id))
+  expect_equal(length(get_activeGeomLayers(p)), 0)
   g <- ggplot2loon(p)
+  expect_equal(class(g), c("l_plot", "loon"))
+  g <- loon.ggplot(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 4
@@ -155,6 +158,7 @@ test_that("example works", {
   # example 15
   pp <- ggplot(diamonds, aes((carat))) +
     geom_histogram()
+  expect_equal(length(get_activeGeomLayers(pp)), 1)
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_hist", "loon"))
 
@@ -217,7 +221,7 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 23
-  p <- ggplot(data = SAheart, mapping = aes(x = tobacco, y = sbp))
+  p <- ggplot(data = mtcars, mapping = aes(x = mpg, y = hp))
   pp <- p + geom_point() + geom_density_2d(lwd = 1.5, col = "steelblue")
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
@@ -352,7 +356,7 @@ test_that("example works", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   # example 44
-  pp <- ggplot(SAheart, aes(obesity, adiposity)) + geom_point() + geom_smooth() +
+  pp <- ggplot(data = mtcars, mapping = aes(x = mpg, y = hp)) + geom_point() + geom_smooth() +
     coord_polar(theta = "y")
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
@@ -523,6 +527,11 @@ test_that("example works", {
   p1 <- p + facet_grid(rows = vars(drv))
   g <- ggplot2loon(p1)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # loonGrob
+  lg <- loonGrob(g)
+  expect_is(lg, c("gTree", "grob", "gDesc"))
+  l <- layout_coords(g)
+  expect_equal(l, data.frame(row = 1:3, col = rep(1,3)))
 
   # example 71
   p2 <- p + facet_grid(cols = vars(cyl))
@@ -775,6 +784,8 @@ test_that("example works", {
   g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggmatrix"))
+  g <- loon.ggplot(p)
+  expect_equal(class(g), c("gg", "ggmatrix"))
 
   # ex94
   s <- l_serialaxes(iris)
@@ -865,4 +876,17 @@ test_that("example works", {
   )
   g
   expect_equal(class(g), c("gg", "ggplot"))
+  # gg_pipe
+  g <- mtcars %>%
+     gg_pipe(
+       ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
+     ) %>%
+     ggplot2loon()
+  expect_equal(class(g), c("l_plot", "loon"))
+  # layout coordinates
+  l <- layout_coords(g)
+  expect_is(l, "matrix")
+  h <- l_hist(iris)
+  l <- layout_coords(h)
+  expect_is(l, "matrix")
 })

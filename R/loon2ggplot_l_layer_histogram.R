@@ -56,17 +56,17 @@ transform_hist_x <- function(widget) {
   b_bins <- lapply(bins,
                    function(bin) {
 
-                     nam <- names(bin$count[-1])
+                     name <- names(bin$count[-1])
 
                      if (showStackedColors) {
-                       first <- intersect(colorStackingOrder, nam)
-                       rest <- setdiff(nam, c("all", first))
+                       first <- intersect(colorStackingOrder, name)
+                       rest <- setdiff(name, c("all", first))
                        bnames <- c(first, rest)
                        count <- bin$count
                        default_fill <- NULL
                      } else {
                        count <- list()
-                       if("selected" %in% nam) {
+                       if("selected" %in% name) {
                          count$selected <- bin$count$selected
                          count$unselected <- bin$count$all - bin$count$selected
                        } else count$unselected <- bin$count$all

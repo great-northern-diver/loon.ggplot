@@ -52,11 +52,7 @@ a stacked star glyph plot, or as a parallel coordinate plot.
 p <- ggplot(data = mtcars, mapping = aes(colour = factor(cyl)))
 # Add serial axes (returns a ggplot object)
 g <- ggSerialAxes(p)
-# modify categorical variable color and legend background
-g +
-  theme(legend.key = element_rect(fill = "lightblue", color = "black")) +
-  scale_colour_manual(values = gg_color_hue(3))
-
+g
 # An eulerian path of iris variables
 # ordSeq <- PairViz::eulerian(4)
 ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)

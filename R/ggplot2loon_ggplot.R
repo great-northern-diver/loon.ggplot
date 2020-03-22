@@ -127,9 +127,6 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
     stop("activeGeomLayers is a numeric argument")
   }
-  if(!is.null(parent)) {
-    if(!is(parent, "tkwin")) stop("parent must be a Tk toplevel window")
-  }
   if(!is.logical(ggGuides)) {
     stop("ggGuides is a logical argument")
   }
@@ -153,76 +150,82 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
     stop("canvasWidth is a numerical argument")
   }
 
+  plots_info <- list()
+
   args <- list(...)
-  dataFrame <- ggObj$data
-  linkingKey <- loonLinkingKey(dataFrame, args)
-  itemLabel <- loonItemLabel(dataFrame, args)
+  plots_info$dataFrame <- ggObj$data
+  plots_info$linkingKey <- loonLinkingKey(plots_info$dataFrame, args)
+  plots_info$itemLabel <- loonItemLabel(plots_info$dataFrame, args)
 
   # ggplot_build
-  buildggObj <-  ggBuild2Loon(ggObj, linkingKey, itemLabel)
-  layout <- buildggObj$layout
-  ggBuild <- buildggObj$ggBuild
+  plots_info$buildggObj <-  ggBuild2Loon(ggObj, plots_info$linkingKey, plots_info$itemLabel)
+  plots_info$layout <- plots_info$buildggObj$layout
+  plots_info$ggBuild <- plots_info$buildggObj$ggBuild
   # number of panels
-  panelNum <- dim(layout)[1]
+  plots_info$panelNum <- dim(plots_info$layout)[1]
 
   # labels
-  title <- ggObj$labels$title
-  ylabel <- ggObj$labels$y
-  xlabel <- ggObj$labels$x
-  span <- round(1/exteriorLabelProportion)
+  plots_info$title <- ggObj$labels$title
+  plots_info$ylabel <- ggObj$labels$y
+  plots_info$xlabel <- ggObj$labels$x
+  plots_info$span <- round(1/exteriorLabelProportion)
 
-  tkLabels <- tkLabels %||% panelNum != 1
+  tkLabels <- tkLabels %||% plots_info$panelNum != 1
 
   if (tkLabels) {
     # two ways to separate facets, facet_wrap or facet_grid
-    is_facet_wrap <- buildggObj$is_facet_wrap
-    is_facet_grid <- buildggObj$is_facet_grid
-    if(is_facet_wrap) {
-      byCOLS <- TRUE
-      byROWS <- FALSE
-    } else if(is_facet_grid) {
+    plots_info$is_facet_wrap <- plots_info$buildggObj$is_facet_wrap
+    plots_info$is_facet_grid <- plots_info$buildggObj$is_facet_grid
+    if(plots_info$is_facet_wrap) {
+      plots_info$byCOLS <- TRUE
+      plots_info$byROWS <- FALSE
+    } else if(plots_info$is_facet_grid) {
       # layout multiple facets by rows or by cols
-      layoutByROWS <- names(ggBuild$layout$facet_params$rows)
-      layoutByCOLS <- names(ggBuild$layout$facet_params$cols)
+      plots_info$layoutByROWS <- names(plots_info$ggBuild$layout$facet_params$rows)
+      plots_info$layoutByCOLS <- names(plots_info$ggBuild$layout$facet_params$cols)
       # by columns or by rows?
-      byCOLS <- ifelse(length(layoutByCOLS) > 0, TRUE, FALSE)
-      byROWS <- ifelse(length(layoutByROWS) > 0, TRUE, FALSE)
+      plots_info$byCOLS <- ifelse(length(plots_info$layoutByCOLS) > 0, TRUE, FALSE)
+      plots_info$byROWS <- ifelse(length(plots_info$layoutByROWS) > 0, TRUE, FALSE)
     } else {
-      byCOLS <- FALSE
-      byROWS <- FALSE
+      plots_info$byCOLS <- FALSE
+      plots_info$byROWS <- FALSE
     }
 
-    start.xpos <- ifelse(!is.null(ylabel), 1, 0)
-    start.ypos <- start.subtitlepos <- if(!is.null(title)) {
-      ifelse(is_facet_grid & byCOLS, 2, 1)
+    plots_info$start.xpos <- ifelse(!is.null(plots_info$ylabel), 1, 0)
+    plots_info$start.ypos <- plots_info$start.subtitlepos <- if(!is.null(plots_info$title)) {
+      ifelse(plots_info$is_facet_grid & plots_info$byCOLS, 2, 1)
     } else {
-      ifelse(is_facet_grid & byCOLS, 1, 0)
+      ifelse(plots_info$is_facet_grid & plots_info$byCOLS, 1, 0)
     }
-    showLabels <- FALSE
+    plots_info$showLabels <- FALSE
   } else {
-    is_facet_wrap <- FALSE
-    is_facet_grid <- FALSE
-    byCOLS <- FALSE
-    byROWS <- FALSE
+    plots_info$is_facet_wrap <- FALSE
+    plots_info$is_facet_grid <- FALSE
+    plots_info$byCOLS <- FALSE
+    plots_info$byROWS <- FALSE
 
-    start.xpos <- 0
-    start.ypos <- 0
-    start.subtitlepos <- 0
-    showLabels <- TRUE
+    plots_info$start.xpos <- 0
+    plots_info$start.ypos <- 0
+    plots_info$start.subtitlepos <- 0
+    plots_info$showLabels <- TRUE
   }
 
   if(is.null(parent)) {
-    parent <- tktoplevel(background = "white")
-    tktitle(parent) <- paste0("loon.ggplot", as.character(tktitle(parent)))
+    parent <- l_toplevel()
+    subwin <- loon::l_subwin(parent, 'ggplot')
+    tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
+    parent <- as.character(tcltk::tcl('frame', subwin))
   }
 
-  column <- max(layout$COL)
-  row <- max(layout$ROW)
-  row.span <- span * row
-  column.span <- span * column
+  plots_info$column <- max(plots_info$layout$COL)
+  plots_info$row <- max(plots_info$layout$ROW)
+  plots_info$row.span <- plots_info$span * plots_info$row
+  plots_info$column.span <- plots_info$span * plots_info$column
 
   sync <- args$sync %||% "pull"
   if(!sync %in% c("pull", "push")) stop("not known sync")
+  plots_info$sync <- sync
+
   if (is.null(args[['linkingGroup']])) {
     args[['linkingGroup']] <- "none"
   }
@@ -236,15 +239,29 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   if (is.null(args[['minimumMargins']]) & tkLabels) {
     args[['minimumMargins']] <- c(20, 20, 10, 10)
   }
+  plots_info$args <- args
 
   ## too many args to pass in `get_loon_plots_info`, `pack_loon_plots` and `modify_loon_plots`;
   ## args will be called from environment
-
-  plots_info <- get_loon_plots_info()
+  plots_info <- c(
+    plots_info,
+    get_loon_plots_info(plots_info = plots_info,
+                        ggObj = ggObj,
+                        parent = parent,
+                        activeGeomLayers = activeGeomLayers,
+                        ggGuides = ggGuides,
+                        pack = pack,
+                        tkLabels = tkLabels,
+                        canvasHeight = canvasHeight,
+                        canvasWidth = canvasWidth)
+  )
   # pack labels
-  if(pack) pack_loon_plots()
+  if(pack) pack_loon_plots(plots_info = plots_info,
+                           ggObj = ggObj,
+                           parent = parent,
+                           tkLabels = tkLabels)
   # modify plots
-  plots <- modify_loon_plots()
+  plots <- modify_loon_plots(plots_info = plots_info)
 
-  return(invisible(plots))
+  plots
 }

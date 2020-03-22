@@ -28,3 +28,12 @@ reference:
     - ggSerialAxes
     - g_getPlots
     - g_getLocations
+    - lggplot
+    - x_airplane
+    - x_cross
+    - x_hexagon
+    - x_star
+    - y_airplane
+    - y_cross
+    - y_hexagon
+    - y_star

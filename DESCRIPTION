@@ -33,7 +33,6 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    ElemStatLearn,
     tidyverse,
     covr,
     spelling,

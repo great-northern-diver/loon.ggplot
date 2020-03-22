@@ -1,21 +1,19 @@
-pack_loon_plots <- function(envir = parent.frame()) {
-
-  plots_info <- get("plots_info", envir = envir)
-  ggObj <- get("ggObj", envir = envir)
+pack_loon_plots <- function(plots_info = list(),
+                            ggObj,
+                            parent = NULL,
+                            tkLabels = NULL) {
 
   plots <- plots_info$plots
   display_info <- plots_info$display_info
 
   # get from environment
-  xlabel <- get("xlabel", envir = envir)
-  ylabel <- get("ylabel", envir = envir)
-  tkLabels <- get("tkLabels", envir = envir)
-  parent <- get("parent", envir = envir)
-  span <- get("span", envir = envir)
-  row.span <- get("row.span", envir = envir)
-  column.span <- get("column.span", envir = envir)
-  start.ypos <- get("start.ypos", envir = envir)
-  start.xpos <- get("start.xpos", envir = envir)
+  xlabel <- plots_info$xlabel
+  ylabel <- plots_info$ylabel
+  span <- plots_info$span
+  row.span <- plots_info$row.span
+  column.span <- plots_info$column.span
+  start.ypos <- plots_info$start.ypos
+  start.xpos <- plots_info$start.xpos
 
   if(display_info$swapAxes) {
     label <- ylabel
@@ -47,7 +45,7 @@ pack_loon_plots <- function(envir = parent.frame()) {
   }
 
   # is_facet_grid; subtitle by row?
-  if(!is.null(display_info$rowSubtitles) &  get("is_facet_grid", envir = envir) & tkLabels) {
+  if(!is.null(display_info$rowSubtitles) &  plots_info$is_facet_grid & tkLabels) {
     uniqueRowSubtitles <- unique(display_info$rowSubtitles)
     for(i in 1:length(uniqueRowSubtitles)){
       rowSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
@@ -60,7 +58,7 @@ pack_loon_plots <- function(envir = parent.frame()) {
     }
   }
   # is_facet_grid; subtitle by col?
-  if(!is.null(display_info$colSubtitles) &  get("is_facet_grid", envir = envir) & tkLabels) {
+  if(!is.null(display_info$colSubtitles) &  plots_info$is_facet_grid & tkLabels) {
     uniqueColSubtitles <- unique(display_info$colSubtitles)
     for(i in 1:length(uniqueColSubtitles)){
       colSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
@@ -72,13 +70,15 @@ pack_loon_plots <- function(envir = parent.frame()) {
     }
   }
 
-  if(!is.null(get("title", envir = envir)) & tkLabels) {
+  if(!is.null(plots_info$title) & tkLabels) {
     titleFont <- if(display_info$start.subtitlepos == start.ypos) tkfont.create(size = 16) else tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
-                                   text= get("title", envir = envir), background = "white"))
+                                   text= plots_info$title, background = "white"))
     tkconfigure(tit, font = titleFont)
     tcltk::tkgrid(tit, row = 0, column = start.xpos,
                   rowspan = 1, columnspan = column.span,
                   sticky="w")
   }
+
+  tkpack(parent, fill="both", expand=TRUE)
 }

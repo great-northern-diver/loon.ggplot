@@ -52,7 +52,7 @@ loon2ggplot.default <- function(target, ...) {
 #' @export
 loon2ggplot.l_plot <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  loon::l_isLoonWidget(target) || stop(target, " does not exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
