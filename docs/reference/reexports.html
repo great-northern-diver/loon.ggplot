@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pipe ggplot object — gg_pipe • loon.ggplot</title>
+<title>Objects exported from other packages — reexports • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,9 +42,15 @@
 
 
 
-<meta property="og:title" content="Pipe ggplot object — gg_pipe" />
-<meta property="og:description" content="Pack a ggplot object forward to ggplot2loon expressions
-via a pipe-operator &quot;%&amp;gt;%&quot;." />
+<meta property="og:title" content="Objects exported from other packages — reexports" />
+<meta property="og:description" content="These objects are imported from other packages. Follow the links
+below to see their documentation.
+
+  ggplot2aes
+
+  magrittr%&amp;gt;%
+
+" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -121,70 +127,29 @@ via a pipe-operator &quot;%&amp;gt;%&quot;." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Pipe ggplot object</h1>
+    <h1>Objects exported from other packages</h1>
     
-    <div class="hidden name"><code>gg_pipe.Rd</code></div>
+    <div class="hidden name"><code>reexports.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Pack a <code>ggplot</code> object forward to <code>ggplot2loon</code> expressions
-via a pipe-operator "%&gt;%".</p>
+    <p>These objects are imported from other packages. Follow the links
+below to see their documentation.</p>
+<dl class='dl-horizontal'>
+  <dt>ggplot2</dt><dd><p><code><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></code></p></dd>
+
+  <dt>magrittr</dt><dd><p><code>%&gt;%</code></p></dd>
+
+</dl>
     </div>
 
-    <pre class="usage"><span class='fu'>gg_pipe</span>(<span class='no'>data</span>, <span class='no'>ggObj</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p>a data frame to use for ggplot</p></td>
-    </tr>
-    <tr>
-      <th>ggObj</th>
-      <td><p>a ggplot object to be passed though</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a ggplot evaluate object</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>When "+" and "%&gt;%" both appear in pipe operations, "%&gt;%" takes the priority of "+",e.g:</p>
-<p><code>mtcars %&gt;%
-   ggplot(aes(mpg, wt, colour = cyl)) +
-   geom_point() %&gt;%
-   ggplot2loon()</code>,</p>
-<p>error would occur. The reason is</p>
-<p><code>geom_point() %&gt;% ggplot2loon()</code></p>
-<p>would run before</p>
-<p><code>ggplot(aes(mpg, wt, colour = cyl)) + geom_point()</code>.</p>
-<p>Hence, we need a function <code>gg_pipe()</code> to pack the <code>ggplot</code> object and force operations happen in order.</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>magrittr</span>)) {
-   <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-     <span class='co'># Error</span>
-     <span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span>
-        <span class='fu'>ggplot</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>cyl</span>)) +
-        <span class='fu'>geom_point</span>() <span class='kw'>%&gt;%</span>
-        <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span>()
-   }
-   <span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span>
-     <span class='fu'>gg_pipe</span>(
-       <span class='fu'>ggplot</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>cyl</span>)) + <span class='fu'>geom_point</span>()
-     ) <span class='kw'>%&gt;%</span>
-     <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span>()
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: magrittr</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>

@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pipe ggplot object — gg_pipe • loon.ggplot</title>
+<title>loon.ggplot: An add on package to loon that converts ggplot2 plots to interactive loon
+    plots — loon.ggplot-package • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -42,9 +43,10 @@
 
 
 
-<meta property="og:title" content="Pipe ggplot object — gg_pipe" />
-<meta property="og:description" content="Pack a ggplot object forward to ggplot2loon expressions
-via a pipe-operator &quot;%&amp;gt;%&quot;." />
+<meta property="og:title" content="loon.ggplot: An add on package to loon that converts ggplot2 plots to interactive loon
+    plots — loon.ggplot-package" />
+<meta property="og:description" content="
+The loon.ggplot package brings both loon and ggplot2 packages together. Data analysts who value the ease with which ggplot2 can create meaningful graphics can now turn these ggplots into interactive loon plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive loon plots into ggplots. The former is accomplished by the simple translation function ggplot2loon() and the latter by the simple translation function loon2ggplot()." />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -121,71 +123,40 @@ via a pipe-operator &quot;%&amp;gt;%&quot;." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Pipe ggplot object</h1>
+    <h1>loon.ggplot: An add on package to loon that converts ggplot2 plots to interactive loon
+    plots</h1>
     
-    <div class="hidden name"><code>gg_pipe.Rd</code></div>
+    <div class="hidden name"><code>loon.ggplot-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Pack a <code>ggplot</code> object forward to <code>ggplot2loon</code> expressions
-via a pipe-operator "%&gt;%".</p>
+    <p><img src='figures/logo.png' align='right' alt='logo' width='120' /></p>
+<p>The <code>loon.ggplot</code> package brings both <code>loon</code> and <code>ggplot2</code> packages together. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <code><a href='ggplot2loon.html'>ggplot2loon()</a></code> and the latter by the simple translation function <code><a href='loon2ggplot.html'>loon2ggplot()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>gg_pipe</span>(<span class='no'>data</span>, <span class='no'>ggObj</span>)</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>data</th>
-      <td><p>a data frame to use for ggplot</p></td>
-    </tr>
-    <tr>
-      <th>ggObj</th>
-      <td><p>a ggplot object to be passed though</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p>a ggplot evaluate object</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <div class='dont-index'><p>Useful links:</p><ul>
+<li><p>Report bugs at <a href='https://github.com/z267xu/loon.ggplot/issues'>https://github.com/z267xu/loon.ggplot/issues</a></p></li>
+</ul>
 
-    <p>When "+" and "%&gt;%" both appear in pipe operations, "%&gt;%" takes the priority of "+",e.g:</p>
-<p><code>mtcars %&gt;%
-   ggplot(aes(mpg, wt, colour = cyl)) +
-   geom_point() %&gt;%
-   ggplot2loon()</code>,</p>
-<p>error would occur. The reason is</p>
-<p><code>geom_point() %&gt;% ggplot2loon()</code></p>
-<p>would run before</p>
-<p><code>ggplot(aes(mpg, wt, colour = cyl)) + geom_point()</code>.</p>
-<p>Hence, we need a function <code>gg_pipe()</code> to pack the <code>ggplot</code> object and force operations happen in order.</p>
+</div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>magrittr</span>)) {
-   <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-     <span class='co'># Error</span>
-     <span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span>
-        <span class='fu'>ggplot</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>cyl</span>)) +
-        <span class='fu'>geom_point</span>() <span class='kw'>%&gt;%</span>
-        <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span>()
-   }
-   <span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span>
-     <span class='fu'>gg_pipe</span>(
-       <span class='fu'>ggplot</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>cyl</span>)) + <span class='fu'>geom_point</span>()
-     ) <span class='kw'>%&gt;%</span>
-     <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span>()
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: magrittr</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#examples">Examples</a></li>
+      <li><a href="#see-also">See also</a></li>
     </ul>
+
+    <h2>Author</h2>
+    <p><strong>Maintainer</strong>: Zehao Xu <a href='mailto:z267xu@uwaterloo.ca'>z267xu@uwaterloo.ca</a></p>
+<p>Authors:</p><ul>
+<li><p>R. Wayne Oldford <a href='mailto:rwoldford@uwaterloo.ca'>rwoldford@uwaterloo.ca</a></p></li>
+</ul>
+
 
   </div>
 </div>
