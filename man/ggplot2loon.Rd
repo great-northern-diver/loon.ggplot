@@ -4,10 +4,18 @@
 \alias{ggplot2loon}
 \title{\code{ggplot} to \code{loon}}
 \usage{
-ggplot2loon(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
-  ..., parent = NULL, pack = TRUE, tkLabels = NULL,
-  exteriorLabelProportion = 1/5, canvasHeight = 700,
-  canvasWidth = 850)
+ggplot2loon(
+  ggObj,
+  activeGeomLayers = integer(0),
+  ggGuides = FALSE,
+  ...,
+  parent = NULL,
+  pack = TRUE,
+  tkLabels = NULL,
+  exteriorLabelProportion = 1/5,
+  canvasHeight = 700,
+  canvasWidth = 850
+)
 }
 \arguments{
 \item{ggObj}{a \code{ggplot} or \code{ggmatrix} object}

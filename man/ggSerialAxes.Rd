@@ -4,11 +4,22 @@
 \alias{ggSerialAxes}
 \title{ggplot serialaxes}
 \usage{
-ggSerialAxes(ggObj, data = NULL, axesLabels = NULL, showAxes = TRUE,
-  showAxesLabels = TRUE, scaling = c("variable", "observation", "data",
-  "none"), layout = c("parallel", "radial"), displayOrder = NULL,
-  title = "", showLabels = TRUE, color = NULL, size = NULL,
-  showGuides = TRUE, showArea = FALSE)
+ggSerialAxes(
+  ggObj,
+  data = NULL,
+  axesLabels = NULL,
+  showAxes = TRUE,
+  showAxesLabels = TRUE,
+  scaling = c("variable", "observation", "data", "none"),
+  layout = c("parallel", "radial"),
+  displayOrder = NULL,
+  title = "",
+  showLabels = TRUE,
+  color = NULL,
+  size = NULL,
+  showGuides = TRUE,
+  showArea = FALSE
+)
 }
 \arguments{
 \item{ggObj}{A `ggplot` object}

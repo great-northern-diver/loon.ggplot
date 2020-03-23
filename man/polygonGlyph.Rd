@@ -12,7 +12,23 @@
 \alias{x_airplane}
 \alias{y_airplane}
 \title{Polygon glyph coordinates}
-\format{An object of class \code{character}.}
+\format{
+An object of class \code{character}.
+
+An object of class \code{numeric} of length 10.
+
+An object of class \code{numeric} of length 12.
+
+An object of class \code{numeric} of length 12.
+
+An object of class \code{numeric} of length 6.
+
+An object of class \code{numeric} of length 6.
+
+An object of class \code{numeric} of length 32.
+
+An object of class \code{numeric} of length 32.
+}
 \usage{
 x_star
 
