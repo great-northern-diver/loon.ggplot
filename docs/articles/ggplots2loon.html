@@ -403,12 +403,12 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
 <div id="facets-and-l_compound-plots" class="section level2">
 <h2 class="hasAnchor">
 <a href="#facets-and-l_compound-plots" class="anchor"></a>Facets and <code>l_compound</code> plots</h2>
-<p>A significant data analytic feature in the ggplot pipeline is the notion of faceting the plots, for example, via <code>facet_wrap()</code></p>
+<p>A significant data analytic feature in the <code>ggplot</code> pipeline is the notion of faceting the plots, for example, via <code>facet_wrap()</code></p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">fwrap &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mtcars, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> wt, <span class="dt">y =</span> mpg)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb44-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb44-3" title="3"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>gear <span class="op">+</span><span class="st"> </span>am) </a>
 <a class="sourceLine" id="cb44-4" title="4">fwrap</a></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/fwrap-1.png" width="70%" style="display: block; margin: auto;"> Faceted plots can also be rendered interactive in the same way as any other ggplot:</p>
+<p><img src="ggplots2loon_files/figure-html/fwrap-1.png" width="70%" style="display: block; margin: auto;"> Faceted plots can also be rendered interactive in the same way as any other <code>ggplot</code> objects:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">l_fwrap &lt;-<span class="st"> </span><span class="kw"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span>(fwrap, <span class="dt">linkingGroup =</span> <span class="st">"Motor Trend 1974"</span>)</a></code></pre></div>
 <p>which will look like <img src="img/ggplots2loon/l_fwrap.png" width="70%" style="display: block; margin: auto;"> Note that because we set the <code>linkingGroup</code> at the time of creation (and because the <code>linkingKey</code> is the the default in all plots in this group), the interactive faceted plot has pulled the colours from the other plots in the same <code>linkingGroup</code>.</p>
 <p>Note the class of <code>l_fwrap</code>:</p>
@@ -537,30 +537,57 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 <a class="sourceLine" id="cb55-21" title="21"><span class="co">#&gt; [29] "#000000000000" "#000000000000" "#000000000000" "#46468282B4B4"</span></a></code></pre></div>
 <p>In the <code>magrittr</code> package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful – not just <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code>.</p>
 </div>
+<div id="using-lggplot" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-lggplot" class="anchor"></a>Using <code>lggplot()</code>
+</h3>
+<p>Additionally, using function <code>lggplot</code>, can also create a <code>loon</code> plot with <code>ggplot</code> pipe model.</p>
+<p>The display of <code>ggplot</code> object relies on the default <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> function in <code>R</code>. Function <code>lggplot</code>, inserts a new class <code>lggplot</code> into the original <code>ggplot</code> object. At the printing time, <a href="http://adv-r.had.co.nz/S3.html">S3 method</a> <code><a href="../reference/print.lggplot.html">print.lggplot()</a></code> will be executed to transform a <code>ggplot</code> plot to a <code>loon</code> plot.</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">obj &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-2" title="2"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">transmission =</span> am, <span class="dt">weight =</span> wt) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lp100km =</span> (<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="fl">3.785411784</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">1.609344</span> <span class="op">*</span><span class="st"> </span>mpg)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-4" title="4"><span class="st">  </span><span class="kw">select</span>(weight, lp100km) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb56-5" title="5"><span class="st">  </span><span class="co"># replace `ggplot` to `lggplot`</span></a>
+<a class="sourceLine" id="cb56-6" title="6"><span class="st">  </span><span class="kw"><a href="../reference/lggplot.html">lggplot</a></span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> weight, <span class="dt">y =</span> lp100km)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-7" title="7"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-8" title="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Litres per 100 kilometres"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb56-9" title="9"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Gas usage"</span>)</a>
+<a class="sourceLine" id="cb56-10" title="10">obj</a></code></pre></div>
+<p>However, this design has an obvious drawback: we need one more step to obtain the <code>loon</code> data structure. Since the transformation is accomplished at printing time, the object <code>obj</code> still has a <code>ggplot</code> data structure. To create a <code>loon</code> “handle”, we have to use <code>l_getFromPath()</code></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="cf">if</span>(utils<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"loon"</span>) <span class="op">&gt;</span><span class="st"> "1.2.3"</span>) {</a>
+<a class="sourceLine" id="cb57-2" title="2">  <span class="co"># **THIS IS IMPORTANT**</span></a>
+<a class="sourceLine" id="cb57-3" title="3">  <span class="co"># The path name can be obtained at the top left tk window</span></a>
+<a class="sourceLine" id="cb57-4" title="4">  <span class="co"># Suppose the label is "loon.ggplot --path: .l13.ggplot"</span></a>
+<a class="sourceLine" id="cb57-5" title="5">  <span class="co"># The path would be the char right after "path: " which is ".l13.ggplot"</span></a>
+<a class="sourceLine" id="cb57-6" title="6">  loonWidget &lt;-<span class="st"> </span><span class="kw">l_getFromPath</span>(<span class="st">".l13.ggplot"</span>)</a>
+<a class="sourceLine" id="cb57-7" title="7">  <span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(loonWidget)</a>
+<a class="sourceLine" id="cb57-8" title="8">  <span class="co"># [1] "l_plot" "loon"</span></a>
+<a class="sourceLine" id="cb57-9" title="9">}</a></code></pre></div>
+</div>
 <div id="just-use-loon-for-built-in-interactive-plots" class="section level3">
 <h3 class="hasAnchor">
 <a href="#just-use-loon-for-built-in-interactive-plots" class="anchor"></a>just use loon for built-in interactive plots</h3>
 <p>Of course, for plots already existing in <code>loon</code>, <code>ggplot()</code> and hence <code><a href="../reference/gg_pipe.html">gg_pipe()</a></code> could be avoided entirely:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">mtcars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb56-2" title="2"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">transmission =</span> am, <span class="dt">weight =</span> wt) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb56-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lp100km =</span> (<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="fl">3.785411784</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">1.609344</span> <span class="op">*</span><span class="st"> </span>mpg)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb56-4" title="4"><span class="st">  </span><span class="kw">select</span>(weight, lp100km) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb56-5" title="5"><span class="st">  </span><span class="co"># and pass the built plot on</span></a>
-<a class="sourceLine" id="cb56-6" title="6"><span class="st">  </span><span class="kw">l_plot</span>(<span class="dt">title =</span> <span class="st">"Gas Usage"</span>, </a>
-<a class="sourceLine" id="cb56-7" title="7">         <span class="dt">showGuides =</span> <span class="ot">TRUE</span>, <span class="dt">showScales =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb56-8" title="8">         <span class="dt">ylabel =</span> <span class="st">"Litres per 100 kilometres"</span>, </a>
-<a class="sourceLine" id="cb56-9" title="9">         <span class="dt">linkingGroup =</span> <span class="st">"Motor Trend 1974"</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb56-10" title="10"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>()   <span class="co"># get a static version via grid</span></a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-2" title="2"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">transmission =</span> am, <span class="dt">weight =</span> wt) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lp100km =</span> (<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="fl">3.785411784</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">1.609344</span> <span class="op">*</span><span class="st"> </span>mpg)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-4" title="4"><span class="st">  </span><span class="kw">select</span>(weight, lp100km) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-5" title="5"><span class="st">  </span><span class="co"># and pass the built plot on</span></a>
+<a class="sourceLine" id="cb58-6" title="6"><span class="st">  </span><span class="kw">l_plot</span>(<span class="dt">title =</span> <span class="st">"Gas Usage"</span>, </a>
+<a class="sourceLine" id="cb58-7" title="7">         <span class="dt">showGuides =</span> <span class="ot">TRUE</span>, <span class="dt">showScales =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb58-8" title="8">         <span class="dt">ylabel =</span> <span class="st">"Litres per 100 kilometres"</span>, </a>
+<a class="sourceLine" id="cb58-9" title="9">         <span class="dt">linkingGroup =</span> <span class="st">"Motor Trend 1974"</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb58-10" title="10"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>()   <span class="co"># get a static version via grid</span></a></code></pre></div>
 <p><img src="ggplots2loon_files/figure-html/loon_only_pipe-1.png" width="70%" style="display: block; margin: auto;"></p>
 <p>or</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1">mtcars <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-2" title="2"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">transmission =</span> am, <span class="dt">weight =</span> wt) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lp100km =</span> (<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="fl">3.785411784</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">1.609344</span> <span class="op">*</span><span class="st"> </span>mpg)) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-4" title="4"><span class="st">  </span><span class="kw">select</span>(lp100km, weight, transmission) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb57-5" title="5"><span class="st">  </span><span class="co"># and pass the built plot on</span></a>
-<a class="sourceLine" id="cb57-6" title="6"><span class="st">  </span><span class="kw">l_pairs</span>(<span class="dt">showHistograms =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb57-7" title="7">          <span class="dt">linkingGroup =</span> <span class="st">"Motor Trend 1974"</span>) -&gt;<span class="st">  </span><span class="co"># and assign the result.</span></a>
-<a class="sourceLine" id="cb57-8" title="8"><span class="st">  </span>l_pp</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1">mtcars <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb59-2" title="2"><span class="st">  </span><span class="kw">rename</span>(<span class="dt">transmission =</span> am, <span class="dt">weight =</span> wt) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb59-3" title="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">lp100km =</span> (<span class="dv">100</span> <span class="op">*</span><span class="st"> </span><span class="fl">3.785411784</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">1.609344</span> <span class="op">*</span><span class="st"> </span>mpg)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb59-4" title="4"><span class="st">  </span><span class="kw">select</span>(lp100km, weight, transmission) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb59-5" title="5"><span class="st">  </span><span class="co"># and pass the built plot on</span></a>
+<a class="sourceLine" id="cb59-6" title="6"><span class="st">  </span><span class="kw">l_pairs</span>(<span class="dt">showHistograms =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb59-7" title="7">          <span class="dt">linkingGroup =</span> <span class="st">"Motor Trend 1974"</span>) -&gt;<span class="st">  </span><span class="co"># and assign the result.</span></a>
+<a class="sourceLine" id="cb59-8" title="8"><span class="st">  </span>l_pp</a></code></pre></div>
 <p>produces an interactive pairs plot with histograms on the margins (see <code>?l_pairs</code>) and assigns the result to <code>l_pp</code> (which could have been assigned at the beginning with <code>&lt;-</code> as well).</p>
 </div>
 </div>
@@ -568,32 +595,30 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 <div id="loon---ggplot" class="section level1">
 <h1 class="hasAnchor">
 <a href="#loon---ggplot" class="anchor"></a>Loon -&gt; Ggplot</h1>
-<p>Loon plots to ggplot objects</p>
+<p>Interactive loon plots to static ggplots.</p>
 <div id="turn-loon-static-via-loon2ggplot" class="section level2">
 <h2 class="hasAnchor">
-<a href="#turn-loon-static-via-loon2ggplot" class="anchor"></a>Turn loon static via <code>loon2ggplot()</code>
+<a href="#turn-loon-static-via-loon2ggplot" class="anchor"></a>Turn <code>loon</code> static via <code>loon2ggplot()</code>
 </h2>
-<p>Interactive <code>loon</code> plots can be static by calling <code>loonGrob()</code> or <code>grid.loon()</code> to turn <code>loon</code> widgets to <code>grid</code> objects. However, the modification of a <code>grid</code> object needs strong background knowledge of package <code>grid</code>. Besides, low level <code>grid</code> is commonly used as a foundation of other systems and it does not have a formal model. Thus, <code>grid</code> objects are hard to be extended to other systems.</p>
-<p><code>Ggplot</code> provides a unified data structure which is easy to be extended. <code>Loon2ggplot()</code> takes advantage of that, transforming <code>loon</code> widgets to <code>ggplot</code> objects.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">g &lt;-<span class="st"> </span><span class="kw"><a href="../reference/loon2ggplot.html">loon2ggplot</a></span>(l_pp)</a>
-<a class="sourceLine" id="cb58-2" title="2">g</a></code></pre></div>
+<p>Interactive <code>loon</code> plots can be static by calling <code>loonGrob()</code> or <code>grid.loon()</code> to turn <code>loon</code> widgets to <code>grid</code> objects. However, the modification of a <code>grid</code> object needs strong background knowledge of package <code>grid</code>. Besides, low level <code>grid</code> is commonly used as a foundation of other systems and it does not have a formal model. Thus, <code>grid</code> objects are hard to be extended to other systems. But <code>ggplot</code> graphical system provides a unified data structure which is easy to be extended. <code>Loon2ggplot()</code> takes advantage of that, transforming <code>loon</code> widgets to <code>ggplot</code> objects.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">g &lt;-<span class="st"> </span><span class="kw"><a href="../reference/loon2ggplot.html">loon2ggplot</a></span>(l_pp)</a>
+<a class="sourceLine" id="cb60-2" title="2">g</a></code></pre></div>
 <p><img src="ggplots2loon_files/figure-html/p1_piped_staic%20%20ggplot-1.png" width="70%" style="display: block; margin: auto;"></p>
-<p>Add a smooth line on <code>lp100km vs weight</code> scatterplot and density curve on <code>weight</code> histogram. Also, modify the theme of this compound plot.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># Modify theme</span></a>
-<a class="sourceLine" id="cb59-2" title="2">g &lt;-<span class="st"> </span>g <span class="op">+</span><span class="st"> </span><span class="kw">theme_light</span>()</a>
-<a class="sourceLine" id="cb59-3" title="3"><span class="co"># Add a smooth line on g[2,2]</span></a>
-<a class="sourceLine" id="cb59-4" title="4"><span class="co"># the index of `lp100km vs weight` scatterplot is </span></a>
-<a class="sourceLine" id="cb59-5" title="5"><span class="co"># 1 * 4 + 2</span></a>
-<a class="sourceLine" id="cb59-6" title="6">g<span class="op">$</span>plots[[<span class="dv">6</span>]] &lt;-<span class="st"> </span>g<span class="op">$</span>plots[[<span class="dv">6</span>]] <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a>
-<a class="sourceLine" id="cb59-7" title="7"><span class="co"># Add a density curve on g[1,2]</span></a>
-<a class="sourceLine" id="cb59-8" title="8"><span class="co"># the index of `weight` histogram is </span></a>
-<a class="sourceLine" id="cb59-9" title="9"><span class="co"># 1 * 4 + 1</span></a>
-<a class="sourceLine" id="cb59-10" title="10">g<span class="op">$</span>plots[[<span class="dv">5</span>]] &lt;-<span class="st"> </span>g<span class="op">$</span>plots[[<span class="dv">5</span>]] <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>()</a>
-<a class="sourceLine" id="cb59-11" title="11">g</a></code></pre></div>
+<p>The object <code>g</code> is a <code>ggplot</code> graphic. We can fit a smooth line on the <code>lp100km vs weight</code> scatterplot and draw a density curve on the <code>weight</code> histogram. Additionally, the theme of these plots are adjusted to <code>theme_light</code> to direct more attention towards the data.</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># Add a smooth line on g[2,2]</span></a>
+<a class="sourceLine" id="cb61-2" title="2"><span class="co"># the index of `lp100km vs weight` scatterplot is </span></a>
+<a class="sourceLine" id="cb61-3" title="3"><span class="co"># 1 * 4 + 2</span></a>
+<a class="sourceLine" id="cb61-4" title="4">g<span class="op">$</span>plots[[<span class="dv">6</span>]] &lt;-<span class="st"> </span>g<span class="op">$</span>plots[[<span class="dv">6</span>]] <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</a>
+<a class="sourceLine" id="cb61-5" title="5"><span class="co"># Add a density curve on g[1,2]</span></a>
+<a class="sourceLine" id="cb61-6" title="6"><span class="co"># the index of `weight` histogram is </span></a>
+<a class="sourceLine" id="cb61-7" title="7"><span class="co"># 1 * 4 + 1</span></a>
+<a class="sourceLine" id="cb61-8" title="8">g<span class="op">$</span>plots[[<span class="dv">5</span>]] &lt;-<span class="st"> </span>g<span class="op">$</span>plots[[<span class="dv">5</span>]] <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>()</a>
+<a class="sourceLine" id="cb61-9" title="9"><span class="co"># Modify theme</span></a>
+<a class="sourceLine" id="cb61-10" title="10">g &lt;-<span class="st"> </span>g <span class="op">+</span><span class="st"> </span><span class="kw">theme_light</span>()</a>
+<a class="sourceLine" id="cb61-11" title="11">g</a></code></pre></div>
 <p><img src="ggplots2loon_files/figure-html/p1_piped_modification%20%20ggplot-1.png" width="70%" style="display: block; margin: auto;"></p>
-<p>Comparing with static <code>grid</code> (via <code>loonGrob()</code>), modification of <code>ggplot</code> (via <code>loon2ggplot</code>) is simpler and more creative.</p>
-<p>Note that:</p>
-<p>Compound loon widget (the previous example) like <code>l_ts</code> and <code>l_pairs</code> are created by <code><a href="https://rdrr.io/pkg/GGally/man/ggmatrix.html">GGally::ggmatrix</a></code>. Features like <code>theme</code>, <code>labels</code> can be piped through but by <code>ggmatrix</code> rule. The single <code>ggplot</code> object can be extracted by <code>...$plots[[id]]</code>, where <code>id</code> is the index of such object. To <code>M[x, y]</code>, <span class="math inline">\(id = (y-1) \times nrow + x\)</span>, <span class="math inline">\(nrow\)</span> is the number of rows.</p>
+<p>Comparing with static <code>grid</code> (via <code>loonGrob()</code>), modification of <code>ggplot</code> (via <code>loon2ggplot</code>) is simpler and more creative. Moreover, <code>ggplot</code> has over 100 extended packages. After transforming from <code>loon</code> to <code>ggplot</code>, users can continually take advantage of these extensions.</p>
+<p><font size="1"> Note that: compound loon widget (the previous example) like <code>l_ts</code> and <code>l_pairs</code> are created by <code><a href="https://rdrr.io/pkg/GGally/man/ggmatrix.html">GGally::ggmatrix</a></code>. Features like <code>theme</code>, <code>labels</code> can be piped through but by <code>ggmatrix</code> rule. The single <code>ggplot</code> object can be extracted by <code>...$plots[[id]]</code>, where <code>id</code> is the index of such object. To <code>M[x, y]</code>, <span class="math inline">\(id = (y-1) \times nrow + x\)</span>, <span class="math inline">\(nrow\)</span> is the number of rows. </font></p>
 </div>
 <div id="geom-layers" class="section level2">
 <h2 class="hasAnchor">
@@ -601,43 +626,43 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 <ul>
 <li>Adding glyphs on scatterplot</li>
 </ul>
-<p><code>Loon.ggplot</code> package also provides glyph point layer to create scatterplots with a variety glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of “nyc” flights in 2013. All destinations have a “airplane” polygon glyph and LA is highlighted by a magenta star.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nycflights13)</a>
-<a class="sourceLine" id="cb60-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb60-3" title="3">destinations &lt;-<span class="st"> </span>nycflights13<span class="op">::</span>airports <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">dest =</span> faa) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">semi_join</a></span>(nycflights13<span class="op">::</span>flights, <span class="dt">by =</span> <span class="st">"dest"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(lon <span class="op">&gt;</span><span class="st"> </span><span class="dv">-151</span>, </a>
-<a class="sourceLine" id="cb60-7" title="7">                lat <span class="op">&lt;</span><span class="st"> </span><span class="dv">55</span>)</a>
-<a class="sourceLine" id="cb60-8" title="8">LA &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb60-9" title="9">  <span class="dt">lon =</span> <span class="fl">-118.243683</span>,</a>
-<a class="sourceLine" id="cb60-10" title="10">  <span class="dt">lat =</span> <span class="fl">34.052235</span></a>
-<a class="sourceLine" id="cb60-11" title="11">)</a>
-<a class="sourceLine" id="cb60-12" title="12"><span class="kw">map_data</span>(<span class="st">"state"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-13" title="13"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(long, lat, <span class="dt">group =</span> group)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb60-14" title="14"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">color=</span><span class="st">"black"</span>, <span class="dt">fill=</span><span class="st">"lightblue"</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-15" title="15"><span class="st">  </span><span class="kw"><a href="../reference/glyphGeoms.html">geom_polygonGlyph</a></span>(<span class="dt">data =</span> destinations,</a>
-<a class="sourceLine" id="cb60-16" title="16">                    <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), </a>
-<a class="sourceLine" id="cb60-17" title="17">                    <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb60-18" title="18">                    <span class="dt">polygon_x =</span> x_airplane,</a>
-<a class="sourceLine" id="cb60-19" title="19">                    <span class="dt">polygon_y =</span> y_airplane, </a>
-<a class="sourceLine" id="cb60-20" title="20">                    <span class="dt">size =</span> <span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb60-21" title="21">                    <span class="dt">alpha =</span> <span class="fl">0.5</span>, </a>
-<a class="sourceLine" id="cb60-22" title="22">                    <span class="dt">fill =</span> <span class="st">"firebrick"</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb60-23" title="23"><span class="st">  </span><span class="kw"><a href="../reference/glyphGeoms.html">geom_polygonGlyph</a></span>(<span class="dt">data =</span> LA,</a>
-<a class="sourceLine" id="cb60-24" title="24">                    <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), </a>
-<a class="sourceLine" id="cb60-25" title="25">                    <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb60-26" title="26">                    <span class="dt">polygon_x =</span> x_star,</a>
-<a class="sourceLine" id="cb60-27" title="27">                    <span class="dt">polygon_y =</span> y_star, </a>
-<a class="sourceLine" id="cb60-28" title="28">                    <span class="dt">fill =</span> <span class="st">"magenta"</span>)</a></code></pre></div>
+<p>Package <code>loon.ggplot</code> also provides “pointGlyph” layer to create scatterplots with a variety of glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of “nyc” flights in 2013. All destinations are marked as a “airplane” polygon symbol and LA is highlighted by a magenta star.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(nycflights13)</a>
+<a class="sourceLine" id="cb62-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb62-3" title="3">destinations &lt;-<span class="st"> </span>nycflights13<span class="op">::</span>airports <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">rename</a></span>(<span class="dt">dest =</span> faa) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/join.html">semi_join</a></span>(nycflights13<span class="op">::</span>flights, <span class="dt">by =</span> <span class="st">"dest"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span>(lon <span class="op">&gt;</span><span class="st"> </span><span class="dv">-151</span>, </a>
+<a class="sourceLine" id="cb62-7" title="7">                lat <span class="op">&lt;</span><span class="st"> </span><span class="dv">55</span>)</a>
+<a class="sourceLine" id="cb62-8" title="8">LA &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb62-9" title="9">  <span class="dt">lon =</span> <span class="fl">-118.243683</span>,</a>
+<a class="sourceLine" id="cb62-10" title="10">  <span class="dt">lat =</span> <span class="fl">34.052235</span></a>
+<a class="sourceLine" id="cb62-11" title="11">)</a>
+<a class="sourceLine" id="cb62-12" title="12"><span class="kw">map_data</span>(<span class="st">"state"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-13" title="13"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(long, lat, <span class="dt">group =</span> group)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb62-14" title="14"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">color=</span><span class="st">"black"</span>, <span class="dt">fill=</span><span class="st">"lightblue"</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-15" title="15"><span class="st">  </span><span class="kw"><a href="../reference/glyphGeoms.html">geom_polygonGlyph</a></span>(<span class="dt">data =</span> destinations,</a>
+<a class="sourceLine" id="cb62-16" title="16">                    <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), </a>
+<a class="sourceLine" id="cb62-17" title="17">                    <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb62-18" title="18">                    <span class="dt">polygon_x =</span> x_airplane,</a>
+<a class="sourceLine" id="cb62-19" title="19">                    <span class="dt">polygon_y =</span> y_airplane, </a>
+<a class="sourceLine" id="cb62-20" title="20">                    <span class="dt">size =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb62-21" title="21">                    <span class="dt">alpha =</span> <span class="fl">0.5</span>, </a>
+<a class="sourceLine" id="cb62-22" title="22">                    <span class="dt">fill =</span> <span class="st">"firebrick"</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb62-23" title="23"><span class="st">  </span><span class="kw"><a href="../reference/glyphGeoms.html">geom_polygonGlyph</a></span>(<span class="dt">data =</span> LA,</a>
+<a class="sourceLine" id="cb62-24" title="24">                    <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat), </a>
+<a class="sourceLine" id="cb62-25" title="25">                    <span class="dt">inherit.aes =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb62-26" title="26">                    <span class="dt">polygon_x =</span> x_star,</a>
+<a class="sourceLine" id="cb62-27" title="27">                    <span class="dt">polygon_y =</span> y_star, </a>
+<a class="sourceLine" id="cb62-28" title="28">                    <span class="dt">fill =</span> <span class="st">"magenta"</span>)</a></code></pre></div>
 <p><img src="ggplots2loon_files/figure-html/glyph_ggplot-1.png" width="70%" style="display: block; margin: auto;"></p>
 <ul>
 <li>
 <p>Providing serial axes plots (parallel coordinate or radial coordinate) via <code><a href="../reference/ggSerialAxes.html">ggSerialAxes()</a></code></p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># parallel axes plot</span></a>
-<a class="sourceLine" id="cb61-2" title="2"><span class="kw">ggplot</span>(<span class="dt">data =</span> iris, </a>
-<a class="sourceLine" id="cb61-3" title="3">       <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">colour =</span> Species)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb61-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/ggSerialAxes.html">ggSerialAxes</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># parallel axes plot</span></a>
+<a class="sourceLine" id="cb63-2" title="2"><span class="kw">ggplot</span>(<span class="dt">data =</span> iris, </a>
+<a class="sourceLine" id="cb63-3" title="3">       <span class="dt">mapping =</span> <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">colour =</span> Species)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/ggSerialAxes.html">ggSerialAxes</a></span>()</a></code></pre></div>
 <p><img src="ggplots2loon_files/figure-html/serialaxes-1.png" width="70%" style="display: block; margin: auto;"></p>
 </li>
 </ul>
@@ -649,8 +674,8 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 </h1>
 <p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code> package is a S3 method and gathers features of both <code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
 <ul>
-<li>Ggplot to loon <code><a href="../reference/loon.ggplot.html">loon.ggplot(gg)</a></code> is equivalent to <code><a href="../reference/ggplot2loon.html">ggplot2loon(gg)</a></code>.</li>
-<li>Loon to ggplot <code><a href="../reference/loon.ggplot.html">loon.ggplot(loon)</a></code> is equivalent to <code><a href="../reference/loon2ggplot.html">loon2ggplot(loon)</a></code>.</li>
+<li>Ggplot to loon: <code><a href="../reference/loon.ggplot.html">loon.ggplot(gg)</a></code> is equivalent to <code><a href="../reference/ggplot2loon.html">ggplot2loon(gg)</a></code>.</li>
+<li>Loon to ggplot: <code><a href="../reference/loon.ggplot.html">loon.ggplot(loon)</a></code> is equivalent to <code><a href="../reference/loon2ggplot.html">loon2ggplot(loon)</a></code>.</li>
 </ul>
 </div>
   </div>
@@ -671,7 +696,7 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 </li>
       <li>
 <a href="#loon---ggplot">Loon -&gt; Ggplot</a><ul class="nav nav-pills nav-stacked">
-<li><a href="#turn-loon-static-via-loon2ggplot">Turn loon static via <code>loon2ggplot()</code></a></li>
+<li><a href="#turn-loon-static-via-loon2ggplot">Turn <code>loon</code> static via <code>loon2ggplot()</code></a></li>
       <li><a href="#geom-layers">Geom layers</a></li>
       </ul>
 </li>
