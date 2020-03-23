@@ -47,9 +47,9 @@ header-includes:
 - \newcommand{\st}{~:~}
 
 vignette: >
+  %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{ggplots2loon}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\usepackage[UTF-8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
@@ -494,14 +494,14 @@ l_pgps.23 <- ggplot2loon(pgps,
 
 ## Facets and `l_compound` plots
 
-A significant data analytic feature in the ggplot pipeline is the notion of facetting the plots, for example, via `facet_wrap()`
+A significant data analytic feature in the ggplot pipeline is the notion of faceting the plots, for example, via `facet_wrap()`
 ```{r fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 fwrap <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
   facet_wrap(~ gear + am) 
 fwrap
 ```
-Facetted plots can also be rendered interactive in the same way as any other ggplot:
+Faceted plots can also be rendered interactive in the same way as any other ggplot:
 ```{r l_fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_fwrap <- ggplot2loon(fwrap, linkingGroup = "Motor Trend 1974")
 ```
@@ -509,7 +509,7 @@ which will look like
 ```{r linking_Key_fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 include_graphics(path_concat(imageDirectory, "l_fwrap.png"))
 ```
-Note that because we set the `linkingGroup` at the time of creation (and because the `linkingKey` is the the default in all plots in this group), the interactive facetted plot has pulled the colours from the other plots in the same `linkingGroup`.
+Note that because we set the `linkingGroup` at the time of creation (and because the `linkingKey` is the the default in all plots in this group), the interactive faceted plot has pulled the colours from the other plots in the same `linkingGroup`.
 
 Note the class of `l_fwrap`:
 ```{r class_l_fwrap}
@@ -531,7 +531,7 @@ Each plot in `l_fwrap` is an independent loon plot which can be interacted with 
 
 ## Pipes
 
-THe `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
+The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
 ```{r pipes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 library(tidyverse)  # load this to also have dplyr functionality
 p1_piped <- mtcars %>%
@@ -675,7 +675,7 @@ Loon plots to ggplot objects
 
 Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be extended to other systems. 
 
-`Ggplot` provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes adventage of that, transforming `loon` widgets to `ggplot` objects.
+`Ggplot` provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes advantage of that, transforming `loon` widgets to `ggplot` objects.
 
 ```{r p1_piped_staic  ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 g <- loon2ggplot(l_pp)
@@ -708,7 +708,7 @@ Compound loon widget (the previous example) like `l_ts` and `l_pairs` are create
 
   * Adding glyphs on scatterplot
   
-  `Loon.ggplot` package also provides glyph point layer to create scatterplots with a variety glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of nyc flights in 2013. All destinations have a "airplane" polygon glyph and LA is highlighted by a magenta star.
+  `Loon.ggplot` package also provides glyph point layer to create scatterplots with a variety glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of "nyc" flights in 2013. All destinations have a "airplane" polygon glyph and LA is highlighted by a magenta star.
 
 ```{r glyph_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 library(nycflights13)

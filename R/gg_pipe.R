@@ -28,18 +28,19 @@
 #' @export
 #'
 #' @examples
-#' library(magrittr)
-#' g <- mtcars %>%
-#'    gg_pipe(
-#'      ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
-#'    ) %>%
-#'    ggplot2loon()
-#' \dontrun{
-#'    # Error
+#' if(require(magrittr)) {
+#'    \dontrun{
+#'      # Error
+#'      g <- mtcars %>%
+#'         ggplot(aes(mpg, wt, colour = cyl)) +
+#'         geom_point() %>%
+#'         ggplot2loon()
+#'    }
 #'    g <- mtcars %>%
-#'       ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
-#'       %>%
-#'       ggplot2loon()
+#'      gg_pipe(
+#'        ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
+#'      ) %>%
+#'      ggplot2loon()
 #' }
 
 gg_pipe <- function(data, ggObj) {
