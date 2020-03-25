@@ -1,6 +1,6 @@
 #' @title layout matrix
 #' @description return the layout matrix of a list of loon plots
-#' @param target an object `ggplot2loon()` returns
+#' @param target an object \code{ggplot2loon()} returns
 
 layout_coords <- function(target) {
   UseMethod("layout_coords", target)

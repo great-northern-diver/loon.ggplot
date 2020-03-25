@@ -47,9 +47,9 @@ header-includes:
 - \newcommand{\st}{~:~}
 
 vignette: >
+  %\VignetteEngine{knitr::knitr}
   %\VignetteIndexEntry{ggplots2loon}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+  %\usepackage[UTF-8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
@@ -494,14 +494,14 @@ l_pgps.23 <- ggplot2loon(pgps,
 
 ## Facets and `l_compound` plots
 
-A significant data analytic feature in the ggplot pipeline is the notion of facetting the plots, for example, via `facet_wrap()`
+A significant data analytic feature in the `ggplot` pipeline is the notion of faceting the plots, for example, via `facet_wrap()`
 ```{r fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 fwrap <- ggplot(mtcars, aes(x = wt, y = mpg)) +
   geom_point() +
   facet_wrap(~ gear + am) 
 fwrap
 ```
-Facetted plots can also be rendered interactive in the same way as any other ggplot:
+Faceted plots can also be rendered interactive in the same way as any other `ggplot` objects:
 ```{r l_fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_fwrap <- ggplot2loon(fwrap, linkingGroup = "Motor Trend 1974")
 ```
@@ -509,7 +509,7 @@ which will look like
 ```{r linking_Key_fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 include_graphics(path_concat(imageDirectory, "l_fwrap.png"))
 ```
-Note that because we set the `linkingGroup` at the time of creation (and because the `linkingKey` is the the default in all plots in this group), the interactive facetted plot has pulled the colours from the other plots in the same `linkingGroup`.
+Note that because we set the `linkingGroup` at the time of creation (and because the `linkingKey` is the the default in all plots in this group), the interactive faceted plot has pulled the colours from the other plots in the same `linkingGroup`.
 
 Note the class of `l_fwrap`:
 ```{r class_l_fwrap}
@@ -531,7 +531,7 @@ Each plot in `l_fwrap` is an independent loon plot which can be interacted with 
 
 ## Pipes
 
-THe `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
+The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
 ```{r pipes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 library(tidyverse)  # load this to also have dplyr functionality
 p1_piped <- mtcars %>%
@@ -635,6 +635,36 @@ mtcars %>%
 
 In the `magrittr` package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful -- not just `%>%`.
 
+### Using `lggplot()`
+
+Additionally, using function `lggplot`, can also create a `loon` plot with `ggplot` pipe model.
+
+The display of `ggplot` object relies on the default `print()` function in `R`. Function `lggplot`, inserts a new class `lggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.lggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
+```{r lggplot_pipe, message = FALSE, eval = FALSE}
+obj <- mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  # replace `ggplot` to `lggplot`
+  lggplot(aes(x = weight, y = lp100km)) +
+  geom_point() +
+  ylab("Litres per 100 kilometres") +
+  ggtitle("Gas usage")
+obj
+```
+
+However, this design has an obvious drawback: confusion of the output data structure. Since the transformation is accomplished at the printing time, object `obj` is still a `ggplot` data structure. To create a `loon` "handle", we have to use `l_getFromPath()`
+```{r, l_getFromPath, message = FALSE, eval = FALSE}
+if(utils::packageVersion("loon") >= "1.2.4") {
+  # **THIS IS IMPORTANT**
+  # The path name can be obtained at the top left tk window
+  # Suppose the label is "loon.ggplot --path: .l13.ggplot"
+  # The path would be the char right after "path: " which is ".l13.ggplot"
+  loonWidget <- l_getFromPath(".l13.ggplot")
+  class(loonWidget)
+  # [1] "l_plot" "loon"
+}
+```
 
 ### just use loon for built-in interactive plots
 
@@ -669,24 +699,20 @@ mtcars %>%
 produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well).
 
 # Loon -> Ggplot
-Loon plots to ggplot objects
+Interactive loon plots to static ggplots.
 
-## Turn loon static via `loon2ggplot()` 
+## Turn `loon` static via `loon2ggplot()` 
 
-Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be extended to other systems. 
-
-`Ggplot` provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes adventage of that, transforming `loon` widgets to `ggplot` objects.
+Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be extended to other systems. But `ggplot` graphical system provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes advantage of that, transforming `loon` widgets to `ggplot` objects.
 
 ```{r p1_piped_staic  ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 g <- loon2ggplot(l_pp)
 g
 ```
 
-Add a smooth line on `lp100km vs weight` scatterplot and density curve on `weight` histogram. Also, modify the theme of this compound plot.
+The object `g` is a `ggplot` graphic. We can fit a smooth line on the `lp100km vs weight` scatterplot and draw a density curve on the `weight` histogram. Additionally, the theme of these plots are adjusted to `theme_light` to direct more attention towards the data.
 
 ```{r p1_piped_modification  ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-# Modify theme
-g <- g + theme_light()
 # Add a smooth line on g[2,2]
 # the index of `lp100km vs weight` scatterplot is 
 # 1 * 4 + 2
@@ -695,22 +721,24 @@ g$plots[[6]] <- g$plots[[6]] + geom_smooth()
 # the index of `weight` histogram is 
 # 1 * 4 + 1
 g$plots[[5]] <- g$plots[[5]] + geom_density()
+# Modify theme
+g <- g + theme_light()
 g
 ```
 
-Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `loon2ggplot`) is simpler and more creative. 
+Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `loon2ggplot`) is simpler and more creative. Moreover, `ggplot` has over 100 extended packages. After transforming from `loon` to `ggplot`, users can continually take advantage of these extensions.  
 
-Note that:
-
-Compound loon widget (the previous example) like `l_ts` and `l_pairs` are created by `GGally::ggmatrix`. Features like `theme`, `labels` can be piped through but by `ggmatrix` rule. The single `ggplot` object can be extracted by `...$plots[[id]]`, where `id` is the index of such object. To `M[x, y]`, $id = (y-1) \times nrow + x$, $nrow$ is the number of rows.
+<font size="1"> 
+Note that: compound loon widget (the previous example) like `l_ts` and `l_pairs` are created by `GGally::ggmatrix`. Features like `theme`, `labels` can be piped through but by `ggmatrix` rule. The single `ggplot` object can be extracted by `...$plots[[id]]`, where `id` is the index of such object. To `M[x, y]`, $id = (y-1) \times nrow + x$, $nrow$ is the number of rows.
+</font>
 
 ## Geom layers
 
   * Adding glyphs on scatterplot
   
-  `Loon.ggplot` package also provides glyph point layer to create scatterplots with a variety glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of nyc flights in 2013. All destinations have a "airplane" polygon glyph and LA is highlighted by a magenta star.
+  Package `loon.ggplot` also provides "pointGlyph" layer to create scatterplots with a variety of glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of "nyc" flights in 2013. All destinations are marked as a "airplane" polygon symbol and LA is highlighted by a magenta star.
 
-```{r glyph_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r glyph_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 3, fig.align = "center", out.width = "70%"}
 library(nycflights13)
 library(dplyr)
 destinations <- nycflights13::airports %>% 
@@ -743,7 +771,7 @@ map_data("state") %>%
   
   * Providing serial axes plots (parallel coordinate or radial coordinate) via `ggSerialAxes()`
   
-    ```{r serialaxes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+    ```{r serialaxes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 3, fig.align = "center", out.width = "70%"}
     # parallel axes plot
     ggplot(data = iris, 
            mapping = aes(colour = Species)) %>% 
@@ -754,5 +782,5 @@ map_data("state") %>%
 
 `loon.ggplot()` function in `loon.ggplot` package is a S3 method and gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and forth. 
 
-* Ggplot to loon `loon.ggplot(gg)` is equivalent to `ggplot2loon(gg)`.
-* Loon to ggplot `loon.ggplot(loon)` is equivalent to `loon2ggplot(loon)`.
+* Ggplot to loon: `loon.ggplot(gg)` is equivalent to `ggplot2loon(gg)`.
+* Loon to ggplot: `loon.ggplot(loon)` is equivalent to `loon2ggplot(loon)`.

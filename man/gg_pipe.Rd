@@ -37,17 +37,18 @@ would run before
 Hence, we need a function \code{gg_pipe()} to pack the \code{ggplot} object and force operations happen in order.
 }
 \examples{
-library(magrittr)
-g <- mtcars \%>\%
-   gg_pipe(
-     ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
-   ) \%>\%
-   ggplot2loon()
-\dontrun{
-   # Error
+if(require(magrittr)) {
+   \dontrun{
+     # Error
+     g <- mtcars \%>\%
+        ggplot(aes(mpg, wt, colour = cyl)) +
+        geom_point() \%>\%
+        ggplot2loon()
+   }
    g <- mtcars \%>\%
-      ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
-      \%>\%
-      ggplot2loon()
+     gg_pipe(
+       ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
+     ) \%>\%
+     ggplot2loon()
 }
 }

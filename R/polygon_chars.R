@@ -26,7 +26,6 @@ x_star <-
     -0.586430423509075, -0.474070872947277, -0.949438202247191, -0.29256698357822)
 
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
 #' @export
 y_star <-
   c(-1, -0.403630077787381, -0.308556611927398, 0.153846153846154,
@@ -34,7 +33,6 @@ y_star <-
     0.153846153846154, -0.308556611927398, -0.403630077787381)
 
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
 #' @export
 x_cross <-
   c(-0.258931143762604, -0.258931143762604, -0.950374531835206,
@@ -43,7 +41,6 @@ x_cross <-
     0.948934024776722, 0.259651397291847, 0.259651397291847)
 
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
 #' @export
 y_cross <-
   c(-0.950374531835206, -0.258931143762604, -0.258931143762604,
@@ -52,14 +49,14 @@ y_cross <-
     -0.258931143762604, -0.258931143762604, -0.950374531835206)
 
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
+
 #' @export
 x_hexagon <-
   c(0.773552290406223, 0, -0.773552290406223, -0.773552290406223,
     0, 0.773552290406223)
 
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
+
 #' @export
 y_hexagon <-
   c(0.446917314894843, 0.894194756554307, 0.446917314894843,
@@ -77,10 +74,10 @@ x_ap <- airplane_coords[seq(1, length(airplane_coords), by=2)]
 y_ap <- airplane_coords[seq(2, length(airplane_coords), by=2)]
 d_ap <- diff(range(x_ap, y_ap))/3.5
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
+
 #' @export
 x_airplane <- (x_ap-mean(x_ap))/d_ap
 #' @rdname polygonGlyph
-#' @inherit polygonGlyph
+
 #' @export
 y_airplane <- (y_ap-mean(y_ap))/d_ap

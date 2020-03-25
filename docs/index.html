@@ -7,12 +7,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>An add on package to loon that converts ggplot2 plots to interactive loon
     plots • loon.ggplot</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="An add on package to loon that converts ggplot2 plots to interactive loon
     plots">
-<meta property="og:description" content="Interactive loon plots from ggplots.">
+<meta property="og:description" content="The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{ggplot}s into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot}s. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -33,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -41,7 +48,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -56,19 +63,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/ggplots2loon.html">ggplots -&gt; interactive loon plots</a>
+      <a href="articles/ggplots2loon.html">Ggplots &lt;--&gt; interactive loon plots</a>
     </li>
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
+<ul class="nav navbar-nav navbar-right"></ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -77,19 +77,124 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="loon-ggplot" class="section level2">
+<div id="loonggplot-" class="section level2">
 <h2 class="hasAnchor">
-<a href="#loon-ggplot" class="anchor"></a>loon.ggplot <img src="reference/figures/logo.png" align="right" width="120">
+<a href="#loonggplot-" class="anchor"></a>loon.ggplot <img src="reference/figures/logo.png" align="right" width="120">
 </h2>
-<p><a href="https://travis-ci.org/great-northern-diver/loon.ggplot"><img src="https://travis-ci.org/great-northern-diver/loon.ggplot.svg?branch=master" alt="Build Status"></a> An R package to turn ggplot graphic data structures into interactive loon plots</p>
-<p>Documentation: <a href="http://great-northern-diver.github.io/loon.ggplot/" class="uri">http://great-northern-diver.github.io/loon.ggplot/</a></p>
+
+<p>An R package to turn ggplot graphic data structures into interactive loon plots</p>
+<p>Documentation: <a href="https://z267xu.github.io/loon.ggplot/">https://z267xu.github.io/loon.ggplot/</a></p>
+<div id="introduction" class="section level3">
+<h3 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h3>
+<p>The <code>ggplot2</code> graphics package (part of the <code>tidyverse</code> package collection) uses the base <code>grid</code> graphics package to produce publication quality graphics for data analysis. Based on a grammar for graphics, <code>ggplot2</code> also provides a lot of functionality (e.g. <code>facet</code>s) that can be extremely useful in data analysis.</p>
+<p>The <code>loon</code> graphics package provides <strong>interactive</strong> graphics especially valuable in any <strong>exploratory data analysis</strong>. This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, <code>loon</code> also provides publication quality static graphics in <code>grid</code> via loon’s functions <code>grid.loon()</code> and <code>loonGrob()</code>.</p>
+<p>The loon.ggplot package brings <strong>both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <strong><code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code></strong> and the latter by the simple translation function <strong><code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code></strong>.</p>
+</div>
+<div id="install" class="section level3">
+<h3 class="hasAnchor">
+<a href="#install" class="anchor"></a>Install</h3>
+<p><code>loon.ggplot</code> can be achieved directly from github repo</p>
+<pre><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("https://github.com/great-northern-diver/loon.ggplot")</a></code></pre>
+<p>Launch R, then install the required package dependencies</p>
+<pre><code>install.packages("ggplot2")
+install.packages("loon")</code></pre>
+</div>
+<div id="basic" class="section level3">
+<h3 class="hasAnchor">
+<a href="#basic" class="anchor"></a>Basic</h3>
+<div id="ggplot2loon-ggplot--loon" class="section level4">
+<h4 class="hasAnchor">
+<a href="#ggplot2loon-ggplot--loon" class="anchor"></a><code>ggplot2loon()</code>: ggplot –&gt; loon</h4>
+<ul>
+<li>Construct <code>ggplot</code>
+</li>
+</ul>
+<p>Consider the <code>mtcars</code> data set. Suppose we draw a scatterplot of the mileage <code>mpg</code> (miles per US gallon) versus the weight of the car <code>wt</code> in thousands of pounds and colour represents different cylinder numbers. In <code>ggplot2</code> this would be constructed as</p>
+<pre><code>library(ggplot2)
+p &lt;- ggplot(mtcars, aes(wt, mpg, colour = as.factor(cyl))) + geom_point()
+p</code></pre>
+<p><img src="reference/figures/mtcarsScatterPlot.png"></p>
+<p>We might also display a histogram of some other variate, say the engine’s horsepower <code>hp</code>. In <code>ggplot2</code> this would be constructed as</p>
+<pre><code>h &lt;- ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) + geom_histogram()
+h</code></pre>
+<p><img src="reference/figures/hpHistogram.png"></p>
+<ul>
+<li>To <code>loon</code>
+</li>
+</ul>
+<p>the <code>"ggplot"</code> data structures <code>p</code> and <code>h</code> can be <strong>turned into an interactive loon plot</strong> using the <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code> function:</p>
+<pre><code>library(loon.ggplot)
+pl &lt;- ggplot2loon(p)
+hl &lt;- ggplot2loon(h)</code></pre>
+<p><img src="reference/figures/scatterAndHist.gif"></p>
+<p>Note that:</p>
+<ul>
+<li><p>Loon “Hello World”: Introduction to interactive <code>loon</code> plots can be found via <a href="https://cran.r-project.org/web/packages/loon/vignettes/introduction.html">loon</a>. It shows how to create, manipulate (selection, linking and etc) <code>loon</code> plots</p></li>
+<li><p><code>loon.ggplot</code> talk: A talk “Interactive ggplots in R” has been given in <a href="https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216">SDSS 2019</a>. Slides can be found in <a href="https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html">SDSS2019/loon.ggplot talk</a> which gives more details.</p></li>
+<li><p><code>ggmatrix</code> object in package <code>GGally</code> can also be converted to <code>loon</code> widget. See <code><a href="https://rdrr.io/r/utils/help.html">help(ggplot2loon)</a></code> for more info.</p></li>
+</ul>
+</div>
+<div id="loon2ggplot-loon--ggplot" class="section level4">
+<h4 class="hasAnchor">
+<a href="#loon2ggplot-loon--ggplot" class="anchor"></a><code>loon2ggplot()</code>: loon –&gt; ggplot</h4>
+<p>After creating <code>loon</code> plots and adding programmatic and direct manipulation of the visualizations to effect interactive identification, function <code>loon2ggplot</code> can be applied to return a static <code>ggplot</code></p>
+<pre><code>pg &lt;- loon2ggplot(pl)
+hg &lt;- loon2ggplot(hl)</code></pre>
+<p>Note that <code>pg</code> and <code>hg</code> are <code>ggplot</code> objects.</p>
+<pre><code>class(pg)
+[1] "gg"     "ggplot"
+class(hg)
+[1] "gg"     "ggplot"</code></pre>
+<p>Layers, theme adjustment can be piped though like:</p>
+<pre><code>pg + 
+  ggplot2::geom_smooth() + 
+  ggplot2::ggtitle("Mtcars")</code></pre>
+<p><img src="reference/figures/mtcarsAddSmooth.png"></p>
+<pre><code>hg + 
+  ggplot2::geom_density() + 
+  ggplot2::coord_flip()</code></pre>
+<p><img src="reference/figures/hpAddDensity.png"></p>
+<p>Note that:</p>
+<ul>
+<li><p>Compound loon widget like <code>l_ts</code> and <code>l_pairs</code> are created by <code>ggmatrix</code> in <code>GGally</code>. Ggplot features like <code>theme</code>, <code>labels</code> can be piped through but by <a href="https://mran.microsoft.com/snapshot/2016-01-21/web/packages/GGally/vignettes/ggmatrix.html"><code>ggmatrix</code></a> rule.</p></li>
+<li>Some functionalities are provided
+<ul>
+<li>Adding glyphs on scatterplot like <code><a href="reference/glyphGeoms.html">geom_serialAxesGlyph()</a></code>, <code><a href="reference/glyphGeoms.html">geom_polygonGlyph()</a></code>, <code><a href="reference/glyphGeoms.html">geom_imageGlyph()</a></code> and etc.</li>
+<li>Providing serial axes plots (parallel coordinate and radial coordinate) via <code><a href="reference/ggSerialAxes.html">ggSerialAxes()</a></code>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div id="loonggplot-loon--ggplot" class="section level4">
+<h4 class="hasAnchor">
+<a href="#loonggplot-loon--ggplot" class="anchor"></a><code>loon.ggplot()</code>: loon &lt;–&gt; ggplot</h4>
+<p><code><a href="reference/loon.ggplot.html">loon.ggplot()</a></code> gathers features of both <code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
+<pre><code>p &lt;- l_plot(iris)
+# `loon` to `gg`
+g &lt;- loon.ggplot(p)
+g &lt;- g + geom_smooth(method = "lm") + theme_bw() 
+g
+# `gg` to `loon`
+l &lt;- loon.ggplot(g)</code></pre>
+</div>
+</div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Report a bug at <br><a href="https://github.com/z267xu/loon.ggplot/issues">https://​github.com/​z267xu/​loon.ggplot/​issues</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
@@ -103,20 +208,30 @@
 </ul>
 </div>
 
-  </div>
+  <div class="dev-status">
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://travis-ci.org/z267xu/loon.ggplot"><img src="https://travis-ci.org/z267xu/loon.ggplot.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/gh/z267xu/loon.ggplot?branch=master"><img src="https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+</ul>
 </div>
+</div>
+</div>
+
 
       <footer><div class="copyright">
   <p>Developed by Zehao Xu, R. Wayne Oldford.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>

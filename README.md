@@ -7,7 +7,7 @@
 An R package to turn ggplot graphic data structures into interactive loon plots
 
 
-Documentation: [http://great-northern-diver.github.io/loon.ggplot/](http://great-northern-diver.github.io/loon.ggplot/)
+Documentation: [https://z267xu.github.io/loon.ggplot/](https://z267xu.github.io/loon.ggplot/)
 
 ### Introduction
 

@@ -4,8 +4,7 @@
 \alias{lggplot}
 \title{Automatically create a loon widget}
 \usage{
-lggplot(data = NULL, mapping = aes(), ...,
-  environment = parent.frame())
+lggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
 \arguments{
 \item{data}{Default dataset to use for plot. If not already a data.frame, will be converted to one by fortify().
