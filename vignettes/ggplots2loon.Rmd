@@ -653,9 +653,9 @@ obj <- mtcars %>%
 obj
 ```
 
-However, this design has an obvious drawback: we need one more step to obtain the `loon` data structure. Since the transformation is accomplished at printing time, the object `obj` still has a `ggplot` data structure. To create a `loon` "handle", we have to use `l_getFromPath()`
+However, this design has an obvious drawback: confusion of the output data structure. Since the transformation is accomplished at the printing time, object `obj` is still a `ggplot` data structure. To create a `loon` "handle", we have to use `l_getFromPath()`
 ```{r, l_getFromPath, message = FALSE, eval = FALSE}
-if(utils::packageVersion("loon") > "1.2.3") {
+if(utils::packageVersion("loon") >= "1.2.4") {
   # **THIS IS IMPORTANT**
   # The path name can be obtained at the top left tk window
   # Suppose the label is "loon.ggplot --path: .l13.ggplot"

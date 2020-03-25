@@ -82,7 +82,7 @@
       <h1>Ggplots &lt;–&gt; interactive loon plots</h1>
                         <h4 class="author">Wayne Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2020-03-23</h4>
+            <h4 class="date">2020-03-24</h4>
       
       
       <div class="hidden name"><code>ggplots2loon.Rmd</code></div>
@@ -553,8 +553,8 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 <a class="sourceLine" id="cb56-8" title="8"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Litres per 100 kilometres"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb56-9" title="9"><span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"Gas usage"</span>)</a>
 <a class="sourceLine" id="cb56-10" title="10">obj</a></code></pre></div>
-<p>However, this design has an obvious drawback: we need one more step to obtain the <code>loon</code> data structure. Since the transformation is accomplished at printing time, the object <code>obj</code> still has a <code>ggplot</code> data structure. To create a <code>loon</code> “handle”, we have to use <code>l_getFromPath()</code></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="cf">if</span>(utils<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"loon"</span>) <span class="op">&gt;</span><span class="st"> "1.2.3"</span>) {</a>
+<p>However, this design has an obvious drawback: confusion of the output data structure. Since the transformation is accomplished at the printing time, object <code>obj</code> is still a <code>ggplot</code> data structure. To create a <code>loon</code> “handle”, we have to use <code>l_getFromPath()</code></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="cf">if</span>(utils<span class="op">::</span><span class="kw"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span>(<span class="st">"loon"</span>) <span class="op">&gt;=</span><span class="st"> "1.2.4"</span>) {</a>
 <a class="sourceLine" id="cb57-2" title="2">  <span class="co"># **THIS IS IMPORTANT**</span></a>
 <a class="sourceLine" id="cb57-3" title="3">  <span class="co"># The path name can be obtained at the top left tk window</span></a>
 <a class="sourceLine" id="cb57-4" title="4">  <span class="co"># Suppose the label is "loon.ggplot --path: .l13.ggplot"</span></a>
