@@ -39,7 +39,7 @@ loon2ggplot.l_layer_histogram <- function(target, ...) {
 transform_hist_x <- function(widget) {
 
   yshows <- widget['yshows']
-  bins <- getBinData(widget)
+  bins <- l_getBinData(widget)
 
   showStackedColors <- widget['showStackedColors']
   showOutlines <- widget['showOutlines']

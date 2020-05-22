@@ -315,7 +315,7 @@ loon2ggplot.l_layer_line <- function(target, ...) {
     y <- if(swapAxes) states$x else states$y
 
     ggObj <- ggObj +
-      ggplot2::geom_line(
+      ggplot2::geom_path(
         data = data.frame(
           x = x,
           y = y
@@ -629,7 +629,7 @@ loon2ggplot.l_layer_lines <- function(target, ...) {
     )
 
     ggObj <- ggObj +
-      ggplot2::geom_line(
+      ggplot2::geom_path(
         data =df,
         mapping = ggplot2::aes(x = x, y = y, group = group),
         colour = rep(linecolor, times = len_x),
