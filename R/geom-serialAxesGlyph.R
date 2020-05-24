@@ -220,7 +220,9 @@ get_gridAesthetic <- function(axesLayout, xpos, ypos, scaleX, scaleY, xaxis, yax
   serialCoordX <- serialCoordY <- list()
 
   N <- length(xpos)
-  hide <- if(axesLayout == "parallel") {
+
+  # side effect
+  if(axesLayout == "parallel") {
     lapply(1:N,
            function(i){
              # enclosing
