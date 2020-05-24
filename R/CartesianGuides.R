@@ -85,30 +85,34 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
                                              parent = ylinesGroup)
                         })
   # axis
-  if(length(theme$axis.text) != 0 | length(theme) == 0) {
+  if(length(theme$axis.text) != 0 || length(theme) == 0) {
+
     xlabelGroup <- loon::l_layer_group(widget, "x axis", parent = guidesGroup)
     xlinesLayer <- lapply(seq_len(length(x.major_source)),
                           function(i){
-                            loon::l_layer_text(widget,
-                                               x = x.major_source[i],
-                                               y = extend.yrange[1],
-                                               color = axis.text_color,
-                                               parent = xlabelGroup,
-                                               text = x.labels[i],
-                                               size = axis.text_size,
-                                               anchor = "s")
+                            if(!is.na(x.major_source[i]))
+                              loon::l_layer_text(widget,
+                                                 x = x.major_source[i],
+                                                 y = extend.yrange[1],
+                                                 color = axis.text_color,
+                                                 parent = xlabelGroup,
+                                                 text = x.labels[i] %||% x.major_source[i],
+                                                 size = axis.text_size,
+                                                 anchor = "s")
                           })
+
     ylabelGroup <- loon::l_layer_group(widget, "y axis", parent = guidesGroup)
     ylinesLayer <- lapply(seq_len(length(y.major_source)),
                           function(i){
-                            loon::l_layer_text(widget,
-                                               x = extend.xrange[1],
-                                               y = y.major_source[i],
-                                               color = axis.text_color,
-                                               parent = ylabelGroup,
-                                               text = y.labels[i],
-                                               size = axis.text_size,
-                                               anchor = "w")
+                            if(!is.na(y.major_source[i]))
+                              loon::l_layer_text(widget,
+                                                 x = extend.xrange[1],
+                                                 y = y.major_source[i],
+                                                 color = axis.text_color,
+                                                 parent = ylabelGroup,
+                                                 text = y.labels[i] %||% y.major_source[i],
+                                                 size = axis.text_size,
+                                                 anchor = "w")
                           })
 
   }
