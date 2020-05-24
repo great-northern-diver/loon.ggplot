@@ -722,7 +722,7 @@ loonLayer.GeomHex <- function(widget,
     # can n be one?
     n <- dim(data)[1]
     if (n == 1) {
-      warnings("one hexagon is not allowed")
+      warning("one hexagon is not allowed", call. = FALSE)
     } else {
       unique_y <- unique(data$y)
       # hex width

@@ -90,7 +90,7 @@ get_loon_plots_info <- function(plots_info = list(),
                                     sticky="nesw")
                       start.subtitlepos <<- start.ypos + numOfSubtitles
                       newspan <- span - numOfSubtitles
-                      if(newspan <= 0) stop(paste0("pick a larger span, at least larger than ", numOfSubtitles))
+                      if(newspan <= 0) stop(paste0("pick a larger span, at least larger than ", numOfSubtitles), call. = FALSE)
                     }
 
                     # is polar coord?

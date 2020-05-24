@@ -48,7 +48,7 @@ ggSerialAxes <- function(ggObj,
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
-    stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"))
+    stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"), call. = FALSE)
   }
 
   scaling <- match.arg(scaling)

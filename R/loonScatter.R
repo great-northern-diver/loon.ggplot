@@ -69,7 +69,7 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
     isDuplicated_linkingKey <- duplicated(combined.pointsData$linkingKey)
     if(any(isDuplicated_linkingKey)) {
       combined.pointsData$linkingKey <- 0:(dim(combined.pointsData)[1] - 1)
-      warning("linkingKey may not match and will be set as the default loon one")
+      warning("linkingKey may not match and will be set as the default loon one", call. = FALSE)
     }
   } else {
     # used for boxplot

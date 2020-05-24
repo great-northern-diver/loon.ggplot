@@ -3,7 +3,7 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
   # draw ggGuides?
   if (isCoordPolar) {
     if ("l_hist" %in% class(loonPlot)) {
-      warning("l_hist only works with Cartesian coordinates\n")
+      warning("l_hist only works with Cartesian coordinates", call. = FALSE)
     } else {
       if (ggGuides) {
         polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[panelIndex]], swapAxes, theme)
