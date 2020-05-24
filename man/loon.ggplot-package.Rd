@@ -14,7 +14,7 @@ The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packag
 \seealso{
 Useful links:
 \itemize{
-  \item Report bugs at \url{https://github.com/z267xu/loon.ggplot/issues}
+  \item Report bugs at \url{https://github.com/great-northern-diver/loon.ggplot/issues}
 }
 
 }
