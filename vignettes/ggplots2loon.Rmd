@@ -1,7 +1,18 @@
 ---
-title: "Ggplots <--> interactive loon plots"
+title: "ggplots <--> loon plots"
 author: "Wayne Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+geometry: margin=.75in
+urlcolor: blue
+graphics: yes
+vignette: >
+  %\VignetteIndexEntry{ggplots2loon}
+  %\VignetteEngine{knitr::knitr}
+  %\usepackage[UTF-8]{inputenc}
+  %\VignetteDepends{dplyr, magrittr, nycflights13}
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{epic}
@@ -46,23 +57,38 @@ header-includes:
 - \newcommand{\suchthat}{~:~}
 - \newcommand{\st}{~:~}
 
-vignette: >
-  %\VignetteEngine{knitr::knitr}
-  %\VignetteIndexEntry{ggplots2loon}
-  %\usepackage[UTF-8]{inputenc}
 ---
 
+
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 5,
+                      out.width = "60%", 
+                      collapse = TRUE,
+                      comment = "#>",
+                      tidy.opts = list(width.cutoff = 65),
+                      tidy = FALSE)
 library(knitr)
 set.seed(12314159)
 imageDirectory <- "./img/ggplots2loon"
-dataDirectory <- "./data"
-path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+dataDirectory <- "./data/ggplots2loon"
+path_concat <- function(path1, ..., sep="/") {
+    # The "/" is standard unix directory separator and so will
+    # work on Macs and Linux.
+    # In windows the separator might have to be sep = "\" or 
+    # even sep = "\\" or possibly something else. 
+    paste(path1, ..., sep = sep)
+}
+
+
+library(ggplot2, quietly = TRUE)
+library(dplyr, quietly = TRUE)
+library(nycflights13, quietly = TRUE)
+library(magrittr, quietly = TRUE)
 ```
 
 The `ggplot2` graphics package (part of the `tidyverse` package collection) uses the base `grid` graphics package to produce publication quality graphics for data analysis.  Based on a grammar for graphics, `ggplot2` also provides a lot of functionality (e.g. `facet`s) that can be extremely useful in data analysis.
@@ -73,8 +99,9 @@ The `loon` graphics package provides **interactive** graphics especially valuabl
 The loon.ggplot package **brings both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics can now **turn these `ggplot`s into interactive `loon` plots** for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s. The former is accomplished by the simple translation function `ggplot2loon()` and the latter by the simple translation function `loon2ggplot()`.
 
 
-# Ggplot -> Loon
-Ggplots to interactive loon plots.
+# ggplot -> Loon
+
+Turning a `ggplot` into an interactive `loon` plot.
 
 ## Basics
 
@@ -82,7 +109,6 @@ Ggplots to interactive loon plots.
 Consider the `mtcars` data set and suppose we draw a scatterplot of the mileage `mpg` (miles per US gallon) versus the weight of the car `wt` in thousands of pounds.  In `ggplot2` this would be constructed as
 
 ```{r mpg_vs_wt, message = FALSE, warning = FALSE}
-library(ggplot2)
 p1 <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 ```
 and displayed by printing the `"ggplot"` data structure `p1` as
@@ -533,7 +559,7 @@ Each plot in `l_fwrap` is an independent loon plot which can be interacted with 
 
 The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
 ```{r pipes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-library(tidyverse)  # load this to also have dplyr functionality
+library(dplyr)  # load this to also have dplyr functionality
 p1_piped <- mtcars %>%
   rename(transmission = am, weight = wt) %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
@@ -698,12 +724,20 @@ mtcars %>%
 
 produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well).
 
-# Loon -> Ggplot
-Interactive loon plots to static ggplots.
+# loon -> ggplot
 
-## Turn `loon` static via `loon2ggplot()` 
+In `loon`, the current view of any `loon` plot `p` can be turned into a `grid` plot in a variety of ways:
 
-Interactive `loon` plots can be static by calling `loonGrob()` or `grid.loon()` to turn `loon` widgets to `grid` objects. However, the modification of a `grid` object needs strong background knowledge of package `grid`. Besides, low level `grid` is commonly used as a foundation of other systems and it does not have a formal model. Thus, `grid` objects are hard to be extended to other systems. But `ggplot` graphical system provides a unified data structure which is easy to be extended. `Loon2ggplot()` takes advantage of that, transforming `loon` widgets to `ggplot` objects.
+- `plot(p)` 
+- `grid.loon(p)` or `grid.loon(p, draw = FALSE)`
+- `loonGrob(p)` to create the grid object.
+
+The corresponding `grid` object is a rich structure that can be exported, printed, edited, and incorporated into other `grid` structures.  However, adapting that structure to slightly different presentations is a bit of a challenge compared to a `ggplot` (also ultimately a `grid` structure).
+
+In this section, we turn the current state of any `loon` plot into a `ggplot` plot which can then be modified following the rules of the `ggplot2` grammar.
+
+## `loon2ggplot()` 
+
 
 ```{r p1_piped_staic  ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 g <- loon2ggplot(l_pp)
@@ -752,21 +786,22 @@ LA <- data.frame(
 )
 map_data("state") %>% 
   ggplot(aes(long, lat, group = group)) +
-  geom_polygon(color="black", fill="lightblue") + 
+  geom_polygon(color="black", fill="cornsilk") + 
   geom_polygonGlyph(data = destinations,
                     mapping = aes(x = lon, y = lat), 
                     inherit.aes = FALSE,
                     polygon_x = x_airplane,
                     polygon_y = y_airplane, 
                     size = 2,
-                    alpha = 0.5, 
-                    fill = "firebrick") + 
+                    alpha = 0.75, 
+                    fill = "deepskyblue") + 
   geom_polygonGlyph(data = LA,
                     mapping = aes(x = lon, y = lat), 
                     inherit.aes = FALSE,
                     polygon_x = x_star,
                     polygon_y = y_star, 
-                    fill = "magenta")
+                    alpha = 0.75, 
+                    fill = "red")
 ```
   
   * Providing serial axes plots (parallel coordinate or radial coordinate) via `ggSerialAxes()`

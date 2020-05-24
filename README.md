@@ -1,8 +1,8 @@
 
 ## loon.ggplot  <img src="man/figures/logo.png" align="right" width="120" />
 
-[![Build Status](https://travis-ci.org/z267xu/loon.ggplot.svg?branch=master)](https://travis-ci.org/z267xu/loon.ggplot)
-[![Codecov test coverage](https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/z267xu/loon.ggplot?branch=master)
+[![Build Status](https://travis-ci.org/z267xu/loon.ggplot.svg?branch=master)](https://travis-ci.org/great-northern-diver/loon.ggplot)
+[![Codecov test coverage](https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master)
 
 An R package to turn ggplot graphic data structures into interactive loon plots
 
