@@ -52,7 +52,7 @@ loon2ggplot.default <- function(target, ...) {
 #' @export
 loon2ggplot.l_plot <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop(target, " does not exist")
+  loon::l_isLoonWidget(target) || stop(target, " does not exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
@@ -62,7 +62,7 @@ loon2ggplot.l_plot <- function(target, ...) {
 #' @export
 loon2ggplot.l_hist <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
@@ -71,7 +71,7 @@ loon2ggplot.l_hist <- function(target, ...) {
 #' @export
 loon2ggplot.l_graph <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
@@ -81,7 +81,7 @@ loon2ggplot.l_graph <- function(target, ...) {
 #' @export
 loon2ggplot.l_plot3D <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist")
+  loon::l_isLoonWidget(target) || stop("widget does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
 
   axes_coords <- target["axesCoords"]
@@ -213,7 +213,7 @@ cartesian_gg <- function(target, ggObj) {
                               size = 1) else ggplot2::element_blank(),
       plot.margin = grid::unit(margins, "lines")
     )
-  if(swapAxes) ggObj <- ggObj + coord_flip()
+  if(swapAxes) ggObj <- ggObj + coord_flip(xlim = xlim, ylim = ylim)
   return(ggObj)
 }
 

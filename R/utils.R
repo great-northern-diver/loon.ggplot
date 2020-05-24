@@ -262,7 +262,7 @@ get_hjust <- function(just) {
 
 l_layer_getUngroupedChildren <- function(widget, target) {
 
-  loon::l_isLoonWidget(widget) || stop("widget does not seem to exist")
+  loon::l_isLoonWidget(widget) || stop("widget does not seem to exist", call. = FALSE)
   children <- loon::l_layer_getChildren(target)
   layer <- lapply(children,
                   function(child) {

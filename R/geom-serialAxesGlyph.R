@@ -110,7 +110,7 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
 
                                                      })
                                             },
-                                            error = function(e) warning("welcome to report issues in https://github.com/great-northern-diver/loon.ggplot")
+                                            error = function(e) warning("welcome to report issues in https://github.com/great-northern-diver/loon.ggplot", call. = FALSE)
                                           )
 
                                           data
@@ -166,7 +166,7 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                                                                scaleX = scaleX, scaleY = scaleY,
                                                                                xaxis = radialxaxis, yaxis = radialyaxis,
                                                                                dimension = dimension, showArea = showArea)
-                                          } else stop("unknown axes layout")
+                                          } else stop("unknown axes layout", call. = FALSE)
 
                                           ggplot2:::ggname("geom_serialAxesGlyph",
                                                            grid::gTree(
@@ -220,7 +220,9 @@ get_gridAesthetic <- function(axesLayout, xpos, ypos, scaleX, scaleY, xaxis, yax
   serialCoordX <- serialCoordY <- list()
 
   N <- length(xpos)
-  hide <- if(axesLayout == "parallel") {
+
+  # side effect
+  if(axesLayout == "parallel") {
     lapply(1:N,
            function(i){
              # enclosing
@@ -265,7 +267,7 @@ get_gridAesthetic <- function(axesLayout, xpos, ypos, scaleX, scaleY, xaxis, yax
     enclosingId <- rep(1:N, each = len_radial)
     serialCoordId <- rep(1:N, each = (dimension + 1))
 
-  } else stop('unknown axes layout')
+  } else stop('unknown axes layout', call. = FALSE)
 
   list(
     enclosingX = do.call(grid::unit.c, enclosingX),

@@ -54,7 +54,7 @@ gg_pipe <- function(data, ggObj) {
   if (any(stringr::str_detect(dep, "ggplot"))) {
     ggplot_id <- which(stringr::str_detect(dep, "ggplot") == TRUE)
     if (length(ggplot_id) > 1) {
-      stop("only one ggplot model can be handled")
+      stop("only one ggplot model can be handled", call. = FALSE)
     } else {
       dep1 <- dep[ggplot_id]
       # construct a new ggplot character with input data
@@ -68,5 +68,5 @@ gg_pipe <- function(data, ggObj) {
       parse_dep <- parse(text = paste0(dep, collapse = ""))
       eval(parse_dep)
     }
-  } else stop("ggplot object cannot be found")
+  } else stop("ggplot object cannot be found", call. = FALSE)
 }

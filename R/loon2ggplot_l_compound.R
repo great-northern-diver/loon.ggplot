@@ -6,5 +6,6 @@ loon2ggplot.l_compound <- function(target, ...) {
 
   GGally::ggmatrix(plots = g_getPlots(target),
                    nrow = locations$nrow,
-                   ncol = locations$ncol)
+                   ncol = locations$ncol,
+                   byrow = FALSE)
 }

@@ -28,7 +28,7 @@ l_configure.l_ggplot <- function(target, ...) {
   } else {
     # check sync
     sync <- args$sync
-    if(!sync %in% c("pull", "push")) stop("not known sync")
+    if(!sync %in% c("pull", "push")) stop("not known sync", call. = FALSE)
     states <- names(args)
     states <- states[-which(states == "sync")]
   }
@@ -36,7 +36,7 @@ l_configure.l_ggplot <- function(target, ...) {
   plots <- target$plots
 
   if (is.null(states) || any("" %in% states))
-    stop("configuration needs key=value pairs")
+    stop("configuration needs key=value pairs", call. = FALSE)
 
   for (state in states) {
     arg <- args[[state]]
@@ -46,13 +46,13 @@ l_configure.l_ggplot <- function(target, ...) {
              if(state == "linkingGroup") {
                loon::l_configure(plot, linkingGroup = arg, sync = sync)
              } else if(state == "selected") {
-               stop("not implemented yet")
+               stop("not implemented yet", call. = FALSE)
              } else {
                if(is.list(arg)) {
                  if(length(arg) == length(plots)) {
                    plot[state] <- arg[[i]]
                  } else {
-                   stop(paste0("the length of argument ", state, " should be equal to the length of facets"))
+                   stop(paste0("the length of argument ", state, " should be equal to the length of facets"), call. = FALSE)
                  }
                } else {
                  plot[state] <- arg

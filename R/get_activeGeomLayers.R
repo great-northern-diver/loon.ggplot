@@ -43,7 +43,7 @@
 get_activeGeomLayers <- function(ggObj) {
 
   if(!ggplot2::is.ggplot(ggObj)) {
-    stop(paste0(deparse(substitute(ggObj)), " is not a ggplot object"))
+    stop(paste0(deparse(substitute(ggObj)), " is not a ggplot object"), call. = FALSE)
   }
   len_layers <- length(ggObj$layers)
 

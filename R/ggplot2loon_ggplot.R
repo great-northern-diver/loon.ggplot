@@ -95,7 +95,7 @@ ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
 
 #' @export
 ggplot2loon.default <- function(ggObj, ...) {
-  stop(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"))
+  stop(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"), call. = FALSE)
 }
 
 #' @export
@@ -122,32 +122,32 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
-    stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"))
+    stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"), call. = FALSE)
   }
   if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
-    stop("activeGeomLayers is a numeric argument")
+    stop("activeGeomLayers is a numeric argument", call. = FALSE)
   }
   if(!is.logical(ggGuides)) {
-    stop("ggGuides is a logical argument")
+    stop("ggGuides is a logical argument", call. = FALSE)
   }
   if(!is.logical(pack)) {
-    stop("pack is a logical argument")
+    stop("pack is a logical argument", call. = FALSE)
   }
   if(!is.null(tkLabels)) {
-    if(!is.logical(tkLabels)) stop("tkLabels is a logical argument")
+    if(!is.logical(tkLabels)) stop("tkLabels is a logical argument", call. = FALSE)
   }
   if(!is.numeric(exteriorLabelProportion)) {
-    stop("exteriorLabelProportion is a numerical argument")
+    stop("exteriorLabelProportion is a numerical argument", call. = FALSE)
   } else {
     if(exteriorLabelProportion >= 1 & length(exteriorLabelProportion) != 1) {
-      stop("exteriorLabelProportion is a single number between 0 to 1")
+      stop("exteriorLabelProportion is a single number between 0 to 1", call. = FALSE)
     }
   }
   if(!is.numeric(canvasHeight)) {
-    stop("canvasHeight is a numerical argument")
+    stop("canvasHeight is a numerical argument", call. = FALSE)
   }
   if(!is.numeric(canvasWidth)) {
-    stop("canvasWidth is a numerical argument")
+    stop("canvasWidth is a numerical argument", call. = FALSE)
   }
 
   plots_info <- list()
@@ -223,7 +223,7 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   plots_info$column.span <- plots_info$span * plots_info$column
 
   sync <- args$sync %||% "pull"
-  if(!sync %in% c("pull", "push")) stop("not known sync")
+  if(!sync %in% c("pull", "push")) stop("not known sync", call. = FALSE)
   plots_info$sync <- sync
 
   if (is.null(args[['linkingGroup']])) {
