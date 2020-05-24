@@ -35,7 +35,6 @@ Suggests:
     rmarkdown,
     tidyverse,
     covr,
-    spelling,
     nycflights13
 LazyData: true
 RoxygenNote: 7.1.0
