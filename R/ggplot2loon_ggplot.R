@@ -37,10 +37,6 @@
 #' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 #' g <- ggplot2loon(p)
 #'
-#' # show ggGuides
-#' p <- ggplot(mpg, aes(class, hwy)) + geom_boxplot()
-#' g <- ggplot2loon(p, ggGuides = TRUE)
-#'
 #' # tkLabels
 #' p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
 #'    colour = factor(gear))) + facet_wrap(~am)
