@@ -1,15 +1,19 @@
-#' @title Add glyph on scatter plot
+#' @title Add polygon glyph on scatter plot
 #' @description The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.
-#' @name glyphGeoms
 #'
 #' @inheritParams ggplot2::layer
 #' @param polygon_x nested list of x-coordinates of polygons, one list element for each scatterplot point.
-#' If not provided, `geom_point()` will be called.
+#' If not provided, \code{geom_point()} will be called.
 #' @param polygon_y nested list of y-coordinates of polygons, one list element for each scatterplot point.
-#' If not provided, `geom_point()` will be called.
-#' @param na.rm If FALSE, the default, missing values are removed with a warning.
-#' If TRUE, missing values are silently removed.
-#' @param ... Other arguments passed on to `layer()`.
+#' If not provided, \code{geom_point()} will be called.
+#' @param showArea boolean to indicate whether area should be shown or not
+#' @param linewidth line width of polygon
+#' @param na.rm If \code{FALSE}, the default, missing values are removed with a warning.
+#' If `TRUE`, missing values are silently removed.
+#' @param ... Other arguments passed on to \code{ggplot2::layer}.
+#' These are often aesthetics, used to set an aesthetic to a fixed value,
+#' like \code{colour = "red"} or \code{size = 3}.
+#' They may also be parameters to the paired geom/stat.
 #'
 #' @section Aesthetics:
 #' geom_...Glyph() understands the following aesthetics (required aesthetics are in bold):
@@ -26,7 +30,8 @@
 #' \item{linetype}
 #' }
 #' @export
-#' @seealso \link{polygonGlyph}
+#' @seealso \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}
 #' @examples
 #' # polygon glyph
 #' p <- ggplot(data = data.frame(x = 1:4, y = 1:4),

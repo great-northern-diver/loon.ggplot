@@ -3,7 +3,6 @@
 #' @name polygonGlyph
 #' @seealso \link{geom_polygonGlyph}
 #' @export
-#' @format An object of class \code{character}.
 #' @examples
 #' if(requireNamespace("grid")) {
 #'   library(grid)

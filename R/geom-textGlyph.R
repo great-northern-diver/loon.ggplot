@@ -1,8 +1,19 @@
-#' @rdname glyphGeoms
-#' @inherit glyphGeoms
+#' @title Add text glyph on scatter plot
+#' @description The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.
+#'
+#' @inheritParams ggplot2::layer
 #' @param text the text strings for each observation.
 #' If the object is a factor then the labels get extracted with \code{\link{as.character}}.
+#' @param na.rm If \code{FALSE}, the default, missing values are removed with a warning.
+#' If `TRUE`, missing values are silently removed.
+#' @param ... Other arguments passed on to \code{ggplot2::layer}.
+#' These are often aesthetics, used to set an aesthetic to a fixed value,
+#' like \code{colour = "red"} or \code{size = 3}.
+#' They may also be parameters to the paired geom/stat.
 #' @export
+#'
+#' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_serialAxesGlyph}}
 #'
 #' @examples
 #' # text glyph
