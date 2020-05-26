@@ -16,10 +16,7 @@ get_importantLayers <- function(len_layers, ggObj, isCoordPolar){
                                   function(layerName){
                                     if("GeomBar" %in% layerName) {
                                       if(isCoordPolar) {
-                                        warning("loon `l_hist` is built on top of Cartesian coordinates
-                                                and does not accept polar coordinates. \n
-                                                If polar coords are detected, histogram or bar plots \n
-                                                will be considered as polygons and will **not** be active.", call. = FALSE)
+                                        warning("loon `l_hist` is built based on Cartesian coordinate system\n and does not accommodate polar coordinate system yet. \n If polar coords are used, the histograms or bar plots \n will be created as static polygons and will **not** be interactive.", call. = FALSE)
                                         FALSE
                                       } else TRUE
                                     } else FALSE
