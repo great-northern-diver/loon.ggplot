@@ -127,10 +127,12 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                           # size
                                           size <- data$size
                                           # parallel or radial
-                                          scaledData <- get_scaledData(data = serialAxesData,
-                                                                       sequence = sequence,
-                                                                       scaling = scaling,
-                                                                       displayOrder = 1:length(color))
+                                          scaledData <- suppressWarnings(
+                                            get_scaledData(data = serialAxesData,
+                                                           sequence = sequence,
+                                                           scaling = scaling,
+                                                           displayOrder = seq(length(color)))
+                                          )
 
                                           dimension <- dim(scaledData)[2]
 

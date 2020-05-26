@@ -161,10 +161,11 @@ ggRadialSerialAxes <- function(ggObj,
   mapping <- ggObj$mapping
   lineWidth <- set_lineSize(data, mapping, lineWidth)
 
-  grouped_data <- get_scaledData(data = data,
-                                 sequence = axesLabels,
-                                 scaling = scaling,
-                                 displayOrder = displayOrder) %>%
+  grouped_data <- suppressWarnings(
+    get_scaledData(data = data,
+                   sequence = axesLabels,
+                   scaling = scaling,
+                   displayOrder = displayOrder) )%>%
     set_data_group(
       mapping = mapping,
       showArea = showArea,
