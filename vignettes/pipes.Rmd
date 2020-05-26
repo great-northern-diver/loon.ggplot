@@ -234,19 +234,3 @@ mtcars %>%
          linkingGroup = "Motor Trend 1974") %>%
   plot()   # get a static version via grid
 ```
-
-or 
-
-```{r loon_pairs  pipe, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(lp100km, weight, transmission) %>%
-  # and pass the built plot on
-  l_pairs(showHistograms = TRUE,
-          linkingGroup = "Motor Trend 1974") ->  # and assign the result.
-  l_pp
-```
-
-
-produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well).
