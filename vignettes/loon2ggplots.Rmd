@@ -81,6 +81,7 @@ library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
 library(nycflights13, quietly = TRUE)
 library(magrittr, quietly = TRUE)
+library(maps, quietly = TRUE)
 ```
 
 Package `loon` provides the truly direct manipulation and package `ggplot` provides a unified data structure so that it is easy to be extended. Data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s by the simple translation function `loon2ggplot()`.
