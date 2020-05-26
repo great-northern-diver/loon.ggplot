@@ -10,9 +10,8 @@ urlcolor: blue
 graphics: yes
 vignette: >
   %\VignetteIndexEntry{ggplots2loon}
-  %\VignetteEngine{knitr::knitr}
-  %\usepackage[UTF-8]{inputenc}
-  %\VignetteDepends{dplyr, magrittr, nycflights13}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{epic}
@@ -76,14 +75,7 @@ library(knitr)
 set.seed(12314159)
 imageDirectory <- "./img/ggplots2loon"
 dataDirectory <- "./data/ggplots2loon"
-path_concat <- function(path1, ..., sep="/") {
-    # The "/" is standard unix directory separator and so will
-    # work on Macs and Linux.
-    # In windows the separator might have to be sep = "\" or 
-    # even sep = "\\" or possibly something else. 
-    paste(path1, ..., sep = sep)
-}
-
+path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
