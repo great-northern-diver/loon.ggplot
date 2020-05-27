@@ -1,6 +1,8 @@
-#' @rdname glyphGeoms
-#' @inherit glyphGeoms
-#' @param serialAxesData a serial axes numerical data set. If not provided, `geom_point()` will be called.
+#' @title Add serialaxes glyph on scatter plot
+#' @description The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.
+#'
+#' @inheritParams ggplot2::layer
+#' @param serialAxesData a serial axes numerical data set. If not provided, \code{geom_point()} will be called.
 #' @param sequence vector with variable names that defines the axes sequence
 #' @param linewidth line width of serial axes plot
 #' @param scaling one of 'variable', 'data', 'observation' or 'none' to
@@ -11,7 +13,16 @@
 #' @param showEnclosing boolean to indicate whether enclosing should be shown or not
 #' @param axesColor axes color
 #' @param bboxColor bounding box color
+#' @param na.rm If \code{FALSE}, the default, missing values are removed with a warning.
+#' If `TRUE`, missing values are silently removed.
+#' @param ... Other arguments passed on to \code{ggplot2::layer}.
+#' These are often aesthetics, used to set an aesthetic to a fixed value,
+#' like \code{colour = "red"} or \code{size = 3}.
+#' They may also be parameters to the paired geom/stat.
 #' @export
+#'
+#' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_textGlyph}}
 #'
 #' @examples
 #' # serial axes glyph
@@ -127,10 +138,12 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                           # size
                                           size <- data$size
                                           # parallel or radial
-                                          scaledData <- get_scaledData(data = serialAxesData,
-                                                                       sequence = sequence,
-                                                                       scaling = scaling,
-                                                                       displayOrder = 1:length(color))
+                                          scaledData <- suppressWarnings(
+                                            get_scaledData(data = serialAxesData,
+                                                           sequence = sequence,
+                                                           scaling = scaling,
+                                                           displayOrder = seq(length(color)))
+                                          )
 
                                           dimension <- dim(scaledData)[2]
 

@@ -62,12 +62,11 @@ test_that("facet wrap scales (ggplot to loon)", {
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
   # example 69
-  pp <- ggplot(df, aes(x, y)) +
-    geom_point(data = df2, colour = "grey70") +
-    geom_point(aes(colour = z)) +
-    facet_wrap(~z, scales = "free_y")
-  g <- ggplot2loon(pp, activeGeomLayers = c(1,2))
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  expect_warning(ggplot2loon(ggObj = ggplot(df, aes(x, y)) +
+                               geom_point(data = df2, colour = "grey70") +
+                               geom_point(aes(colour = z)) +
+                               facet_wrap(~z, scales = "free_y"),
+                             activeGeomLayers = c(1,2)))
 })
 
 test_that("facet grid basic (ggplot to loon)", {

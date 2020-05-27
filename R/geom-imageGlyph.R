@@ -1,11 +1,22 @@
-#' @inherit glyphGeoms
-#' @rdname glyphGeoms
-#' @param images a list of images (a raster object, bitmap image). If not provided, `geom_point()` will be called.
+#' @title Add image glyph on scatter plot
+#' @description The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.
+#'
+#' @inheritParams ggplot2::layer
+#' @param images a list of images (a raster object, bitmap image). If not provided, \code{geom_point()} will be called.
 #' @param width width of image
 #' @param height height of image
+#' @param na.rm If \code{FALSE}, the default, missing values are removed with a warning.
+#' If `TRUE`, missing values are silently removed.
+#' @param ... Other arguments passed on to \code{ggplot2::layer}.
+#' These are often aesthetics, used to set an aesthetic to a fixed value,
+#' like \code{colour = "red"} or \code{size = 3}.
+#' They may also be parameters to the paired geom/stat.
 #' @export
+#' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}
 #' @examples
 #' # image glyph
+#' \dontrun{
 #' if(requireNamespace("png")) {
 #'   img_paths <- list.files(file.path(find.package(package = 'loon'), "images"), full.names = TRUE)
 #'   images <- lapply(img_paths, function(path) png::readPNG(path))
@@ -13,6 +24,7 @@
 #'               mapping = aes(x = x, y = y)) +
 #'          geom_imageGlyph(images = images, alpha = 0.4, width = 2, height = 1.5)
 #'   p
+#' }
 #' }
 #'
 

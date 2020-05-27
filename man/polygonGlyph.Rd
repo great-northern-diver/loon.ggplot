@@ -13,7 +13,7 @@
 \alias{y_airplane}
 \title{Polygon glyph coordinates}
 \format{
-An object of class \code{character}.
+An object of class \code{numeric} of length 10.
 
 An object of class \code{numeric} of length 10.
 

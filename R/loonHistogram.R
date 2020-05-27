@@ -362,7 +362,7 @@ position_operation.PositionDodge <- function(position, hist_values, activeGeomLa
       hist_values <- paste(hist_values, fill_var, sep = sep)
       message("Viewport is changed. Set `l_scaleto_world` to get the world view")
     } else
-      warning("The length does not match. It should not happen.", call. = FALSE)
+      stop("The length of `hist_values` and `fill_var` does not match.", call. = FALSE)
 
   } else {
     fill_var <- hist_values

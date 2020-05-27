@@ -1,11 +1,41 @@
-#' @rdname glyphGeoms
-#' @inherit glyphGeoms
-#' @param ymin vector with lower y-value of the point range. If not provided, `geom_point()` will be called.
-#' @param ymax vector with upper y-value of the point range. If not provided, `geom_point()` will be called.
+#' @title Add pointrange glyph on scatter plot
+#' @description The glyph geom is used to create scatterplots with
+#' a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.
+#'
+#' @inheritParams ggplot2::layer
+#' @param ymin vector with lower y-value of the point range. If not provided, \code{geom_point()} will be called.
+#' @param ymax vector with upper y-value of the point range. If not provided, \code{geom_point()} will be called.
+#' @param showArea If \code{TRUE}, the point pch is 21, else it is 1.
+#' @param linewidth line width of whisker
+#' @param na.rm If \code{FALSE}, the default, missing values are removed with a warning.
+#' If `TRUE`, missing values are silently removed.
+#' @param ... Other arguments passed on to \code{ggplot2::layer}
+#' These are often aesthetics, used to set an aesthetic to a fixed value,
+#' like \code{colour = "red"} or \code{size = 3}.
+#' They may also be parameters to the paired geom/stat.
+#'
+#' @section Aesthetics:
+#' geom_...Glyph() understands the following aesthetics (required aesthetics are in bold):
+#' \itemize{
+#' \item{\strong{x}}
+#' \item{\strong{y}}
+#' \item{alpha}
+#' \item{colour}
+#' \item{fill}
+#' \item{group}
+#' \item{shape}
+#' \item{size}
+#' \item{stroke}
+#' \item{linetype}
+#' }
+#' @export
+#' @seealso \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
+#' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}
 #'
 #' @details \code{geom_pointrangeGlyph()} is very close to \code{\link{geom_pointrange}} but with `loon` API
 #' @export
-#'
+#' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_imageGlyph}},
+#' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}
 #' @examples
 #' # point range glyph
 #' p <- ggplot(data = data.frame(x = 1:3, y = 1:3),
@@ -14,7 +44,7 @@
 #' p
 geom_pointrangeGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                                  position = 'identity', ...,
-                                 ymin, ymax, linewidth = 1, showArea = TRUE,
+                                 ymin, ymax, showArea = TRUE, linewidth = 1,
                                  na.rm = FALSE, show.legend = NA,
                                  inherit.aes = TRUE) {
 

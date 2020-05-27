@@ -14,11 +14,10 @@ test_that("Polar coordinate system (ggplot to loon)", {
   pie <- ggplot(mtcars, aes(x = factor(1), fill = factor(cyl))) +
     geom_bar(width = 1)
   pp <- pie + coord_polar(theta = "x")
-  g <- ggplot2loon(pp)
-  expect_equal(class(g), c("l_plot", "loon"))
+  expect_warning(ggplot2loon(pp))
+
   pp <- pie + coord_polar(theta = "y")
-  g <- ggplot2loon(pp)
-  expect_equal(class(g), c("l_plot", "loon"))
+  expect_warning(ggplot2loon(pp))
 
   rect <- data.frame(x = 50, y = 50)
   line <- data.frame(x = c(1, 200), y = c(100, 1))
