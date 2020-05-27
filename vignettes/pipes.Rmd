@@ -12,6 +12,7 @@ vignette: >
   %\VignetteIndexEntry{pipes}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{epic}
