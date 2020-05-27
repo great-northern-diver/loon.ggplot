@@ -12,6 +12,7 @@ vignette: >
   %\VignetteIndexEntry{loon2ggplots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
+  
 header-includes:
 - \usepackage{graphicx}
 - \usepackage{epic}
@@ -183,18 +184,18 @@ Note that:  The single `ggplot` object can be extracted by `...$plots[[id]]`, wh
 
 ## Geom layers
 
-  * Adding glyphs on scatterplot
-  
-  Package `loon.ggplot` also provides "pointGlyph" layer to create scatterplots with a variety of glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of "nyc" flights in 2013. All destinations are marked as a "airplane" polygon symbol and LA is highlighted by a magenta star.
+* Adding glyphs on scatterplot
+
+Package `loon.ggplot` also provides "pointGlyph" layer to create scatterplots with a variety of glyphs, such as polygon glyph, serialaxes glyph, image glyph and etc. Following example illustrates the USA destinations (not including Alaska and Hawaii) of "nyc" flights in 2013. All destinations are marked as a "airplane" polygon symbol and LA is highlighted by a magenta star.
 
 ```{r glyph_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 3, fig.align = "center", out.width = "70%"}
 library(nycflights13)
-library(dplyr)
+library(maps)
 destinations <- nycflights13::airports %>% 
-  dplyr::rename(dest = faa) %>% 
-  dplyr::semi_join(nycflights13::flights, by = "dest") %>% 
-  dplyr::filter(lon > -151, 
-                lat < 55)
+  rename(dest = faa) %>% 
+  semi_join(nycflights13::flights, by = "dest") %>% 
+  filter(lon > -151, 
+         lat < 55)
 LA <- data.frame(
   lon = -118.243683,
   lat = 34.052235
@@ -219,20 +220,20 @@ map_data("state") %>%
                     fill = "red")
 ```
 
-  
-  * Providing serial axes plots (parallel coordinate or radial coordinate) via `ggSerialAxes()`
-  
-    ```{r serialaxes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 3, fig.align = "center", out.width = "70%"}
-    # parallel axes plot
-    ggplot(data = iris, 
-           mapping = aes(colour = Species)) %>% 
-      ggSerialAxes(layout = "parallel") +
-      theme(axis.text.x = element_text(angle = 30, hjust = 0.7))
-    ```
-    
-    <font size="1"> 
-    Note that we use `%>%` to pipe through the `ggplot()` object instead of the original `+`.   
-    </font>
+
+* Providing serial axes plots (parallel coordinate or radial coordinate) via `ggSerialAxes()`
+
+```{r serialaxes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 3, fig.align = "center", out.width = "70%"}
+# parallel axes plot
+ggplot(data = iris, 
+       mapping = aes(colour = Species)) %>% 
+  ggSerialAxes(layout = "parallel") +
+  theme(axis.text.x = element_text(angle = 30, hjust = 0.7))
+```
+
+<font size="1"> 
+Note that we use `%>%` to pipe through the `ggplot()` object instead of the original `+`.   
+</font>
 
 ## Function `loon.ggplot()`
 
