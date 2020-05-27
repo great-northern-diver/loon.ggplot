@@ -12,12 +12,14 @@
 #'
 #' @export
 #' @examples
-#' l <- l_plot(iris, color = iris$Species)
-#' p <- loon2ggplot(l)
-#' p # a ggplot object
-#' str(p)
-#' # add themes
-#' p + geom_smooth() + theme_linedraw()
+#' if(interactive()) {
+#'   l <- l_plot(iris, color = iris$Species)
+#'   p <- loon2ggplot(l)
+#'   p # a ggplot object
+#'   str(p)
+#'   # add themes
+#'   p + geom_smooth() + theme_linedraw()
+#' }
 #'
 loon2ggplot <- function(target, ...) {
 

@@ -26,22 +26,26 @@ A bridge between \code{loon} widgets and \code{gg} objects. It can take either a
 or a \code{gg} object (\code{ggplot} or \code{ggmatrix}), then create a corresponding \code{gg} (or \code{loon}) graphics.
 }
 \examples{
+
+if(interactive()) {
 ######### loon --> gg #########
-# loon 3D plot
-l <- with(quakes,
-  l_plot3D(long, lat, depth, linkingGroup = "quakes")
-)
-# equivalent to `loon2ggplot(l)`
-g <- loon.ggplot(l)
-g # a ggplot object
+  # loon 3D plot
+  l <- with(quakes,
+    l_plot3D(long, lat, depth, linkingGroup = "quakes")
+  )
+  # equivalent to `loon2ggplot(l)`
+  g <- loon.ggplot(l)
+  g # a ggplot object
 
 ######### gg --> loon #########
-# ggplot histogram
-g <- ggplot(iris, mapping = aes(Sepal.Length, fill = Species)) +
-  geom_histogram()
-# equivalent to `ggplot2loon(g)`
-l <- loon.ggplot(g)
-l # a loon widget
+
+  # ggplot histogram
+  g <- ggplot(iris, mapping = aes(Sepal.Length, fill = Species)) +
+    geom_histogram()
+  # equivalent to `ggplot2loon(g)`
+  l <- loon.ggplot(g)
+  l # a loon widget
+}
 }
 \seealso{
 \code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}

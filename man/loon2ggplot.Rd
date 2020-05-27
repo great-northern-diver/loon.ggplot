@@ -57,11 +57,13 @@ a ggplot object
 Create a \code{ggplot} object from a \code{loon} widget
 }
 \examples{
-l <- l_plot(iris, color = iris$Species)
-p <- loon2ggplot(l)
-p # a ggplot object
-str(p)
-# add themes
-p + geom_smooth() + theme_linedraw()
+if(interactive()) {
+  l <- l_plot(iris, color = iris$Species)
+  p <- loon2ggplot(l)
+  p # a ggplot object
+  str(p)
+  # add themes
+  p + geom_smooth() + theme_linedraw()
+}
 
 }

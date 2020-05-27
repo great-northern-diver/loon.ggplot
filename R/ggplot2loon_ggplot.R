@@ -34,14 +34,17 @@
 #'
 #' @export
 #' @examples
-#' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
-#' g <- ggplot2loon(p)
 #'
-#' # tkLabels
-#' p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-#'    colour = factor(gear))) + facet_wrap(~am)
-#' g1 <- ggplot2loon(p)
-#' g2 <- ggplot2loon(p, tkLabels = FALSE)
+#' if(interactive()) {
+#'   p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+#'   g <- ggplot2loon(p)
+#'
+#'   # tkLabels
+#'   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
+#'      colour = factor(gear))) + facet_wrap(~am)
+#'   g1 <- ggplot2loon(p)
+#'   g2 <- ggplot2loon(p, tkLabels = FALSE)
+#' }
 #'
 #' \dontrun{
 #' df <- data.frame(

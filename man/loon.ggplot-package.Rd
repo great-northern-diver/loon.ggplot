@@ -4,12 +4,11 @@
 \name{loon.ggplot-package}
 \alias{loon.ggplot-package}
 \alias{_PACKAGE}
-\title{loon.ggplot: An add on package to loon that converts ggplot2 plots to interactive loon
-    plots}
+\title{loon.ggplot: An Add on Package to Loon that Converts ggplot2 Plots to Interactive Loon Plots}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{ggplot}s into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot}s. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.
+The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{gg} plots into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot}s. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.
 }
 \seealso{
 Useful links:
