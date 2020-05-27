@@ -8,6 +8,7 @@
 #' @seealso \code{\link{ggplot2loon}}
 #'
 #' @examples
+#' \dontrun{
 #' df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
 #' xgrid <- with(df, seq(min(x), max(x), length = 50))
 #' interp <- data.frame(
@@ -38,6 +39,7 @@
 #' agL <- get_activeGeomLayers(p2)
 #' #transparency is not allowed in tcltk
 #' ggplot2loon(p2, ggGuides = TRUE, activeGeomLayers = agL)
+#' }
 #'
 #' @export
 get_activeGeomLayers <- function(ggObj) {
