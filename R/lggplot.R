@@ -20,13 +20,13 @@
 #'   # p is a `lggplot` object, `print.lggplot(p)` is called automatically.
 #'   # Then, the `lggplot` object will be transformed to a `loon` widget
 #'   p
-#'   \dontrun{
-#'     # get widgets from current path
-#'     # suppose the path of `p` is '.l0.ggplot'
-#'     q <- l_getFromPath('.l0.ggplot')
-#'     # q is a `loon` widget
-#'     q
-#'   }
+#' }
+#' \dontrun{
+#'   # get widgets from current path
+#'   # suppose the path of `p` is '.l0.ggplot'
+#'   q <- l_getFromPath('.l0.ggplot')
+#'   # q is a `loon` widget
+#'   q
 #' }
 lggplot <- function(data = NULL, mapping = aes(), ...,
                     environment = parent.frame()) {
