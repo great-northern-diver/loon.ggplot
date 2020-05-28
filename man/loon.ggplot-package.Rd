@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Zehao Xu \email{z267xu@uwaterloo.ca}
+\strong{Maintainer}: Zehao Xu \email{z267xu@uwaterloo.ca} [thesis advisor]
 
 Authors:
 \itemize{
