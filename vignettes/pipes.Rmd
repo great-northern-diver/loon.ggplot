@@ -60,7 +60,7 @@ header-includes:
 ---
 
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       message = FALSE,
@@ -81,6 +81,7 @@ path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
 library(magrittr, quietly = TRUE)
+library(loon, quietly = TRUE)
 ```
 
 The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:

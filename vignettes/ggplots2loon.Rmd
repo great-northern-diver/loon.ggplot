@@ -60,7 +60,7 @@ header-includes:
 ---
 
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       message = FALSE,
@@ -81,6 +81,7 @@ path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
 library(magrittr, quietly = TRUE)
+library(loon, quietly = TRUE)
 ```
 
 The `ggplot2` graphics package (part of the `tidyverse` package collection) uses the base `grid` graphics package to produce publication quality graphics for data analysis.  Based on a grammar for graphics, `ggplot2` also provides a lot of functionality (e.g. `facet`s) that can be extremely useful in data analysis.
@@ -107,7 +108,7 @@ p1
 
 We might also display a histogram of some other variate, say the engine's horsepower `hp`.  In `ggplot2` this would be constructed as
 ```{r hp_ggplot, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "50%"}
-h1 <- ggplot(mtcars, aes(hp)) + geom_histogram()
+h1 <- ggplot(mtcars, aes(hp)) + geom_histogram(bins = 30)
 ```
 and displayed as
 ```{r hp_ggplot_display, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "50%"}
@@ -353,8 +354,13 @@ plot(l_p2)
 ## Layers
 
 Rather complex plots can be built up in `ggplot2` by adding *layers*.  For example,
-```{r mtcars_smooth, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r mtcars_smooth, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 p_fit <- ggplot(mtcars, aes(drat, mpg)) + geom_smooth() + geom_point()
+p_fit
+```
+
+```{r mtcars_smooth_eval, message = FALSE, echo = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+p_fit <- ggplot(mtcars, aes(drat, mpg)) + geom_smooth(formula = y~x, method = "loess") + geom_point()
 p_fit
 ```
 
@@ -516,8 +522,12 @@ fwrap <- ggplot(mtcars, aes(x = wt, y = mpg)) +
 fwrap
 ```
 Faceted plots can also be rendered interactive in the same way as any other `ggplot` objects:
-```{r l_fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+```{r l_fwrap, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 l_fwrap <- ggplot2loon(fwrap, linkingGroup = "Motor Trend 1974")
+```
+
+```{r l_fwrap_eval, message = FALSE, echo = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+l_fwrap <- ggplot2loon(fwrap, linkingGroup = "Motor Trend 1974", sync = "pull")
 ```
 which will look like
 ```{r linking_Key_fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}

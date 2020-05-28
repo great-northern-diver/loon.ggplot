@@ -60,7 +60,7 @@ header-includes:
 ---
 
 
-```{r setup, include=FALSE}
+```{r setup, warning=FALSE, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       message = FALSE,
@@ -81,6 +81,7 @@ path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
 library(nycflights13, quietly = TRUE)
+library(loon, quietly = TRUE)
 library(magrittr, quietly = TRUE)
 library(maps, quietly = TRUE)
 ```
