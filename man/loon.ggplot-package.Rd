@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{gg} plots into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot}s. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.
+The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{ggplot2} objects into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot2} objects. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.
 }
 \seealso{
 Useful links:
