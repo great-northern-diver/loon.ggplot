@@ -81,15 +81,15 @@ test_that("geometric layers (ggplot to loon)", {
   g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
 
-  mod_coef <- coef(lm(log10(price)~ log10(carat), data = diamonds))
-  p <- ggplot(diamonds, aes(log10(carat), log10(price))) +
+  mod_coef <- coef(lm(log10( mpg)~ log10(hp), data = mtcars))
+  p <- ggplot(mtcars, aes(log10(hp), log10(mpg))) +
     geom_bin2d() +
     geom_abline(intercept = mod_coef[1], slope = mod_coef[2],
                 colour = "white", size = 1) +
-    facet_wrap(~cut, nrow = 1)
+    facet_wrap(~am, nrow = 1)
 
   g <- ggplot2loon(p)
-  expect_equal(length(g$plots), 5)
+  expect_equal(length(g$plots), 2)
 
   df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
   xgrid <- with(df, seq(min(x), max(x), length = 50))
@@ -141,14 +141,9 @@ test_that("geometric layers (ggplot to loon)", {
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
-  pp <- ggplot(diamonds, aes(depth, colour = cut)) +
+  pp <- ggplot(mtcars, aes(hp, colour = am)) +
     geom_density(na.rm = TRUE) +
-    xlim(55, 70)
-  g <- ggplot2loon(pp)
-  expect_equal(class(g), c("l_plot", "loon"))
-
-  pp <- ggplot(diamonds, aes(carat, fill = cut)) +
-    geom_density(position = "stack")
+    xlim(100, 200)
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
@@ -195,9 +190,9 @@ test_that("geometric layers (ggplot to loon)", {
   pp <- p + geom_boxplot()
   expect_equal(class(ggplot2loon(pp, ggGuides = TRUE)), c("l_plot", "loon"))
 
-  # pp <- ggplot(diamonds, aes(carat, price)) +
-  #   geom_boxplot(aes(group = cut_width(carat, 0.25)), outlier.alpha = 0.1)
-  # expect_equal(class(ggplot2loon(pp)), c("l_plot", "loon"))
+  p <- ggplot(mpg, aes(hwy, class))
+  pp <- p + geom_boxplot()
+  expect_equal(class(ggplot2loon(pp, ggGuides = TRUE)), c("l_plot", "loon"))
 
   p <- ggplot(mtcars, aes(factor(cyl), mpg))
   pp <- p + geom_violin(draw_quantiles = c(0.25, 0.5, 0.75))
@@ -246,14 +241,14 @@ test_that("geometric layers (ggplot to loon)", {
 })
 
 test_that("geometric (histogram, bar) layers (ggplot to loon)", {
-  pp <- ggplot(diamonds, aes((carat))) +
+  pp <- ggplot(mtcars, aes((hp), fill = factor(am))) +
     geom_histogram()
   expect_equal(length(get_activeGeomLayers(pp)), 1)
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_hist", "loon"))
 
-  pp <- ggplot(diamonds, aes(price, fill = cut)) +
-    geom_histogram(binwidth = 500) + geom_freqpoly()+ facet_wrap(~color)
+  pp <- ggplot(mtcars, aes(hp, fill = as.character(am))) +
+    geom_histogram() + geom_freqpoly()+ facet_wrap(~cyl)
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
 
@@ -271,7 +266,9 @@ test_that("geometric (histogram, bar) layers (ggplot to loon)", {
   gg <- ggplot2loon(pp, ggGuides = TRUE)
   expect_equal(class(gg), c("l_hist", "loon"))
 
-  pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density..))
+  #### TODO:This is an interesting case
+  #### FIX LATER
+  pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density.., fill = trans))
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_hist", "loon"))
 
