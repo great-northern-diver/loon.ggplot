@@ -16,7 +16,7 @@
 #' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}
 #' @examples
 #' # image glyph
-#' \dontrun{
+#' \donttest{
 #' if(requireNamespace("png")) {
 #'   img_paths <- list.files(file.path(find.package(package = 'loon'), "images"), full.names = TRUE)
 #'   images <- lapply(img_paths, function(path) png::readPNG(path))
