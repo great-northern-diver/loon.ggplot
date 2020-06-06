@@ -1,4 +1,5 @@
 # adding labels to ggplot_build points layer
+ggplot2Version <- utils::packageVersion("ggplot2")
 
 ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
 
@@ -9,7 +10,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
   ggLayout <- ggBuild$layout
 
   # different ggplot2 versions have different names
-  if(is_devtools_ggplot2()){
+  if(ggplot2Version > "2.2.1"){
     layout <- ggLayout$layout
     # panel_params
     ggplotPanel_params <- reset_panel_params(ggBuild$layout$panel_params)
@@ -110,7 +111,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
 
               # In version below 3.1.0, ggplot_build automatically order points by PANEL and group
               # In the version 3.1.0, the order is kept by orginal data set
-              if(is_new_ggplot2()) {
+              if(ggplot2Version >= "3.1.0") {
 
                 ggBuild_data[[pointsLayerId[i]]]$linkingKey <- linkingKey
                 ggBuild_data[[pointsLayerId[i]]]$itemLabel <- itemLabel
@@ -245,13 +246,4 @@ reset_panel_params <- function(panel_params) {
                   y.labels = y.labels)
            )
          })
-}
-
-# many names are changed after version 2.2.1
-is_devtools_ggplot2 <- function() {
-  packageVersion("ggplot2") > "2.2.1"
-}
-
-is_new_ggplot2 <- function() {
-  packageVersion("ggplot2") >= "3.1.0"
 }
