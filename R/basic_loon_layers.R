@@ -39,14 +39,14 @@ loonLayer.GeomPoint <- function(widget,
              function(j){
                if(data$shape[j] %in% 21:24){
                  data$fill[j]
-               } else if (data$shape[j] %in% c(0, 1, 2, 5)) {
-                 ""
-               }
-               else {
-                 data$colour[j] }
-             } )
+               } else {
+                 data$colour[j]
+              }
+             })
     } else data$colour
-    pointsSize <- as_loon_size( data$size, "points" )
+    # l_layer_points cannot change the shape of the points so far
+    # pointsGlyph <- pch_to_glyph(data$shape, data$alpha)
+    pointsSize <- as_loon_size(data$size, "points" )
 
     # method <- get_stat_param(layerGeom, "distribution", ...)
 
