@@ -4,11 +4,11 @@
 \name{loon.ggplot-package}
 \alias{loon.ggplot-package}
 \alias{_PACKAGE}
-\title{loon.ggplot: An Add on Package to Loon that Converts ggplot2 Plots to Interactive Loon Plots}
+\title{loon.ggplot: Making 'ggplot2' Plots Interactive with 'loon' and Vice Versa}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-The \code{loon.ggplot} package brings both \code{loon} and \code{ggplot2} packages together. Data analysts who value the ease with which \code{ggplot2} can create meaningful graphics can now turn these \code{ggplot2} objects into interactive \code{loon} plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive \code{loon} plots into \code{ggplot2} objects. The former is accomplished by the simple translation function \code{ggplot2loon()} and the latter by the simple translation function \code{loon2ggplot()}.
+It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts who value the grammar pipeline provided by 'ggplot2' can turn these static plots into interactive 'loon' plots. Conversely, data analysts who explore data interactively with 'loon' can turn any 'loon' plot into a 'ggplot2' plot structure. The function 'loon.ggplot()' is applied to one plot structure will return the other.
 }
 \seealso{
 Useful links:
@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Zehao Xu \email{z267xu@uwaterloo.ca} [thesis advisor]
+\strong{Maintainer}: Zehao Xu \email{z267xu@uwaterloo.ca}
 
 Authors:
 \itemize{
