@@ -46,7 +46,7 @@
 #'   g2 <- ggplot2loon(p, tkLabels = FALSE)
 #' }
 #'
-#' \dontrun{
+#' \donttest{
 #' df <- data.frame(
 #'   x = rnorm(120, c(0, 2, 4)),
 #'   y = rnorm(120, c(1, 2, 1)),

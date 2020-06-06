@@ -29,18 +29,18 @@
 #'
 #' @examples
 #' if(require(magrittr) && interactive()) {
-#'    \dontrun{
-#'      # Error
-#'      g <- mtcars %>%
-#'         ggplot(aes(mpg, wt, colour = cyl)) +
-#'         geom_point() %>%
-#'         ggplot2loon()
-#'    }
-#'    g <- mtcars %>%
-#'      gg_pipe(
-#'        ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
-#'      ) %>%
-#'      ggplot2loon()
+#' \dontrun{
+#'  # Error
+#'  g <- mtcars %>%
+#'     ggplot(aes(mpg, wt, colour = cyl)) +
+#'     geom_point() %>%
+#'     ggplot2loon()
+#' }
+#'  g <- mtcars %>%
+#'    gg_pipe(
+#'      ggplot(aes(mpg, wt, colour = cyl)) + geom_point()
+#'    ) %>%
+#'    ggplot2loon()
 #' }
 
 gg_pipe <- function(data, ggObj) {
