@@ -9,34 +9,79 @@ loonLayer.GeomViolin <- function(widget,
                                  parent = "root",
                                  label = NULL,
                                  ...) {
-  if(dim(data)[1] != 0) {
+  if(dim(data)[1] == 0) return(NULL)
 
-    uniGroup <- unique(data$group)
-    seqLength <- 20
+  uniGroup <- unique(data$group)
+  seqLength <- 20
 
-    if(parent == "root") {
-      parent <- loon::l_layer_group(widget,
-                                    label = label %||% "violins")
-    }
+  if(parent == "root") {
+    parent <- loon::l_layer_group(widget,
+                                  label = label %||% "violins")
+  }
 
-    m <- length(uniGroup)
-    lapply(1:m,
-           function(i){
+  show_quantiles <- FALSE
+  if(!is.null(layerGeom$geom_params$draw_quantiles)) show_quantiles <- TRUE
 
-             method <- get_stat_param(layerGeom, "scale", ...)
+  m <- length(uniGroup)
+  lapply(1:m,
+         function(i){
 
-             mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = paste(c("violin", method)),
-                                              label = label,
-                                              i = if(m == 1) NULL else i)
+           method <- get_stat_param(layerGeom, "scale", ...)
 
-             violinGroup <- loon::l_layer_group(widget,
-                                                label = mappingLabel,
-                                                parent = parent)
+           mappingLabel <- get_mappingLabel(layerGeom,
+                                            name = paste(c("violin", method)),
+                                            label = label,
+                                            i = if(m == 1) NULL else i)
 
-             group_i_data <- data[data$group == uniGroup[i], ]
-             group_i_revdata <- group_i_data
-             n <- dim(group_i_data)[1]
+           violinGroup <- loon::l_layer_group(widget,
+                                              label = mappingLabel,
+                                              parent = parent)
+
+           group_i_data <- data[data$group == uniGroup[i], ]
+           group_i_revdata <- group_i_data
+           n <- dim(group_i_data)[1]
+
+           flipped_aes <- any(group_i_data$flipped_aes) %||% FALSE
+
+           if(flipped_aes) {
+
+             # set rev y
+             group_i_revdata$x <- rev(group_i_revdata$x)
+             group_i_revdata$violinwidth <- rev(group_i_revdata$violinwidth)
+             # set x for both data set
+             group_i_revdata$y <- group_i_revdata.y <- group_i_revdata$y + group_i_revdata$violinwidth/2
+             group_i_data$y <- group_i_data.y <- group_i_data$y - group_i_data$violinwidth/2
+             # extend group_i_data and group_i_revdata
+             group_i_data <- group_i_data[c(seq_len(n), rep(n, seqLength)), ]
+             group_i_revdata <- group_i_revdata[c(seq_len(n), rep(n, seqLength)), ]
+             group_i_data$y <- c(group_i_data.y, seq(group_i_data.y[n], group_i_revdata.y[1], length.out = seqLength))
+             group_i_revdata$y <- c(group_i_revdata.y, seq(group_i_revdata.y[n], group_i_data.y[1], length.out = seqLength))
+             group_i_newdata <- rbind(group_i_data, group_i_revdata)
+
+             if (show_quantiles) {
+
+               quantiles <- layerGeom$geom_params$draw_quantiles
+
+               group_i_data <- data[data$group == uniGroup[i], ]
+               xx <- group_i_data$violinwidth/2
+               f <- approxfun(group_i_data$x, xx, yleft = 0, yright = 0)
+               cumulativeArea <- sapply(group_i_data$x,
+                                        function(j){
+                                          integrate(f, min(group_i_data$x), j)$value
+                                        })
+               id <- sapply(quantiles,
+                            function(j) {
+                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+                              which(abs_quantile_area == min(abs_quantile_area))
+                            })
+               linesData <- group_i_data[id, ]
+
+               linesData$y <- linesData$y - linesData$violinwidth/2
+               linesData$yend <- linesData$y + linesData$violinwidth
+               linesData$xend <- linesData$x
+             }
+
+           } else {
              # set rev y
              group_i_revdata$y <- rev(group_i_revdata$y)
              group_i_revdata$violinwidth <- rev(group_i_revdata$violinwidth)
@@ -50,19 +95,7 @@ loonLayer.GeomViolin <- function(widget,
              group_i_revdata$x <- c(group_i_revdata.x, seq(group_i_revdata.x[n], group_i_data.x[1], length.out = seqLength))
              group_i_newdata <- rbind(group_i_data, group_i_revdata)
 
-             method <- get_stat_param(layerGeom, "kernel", ...)
-
-             loonLayer.GeomPolygon(widget,
-                                   layerGeom,
-                                   group_i_newdata,
-                                   ggplotPanel_params,
-                                   ggObj,
-                                   special,
-                                   parent = violinGroup,
-                                   label = paste(c("density", method)))
-
-             # newdata <- rbind(newdata, group_i_newdata)
-             if (!is.null(layerGeom$geom_params$draw_quantiles)) {
+             if (show_quantiles) {
 
                quantiles <- layerGeom$geom_params$draw_quantiles
 
@@ -83,18 +116,32 @@ loonLayer.GeomViolin <- function(widget,
                linesData$x <- linesData$x - linesData$violinwidth/2
                linesData$xend <- linesData$x + linesData$violinwidth
                linesData$yend <- linesData$y
-
-               loonLayer.GeomSegment(widget,
-                                     layerGeom,
-                                     linesData,
-                                     ggplotPanel_params,
-                                     ggObj,
-                                     special,
-                                     parent = violinGroup,
-                                     label = "quantile")
              }
-           })
-  } else NULL
+           }
+
+
+           method <- get_stat_param(layerGeom, "kernel", ...)
+
+           loonLayer.GeomPolygon(widget,
+                                 layerGeom,
+                                 group_i_newdata,
+                                 ggplotPanel_params,
+                                 ggObj,
+                                 special,
+                                 parent = violinGroup,
+                                 label = paste(c("density", method)))
+
+           if(show_quantiles)
+             loonLayer.GeomSegment(widget,
+                                   layerGeom,
+                                   linesData,
+                                   ggplotPanel_params,
+                                   ggObj,
+                                   special,
+                                   parent = violinGroup,
+                                   label = "quantile")
+
+         })
 }
 
 loonLayer.GeomRug <- function(widget,
@@ -197,40 +244,62 @@ loonLayer.GeomBoxplot <- function(widget,
                                   label = NULL,
                                   ...){
 
-  if(dim(data)[1] != 0) {
-    n <- dim(data)[1]
+  if(dim(data)[1] == 0) return(NULL)
 
-    if(parent == "root") {
-      parent <- loon::l_layer_group(widget,
-                                    label = label %||% "boxplots")
-    }
+  n <- dim(data)[1]
 
-    lapply(1:n,
-           function(i){
-             mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = "boxplot",
-                                              label = label,
-                                              i = if(n == 1) NULL else i)
+  if(parent == "root") {
+    parent <- loon::l_layer_group(widget,
+                                  label = label %||% "boxplots")
+  }
 
-             boxplotGroup <- loon::l_layer_group(widget,
-                                                 label = mappingLabel,
-                                                 parent = parent)
-             # rectangulars
-             rectData <- data[i, ]
+  lapply(1:n,
+         function(i){
+           mappingLabel <- get_mappingLabel(layerGeom,
+                                            name = "boxplot",
+                                            label = label,
+                                            i = if(n == 1) NULL else i)
+
+           boxplotGroup <- loon::l_layer_group(widget,
+                                               label = mappingLabel,
+                                               parent = parent)
+           # rect data
+           rectData <- data[i, ]
+           # lines data
+           linesData <- data[rep(i, 3), ]
+
+           flipped_aes <- any(rectData$flipped_aes) %||% FALSE
+
+           if(flipped_aes) {
+
+             # **the boxplot is horizontal**
+             rectData$xmin <- data[i, ]$xlower
+             rectData$xmax <- data[i, ]$xupper
+
+             # lower 25%
+             linesData$x <- linesData$xmin
+             linesData$xend <- linesData$xlower
+             linesData$yend <- linesData$y
+
+             # upper 75%
+             linesData[2, ]$x <- linesData[1, ]$xupper
+             linesData[2, ]$xend <- linesData[1, ]$xmax
+
+             # 50%
+             linesData[3, ]$x <- linesData[3, ]$xend <- linesData[1, ]$xmiddle
+             linesData[3, ]$y <- linesData[1, ]$ymin
+             linesData[3, ]$yend <- linesData[1, ]$ymax
+
+           } else {
+
+             # **the boxplot is vertical**
+             ## lower represents ylower
+             ## upper represents yupper
+
              rectData$ymin <- data[i, ]$lower
              rectData$ymax <- data[i, ]$upper
 
-             loonLayer.GeomRect(widget,
-                                layerGeom,
-                                rectData,
-                                ggplotPanel_params,
-                                ggObj,
-                                special,
-                                parent = boxplotGroup,
-                                label = "box")
-
-             # lines lower 25%
-             linesData <- data[rep(i, 3), ]
+             # lower 25%
              linesData$y <- linesData$ymin
              linesData$yend <- linesData$lower
              linesData$xend <- linesData$x
@@ -243,27 +312,43 @@ loonLayer.GeomBoxplot <- function(widget,
              linesData[3, ]$y <- linesData[3, ]$yend <- linesData[1, ]$middle
              linesData[3, ]$x <- linesData[1, ]$xmin
              linesData[3, ]$xend <- linesData[1, ]$xmax
+           }
+           loonLayer.GeomRect(widget,
+                              layerGeom,
+                              rectData,
+                              ggplotPanel_params,
+                              ggObj,
+                              special,
+                              parent = boxplotGroup,
+                              label = "box")
 
-             method <- get_stat_param(layerGeom, "coef", ...)
+           method <- get_stat_param(layerGeom, "coef", ...)
 
-             loonLayer.GeomSegment(widget,
-                                   layerGeom,
-                                   linesData,
-                                   ggplotPanel_params,
-                                   ggObj,
-                                   special,
-                                   parent = boxplotGroup,
-                                   label = paste(c("quantile", method)))
+           loonLayer.GeomSegment(widget,
+                                 layerGeom,
+                                 linesData,
+                                 ggplotPanel_params,
+                                 ggObj,
+                                 special,
+                                 parent = boxplotGroup,
+                                 label = paste(c("quantile", method)))
 
-             # points layer
-             if (length(data[i, ]$outliers[[1]]) != 0) {
-               pointsData <- data[rep(i, length(data[i,]$outliers[[1]])), ]
+           # points layer
+           if (length(data[i, ]$outliers[[1]]) != 0) {
+
+             pointsData <- data[rep(i, length(data[i,]$outliers[[1]])), ]
+
+             if(flipped_aes)
+               pointsData$x <- unlist(data[i, ]$outliers)
+             else
                pointsData$y <- unlist(data[i, ]$outliers)
-               if( !is.null(layerGeom$geom_params$outlier.colour) ) pointsData$colour <- layerGeom$geom_params$outlier.colour
-               if( !is.null(layerGeom$geom_params$outlier.fill)) pointsData$fill <- layerGeom$geom_params$outlier.fill
-               pointsData$shape <- layerGeom$geom_params$outlier.shape
-               pointsData$size <- layerGeom$geom_params$outlier.size
 
+             if( !is.null(layerGeom$geom_params$outlier.colour) ) pointsData$colour <- layerGeom$geom_params$outlier.colour
+             if( !is.null(layerGeom$geom_params$outlier.fill)) pointsData$fill <- layerGeom$geom_params$outlier.fill
+             pointsData$size <- layerGeom$geom_params$outlier.size
+             pointsData$shape <- layerGeom$geom_params$outlier.shape
+
+             if(all(!is.na(pointsData$shape)) && all(!is.na(pointsData$size))) {
                loonLayer.GeomPoint(widget,
                                    layerGeom,
                                    pointsData,
@@ -273,8 +358,8 @@ loonLayer.GeomBoxplot <- function(widget,
                                    parent = boxplotGroup,
                                    label = "points")
              }
-           })
-  } else NULL
+           }
+         })
 }
 
 
@@ -819,42 +904,48 @@ loonLayer.GeomRibbon <- function(widget,
                                  label = NULL,
                                  ...){
 
-  if(dim(data)[1] != 0) {
+  if(dim(data)[1] == 0) return(NULL)
 
-    if(parent == "root") {
-      parent <- loon::l_layer_group(widget,
-                                    label = label %||% "ribbons")
-    }
+  if(parent == "root") {
+    parent <- loon::l_layer_group(widget,
+                                  label = label %||% "ribbons")
+  }
 
-    uniGroup <- unique(data$group)
-    m <- length(uniGroup)
+  uniGroup <- unique(data$group)
+  m <- length(uniGroup)
 
-    lapply(1:m,
-           function(i){
-             d <- data[data$group == uniGroup[i], ]
-             n <- dim(d)[1]
-             seqLength <- 20
-             nd <- rbind(d, d[rep(n, seqLength), ], d)
+  lapply(1:m,
+         function(i){
+           d <- data[data$group == uniGroup[i], ]
+           n <- dim(d)[1]
+           seqLength <- 20
+           nd <- rbind(d, d[rep(n, seqLength), ], d)
+
+           flipped_aes <- any(nd$flipped_aes) %||% FALSE
+           if(flipped_aes) {
+             nd$y <- c(d$y, rep(d$y[n], seqLength), rev(d$y))
+             nd$x <- c(d$xmin, seq(d$xmin[n], d$xmax[n], length.out = seqLength), rev(d$xmax))
+           } else {
              nd$x <- c(d$x, rep(d$x[n], seqLength), rev(d$x))
              nd$y <- c(d$ymin, seq(d$ymin[n], d$ymax[n], length.out = seqLength), rev(d$ymax))
+           }
 
-             method <- get_stat_param(layerGeom, ...)
+           method <- get_stat_param(layerGeom, ...)
 
-             mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = method %||% "ribbon",
-                                              label = label,
-                                              i = if(m == 1) NULL else i)
+           mappingLabel <- get_mappingLabel(layerGeom,
+                                            name = method %||% "ribbon",
+                                            label = label,
+                                            i = if(m == 1) NULL else i)
 
-             loonLayer.GeomPolygon(widget,
-                                   layerGeom,
-                                   nd,
-                                   ggplotPanel_params,
-                                   ggObj,
-                                   special,
-                                   parent = parent,
-                                   label = mappingLabel)
-           })
-  } else NULL
+           loonLayer.GeomPolygon(widget,
+                                 layerGeom,
+                                 nd,
+                                 ggplotPanel_params,
+                                 ggObj,
+                                 special,
+                                 parent = parent,
+                                 label = mappingLabel)
+         })
 }
 
 loonLayer.GeomDensity <- function(widget,

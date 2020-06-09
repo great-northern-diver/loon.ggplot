@@ -1,18 +1,13 @@
 
 CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
 
-  panel.background_fill <- if(is.null(theme$panel.background$fill) & length(theme) == 0)  {
-    widget['guidesBackground']
-  } else hex6to12(theme$panel.background$fill)
+  panel.background_fill <- theme$panel.background$fill %||% widget['guidesBackground']
 
-  panel.guideline_color <- if(is.null(theme$panel.grid$colour)) {
-    widget['guidelines']
-  } else hex6to12(theme$panel.grid$colour)
+  panel.guideline_color <- theme$panel.grid$colour %||% widget['guidelines']
 
-  axis.text_color <- if(is.null(theme$axis.text$colour)) {
-    widget['foreground']
-  } else hex6to12(theme$axis.text$colour)
+  axis.text_color <- theme$axis.text$colour %||% widget['foreground']
   # as.loon_axisSize is in the file polarGuides.R
+
   axis.text_size <- as.loon_axisSize(as.numeric(theme$axis.text$size))
 
   if (swapAxes) {
@@ -39,11 +34,13 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
 
     # x labels
     x.major_source <- ggplotPanel_params$x.major_source
-    x.labels <- ggplotPanel_params$x.labels
+    x.labels <- ggplotPanel_params$x.labels %||% ggplotPanel_params$x.sec$limits
+    if(is.numeric(x.labels)) x.labels <- x.major_source
 
     # y labels
     y.major_source <- ggplotPanel_params$y.major_source
-    y.labels <- ggplotPanel_params$y.labels
+    y.labels <- ggplotPanel_params$y.labels %||% ggplotPanel_params$y.sec$limits
+    if(is.numeric(y.labels)) y.labels <- y.major_source
 
     # drawing lines
     x.minor_source <- ggplotPanel_params$x.minor_source %||% x.major_source

@@ -43,7 +43,6 @@ modify_loon_plots <- function(plots_info = list()) {
                if(names(args)[j] == "linkingKey") NULL
                else if(names(args)[j] == "linkingGroup") NULL
                else if(names(args)[j] == "itemLabel") NULL
-               else if(names(args)[j] == "sync") NULL
                else args[[j]]
              }
            }

@@ -45,7 +45,7 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
                       zoomY = zoomY)
   }
 
-  # set theme
+  ######################################## set theme ########################################
   if(length(theme) == 0) {
     # default theme: white guide lines, grey92 guidesBackground
     background.color <- loonPlot['background']

@@ -75,7 +75,7 @@ The glyph geom is used to create scatterplots with a variety glyphs such as poly
 }
 \examples{
 # image glyph
-\dontrun{
+\donttest{
 if(requireNamespace("png")) {
   img_paths <- list.files(file.path(find.package(package = 'loon'), "images"), full.names = TRUE)
   images <- lapply(img_paths, function(path) png::readPNG(path))

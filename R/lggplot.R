@@ -13,12 +13,14 @@
 #' @seealso \code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.lggplot}}
 #' @export
 #' @examples
-#' p <- lggplot(mpg, aes(displ, cty)) +
-#'   geom_point() +
-#'   facet_grid(rows = vars(drv))
-#' # p is a `lggplot` object, `print.lggplot(p)` is called automatically.
-#' # Then, the `lggplot` object will be transformed to a `loon` widget
-#' p
+#' if(interactive()) {
+#'   p <- lggplot(mpg, aes(displ, cty)) +
+#'      geom_point() +
+#'      facet_grid(rows = vars(drv))
+#'   # p is a `lggplot` object, `print.lggplot(p)` is called automatically.
+#'   # Then, the `lggplot` object will be transformed to a `loon` widget
+#'   p
+#' }
 #' \dontrun{
 #'   # get widgets from current path
 #'   # suppose the path of `p` is '.l0.ggplot'

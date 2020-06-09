@@ -136,7 +136,7 @@ get_loon_plots_info <- function(plots_info = list(),
                                          colSubtitle,
                                          rowSubtitle), collapse = "\n")
 
-                    if (len_layers != 0) {
+                    if (len_layers > 0) {
                       importantLayers <- get_importantLayers(len_layers, ggObj, isCoordPolar)
 
                       boxplotLayers <- importantLayers$boxplotLayers
@@ -230,8 +230,7 @@ get_loon_plots_info <- function(plots_info = list(),
                                                                                       curveLayers = curveLayers))
                                                 )
                                               }
-                                            }
-                      )
+                                            })
 
                       # recover the points or histogram layer to the original position
                       if(length(activeGeomLayers) != len_layers & length(activeGeomLayers) != 0) {
@@ -290,6 +289,35 @@ get_loon_plots_info <- function(plots_info = list(),
                       }
                       for(j in col.start:(col.start + span - 1)) {
                         tcltk::tkgrid.columnconfigure(parent, j, weight=1)
+                      }
+                    }
+
+                    ## After version 3.3.0, ggplot has a significant change.
+                    ## In the past
+                    ## p <- ggplot(mtcars, aes(y = hp)) +
+                    ##        geom_histogram()
+                    ## this would not work (give an error).
+                    ## However, after version 3.3.0
+                    ## this will produce a swapAxes histogram
+                    ## In other words, if we want to flip a histogram,
+                    ## rather than pipe through function `coord_flip()`
+                    ## we can set mapping systems as `aes(y = variable)`.
+                    if(loonPlot['swapAxes'] != swapAxes) {
+                      # the situation we described before happens
+                      swapAxes <- loonPlot['swapAxes']
+
+                      if(!isCoordPolar && !ggGuides) {
+                        temp <- panX
+                        panX <- panY
+                        panY <- temp
+
+                        temp <- zoomX
+                        zoomX <- zoomY
+                        zoomY <- temp
+
+                        temp <- deltaX
+                        deltaX <- deltaY
+                        deltaY <- temp
                       }
                     }
                     # loonPlot_configure does not produce anything but just configure the loon plot

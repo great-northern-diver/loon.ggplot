@@ -1,4 +1,4 @@
-pch_to_glyph <- function(pch, alpha) {
+pch_to_glyph <- function(pch, alpha = NULL) {
   len <- length(pch)
 
   switchPch <- function(pch){
@@ -25,7 +25,7 @@ pch_to_glyph <- function(pch, alpha) {
 
   vapply(1:len,
          function(i) {
-           if(is.na(alpha[i])){
+           if(is.na(alpha[i]) || is.null(alpha[i])){
              switchPch(pch[i])
            } else {
              if(alpha[i] < 0.5 ){

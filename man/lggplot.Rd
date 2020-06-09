@@ -24,12 +24,14 @@ S3 method \code{print.ggplot} is rendered, however, if a \code{lggplot} object i
 S3 method \code{print.lggplot} will be rendered which will return a \code{loon} widget
 }
 \examples{
-p <- lggplot(mpg, aes(displ, cty)) +
-  geom_point() +
-  facet_grid(rows = vars(drv))
-# p is a `lggplot` object, `print.lggplot(p)` is called automatically.
-# Then, the `lggplot` object will be transformed to a `loon` widget
-p
+if(interactive()) {
+  p <- lggplot(mpg, aes(displ, cty)) +
+     geom_point() +
+     facet_grid(rows = vars(drv))
+  # p is a `lggplot` object, `print.lggplot(p)` is called automatically.
+  # Then, the `lggplot` object will be transformed to a `loon` widget
+  p
+}
 \dontrun{
   # get widgets from current path
   # suppose the path of `p` is '.l0.ggplot'

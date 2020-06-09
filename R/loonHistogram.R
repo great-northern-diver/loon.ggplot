@@ -20,9 +20,21 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
   ## panel i hist values
   hist_data <- ggBuild$data[[activeGeomLayers]]
   hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
-  binwidth_vec <- hist_data$xmax - hist_data$xmin
-  binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
-  hist_x <- as.numeric(rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame))
+
+  flipped_aes <- any(hist_data$flipped_aes) %||% FALSE
+  if(flipped_aes) {
+    binwidth_vec <- hist_data$ymax - hist_data$ymin
+    binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
+    hist_x <- as.numeric(rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame))
+    # label swap
+    temp <- xlabel
+    xlabel <- ylabel
+    ylabel <- temp
+  } else {
+    binwidth_vec <- hist_data$xmax - hist_data$xmin
+    binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
+    hist_x <- as.numeric(rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame))
+  }
   # facet index
   facet_id <- catch_facet_id(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
                              layout, ggLayout, panelIndex, dataFrame)
@@ -32,7 +44,7 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
   x.limits <- ggBuild$layout$panel_scales_x[[1]]$limits
   y.limits <- ggBuild$layout$panel_scales_y[[1]]$limits
 
-  bin_info <- catch_bin_info(hist_values, hist_data, x.limits, y.limits,
+  bin_info <- catch_bin_info(hist_values, hist_data, flipped_aes, x.limits, y.limits,
                              facet_id, in_limits, dataFrame, ggObj,
                              activeGeomLayers,
                              panelIndex = panelIndex,
@@ -51,6 +63,14 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
   } else {
     showOutlines <- FALSE
     colorOutline <- ("black")
+  }
+
+  if(swapAxes) {
+    if(flipped_aes) swapAxes <- FALSE
+    else swapAxes <- TRUE
+  } else {
+    if(flipped_aes) swapAxes <- TRUE
+    else swapAxes <- FALSE
   }
 
   # loon histogram
@@ -82,7 +102,18 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
 
   hist_data <- ggBuild$data[[activeGeomLayers]]
   hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
-  hist_x <- rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame)
+
+  flipped_aes <- any(hist_data$flipped_aes) %||% FALSE
+  if(flipped_aes) {
+    hist_x <- rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame)
+    # label swap
+    temp <- xlabel
+    xlabel <- ylabel
+    ylabel <- temp
+  } else {
+    hist_x <- rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame)
+  }
+
   # grab the facet index
   facet_id <- catch_facet_id(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
                              layout, ggLayout, panelIndex, dataFrame)
@@ -95,9 +126,13 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
   # y.limits is a num
   y.limits <- ggBuild$layout$panel_scales_y[[1]]$limits
 
-  bin_info <- catch_bin_info(hist_values, hist_data, x.limits, y.limits,
-                             facet_id, in_limits, dataFrame, ggObj,
-                             activeGeomLayers)
+  bin_info <- catch_bin_info(hist_values = hist_values,
+                             hist_data = hist_data,
+                             flipped_aes = flipped_aes,
+                             x.limits = x.limits, y.limits = y.limits,
+                             facet_id = facet_id, in_limits = in_limits,
+                             dataFrame = dataFrame, ggObj = ggObj,
+                             activeGeomLayers = activeGeomLayers)
 
   hist_values <- bin_info$hist_values
   fill <- bin_info$fill
@@ -111,6 +146,14 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
   } else {
     showOutlines <- FALSE
     colorOutline <- ("black")
+  }
+
+  if(swapAxes) {
+    if(flipped_aes) swapAxes <- FALSE
+    else swapAxes <- TRUE
+  } else {
+    if(flipped_aes) swapAxes <- TRUE
+    else swapAxes <- FALSE
   }
 
   # loon histogram
@@ -136,7 +179,7 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
 
 # catch_bin_info is mainly used to catch the order of the stacked bins
 # when users set ylim or xlim, the bins would change.
-catch_bin_info <- function(hist_values, hist_data, x.limits, y.limits,
+catch_bin_info <- function(hist_values, hist_data, flipped_aes = FALSE, x.limits, y.limits,
                            facet_id, in_limits, dataFrame,
                            ggObj, activeGeomLayers, ...) {
 
@@ -144,7 +187,7 @@ catch_bin_info <- function(hist_values, hist_data, x.limits, y.limits,
   UseMethod("catch_bin_info", x)
 }
 
-catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
+catch_bin_info.StatBin <- function(hist_values, hist_data, flipped_aes, x.limits, y.limits,
                                    facet_id, in_limits, dataFrame,
                                    ggObj, activeGeomLayers, ...) {
   args <- list(...)
@@ -152,21 +195,10 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
   ggplotPanel_params <- args$ggplotPanel_params
   binwidth <- args$binwidth
 
-  # histogram start value, end value
-  start_value <- min(hist_data$xmin[hist_data$ymax != 0],
-                     na.rm = TRUE)
-  end_value <- max(hist_data$xmax, na.rm = TRUE)
-  in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
+  position <- ggObj$layers[[activeGeomLayers]]$position
+  reverse <- position$reverse %||% FALSE
 
-  if (!is.null(x.limits)) {
-    if(is.na(x.limits[1])) x.limits[1] <- ggplotPanel_params[[panelIndex]]$x.range[1]
-    if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[panelIndex]]$x.range[2]
-    in_x.limits <- hist_values > x.limits[1] & hist_values < x.limits[2]
-  }
-
-  if (!is.null(y.limits)) {
-    if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanel_params[[panelIndex]]$y.range[1])
-    if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[panelIndex]]$y.range[2]
+  getBins <- function(start_value, end_value, binwidth, hist_values, limits, in_limits) {
     bins <- 0
     while ((start_value + bins * binwidth) <= end_value) {
 
@@ -179,11 +211,71 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
       }
       bin_height <- length(bin_id)
       if (bin_height != 0) {
-        if(bin_height < y.limits[1] | bin_height > y.limits[2]) {
-          in_y.limits[bin_id] <- FALSE
+        if(bin_height < limits[1] | bin_height > limits[2]) {
+          in_limits[bin_id] <- FALSE
         }
       }
       bins <- bins + 1
+    }
+    return(
+      list(
+        bins = bins,
+        in_limits = in_limits
+      )
+    )
+  }
+
+  # histogram start value, end value
+  if(flipped_aes) {
+
+    start_value <- min(hist_data$ymin[hist_data$xmax != 0],
+                       na.rm = TRUE)
+    end_value <- max(hist_data$ymax, na.rm = TRUE)
+    in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
+
+    if (!is.null(y.limits)) {
+      if(is.na(y.limits[1])) y.limits[1] <- ggplotPanel_params[[panelIndex]]$y.range[1]
+      if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[panelIndex]]$y.range[2]
+      in_y.limits <- (hist_values > y.limits[1]) & (hist_values < y.limits[2])
+    }
+
+    if (!is.null(x.limits)) {
+      if(is.na(x.limits[1])) x.limits[1] <- max(0, ggplotPanel_params[[panelIndex]]$x.range[1])
+      if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[panelIndex]]$x.range[2]
+      binsLim <- getBins(start_value = start_value,
+                         end_value = end_value,
+                         binwidth = binwidth,
+                         hist_values = hist_values,
+                         limits = x.limits,
+                         in_limits = in_x.limits)
+      bins <- binsLim$bins
+      in_x.limits <- binsLim$in_limits
+    }
+
+  } else {
+    start_value <- min(hist_data$xmin[hist_data$ymax != 0],
+                       na.rm = TRUE)
+    end_value <- max(hist_data$xmax, na.rm = TRUE)
+    in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
+
+    if (!is.null(x.limits)) {
+      if(is.na(x.limits[1])) x.limits[1] <- ggplotPanel_params[[panelIndex]]$x.range[1]
+      if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[panelIndex]]$x.range[2]
+      in_x.limits <- hist_values > x.limits[1] & hist_values < x.limits[2]
+    }
+
+    if (!is.null(y.limits)) {
+      if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanel_params[[panelIndex]]$y.range[1])
+      if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[panelIndex]]$y.range[2]
+
+      binsLim <- getBins(start_value = start_value,
+                         end_value = end_value,
+                         binwidth = binwidth,
+                         hist_values = hist_values,
+                         limits = y.limits,
+                         in_limits = in_y.limits)
+      bins <- binsLim$bins
+      in_y.limits <- binsLim$in_limits
     }
   }
   in_limits <- in_x.limits & in_y.limits
@@ -203,7 +295,7 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
     fill_var <- unlist(
       rlang::eval_tidy(rlang::quo(!!fill_quo),  dataFrame)
     )[facet_id][in_limits]
-    levels <- rev(levels(as.factor(fill_var)))
+    levels <- levels(as.factor(fill_var))
     if (length(uni_fill) == length(levels)) {
       fill <- rep(NA, length(hist_values))
       for(j in seq_len(length(levels))){
@@ -212,7 +304,26 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
     }
   }
 
-  colorStackingOrder <- c("selected", hex6to12(uni_fill))
+  if(ggplot2Version < "3.3.0") {
+
+    colorStackingOrder <- c("selected",
+                            if(reverse) {
+                              hex6to12(rev(uni_fill))
+                            } else {
+                              hex6to12(uni_fill)
+                            }
+    )
+
+  } else {
+
+    colorStackingOrder <- c("selected",
+                            if(reverse) {
+                              hex6to12(uni_fill)
+                            } else {
+                              hex6to12(rev(uni_fill))
+                            }
+    )
+  }
 
   list(
     fill = fill,
@@ -222,68 +333,127 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, x.limits, y.limits,
   )
 }
 
-catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
+catch_bin_info.StatCount <- function(hist_values, hist_data, flipped_aes, x.limits, y.limits,
                                      facet_id, in_limits, dataFrame,
                                      ggObj, activeGeomLayers, ...) {
 
   in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
   colorStackingOrder <- 'selected'
 
-  if (!is.null(x.limits)) {
-    in_x.limits <- hist_values %in% x.limits
-  }
-
   position <- ggObj$layers[[activeGeomLayers]]$position
-  operations <- position_operation(position,
-                                   hist_values,
-                                   activeGeomLayers,
-                                   sep = "&",
-                                   ggObj = ggObj,
-                                   dataFrame = dataFrame,
-                                   facet_id = facet_id)
+  reverse <- position$reverse %||% FALSE
 
-  fill_var <- operations$fill_var
-  hist_values <- operations$hist_values
-
-  if(!is.null(ggObj$labels$fill) && ggObj$labels$fill != ggObj$labels$x && is(position, "PositionStack")) {
-
-    y <- hist_data$y
-    levels_bar <- levels(factor(hist_values))
-
-    # ylim is set some y is dropped
-    if(any(is.na(y))) {
-      na_y <- is.na(y)
-      drops <- levels_bar[hist_data$x[na_y]]
-      drop_count <- hist_data$count[na_y]
-
-      group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
-        dplyr::group_by(fill, hist_values) %>%
-        dplyr::summarise(n = dplyr::n())
-
-      drop_fill <- group_by_table$fill[(group_by_table$hist_values %in% drops) &
-                                         (group_by_table$n %in% drop_count)]
-
-      in_y.limits <- !((hist_values %in% drops) & (fill_var %in% drop_fill))
-    }
-
-    in_limits <- in_y.limits & in_x.limits
-    hist_values <- hist_values[in_limits]
-    fill_var <- fill_var[in_limits]
-
-  } else {
+  if(flipped_aes) {
 
     if (!is.null(y.limits)) {
-      counts <- table(hist_values)
-      name_counts <- names(counts)
-
-      in_y.limits <- hist_values %in%
-        name_counts[y.limits[1] <= counts & y.limits[2] >= counts]
+      in_y.limits <- hist_values %in% y.limits
     }
-    in_limits <- in_y.limits & in_x.limits
-    hist_values <- hist_values[in_limits]
+
+    operations <- position_operation(position,
+                                     hist_values,
+                                     activeGeomLayers,
+                                     sep = "&",
+                                     ggObj = ggObj,
+                                     dataFrame = dataFrame,
+                                     facet_id = facet_id)
+
+    fill_var <- operations$fill_var
+    hist_values <- operations$hist_values
+
+    if(!is.null(ggObj$labels$fill) && ggObj$labels$fill != ggObj$labels$y && is(position, "PositionStack")) {
+
+      x <- hist_data$x
+      levels_bar <- levels(factor(hist_values))
+
+      # ylim is set some y is dropped
+      if(any(is.na(x))) {
+        na_x <- is.na(x)
+        drops <- levels_bar[hist_data$y[na_x]]
+        drop_count <- hist_data$count[na_x]
+
+        group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
+          dplyr::group_by(fill, hist_values) %>%
+          dplyr::summarise(n = dplyr::n())
+
+        drop_fill <- group_by_table$fill[(group_by_table$hist_values %in% drops) &
+                                           (group_by_table$n %in% drop_count)]
+
+        in_x.limits <- !((hist_values %in% drops) & (fill_var %in% drop_fill))
+      }
+
+      in_limits <- in_y.limits & in_x.limits
+      hist_values <- hist_values[in_limits]
+      fill_var <- fill_var[in_limits]
+
+    } else {
+
+      if (!is.null(x.limits)) {
+        counts <- table(hist_values)
+        name_counts <- names(counts)
+
+        in_x.limits <- hist_values %in%
+          name_counts[x.limits[1] <= counts & x.limits[2] >= counts]
+      }
+      in_limits <- in_y.limits & in_x.limits
+      hist_values <- hist_values[in_limits]
+    }
+
+  } else {
+    if (!is.null(x.limits)) {
+      in_x.limits <- hist_values %in% x.limits
+    }
+
+    operations <- position_operation(position,
+                                     hist_values,
+                                     activeGeomLayers,
+                                     sep = "&",
+                                     ggObj = ggObj,
+                                     dataFrame = dataFrame,
+                                     facet_id = facet_id)
+
+    fill_var <- operations$fill_var
+    hist_values <- operations$hist_values
+
+    if(!is.null(ggObj$labels$fill) && ggObj$labels$fill != ggObj$labels$x && is(position, "PositionStack")) {
+
+      y <- hist_data$y
+      levels_bar <- levels(factor(hist_values))
+
+      # ylim is set some y is dropped
+      if(any(is.na(y))) {
+        na_y <- is.na(y)
+        drops <- levels_bar[hist_data$x[na_y]]
+        drop_count <- hist_data$count[na_y]
+
+        group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
+          dplyr::group_by(fill, hist_values) %>%
+          dplyr::summarise(n = dplyr::n())
+
+        drop_fill <- group_by_table$fill[(group_by_table$hist_values %in% drops) &
+                                           (group_by_table$n %in% drop_count)]
+
+        in_y.limits <- !((hist_values %in% drops) & (fill_var %in% drop_fill))
+      }
+
+      in_limits <- in_y.limits & in_x.limits
+      hist_values <- hist_values[in_limits]
+      fill_var <- fill_var[in_limits]
+
+    } else {
+
+      if (!is.null(y.limits)) {
+        counts <- table(hist_values)
+        name_counts <- names(counts)
+
+        in_y.limits <- hist_values %in%
+          name_counts[y.limits[1] <= counts & y.limits[2] >= counts]
+      }
+      in_limits <- in_y.limits & in_x.limits
+      hist_values <- hist_values[in_limits]
+    }
   }
 
-  ggFill <- match_fill(hist_values, fill_var, hist_data)
+  ggFill <- match_fill(hist_values, fill_var, hist_data, flipped_aes = flipped_aes)
   fill_levels <- names(ggFill)
 
   fill <- rep(NA, length(hist_values))
@@ -291,7 +461,24 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, x.limits, y.limits,
     fill[which(fill_var %in% fill_levels[j])] <- ggFill[j]
   }
 
-  colorStackingOrder <- c("selected", hex6to12(rev(unique(ggFill))))
+  if(ggplot2Version < "3.3.0") {
+
+    colorStackingOrder <- c("selected",
+                            if(reverse)
+                              hex6to12(unique(ggFill))
+                            else
+                              hex6to12(rev(unique(ggFill)))
+    )
+
+  } else {
+
+    colorStackingOrder <- c("selected",
+                            if(reverse)
+                              hex6to12(ggFill[order(fill_levels)])
+                            else
+                              hex6to12(rev(ggFill[order(fill_levels)]))
+    )
+  }
 
   list(
     fill = fill,
@@ -416,16 +603,24 @@ catch_facet_id <- function(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
 }
 
 
-match_fill <- function(hist_values, fill_var, hist_data) {
+match_fill <- function(hist_values, fill_var, hist_data,
+                       flipped_aes = FALSE,
+                       ggplot2Version = utils::packageVersion("ggplot2")) {
 
-  aWeirdSymbol <- "<&&>"
-
-  group <- hist_data$group
+  symbol <- "<&&>"
   fill <- hist_data$fill
-  level <- levels(factor(paste(fill_var, hist_values, sep = aWeirdSymbol)))
 
-  x <- stats::setNames(fill[order(group)],
-                       vapply(strsplit(level, aWeirdSymbol), function(x) x[1], character(1)))
+  if(ggplot2Version < "3.3.0") {
+    level <- levels(factor(paste(fill_var, hist_values, sep = symbol)))
+
+    x <- stats::setNames(fill[order(hist_data$group)],
+                         vapply(strsplit(level, symbol), function(x) x[1], character(1)))
+  } else {
+    level <- levels(factor(paste(hist_values, fill_var, sep = symbol)))
+
+    x <- stats::setNames(if(flipped_aes) fill[order(hist_data$y)] else fill[order(hist_data$x)],
+                         vapply(strsplit(level, symbol), function(x) x[2], character(1)))
+  }
   x[!duplicated(names(x))]
 }
 
