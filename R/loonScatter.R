@@ -91,11 +91,16 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
 
     # some default settings, need more thought
     if(length(combined.pointsData$x) > 0 & length(combined.pointsData$y) > 0) {
-      combined.pointsData$x <- as.numeric(combined.pointsData$x)
+
+      if(!is.numeric(combined.pointsData$x))
+        combined.pointsData$x <- as.numeric(factor(combined.pointsData$x))
+      if(!is.numeric(combined.pointsData$y))
+        combined.pointsData$y <- as.numeric(factor(combined.pointsData$y))
+
       combined.pointsData$y <- as.numeric(combined.pointsData$y)
-      combined.pointsData$size <- 3
-      combined.pointsData$color <- "black"
-      combined.pointsData$glyph <- "circle"
+      combined.pointsData$size <- loon_default_setting("size")
+      combined.pointsData$color <- loon_default_setting("color")
+      combined.pointsData$glyph <- loon_default_setting("glyph")
       combined.pointsData$itemLabel <- itemLabel
       combined.pointsData$linkingKey <- linkingKey
     }

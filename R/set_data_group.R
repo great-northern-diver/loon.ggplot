@@ -53,7 +53,7 @@ set_data_group <- function(data = NULL,
       )
     },
     "radial" = {
-      radius <- default_radius()
+      radius <- loon_default_setting("radius")
       xpos <- 0.5
       ypos <- 0.5
       angle <- seq(0, 2 * base::pi, length.out = p + 1)[1:p]
