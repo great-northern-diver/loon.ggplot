@@ -23,7 +23,7 @@
 #' @param data a data frame to use for ggplot
 #' @param ggObj a ggplot object to be passed though
 #'
-#' @return a ggplot evaluate object
+#' @return a \code{ggplot} evaluate object
 #'
 #' @export
 #'
