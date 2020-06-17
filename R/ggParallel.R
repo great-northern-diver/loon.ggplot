@@ -33,7 +33,7 @@ ggParallelAes <- function(ggObj,
                        loon::l_getOption("background"),
                        loon::l_getOption("foreground"))
 
-  boundary_lineWidth <- 1.3
+  boundary_lineWidth <- loon_default_setting("boundaryLineWidth")
 
   ggObj <- ggObj +
     ggplot2::theme(
