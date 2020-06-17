@@ -53,19 +53,19 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
     panel.background_fill <- loonPlot['guidesBackground']
     panel.guideline_color <- loonPlot['guidelines']
   } else {
-    background.color <- if (is.null(theme$plot.background$colour)) {
-      loonPlot['background']
-    } else hex6to12(theme$plot.background$colour)
 
-    text.color <- if (is.null(theme$text$colour)) {
-      loonPlot['foreground']
-    } else hex6to12(theme$text$colour)
+    background.color <- theme$plot.background$colour %||% loonPlot['background']
+    text.color <- theme$text$colour %||% loonPlot['foreground']
 
-    panel.background_fill <- if(is.null(theme$panel.background$fill)) {
+    panel.background_fill <- theme$panel.background$fill %||% {
       if(is(theme$panel.background, "NULL")) {
-        if(is(theme$rect, "element_blank")) "white" else "grey92"
-      } else "white"
-    } else hex6to12(theme$panel.background$fill)
+        if(is(theme$rect, "element_blank"))
+          loon::l_getOption("background")
+        else
+          loon::l_getOption("guidesBackground")
+      } else
+        loon::l_getOption("background")
+    }
 
     panel.guideline_color <- if(is.null(theme$panel.grid$colour)) {
       major_guideline_color <- hex6to12(theme$panel.grid.major$colour)
@@ -76,11 +76,17 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
         minor_guideline_color
       } else loonPlot['guidelines']
     } else {
-      if(length(theme$panel.grid.major) == 0 & length(theme$panel.grid.minor) == 0) {
-        "white"
-      } else hex6to12(theme$panel.grid$colour)
+      if(length(theme$panel.grid.major) == 0 & length(theme$panel.grid.minor) == 0)
+        loon::l_getOption("background")
+      else
+        hex6to12(theme$panel.grid$colour)
     }
   }
+
+  if(is.na(background.color)) background.color <- loonPlot['background']
+  if(is.na(text.color)) text.color <- loonPlot['foreground']
+  if(is.na(panel.background_fill)) panel.background_fill <- loonPlot['guidesBackground']
+  if(is.na(panel.guideline_color)) panel.guideline_color <- loonPlot['guidelines']
 
   loon::l_configure(loonPlot,
                     background = background.color,
