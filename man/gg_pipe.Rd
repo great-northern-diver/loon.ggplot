@@ -12,7 +12,7 @@ gg_pipe(data, ggObj)
 \item{ggObj}{a ggplot object to be passed though}
 }
 \value{
-a ggplot evaluate object
+a \code{ggplot} evaluate object
 }
 \description{
 Pack a \code{ggplot} object forward to \code{ggplot2loon} expressions
