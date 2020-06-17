@@ -23,6 +23,8 @@
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
 #'
+#' @return a \code{loon} single or compound widget
+#'
 #'
 #' @import ggplot2 tcltk loon methods grid rlang
 #' @importFrom stats quantile approxfun integrate setNames na.omit
