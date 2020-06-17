@@ -474,9 +474,9 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, flipped_aes, x.limi
 
     colorStackingOrder <- c("selected",
                             if(reverse)
-                              hex6to12(ggFill[order(fill_levels)])
+                              hex6to12(unique(ggFill[order(fill_levels)]))
                             else
-                              hex6to12(rev(ggFill[order(fill_levels)]))
+                              hex6to12(unique(rev(ggFill[order(fill_levels)])))
     )
   }
 
