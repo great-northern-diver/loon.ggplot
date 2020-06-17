@@ -7,6 +7,8 @@
 #'
 #' @seealso \code{\link{ggplot2loon}}
 #'
+#' @return a numerical vector of indicies (which layer can be interactive)
+#'
 #' @examples
 #' \donttest{
 #'   df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))

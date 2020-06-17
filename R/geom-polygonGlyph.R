@@ -29,6 +29,8 @@
 #' \item{stroke}
 #' \item{linetype}
 #' }
+#'
+#' @return a \code{geom} layer
 #' @export
 #' @seealso \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
 #' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}

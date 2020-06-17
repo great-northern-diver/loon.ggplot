@@ -9,6 +9,9 @@ get_activeGeomLayers(ggObj)
 \arguments{
 \item{ggObj}{a ggplot object}
 }
+\value{
+a numerical vector of indicies (which layer can be interactive)
+}
 \description{
 `get_activeGeomLayers` will return the geom layer index which can be active
 }
