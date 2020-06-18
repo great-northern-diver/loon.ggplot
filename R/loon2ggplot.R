@@ -8,7 +8,7 @@
 #' the remaining objects by their ids.
 #' @param ... arguments used inside \code{loon2ggplot()}, not used by this method
 #'
-#' @return a ggplot object
+#' @return a \code{ggplot} object
 #'
 #' @export
 #' @examples

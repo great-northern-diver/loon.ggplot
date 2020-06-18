@@ -14,7 +14,7 @@
 #'
 #' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
 #' \code{\link{geom_serialAxesGlyph}}
-#'
+#' @return a \code{geom} layer
 #' @examples
 #' # text glyph
 #' p <- ggplot(data = data.frame(x = 1:26, y = 1:26),

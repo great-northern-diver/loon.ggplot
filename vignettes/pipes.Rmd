@@ -9,7 +9,7 @@ geometry: margin=.75in
 urlcolor: blue
 graphics: yes
 vignette: >
-  %\VignetteIndexEntry{pipes}
+  %\VignetteIndexEntry{Pipes}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   
@@ -201,7 +201,7 @@ obj <- mtcars %>%
   mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
   select(weight, lp100km) %>%
   # replace `ggplot` to `lggplot`
-  lggplot(aes(x = weight, y = lp100km)) +
+  l_ggplot(aes(x = weight, y = lp100km)) +
   geom_point() +
   ylab("Litres per 100 kilometres") +
   ggtitle("Gas usage")

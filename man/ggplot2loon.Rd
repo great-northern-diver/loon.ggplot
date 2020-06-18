@@ -48,6 +48,9 @@ This is translated to a row/column span = 1 / exteriorLabelProportion for the pl
 
 \item{canvasWidth}{the width of canvas}
 }
+\value{
+a \code{loon} single or compound widget
+}
 \description{
 Create an interactive `loon` widget from a \code{ggplot} object
 }

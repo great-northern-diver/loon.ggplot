@@ -10,7 +10,16 @@ is.ggmatrix_plot_obj <- function(x) {
   inherits(x, "ggmatrix_plot_obj")
 }
 
-default_radius <- function() 0.5
+# default aesthetics attributes in loon
+loon_default_setting <- function(x) {
+  switch(x,
+         "color" = "grey60",
+         "size" = 4,
+         "glyph" =  "ccircle",
+         "linewidth" = 1,
+         "radius" = 0.5,
+         "boundaryLineWidth" = 1.3)
+}
 
 is.color <- function(colors) {
 

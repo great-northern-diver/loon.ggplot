@@ -23,6 +23,7 @@
 #'
 #' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_imageGlyph}}, \code{\link{geom_pointrangeGlyph}},
 #' \code{\link{geom_textGlyph}}
+#' @return a \code{geom} layer
 #'
 #' @examples
 #' # serial axes glyph

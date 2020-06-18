@@ -29,9 +29,9 @@ ggRadialAes <- function(ggObj,
 
   xpos <- 0.5
   ypos <- 0.5
-  radius <- default_radius()
+  radius <- loon_default_setting("radius")
 
-  boundary_lineWidth <- 1.3
+  boundary_lineWidth <- loon_default_setting("boundaryLineWidth")
 
   panel_bg_fill <- ifelse(showGuides,
                           loon::l_getOption("canvas_bg_guides"),
@@ -150,7 +150,7 @@ ggRadialSerialAxes <- function(ggObj,
 
   xpos <- 0.5
   ypos <- 0.5
-  radius <- default_radius()
+  radius <- loon_default_setting("radius")
 
   # set scaledData
   scaling <- match.arg(scaling)

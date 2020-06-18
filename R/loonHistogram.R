@@ -461,6 +461,12 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, flipped_aes, x.limi
     fill[which(fill_var %in% fill_levels[j])] <- ggFill[j]
   }
 
+  if(length(hist_values) < length(fill)) {
+    hist_values <- rep_len(hist_values, length(fill))
+  } else if(length(hist_values) > length(fill)) {
+    fill <- rep_len(fill, length(hist_values))
+  } else NULL
+
   if(ggplot2Version < "3.3.0") {
 
     colorStackingOrder <- c("selected",
@@ -474,9 +480,9 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, flipped_aes, x.limi
 
     colorStackingOrder <- c("selected",
                             if(reverse)
-                              hex6to12(ggFill[order(fill_levels)])
+                              hex6to12(unique(ggFill[order(fill_levels)]))
                             else
-                              hex6to12(rev(ggFill[order(fill_levels)]))
+                              hex6to12(unique(rev(ggFill[order(fill_levels)])))
     )
   }
 

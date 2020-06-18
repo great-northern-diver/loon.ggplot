@@ -1,5 +1,5 @@
 #' @title Automatically create a loon widget
-#' @description \code{lggplot} wraps function \code{ggplot} with assigning a new class "lggplot" to the output
+#' @description \code{l_ggplot()} wraps function \code{ggplot} with assigning a new class "lggplot" to the output
 #' \code{ggplot} object and returns a \code{lggplot} object. When a \code{ggplot} object is processed,
 #' S3 method \code{print.ggplot} is rendered, however, if a \code{lggplot} object is processed,
 #' S3 method \code{print.lggplot} will be rendered which will return a \code{loon} widget
@@ -12,9 +12,11 @@
 #' @param environment DEPRECATED. Used prior to tidy evaluation.
 #' @seealso \code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.lggplot}}
 #' @export
+#' @return It will return a \code{lggplot} object with class \code{c("lggplot", "gg", "ggplot")}.
+#' Then print a \code{loon} plot automatically.
 #' @examples
 #' if(interactive()) {
-#'   p <- lggplot(mpg, aes(displ, cty)) +
+#'   p <- l_ggplot(mpg, aes(displ, cty)) +
 #'      geom_point() +
 #'      facet_grid(rows = vars(drv))
 #'   # p is a `lggplot` object, `print.lggplot(p)` is called automatically.
@@ -28,14 +30,14 @@
 #'   # q is a `loon` widget
 #'   q
 #' }
-lggplot <- function(data = NULL, mapping = aes(), ...,
+l_ggplot <- function(data = NULL, mapping = aes(), ...,
                     environment = parent.frame()) {
 
   p <- ggplot(data = data, mapping = mapping, ...,
               environment = environment)
 
   structure(p,
-            class = c("gg", "lggplot", "ggplot"))
+            class = c("lggplot", "gg", "ggplot"))
 }
 
 #' Explicitly draw plot
@@ -48,4 +50,16 @@ print.lggplot <- function(x, ...) {
   p <- ggplot2loon(x,
                    ...)
   invisible()
+}
+
+#' @title Automatically create a loon widget
+#' @export
+#' @description It is retired. See \code{\link{l_ggplot}}
+#' @inheritParams l_ggplot
+lggplot <- function(data = NULL, mapping = aes(), ...,
+                    environment = parent.frame()) {
+  warning("`lggplot()` is deprecated now. Please use `l_ggplot()`",
+          call. = FALSE)
+  l_ggplot(data = data, mapping = mapping, ...,
+           environment = environment)
 }

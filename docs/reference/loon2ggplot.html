@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -45,7 +49,6 @@
 <meta property="og:title" content="<code>loon</code> to <code>ggplot</code> — loon2ggplot" />
 <meta property="og:description" content="Create a ggplot object from a loon widget" />
 <meta property="og:image" content="/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -63,7 +66,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -112,7 +115,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/great-northern-diver/loon.ggplot/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -127,7 +135,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1><code>loon</code> to <code>ggplot</code></h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot.R'><code>R/loon2ggplot.R</code></a>, <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot_l_compound.R'><code>R/loon2ggplot_l_compound.R</code></a>, <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot_l_layer_graph.R'><code>R/loon2ggplot_l_layer_graph.R</code></a>, and 5 more</small>
     <div class="hidden name"><code>loon2ggplot.Rd</code></div>
     </div>
 
@@ -191,254 +199,19 @@ the remaining objects by their ids.</p></td>
     <p>a ggplot object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>l_plot</span>(<span class='no'>iris</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>)
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>loon2ggplot</span>(<span class='no'>l</span>)
-<span class='no'>p</span> <span class='co'># a ggplot object</span></div><div class='img'><img src='loon2ggplot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>p</span>)</div><div class='output co'>#&gt; List of 10
-#&gt;  $ data       :'data.frame':	150 obs. of  2 variables:
-#&gt;   ..$ x: num [1:150] 5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
-#&gt;   ..$ y: num [1:150] 3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
-#&gt;  $ layers     :List of 1
-#&gt;   ..$ :Classes 'LayerInstance', 'Layer', 'ggproto', 'gg' &lt;ggproto object: Class LayerInstance, Layer, gg&gt;
-#&gt;     aes_params: list
-#&gt;     compute_aesthetics: function
-#&gt;     compute_geom_1: function
-#&gt;     compute_geom_2: function
-#&gt;     compute_position: function
-#&gt;     compute_statistic: function
-#&gt;     data: data.frame
-#&gt;     draw_geom: function
-#&gt;     finish_statistics: function
-#&gt;     geom: &lt;ggproto object: Class GeomPoint, Geom, gg&gt;
-#&gt;         aesthetics: function
-#&gt;         default_aes: uneval
-#&gt;         draw_group: function
-#&gt;         draw_key: function
-#&gt;         draw_layer: function
-#&gt;         draw_panel: function
-#&gt;         extra_params: na.rm
-#&gt;         handle_na: function
-#&gt;         non_missing_aes: size shape colour
-#&gt;         optional_aes: 
-#&gt;         parameters: function
-#&gt;         required_aes: x y
-#&gt;         setup_data: function
-#&gt;         setup_params: function
-#&gt;         use_defaults: function
-#&gt;         super:  &lt;ggproto object: Class Geom, gg&gt;
-#&gt;     geom_params: list
-#&gt;     inherit.aes: FALSE
-#&gt;     layer_data: function
-#&gt;     map_statistic: function
-#&gt;     mapping: uneval
-#&gt;     position: &lt;ggproto object: Class PositionIdentity, Position, gg&gt;
-#&gt;         compute_layer: function
-#&gt;         compute_panel: function
-#&gt;         required_aes: 
-#&gt;         setup_data: function
-#&gt;         setup_params: function
-#&gt;         super:  &lt;ggproto object: Class Position, gg&gt;
-#&gt;     print: function
-#&gt;     setup_layer: function
-#&gt;     show.legend: NA
-#&gt;     stat: &lt;ggproto object: Class StatIdentity, Stat, gg&gt;
-#&gt;         aesthetics: function
-#&gt;         compute_group: function
-#&gt;         compute_layer: function
-#&gt;         compute_panel: function
-#&gt;         default_aes: uneval
-#&gt;         extra_params: na.rm
-#&gt;         finish_layer: function
-#&gt;         non_missing_aes: 
-#&gt;         parameters: function
-#&gt;         required_aes: 
-#&gt;         retransform: TRUE
-#&gt;         setup_data: function
-#&gt;         setup_params: function
-#&gt;         super:  &lt;ggproto object: Class Stat, gg&gt;
-#&gt;     stat_params: list
-#&gt;     super:  &lt;ggproto object: Class Layer, gg&gt; 
-#&gt;  $ scales     :Classes 'ScalesList', 'ggproto', 'gg' &lt;ggproto object: Class ScalesList, gg&gt;
-#&gt;     add: function
-#&gt;     clone: function
-#&gt;     find: function
-#&gt;     get_scales: function
-#&gt;     has_scale: function
-#&gt;     input: function
-#&gt;     n: function
-#&gt;     non_position_scales: function
-#&gt;     scales: list
-#&gt;     super:  &lt;ggproto object: Class ScalesList, gg&gt; 
-#&gt;  $ mapping    :List of 2
-#&gt;   ..$ x: language ~x
-#&gt;   .. ..- attr(*, ".Environment")=&lt;environment: 0x0000000025dd17b8&gt; 
-#&gt;   ..$ y: language ~y
-#&gt;   .. ..- attr(*, ".Environment")=&lt;environment: 0x0000000025dd17b8&gt; 
-#&gt;   ..- attr(*, "class")= chr "uneval"
-#&gt;  $ theme      :List of 13
-#&gt;   ..$ axis.title      :List of 11
-#&gt;   .. ..$ family       : chr "sans"
-#&gt;   .. ..$ face         : chr "bold"
-#&gt;   .. ..$ colour       : NULL
-#&gt;   .. ..$ size         : chr "16"
-#&gt;   .. ..$ hjust        : NULL
-#&gt;   .. ..$ vjust        : NULL
-#&gt;   .. ..$ angle        : NULL
-#&gt;   .. ..$ lineheight   : NULL
-#&gt;   .. ..$ margin       : NULL
-#&gt;   .. ..$ debug        : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_text" "element"
-#&gt;   ..$ axis.title.x    :List of 11
-#&gt;   .. ..$ family       : chr "sans"
-#&gt;   .. ..$ face         : chr "plain"
-#&gt;   .. ..$ colour       : NULL
-#&gt;   .. ..$ size         : chr "9"
-#&gt;   .. ..$ hjust        : NULL
-#&gt;   .. ..$ vjust        : NULL
-#&gt;   .. ..$ angle        : NULL
-#&gt;   .. ..$ lineheight   : NULL
-#&gt;   .. ..$ margin       : NULL
-#&gt;   .. ..$ debug        : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_text" "element"
-#&gt;   ..$ axis.title.y    :List of 11
-#&gt;   .. ..$ family       : chr "sans"
-#&gt;   .. ..$ face         : chr "plain"
-#&gt;   .. ..$ colour       : NULL
-#&gt;   .. ..$ size         : chr "9"
-#&gt;   .. ..$ hjust        : NULL
-#&gt;   .. ..$ vjust        : NULL
-#&gt;   .. ..$ angle        : NULL
-#&gt;   .. ..$ lineheight   : NULL
-#&gt;   .. ..$ margin       : NULL
-#&gt;   .. ..$ debug        : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_text" "element"
-#&gt;   ..$ axis.text.x     : list()
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_blank" "element"
-#&gt;   ..$ axis.text.y     : list()
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_blank" "element"
-#&gt;   ..$ axis.ticks      : list()
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_blank" "element"
-#&gt;   ..$ panel.background:List of 5
-#&gt;   .. ..$ fill         : chr "#EBEBEB"
-#&gt;   .. ..$ colour       : NULL
-#&gt;   .. ..$ size         : NULL
-#&gt;   .. ..$ linetype     : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_rect" "element"
-#&gt;   ..$ panel.border    :List of 5
-#&gt;   .. ..$ fill         : logi NA
-#&gt;   .. ..$ colour       : chr "#000000"
-#&gt;   .. ..$ size         : num 1
-#&gt;   .. ..$ linetype     : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_rect" "element"
-#&gt;   ..$ panel.grid.major:List of 6
-#&gt;   .. ..$ colour       : chr "#FFFFFF"
-#&gt;   .. ..$ size         : num 1
-#&gt;   .. ..$ linetype     : chr "solid"
-#&gt;   .. ..$ lineend      : NULL
-#&gt;   .. ..$ arrow        : logi FALSE
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_line" "element"
-#&gt;   ..$ panel.grid.minor:List of 6
-#&gt;   .. ..$ colour       : chr "#FFFFFF"
-#&gt;   .. ..$ size         : num 0.5
-#&gt;   .. ..$ linetype     : chr "solid"
-#&gt;   .. ..$ lineend      : NULL
-#&gt;   .. ..$ arrow        : logi FALSE
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_line" "element"
-#&gt;   ..$ plot.background :List of 5
-#&gt;   .. ..$ fill         : chr "#FFFFFF"
-#&gt;   .. ..$ colour       : NULL
-#&gt;   .. ..$ size         : NULL
-#&gt;   .. ..$ linetype     : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_rect" "element"
-#&gt;   ..$ plot.title      :List of 11
-#&gt;   .. ..$ family       : NULL
-#&gt;   .. ..$ face         : NULL
-#&gt;   .. ..$ colour       : NULL
-#&gt;   .. ..$ size         : NULL
-#&gt;   .. ..$ hjust        : num 0.5
-#&gt;   .. ..$ vjust        : NULL
-#&gt;   .. ..$ angle        : NULL
-#&gt;   .. ..$ lineheight   : NULL
-#&gt;   .. ..$ margin       : NULL
-#&gt;   .. ..$ debug        : NULL
-#&gt;   .. ..$ inherit.blank: logi FALSE
-#&gt;   .. ..- attr(*, "class")= chr [1:2] "element_text" "element"
-#&gt;   ..$ plot.margin     : 'unit' num [1:4] 0.3lines 0.3lines 0.2lines 0.2lines
-#&gt;   .. ..- attr(*, "valid.unit")= int 3
-#&gt;   .. ..- attr(*, "unit")= chr "lines"
-#&gt;   ..- attr(*, "complete")= logi FALSE
-#&gt;   ..- attr(*, "validate")= logi TRUE
-#&gt;  $ coordinates:Classes 'CoordCartesian', 'Coord', 'ggproto', 'gg' &lt;ggproto object: Class CoordCartesian, Coord, gg&gt;
-#&gt;     aspect: function
-#&gt;     backtransform_range: function
-#&gt;     clip: on
-#&gt;     default: FALSE
-#&gt;     distance: function
-#&gt;     expand: TRUE
-#&gt;     is_free: function
-#&gt;     is_linear: function
-#&gt;     labels: function
-#&gt;     limits: list
-#&gt;     modify_scales: function
-#&gt;     range: function
-#&gt;     render_axis_h: function
-#&gt;     render_axis_v: function
-#&gt;     render_bg: function
-#&gt;     render_fg: function
-#&gt;     setup_data: function
-#&gt;     setup_layout: function
-#&gt;     setup_panel_guides: function
-#&gt;     setup_panel_params: function
-#&gt;     setup_params: function
-#&gt;     train_panel_guides: function
-#&gt;     transform: function
-#&gt;     super:  &lt;ggproto object: Class CoordCartesian, Coord, gg&gt; 
-#&gt;  $ facet      :Classes 'FacetNull', 'Facet', 'ggproto', 'gg' &lt;ggproto object: Class FacetNull, Facet, gg&gt;
-#&gt;     compute_layout: function
-#&gt;     draw_back: function
-#&gt;     draw_front: function
-#&gt;     draw_labels: function
-#&gt;     draw_panels: function
-#&gt;     finish_data: function
-#&gt;     init_scales: function
-#&gt;     map_data: function
-#&gt;     params: list
-#&gt;     setup_data: function
-#&gt;     setup_params: function
-#&gt;     shrink: TRUE
-#&gt;     train_scales: function
-#&gt;     vars: function
-#&gt;     super:  &lt;ggproto object: Class FacetNull, Facet, gg&gt; 
-#&gt;  $ plot_env   :&lt;environment: 0x0000000025dd17b8&gt; 
-#&gt;  $ labels     :List of 6
-#&gt;   ..$ title: NULL
-#&gt;   ..$ y    : chr "Sepal.Width"
-#&gt;   ..$ x    : chr "Sepal.Length"
-#&gt;   ..$ fill : chr "fill"
-#&gt;   ..$ size : chr "size"
-#&gt;   ..$ shape: chr "pch"
-#&gt;  $ guides     :List of 2
-#&gt;   ..$ shape: logi FALSE
-#&gt;   ..$ size : logi FALSE
-#&gt;  - attr(*, "class")= chr [1:2] "gg" "ggplot"</div><div class='input'><span class='co'># add themes</span>
-<span class='no'>p</span> + <span class='fu'>geom_smooth</span>() + <span class='fu'>theme_linedraw</span>()</div><div class='output co'>#&gt; <span class='message'>`geom_smooth()` using method = 'loess' and formula 'y ~ x'</span></div><div class='img'><img src='loon2ggplot-2.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+  <span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>l_plot</span>(<span class='no'>iris</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>)
+  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>loon2ggplot</span>(<span class='no'>l</span>)
+  <span class='no'>p</span> <span class='co'># a ggplot object</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>p</span>)
+  <span class='co'># add themes</span>
+  <span class='no'>p</span> + <span class='fu'>geom_smooth</span>() + <span class='fu'>theme_linedraw</span>()
+}</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -449,7 +222,7 @@ the remaining objects by their ids.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

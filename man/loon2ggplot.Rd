@@ -51,7 +51,7 @@ the remaining objects by their ids.}
 \item{...}{arguments used inside \code{loon2ggplot()}, not used by this method}
 }
 \value{
-a ggplot object
+a \code{ggplot} object
 }
 \description{
 Create a \code{ggplot} object from a \code{loon} widget

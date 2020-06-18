@@ -11,6 +11,9 @@
 #' These are often aesthetics, used to set an aesthetic to a fixed value,
 #' like \code{colour = "red"} or \code{size = 3}.
 #' They may also be parameters to the paired geom/stat.
+#'
+#' @return a \code{geom} layer
+#'
 #' @export
 #' @seealso \code{\link{geom_polygonGlyph}}, \code{\link{geom_pointrangeGlyph}},
 #' \code{\link{geom_serialAxesGlyph}}, \code{\link{geom_textGlyph}}

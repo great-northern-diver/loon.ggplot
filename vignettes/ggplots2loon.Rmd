@@ -9,7 +9,7 @@ geometry: margin=.75in
 urlcolor: blue
 graphics: yes
 vignette: >
-  %\VignetteIndexEntry{ggplots2loon}
+  %\VignetteIndexEntry{ggplots --> loon plots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   
