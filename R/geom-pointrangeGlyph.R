@@ -131,6 +131,6 @@ GeomPointrangeGlyph <- ggplot2::ggproto('GeomPointrangeGlyph', Geom,
                                             )
                                           }
 
-                                          ggplot2:::ggname("geom_pointrangeGlyph", grob)
+                                          ggname("geom_pointrangeGlyph", grob)
                                         }
 )
