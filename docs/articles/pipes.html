@@ -95,7 +95,7 @@
       <h1 data-toc-skip>Pipes</h1>
                         <h4 class="author">Wayne Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2020-06-10</h4>
+            <h4 class="date">2020-06-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/pipes.Rmd"><code>vignettes/pipes.Rmd</code></a></small>
       <div class="hidden name"><code>pipes.Rmd</code></div>
@@ -116,7 +116,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>() +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span>(<span class="st">"Litres per 100 kilometres"</span>) +
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span>(<span class="st">"Gas usage"</span>)</pre></body></html></div>
-<p>Here the “pipe” <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> takes the output of its left hand side and pushes it into the first argument of its right hand side. Arbitrary many pipes may be gathered together.<br>
+<p>Here the “pipe” <code><a href="https://dplyr.tidyverse.org/reference/reexports.html">%&gt;%</a></code> takes the output of its left hand side and pushes it into the first argument of its right hand side. Arbitrary many pipes may be gathered together.<br>
 This connects nicely with <code>ggplot2</code>’s addition <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator (<code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> itself is sometimes a pipe, sometimes a layer in <code>ggplot</code> construction) to create the <code>ggplot</code> from the data and assign it to <code>p1_piped</code>.</p>
 <p>Two things to note here are. First, the result of the data manipulation is assigned at the beginning using the <code>&lt;-</code> assignment function which seems to run counter to the data flow indicated by the pipes. A more consistent flow would be to have instead written</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="no">mtcars</span> <span class="kw">%&gt;%</span>
@@ -140,7 +140,7 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
 <h3 class="hasAnchor">
 <a href="#using-gg_pipedata-ggplotobj" class="anchor"></a>Using <code>gg_pipe(data, ggplotObj)</code>
 </h3>
-<p>Note that before a <code>ggplot</code> can be displayed, a number of steps are performed so as to prepare the plot object for rendering (e.g. see <code><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html">ggplot2::ggplot_build</a></code>). Unfortunately, this delay in completing the preparation of the <code>ggplot</code> can make it difficult to attach further operations in the <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> pipeline after the <code>ggplot</code> itself – apart of course from further <code>ggplot2</code> additions via the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. For example, one cannot simply add <code>%&gt;% ggplot2loon()</code> at the end of the pipeline used to construct the <code>ggplot</code>. That is,</p>
+<p>Note that before a <code>ggplot</code> can be displayed, a number of steps are performed so as to prepare the plot object for rendering (e.g. see <code><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html">ggplot2::ggplot_build</a></code>). Unfortunately, this delay in completing the preparation of the <code>ggplot</code> can make it difficult to attach further operations in the <code><a href="https://dplyr.tidyverse.org/reference/reexports.html">%&gt;%</a></code> pipeline after the <code>ggplot</code> itself – apart of course from further <code>ggplot2</code> additions via the <code><a href="https://rdrr.io/r/base/Arithmetic.html">+</a></code> operator. For example, one cannot simply add <code>%&gt;% ggplot2loon()</code> at the end of the pipeline used to construct the <code>ggplot</code>. That is,</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">mtcars</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span>(<span class="kw">transmission</span> <span class="kw">=</span> <span class="no">am</span>, <span class="kw">weight</span> <span class="kw">=</span> <span class="no">wt</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">lp100km</span> <span class="kw">=</span> (<span class="fl">100</span> * <span class="fl">3.785411784</span>) / (<span class="fl">1.609344</span> * <span class="no">mpg</span>)) <span class="kw">%&gt;%</span>
@@ -180,14 +180,14 @@ This connects nicely with <code>ggplot2</code>’s addition <code><a href="https
   <span class="co"># and pass the built plot on</span>
   <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span>(<span class="kw">linkingGroup</span> <span class="kw">=</span> <span class="st">"Motor Trend 1974"</span>) <span class="kw">%&gt;%</span>  <span class="co"># pipe the loon plot on</span>
   <span class="fu">l_cget</span>(<span class="st">'color'</span>)  <span class="co"># Gets and returns the vector of point colours</span></pre></body></html></div>
-<p>In the <code>magrittr</code> package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful – not just <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code>.</p>
+<p>In the <code>magrittr</code> package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful – not just <code><a href="https://dplyr.tidyverse.org/reference/reexports.html">%&gt;%</a></code>.</p>
 </div>
 <div id="using-lggplot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#using-lggplot" class="anchor"></a>Using <code>lggplot()</code>
 </h3>
 <p>Additionally, using function <code>lggplot</code>, can also create a <code>loon</code> plot with <code>ggplot</code> pipe model.</p>
-<p>The display of <code>ggplot</code> object relies on the default <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> function in <code>R</code>. Function <code>lggplot</code>, inserts a new class <code>lggplot</code> into the original <code>ggplot</code> object. At the printing time, <a href="http://adv-r.had.co.nz/S3.html">S3 method</a> <code><a href="../reference/print.lggplot.html">print.lggplot()</a></code> will be executed to transform a <code>ggplot</code> plot to a <code>loon</code> plot.</p>
+<p>The display of <code>ggplot</code> object relies on the default <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> function in <code>R</code>. Function <code>l_ggplot</code>, inserts a new class <code>lggplot</code> into the original <code>ggplot</code> object. At the printing time, <a href="http://adv-r.had.co.nz/S3.html">S3 method</a> <code><a href="../reference/print.lggplot.html">print.lggplot()</a></code> will be executed to transform a <code>ggplot</code> plot to a <code>loon</code> plot.</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">obj</span> <span class="kw">&lt;-</span> <span class="no">mtcars</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span>(<span class="kw">transmission</span> <span class="kw">=</span> <span class="no">am</span>, <span class="kw">weight</span> <span class="kw">=</span> <span class="no">wt</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span>(<span class="kw">lp100km</span> <span class="kw">=</span> (<span class="fl">100</span> * <span class="fl">3.785411784</span>) / (<span class="fl">1.609344</span> * <span class="no">mpg</span>)) <span class="kw">%&gt;%</span>
