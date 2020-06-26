@@ -31,9 +31,11 @@
 #'   q
 #' }
 l_ggplot <- function(data = NULL, mapping = aes(), ...,
-                    environment = parent.frame()) {
+                     environment = parent.frame()) {
 
-  p <- ggplot(data = data, mapping = mapping, ...,
+  p <- ggplot(data = data,
+              mapping = mapping,
+              ...,
               environment = environment)
 
   structure(p,
@@ -47,8 +49,19 @@ l_ggplot <- function(data = NULL, mapping = aes(), ...,
 #' @return Invisibly returns a \code{loon} widget
 #' @export
 print.lggplot <- function(x, ...) {
-  p <- ggplot2loon(x,
-                   ...)
+
+  params <- list()
+  if(!is.null(x$linking))
+    params <- x$linking$check_linkingKey(data = x$data, params = x$linking$params)
+  if(!is.null(x$select))
+    params <- c(params, x$select$check_selected(data = x$data, params = x$select$params))
+  if(!is.null(x$itemLabel))
+    params <- c(params, x$itemLabel$check_itemLabel(data = x$data, params = x$itemLabel$params))
+
+  p <- do.call(
+    ggplot2loon,
+    c(list(ggObj = x), params)
+  )
   invisible()
 }
 
