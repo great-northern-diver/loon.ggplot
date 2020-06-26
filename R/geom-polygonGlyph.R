@@ -162,6 +162,6 @@ GeomPolygonGlyph <- ggplot2::ggproto('GeomPolygonGlyph', Geom,
                                          )
                                        }
 
-                                       ggplot2:::ggname("geom_polygonGlyph", grob)
+                                       ggname("geom_polygonGlyph", grob)
                                      }
 )

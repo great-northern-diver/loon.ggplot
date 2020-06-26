@@ -194,7 +194,7 @@ In the `magrittr` package (the source of the pipeline operation) there are a var
 
 Additionally, using function `lggplot`, can also create a `loon` plot with `ggplot` pipe model.
 
-The display of `ggplot` object relies on the default `print()` function in `R`. Function `lggplot`, inserts a new class `lggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.lggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
+The display of `ggplot` object relies on the default `print()` function in `R`. Function `l_ggplot`, inserts a new class `lggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.lggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
 ```{r lggplot_pipe, message = FALSE, eval = FALSE}
 obj <- mtcars %>%
   rename(transmission = am, weight = wt) %>%

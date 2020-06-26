@@ -3,6 +3,7 @@
 
 [![Build Status](https://travis-ci.org/z267xu/loon.ggplot.svg?branch=master)](https://travis-ci.org/great-northern-diver/loon.ggplot)
 [![Codecov test coverage](https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master)
+[![](https://cranlogs.r-pkg.org/badges/loon.ggplot)](https://cran.r-project.org/package=loon.ggplot)
 
 An R package to turn ggplot graphic data structures into interactive loon plots
 
@@ -57,7 +58,7 @@ h
 
 * To `loon`
 
-the `"ggplot"` data structures `p` and `h` can be **turned into an interactive loon plot** using the `ggplot2loon()` function:
+the `"ggplot"` data structures `p` and `h` can be **turned into interactive loon plot**s using the `ggplot2loon()` function:
 
 ```
 library(loon.ggplot)
@@ -66,13 +67,26 @@ hl <- ggplot2loon(h)
 ```
 ![](man/figures/scatterAndHist.gif)
 
+An alternative way of doing so is to replace `ggplot()` function to `l_ggplot()` function. Then, follow the pipe rules of `ggplot()` but get a `loon` plot.
+
+```{r}
+# the scatter plot
+l_ggplot(mtcars, aes(wt, 
+                     mpg, 
+                     colour = as.factor(cyl))) + 
+  geom_point()
+# the histogram
+l_ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) + 
+  geom_histogram()
+```
+
 Note that:
 
   + Loon "Hello World": Introduction to interactive `loon` plots can be found via  [loon](https://cran.r-project.org/web/packages/loon/vignettes/introduction.html). It shows how to create, manipulate (selection, linking and etc) `loon` plots
     
   + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in [SDSS 2019](https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216). Slides can be found in [SDSS2019/loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
   
-  + `ggmatrix` object in package `GGally` can also be converted to `loon` widget. See `help(ggplot2loon)` for more info.
+  + `ggmatrix` object in package `GGally` can also be converted to a `loon` widget. See `help(ggplot2loon)` for more info.
 
 #### `loon2ggplot()`: loon --> ggplot
 

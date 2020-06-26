@@ -77,13 +77,13 @@ GeomTextGlyph <- ggplot2::ggproto('GeomTextGlyph', Geom,
 
                                     data <- coord$transform(data, panel_params)
                                     if (is.character(data$vjust)) {
-                                      data$vjust <- ggplot2:::compute_just(data$vjust, data$y)
+                                      data$vjust <- compute_just(data$vjust, data$y)
                                     }
                                     if (is.character(data$hjust)) {
-                                      data$hjust <- ggplot2:::compute_just(data$hjust, data$x)
+                                      data$hjust <- compute_just(data$hjust, data$x)
                                     }
 
-                                    ggplot2:::ggname(
+                                    ggname(
                                       "geom_textGlyph",
                                       grid::textGrob(
                                         text,

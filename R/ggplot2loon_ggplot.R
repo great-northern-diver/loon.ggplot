@@ -226,6 +226,7 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   sync <- args$sync %||% "pull"
   if(!sync %in% c("pull", "push")) stop("not known sync", call. = FALSE)
   plots_info$sync <- sync
+  args$sync <- NULL
 
   if (is.null(args[['linkingGroup']])) {
     args[['linkingGroup']] <- "none"

@@ -182,46 +182,46 @@ GeomSerialAxesGlyph <- ggplot2::ggproto('GeomSerialAxesGlyph', Geom,
                                                                                dimension = dimension, showArea = showArea)
                                           } else stop("unknown axes layout", call. = FALSE)
 
-                                          ggplot2:::ggname("geom_serialAxesGlyph",
-                                                           grid::gTree(
-                                                             children = grid::gList(
-                                                               if(showEnclosing) {
+                                          ggname("geom_serialAxesGlyph",
+                                                 grid::gTree(
+                                                   children = grid::gList(
+                                                     if(showEnclosing) {
 
-                                                                 grid::polylineGrob(
-                                                                   x = gridAesthetic$enclosingX,
-                                                                   y = gridAesthetic$enclosingY,
-                                                                   id = gridAesthetic$enclosingId,
-                                                                   gp = grid::gpar(col = bboxColor)
-                                                                 )
-                                                               },
-                                                               if(showAxes) {
-                                                                 grid::polylineGrob(
-                                                                   x = gridAesthetic$axesX,
-                                                                   y = gridAesthetic$axesY,
-                                                                   id = gridAesthetic$axesId,
-                                                                   gp = grid::gpar(col = axesColor)
-                                                                 )
-                                                               },
-                                                               if(showArea) {
-                                                                 grid::polygonGrob(
-                                                                   x = gridAesthetic$serialCoordX,
-                                                                   y = gridAesthetic$serialCoordY,
-                                                                   id = gridAesthetic$serialCoordId,
-                                                                   gp = grid::gpar(fill = data$colour,
-                                                                                   col = NA,
-                                                                                   alpha = data$alpha))
-                                                               } else {
-                                                                 grid::polylineGrob(
-                                                                   x = gridAesthetic$serialCoordX,
-                                                                   y = gridAesthetic$serialCoordY,
-                                                                   id = gridAesthetic$serialCoordId,
-                                                                   gp = grid::gpar(col = data$colour,
-                                                                                   lwd = linewidth,
-                                                                                   alpha = data$alpha)
-                                                                 )
-                                                               }
-                                                             )
-                                                           )
+                                                       grid::polylineGrob(
+                                                         x = gridAesthetic$enclosingX,
+                                                         y = gridAesthetic$enclosingY,
+                                                         id = gridAesthetic$enclosingId,
+                                                         gp = grid::gpar(col = bboxColor)
+                                                       )
+                                                     },
+                                                     if(showAxes) {
+                                                       grid::polylineGrob(
+                                                         x = gridAesthetic$axesX,
+                                                         y = gridAesthetic$axesY,
+                                                         id = gridAesthetic$axesId,
+                                                         gp = grid::gpar(col = axesColor)
+                                                       )
+                                                     },
+                                                     if(showArea) {
+                                                       grid::polygonGrob(
+                                                         x = gridAesthetic$serialCoordX,
+                                                         y = gridAesthetic$serialCoordY,
+                                                         id = gridAesthetic$serialCoordId,
+                                                         gp = grid::gpar(fill = data$colour,
+                                                                         col = NA,
+                                                                         alpha = data$alpha))
+                                                     } else {
+                                                       grid::polylineGrob(
+                                                         x = gridAesthetic$serialCoordX,
+                                                         y = gridAesthetic$serialCoordY,
+                                                         id = gridAesthetic$serialCoordId,
+                                                         gp = grid::gpar(col = data$colour,
+                                                                         lwd = linewidth,
+                                                                         alpha = data$alpha)
+                                                       )
+                                                     }
+                                                   )
+                                                 )
                                           )
                                         }
 )
