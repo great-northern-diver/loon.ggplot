@@ -1,6 +1,7 @@
 loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping, dataFrame,
                         activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
-                        itemLabel, showLabels, xlabel, ylabel, loonTitle){
+                        itemLabel, showLabels, xlabel, ylabel, loonTitle) {
+
   if(length(activeGeomLayers) > 0) {
     # combine points data
     count <- 0
@@ -8,15 +9,17 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
     len_linkingKey <- length(linkingKey)
     len_itemLabel <- length(itemLabel)
     combined.pointsData <- lapply(activeGeomLayers,
-                                  function(activeGeomLayer){
-                                    thisLayer <- ggBuild$data[[activeGeomLayer]]
-                                    data <- thisLayer[thisLayer$PANEL == panelIndex, ]
+                                  function(activeGeomLayer) {
+
+                                    activeLayer <- ggBuild$data[[activeGeomLayer]]
+                                    data <- activeLayer[activeLayer$PANEL == panelIndex, ]
                                     num <- dim(data)[1]
                                     x <- data$x
                                     y <- data$y
-                                    if(num != 0){
-                                      thisLayer_itemLabel <- data$itemLabel
-                                      thisLayer_linkingKey <- data$linkingKey
+
+                                    if(num != 0) {
+                                      activeLayer_itemLabel <- data$itemLabel
+                                      activeLayer_linkingKey <- data$linkingKey
                                       color <- sapply(1:dim(data)[1],
                                                       function(j){
                                                         if(data$shape[j] %in% 21:24 ){
@@ -28,24 +31,24 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                       glyph <- pch_to_glyph(data$shape, data$alpha)
                                       size <- as_loon_size( data$size , "points" )
                                     } else {
-                                      thisLayer_linkingKey <- NULL
-                                      thisLayer_itemLabel <- NULL
+                                      activeLayer_linkingKey <- NULL
+                                      activeLayer_itemLabel <- NULL
                                       color <- NULL
                                       glyph <- NULL
                                       size <- NULL
                                     }
 
-                                    if (is.null(thisLayer_itemLabel) | is.null(thisLayer_linkingKey)) {
+                                    if (is.null(activeLayer_itemLabel) | is.null(activeLayer_linkingKey)) {
                                       if(num != 0) {
-                                        thisLayer_linkingKey <- if(activeGeomDim == len_linkingKey) {
+                                        activeLayer_linkingKey <- if(activeGeomDim == len_linkingKey) {
                                           linkingKey[(count : (count + num - 1)) + 1]
                                         } else {
                                           count : (count + num - 1)
                                         }
-                                        thisLayer_itemLabel <- if(activeGeomDim == len_itemLabel) {
+                                        activeLayer_itemLabel <- if(activeGeomDim == len_itemLabel) {
                                           itemLabel[(count : (count + num - 1)) + 1]
                                         } else {
-                                          paste0("item", thisLayer_linkingKey)
+                                          paste0("item", activeLayer_linkingKey)
                                         }
                                         count <<- count + num
                                       }
@@ -53,11 +56,11 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
 
                                     data.frame(x = x,
                                                y = y,
-                                               itemLabel = thisLayer_itemLabel,
+                                               itemLabel = activeLayer_itemLabel,
                                                color = color,
                                                glyph = glyph,
                                                size = size,
-                                               linkingKey = thisLayer_linkingKey)
+                                               linkingKey = activeLayer_linkingKey)
                                   }
     )
     combined.pointsData <- do.call(rbind, combined.pointsData)
@@ -154,15 +157,18 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
   }
 }
 
-
 activeGeomDim <- function(ggBuild, activeGeomLayers, panelIndex) {
-  dim <- 0
-  lapply(activeGeomLayers,
-         function(activeGeomLayer){
-           thisLayer <- ggBuild$data[[activeGeomLayer]]
-           data <- thisLayer[thisLayer$PANEL == panelIndex, ]
-           dim <<- dim + dim(data)[1]
-         }
-  )
-  dim
+  length(l_plot_indices(ggBuild, activeGeomLayers, panelIndex))
 }
+
+# activeGeomDim <- function(ggBuild, activeGeomLayers, panelIndex) {
+#   dimension <- 0
+#   lapply(activeGeomLayers,
+#          function(activeGeomLayer){
+#            activeLayer <- ggBuild$data[[activeGeomLayer]]
+#            data <- activeLayer[activeLayer$PANEL == panelIndex, ]
+#            dimension <<- dimension + dim(data)[1]
+#          }
+#   )
+#   dimension
+# }
