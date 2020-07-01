@@ -30,20 +30,38 @@ S3 method \code{print.lggplot} will be rendered which will return a \code{loon} 
 \examples{
 if(interactive()) {
   p <- l_ggplot(mpg, aes(displ, cty)) +
-     geom_point() +
-     facet_grid(rows = vars(drv))
-  # p is a `lggplot` object, `print.lggplot(p)` is called automatically.
-  # Then, the `lggplot` object will be transformed to a `loon` widget
+     geom_point(
+       size = 4,
+       mapping = aes(color = factor(cyl))
+     )
+  # p is a `lggplot` object, `print.lggplot(p)` will be called automatically.
+  # Then, a `lggplot` object will be transformed to a `loon` widget
   p
-}
-\dontrun{
-  # get widgets from current path
+  p +
+    facet_grid(rows = vars(drv)) +
+    linking(linkingGroup = "mpg") +
+    ggtitle("displ versus cty")
+
+  # a linked bar plot
+  l_hist(mpg$class, linkingGroup = "mpg")
+
+  \dontrun{
+  # Assign a widget from current path
   # suppose the path of `p` is '.l0.ggplot'
   q <- l_getFromPath('.l0.ggplot')
   # q is a `loon` widget
+  q
+  }
+
+  # An alternative way to return a real loon widget from `p` (a `lggplot` object)
+  # is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`
+  # this way can provide richer information (note that it will create a new widget).
+  q <- loon.ggplot(p)
   q
 }
 }
 \seealso{
 \code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.lggplot}}
+
+\code{\link{loon.ggplot}}
 }
