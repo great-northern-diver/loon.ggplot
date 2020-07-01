@@ -16,9 +16,19 @@ char2num.data.frame <- getFromNamespace("char2num.data.frame", "loon")
 cartesian_model_widget_states <- getFromNamespace("cartesian_model_widget_states", "loon")
 tcl_img_2_r_raster <- getFromNamespace("tcl_img_2_r_raster", "loon")
 l_toplevel <- getFromNamespace("l_toplevel", "loon")
+l_nDimStateNames <- getFromNamespace("l_nDimStateNames", "loon")
+
+l_allNDimStateNames <- function(plots) {
+  states <- lapply(plots,
+                   function(plot) {
+                     l_nDimStateNames(plot)
+                   })
+  unique(unlist(states))
+}
 
 
 ## Unexported functions in ggplot2
 
 ggname <- getFromNamespace("ggname", "ggplot2")
 compute_just <- getFromNamespace("compute_just", "ggplot2")
+message_wrap <- getFromNamespace("message_wrap", "ggplot2")
