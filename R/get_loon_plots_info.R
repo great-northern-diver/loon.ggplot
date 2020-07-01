@@ -11,7 +11,6 @@ get_loon_plots_info <- function(plots_info = list(),
   buildggObj <- plots_info$buildggObj
   args <- plots_info$args
 
-
   # ggplot object
   dataFrame <- ggObj$data
   linkingKey <- plots_info$linkingKey
@@ -52,6 +51,8 @@ get_loon_plots_info <- function(plots_info = list(),
 
   # length layers
   len_layers <- length(ggObj$layers)
+
+  indices <- list()
 
   plots <- lapply(seq_len(panelNum),
                   function(i){
@@ -137,20 +138,21 @@ get_loon_plots_info <- function(plots_info = list(),
                                          rowSubtitle), collapse = "\n")
 
                     if (len_layers > 0) {
-                      importantLayers <- get_importantLayers(len_layers, ggObj, isCoordPolar)
 
-                      boxplotLayers <- importantLayers$boxplotLayers
-                      curveLayers <- importantLayers$curveLayers
+                      modelLayers <- get_modelLayers(len_layers, ggObj, isCoordPolar)
+
+                      boxplotLayers <- modelLayers$boxplotLayers
+                      curveLayers <- modelLayers$curveLayers
 
                       # set active geom layer and active model
-                      activeInfo <- get_activeInfo(importantLayers, activeGeomLayers, len_layers)
+                      activeInfo <- get_activeInfo(modelLayers, activeGeomLayers, len_layers)
                       activeGeomLayers <- activeInfo$activeGeomLayers
                       activeModel <- activeInfo$activeModel
 
                       # boxplot has a hidden scatterplot model layer
                       boxplot_point_layers <- c(boxplotLayers, activeGeomLayers)
 
-                      if (is.data.frame(dataFrame) & !"waiver" %in% class(dataFrame)) {
+                      if (is.data.frame(dataFrame) & !inherits(dataFrame, "waiver")) {
                         mapping <- ggObj$mapping
                       } else {
                         if(length(activeGeomLayers) == 1) {
@@ -162,9 +164,31 @@ get_loon_plots_info <- function(plots_info = list(),
                         } else NULL # activeGeomLayers > 1 not implemented so far
                       }
 
-                      if (activeModel == "l_hist" & length(activeGeomLayers) != 0) {
+                      if (activeModel == "l_hist" & length(activeGeomLayers) > 0) {
+
+                        if(length(activeGeomLayers) > 1) {
+                          activeGeomLayers <- activeGeomLayers[1]
+                          warning("Two histogram layers are detected and only the ", activeGeomLayers,
+                                  "th one is the interactive one.", call. = FALSE)
+                        }
+
+                        is_facet_wrap <- plots_info$is_facet_wrap
+                        is_facet_grid <- plots_info$is_facet_grid
+                        ggLayout <- buildggObj$ggLayout
+
+                        indices[[i]] <<- l_hist_indices(ggBuild = ggBuild,
+                                                                activeGeomLayers = activeGeomLayers,
+                                                                panelIndex = i,
+                                                                mapping = mapping,
+                                                                dataFrame = dataFrame,
+                                                                numOfSubtitles = numOfSubtitles,
+                                                                is_facet_wrap = is_facet_wrap,
+                                                                is_facet_grid = is_facet_grid,
+                                                                layout = layout,
+                                                                ggLayout = ggLayout)
+
                         loonPlot <- loonHistogram(ggBuild = ggBuild,
-                                                  ggLayout = buildggObj$ggLayout,
+                                                  ggLayout = ggLayout,
                                                   layout = layout,
                                                   ggplotPanel_params = ggplotPanel_params,
                                                   ggObj = ggObj,
@@ -182,11 +206,16 @@ get_loon_plots_info <- function(plots_info = list(),
                                                   xlabel = xlabel,
                                                   ylabel = ylabel,
                                                   loonTitle = loonTitle,
-                                                  is_facet_wrap = plots_info$is_facet_wrap,
-                                                  is_facet_grid = plots_info$is_facet_grid)
+                                                  is_facet_wrap = is_facet_wrap,
+                                                  is_facet_grid = is_facet_grid)
 
 
-                      } else if(activeModel == "l_plot" & length(boxplot_point_layers) != 0) {
+                      } else if(activeModel == "l_plot" & length(boxplot_point_layers) > 0) {
+
+                        indices[[i]] <<- l_plot_indices(ggBuild = ggBuild,
+                                                                activeGeomLayers = activeGeomLayers,
+                                                                panelIndex = i)
+
                         loonPlot <- loonScatter(ggBuild = ggBuild,
                                                 ggObj = ggObj,
                                                 ggplotPanel_params = ggplotPanel_params,
@@ -207,6 +236,7 @@ get_loon_plots_info <- function(plots_info = list(),
                                                 loonTitle = loonTitle)
 
                       } else {
+
                         loonPlot <- loon::l_plot(parent = parent,
                                                  showGuides = showGuides,
                                                  showScales = showScales,
@@ -349,15 +379,14 @@ get_loon_plots_info <- function(plots_info = list(),
     }
   )
 
-  return(
-    list(
-      plots = plots,
-      display_info = list(
-        colSubtitles = colSubtitles,
-        rowSubtitles = rowSubtitles,
-        start.subtitlepos = start.subtitlepos,
-        swapAxes = swapAxes
-      )
+  list(
+    plots = plots,
+    indices = indices,
+    display_info = list(
+      colSubtitles = colSubtitles,
+      rowSubtitles = rowSubtitles,
+      start.subtitlepos = start.subtitlepos,
+      swapAxes = swapAxes
     )
   )
 }
