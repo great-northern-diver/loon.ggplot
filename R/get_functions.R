@@ -1,4 +1,4 @@
-get_importantLayers <- function(len_layers, ggObj, isCoordPolar){
+get_modelLayers <- function(len_layers, ggObj, isCoordPolar){
   layerNames <- lapply(seq_len(len_layers),
                        function(j) {
                          className <- class(ggObj$layers[[j]]$geom)
@@ -42,11 +42,11 @@ get_importantLayers <- function(len_layers, ggObj, isCoordPolar){
        curveLayers = curveLayers)
 }
 
-get_activeInfo <- function(importantLayers, activeGeomLayers, len_layers){
+get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
 
-  pointLayers <- importantLayers$pointLayers
-  histogramLayers <- importantLayers$histogramLayers
-  boxplotLayers <- importantLayers$boxplotLayers
+  pointLayers <- modelLayers$pointLayers
+  histogramLayers <- modelLayers$histogramLayers
+  boxplotLayers <- modelLayers$boxplotLayers
 
   point_hist_layers <- c(pointLayers, histogramLayers)
   if (length(activeGeomLayers) == 0) {

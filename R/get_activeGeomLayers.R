@@ -50,26 +50,26 @@ get_activeGeomLayers <- function(ggObj) {
   }
   len_layers <- length(ggObj$layers)
 
-  importantLayers <- get_importantLayers(len_layers, ggObj,
-                                         isCoordPolar = (!is.null(ggObj$coordinates$r)) && (!is.null(ggObj$coordinates$theta)))
+  modelLayers <- get_modelLayers(len_layers, ggObj,
+                                 isCoordPolar = (!is.null(ggObj$coordinates$r)) && (!is.null(ggObj$coordinates$theta)))
 
-  np <- length(importantLayers$pointLayers)
-  nh <- length(importantLayers$histogramLayers)
+  np <- length(modelLayers$pointLayers)
+  nh <- length(modelLayers$histogramLayers)
 
   if(np == 0 & nh == 0) {
     message("no layers can be active")
     integer(0)
   } else if(np > 0 & nh == 0) {
 
-    setNames(importantLayers$pointLayers, rep("geom_point", np))
+    setNames(modelLayers$pointLayers, rep("geom_point", np))
 
   } else if(np == 0 & nh > 0) {
 
-    setNames(importantLayers$histogramLayers, rep("geom_histogram", nh))
+    setNames(modelLayers$histogramLayers, rep("geom_histogram", nh))
 
   } else {
 
-    setNames(c(importantLayers$histogramLayers, importantLayers$histogramLayers),
+    setNames(c(modelLayers$histogramLayers, modelLayers$histogramLayers),
              c(rep("geom_point", np), rep("geom_histogram", nh)))
   }
 }

@@ -4,6 +4,7 @@
 \alias{loon.ggplot}
 \alias{loon.ggplot.gg}
 \alias{loon.ggplot.loon}
+\alias{loon.ggplot.lggplot}
 \title{loon.ggplot}
 \usage{
 loon.ggplot(x, ...)
@@ -11,19 +12,23 @@ loon.ggplot(x, ...)
 \method{loon.ggplot}{gg}(x, ...)
 
 \method{loon.ggplot}{loon}(x, ...)
+
+\method{loon.ggplot}{lggplot}(x, ...)
 }
 \arguments{
-\item{x}{A \code{loon} widget or a \code{ggplot} object.}
+\item{x}{A \code{loon} widget, a \code{ggplot} object or a \code{lggplot} object.}
 
 \item{...}{arguments used in either \code{loon2ggplot()} or \code{ggplot2loon()}}
 }
 \value{
 If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversely, if the
-input is a \code{loon} widget, then it returns a \code{ggplot} object.
+input is a \code{loon} widget, then it returns a \code{ggplot} object. If it is a \code{lggplot} object,
+\code{loon.ggplot} helps to return a \code{loon} widget.
 }
 \description{
-A bridge between \code{loon} widgets and \code{gg} objects. It can take either a \code{loon} widget
-or a \code{gg} object (\code{ggplot} or \code{ggmatrix}), then create a corresponding \code{gg} (or \code{loon}) graphics.
+A bridge between \code{loon} widgets and \code{gg} objects. It can take either a \code{loon} widget,
+a \code{gg} object (\code{ggplot} or \code{GGally::ggmatrix}) or
+a \code{lggplot} object, then create a corresponding \code{gg} (or \code{loon}) graphics.
 }
 \examples{
 
@@ -45,8 +50,18 @@ if(interactive()) {
   # equivalent to `ggplot2loon(g)`
   l <- loon.ggplot(g)
   l # a loon widget
+
+######### lggplot #########
+  p <- l_ggplot(mpg, aes(displ, fill = factor(cyl))) +
+       geom_histogram()
+  class(p)
+  # Function `print.lggplot` is called automatically
+  p
+  # Function `loon.ggplot` helps to return a loon widget
+  q <- loon.ggplot(p)
+  q
 }
 }
 \seealso{
-\code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}
+\code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}, \code{\link{l_ggplot}}
 }

@@ -2,8 +2,9 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
                                swapAxes, theme, panX, panY, deltaX, deltaY, zoomX, zoomY){
   # draw ggGuides?
   if (isCoordPolar) {
-    if ("l_hist" %in% class(loonPlot)) {
-      warning("l_hist only works with Cartesian coordinates", call. = FALSE)
+    if (inherits(loonPlot, "l_hist")) {
+      if(panelIndex == 1)
+        warning("l_hist only works with Cartesian coordinates", call. = FALSE)
     } else {
       if (ggGuides) {
         polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[panelIndex]], swapAxes, theme)
@@ -15,7 +16,8 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
                  loon::l_layer_lower(loonPlot, polarGuides)
                })
       } else {
-        message("Is it hard to understand the graphics? Try \"ggGuides = TRUE\"!")
+        if(panelIndex == 1)
+          message("Is it hard to understand the graphics? Try \"ggGuides = TRUE\"!")
       }
 
       loon::l_scaleto_world(loonPlot)
