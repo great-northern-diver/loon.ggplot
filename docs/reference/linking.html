@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>layout matrix — layout_coords • loon.ggplot</title>
+<title>Modify the <code>linking</code> component — linking • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="layout matrix — layout_coords" />
-<meta property="og:description" content="return the layout matrix of a list of loon plots" />
+<meta property="og:title" content="Modify the <code>linking</code> component — linking" />
+<meta property="og:description" content="In interactive graphics, linking is often used to discover the patterns of interest in several plots." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -134,27 +134,79 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>layout matrix</h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/layout_coords.R'><code>R/layout_coords.R</code></a></small>
-    <div class="hidden name"><code>layout_coords.Rd</code></div>
+    <h1>Modify the <code>linking</code> component</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
+    <div class="hidden name"><code>linking.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>return the layout matrix of a list of loon plots</p>
+    <p>In interactive graphics, <code>linking</code> is often used to discover the patterns of interest in several plots.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>layout_coords</span>(<span class='no'>target</span>)</pre>
+    <pre class="usage"><span class='fu'>linking</span>(
+  <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>linkingKey</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>linkedStates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sync</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>target</th>
-      <td><p>an object <code><a href='ggplot2loon.html'>ggplot2loon()</a></code> returns</p></td>
+      <th>linkingGroup</th>
+      <td><p>A character. Plots only in the same linkingGroup can be linked</p></td>
+    </tr>
+    <tr>
+      <th>linkingKey</th>
+      <td><p>LinkingKey is the key of linking. Each object in one plot has a unique linking key.
+Elements in different plots are linked if they share the same linking keys.</p></td>
+    </tr>
+    <tr>
+      <th>linkedStates</th>
+      <td><p>The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
+"color", "selected", "active" for a `l_hist` object.</p></td>
+    </tr>
+    <tr>
+      <th>sync</th>
+      <td><p>The way to synchronize several linked plots. It can be either "pull" (default) or "push".
+If the <code>sync</code> is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
+of the new plot will be pulled from the linked plots;
+if the <code>sync</code> is "push",  the linked states of the new plot will be pushed to the linked plots.</p></td>
+    </tr>
+    <tr>
+      <th>activeGeomLayers</th>
+      <td><p>determine which geom layer is interactive. Only <code>geom_point()</code>
+and <code>geom_histogram()</code> can be set as active geom layer(s) so far.
+(Notice, more than one <code>geom_point()</code> layers can be set as active layers,
+but only one <code>geom_histogram()</code> can be set as an active geom layer)</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>a <code>ggproto</code> object</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='selecting.html'>selecting</a></code>, <code><a href='itemLabel.html'>itemLabel</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>l_hist</span>(<span class='no'>mtcars</span>$<span class='no'>hp</span>, <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mtcars"</span>)
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
+    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
+    <span class='co'># push the states of scatter plot to the histogram</span>
+    <span class='fu'>linking</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mtcars"</span>, <span class='kw'>sync</span> <span class='kw'>=</span> <span class='st'>"push"</span>)
+
+  <span class='co'># set active layer</span>
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
+    <span class='fu'>geom_point</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4.5</span>) +
+    <span class='fu'>geom_point</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
+    <span class='fu'>geom_point</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
+    <span class='co'># only the second layer is interactive</span>
+    <span class='fu'>linking</span>(<span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><code>loon</code> to <code>ggplot</code> — loon2ggplot • loon.ggplot</title>
+<title>Modify the <code>interactive</code> component — interactivity • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="<code>loon</code> to <code>ggplot</code> — loon2ggplot" />
-<meta property="og:description" content="Create a ggplot object from a loon widget" />
+<meta property="og:title" content="Modify the <code>interactive</code> component — interactivity" />
+<meta property="og:description" content="Set interactive components (e.g. linking, selecting, itemLabel, etc)" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -134,78 +134,104 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>loon</code> to <code>ggplot</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot.R'><code>R/loon2ggplot.R</code></a>, <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot_l_compound.R'><code>R/loon2ggplot_l_compound.R</code></a>, <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot_l_layer_graph.R'><code>R/loon2ggplot_l_layer_graph.R</code></a>, and 5 more</small>
-    <div class="hidden name"><code>loon2ggplot.Rd</code></div>
+    <h1>Modify the <code>interactive</code> component</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
+    <div class="hidden name"><code>interactivity.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a <code>ggplot</code> object from a <code>loon</code> widget</p>
+    <p>Set interactive components (e.g. <code>linking</code>, <code>selecting</code>, <code>itemLabel</code>, etc)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_plot</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_hist</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_plot3D</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_compound</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_layer_graph</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_layer_histogram</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_layer_scatterplot</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_pairs</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_serialaxes</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for l_ts</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>interactivity</span>(
+  <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>linkingKey</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>linkedStates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sync</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>selected</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>selectBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>selectionLogic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>itemLabel</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>showItemLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>target</th>
-      <td><p>a<code>loon</code> or a vector that specifies the
-widget, layer, glyph, navigator or context completely.
-The widget is specified by the widget path name (e.g. '.l0.plot'),
-the remaining objects by their ids.</p></td>
+      <th>linkingGroup</th>
+      <td><p>A character. Plots only in the same linkingGroup can be linked</p></td>
+    </tr>
+    <tr>
+      <th>linkingKey</th>
+      <td><p>LinkingKey is the key of linking. Each object in one plot has a unique linking key.
+Elements in different plots are linked if they share the same linking keys.</p></td>
+    </tr>
+    <tr>
+      <th>linkedStates</th>
+      <td><p>The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
+"color", "selected", "active" for a `l_hist` object.</p></td>
+    </tr>
+    <tr>
+      <th>sync</th>
+      <td><p>The way to synchronize several linked plots. It can be either "pull" (default) or "push".
+If the <code>sync</code> is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
+of the new plot will be pulled from the linked plots;
+if the <code>sync</code> is "push",  the linked states of the new plot will be pushed to the linked plots.</p></td>
+    </tr>
+    <tr>
+      <th>activeGeomLayers</th>
+      <td><p>determine which geom layer is interactive. Only <code>geom_point()</code>
+and <code>geom_histogram()</code> can be set as active geom layer(s) so far.
+(Notice, more than one <code>geom_point()</code> layers can be set as active layers,
+but only one <code>geom_histogram()</code> can be set as an active geom layer)</p></td>
+    </tr>
+    <tr>
+      <th>selected</th>
+      <td><p>A logical vector. If it is set as <code>TRUE</code>, the elements are highlighted
+as the graphics are constructed. Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>selectBy</th>
+      <td><p>Select by "sweeping" (default) or "brushing".</p></td>
+    </tr>
+    <tr>
+      <th>selectionLogic</th>
+      <td><p>Selection logic. One of "select" (default), "deselect" and "invert". See details.</p></td>
+    </tr>
+    <tr>
+      <th>itemLabel</th>
+      <td><p>The customized querying information.</p></td>
+    </tr>
+    <tr>
+      <th>showItemLabels</th>
+      <td><p>A logical value. Show item labels or not. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments used inside <code>loon2ggplot()</code>, not used by this method</p></td>
+      <td><p>named arguments to modify <code>loon</code> plot states. See <code>l_info_states</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>ggplot</code> object</p>
+    <p>a <code>ggproto</code> object</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='linking.html'>linking</a></code>, <code><a href='selecting.html'>selecting</a></code>, <code><a href='itemLabel.html'>itemLabel</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-  <span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>l_plot</span>(<span class='no'>iris</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>)
-  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>loon2ggplot</span>(<span class='no'>l</span>)
-  <span class='no'>p</span> <span class='co'># a ggplot object</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>p</span>)
-  <span class='co'># add themes</span>
-  <span class='no'>p</span> + <span class='fu'>geom_smooth</span>() + <span class='fu'>theme_linedraw</span>()
+  <span class='co'># Modify the 'linkingGroup' and 'origin' of function `l_hist`</span>
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>)) +
+    <span class='fu'>geom_histogram</span>() +
+    <span class='fu'>interactivity</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mt"</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>)) +
+    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
+    <span class='fu'>interactivity</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mt"</span>) +
+    <span class='fu'>facet_wrap</span>(~<span class='no'>cyl</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

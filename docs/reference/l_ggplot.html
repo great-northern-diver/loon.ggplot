@@ -83,7 +83,7 @@ S3 method print.lggplot will be rendered which will return a loon widget" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -180,22 +180,39 @@ If not specified, must be supplied in each layer added to the plot.</p></td>
 Then print a <code>loon</code> plot automatically.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>ggplot</code>, <code><a href='ggplot2loon.html'>ggplot2loon</a></code>, <code><a href='print.lggplot.html'>print.lggplot</a></code></p></div>
+    <div class='dont-index'><p><code>ggplot</code>, <code><a href='ggplot2loon.html'>ggplot2loon</a></code>, <code><a href='print.lggplot.html'>print.lggplot</a></code></p>
+<p><code><a href='loon.ggplot.html'>loon.ggplot</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
   <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>l_ggplot</span>(<span class='no'>mpg</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>displ</span>, <span class='no'>cty</span>)) +
-     <span class='fu'>geom_point</span>() +
-     <span class='fu'>facet_grid</span>(<span class='kw'>rows</span> <span class='kw'>=</span> <span class='fu'>vars</span>(<span class='no'>drv</span>))
-  <span class='co'># p is a `lggplot` object, `print.lggplot(p)` is called automatically.</span>
-  <span class='co'># Then, the `lggplot` object will be transformed to a `loon` widget</span>
+     <span class='fu'>geom_point</span>(
+       <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+       <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))
+     )
+  <span class='co'># p is a `lggplot` object, `print.lggplot(p)` will be called automatically.</span>
+  <span class='co'># Then, a `lggplot` object will be transformed to a `loon` widget</span>
   <span class='no'>p</span>
-}
-<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-  <span class='co'># get widgets from current path</span>
+  <span class='no'>p</span> +
+    <span class='fu'>facet_grid</span>(<span class='kw'>rows</span> <span class='kw'>=</span> <span class='fu'>vars</span>(<span class='no'>drv</span>)) +
+    <span class='fu'><a href='linking.html'>linking</a></span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mpg"</span>) +
+    <span class='fu'>ggtitle</span>(<span class='st'>"displ versus cty"</span>)
+
+  <span class='co'># a linked bar plot</span>
+  <span class='fu'>l_hist</span>(<span class='no'>mpg</span>$<span class='no'>class</span>, <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mpg"</span>)
+
+  <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+  <span class='co'># Assign a widget from current path</span>
   <span class='co'># suppose the path of `p` is '.l0.ggplot'</span>
   <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'>l_getFromPath</span>(<span class='st'>'.l0.ggplot'</span>)
   <span class='co'># q is a `loon` widget</span>
+  <span class='no'>q</span>
+  }
+
+  <span class='co'># An alternative way to return a real loon widget from `p` (a `lggplot` object)</span>
+  <span class='co'># is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`</span>
+  <span class='co'># this way can provide richer information (note that it will create a new widget).</span>
+  <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='loon.ggplot.html'>loon.ggplot</a></span>(<span class='no'>p</span>)
   <span class='no'>q</span>
 }</div></pre>
   </div>
