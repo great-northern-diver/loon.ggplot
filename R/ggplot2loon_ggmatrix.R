@@ -63,7 +63,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
   # layout
   ggLayout <- lapply(ggplots,
                      function(plot){
-                       build <- ggplot2::ggplot_build(plot)
+                       build <- ggplot_build(plot)
                        build$layout
                      }
   )
@@ -237,7 +237,10 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
       tcltk::tcl('label',
                  as.character(loon::l_subwin(parent,'label')),
                  text= title,
-                 background = loon::l_getOption("background"))
+                 bg = set_tkLabel()$titleBackground,
+                 fg = set_tkLabel()$titleForeground,
+                 borderwidth = set_tkLabel()$titleBorderwidth,
+                 relief = set_tkLabel()$titleRelief)
     )
     tcltk::tkconfigure(tit,
                        font = tcltk::tkfont.create(size = 16, weight="bold"))
@@ -253,7 +256,10 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
         tcltk::tcl('label',
                    as.character(loon::l_subwin(parent,'label')),
                    text= xAxisLabels[i],
-                   background = loon::l_getOption("canvas_bg_guides"))
+                   bg = set_tkLabel()$xlabelBackground,
+                   fg = set_tkLabel()$xlabelForeground,
+                   borderwidth = set_tkLabel()$xlabelBorderwidth,
+                   relief = set_tkLabel()$xlabelRelief)
       )
       tcltk::tkgrid(xAxisLabel,
                     row = start.ypos - 1,
@@ -271,7 +277,10 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
         tcltk::tcl('label',
                    as.character(loon::l_subwin(parent, 'label')),
                    text= paste(paste0(" ", strsplit(yAxisLabels[i], "")[[1]], " "), collapse = "\n"),
-                   background = loon::l_getOption("canvas_bg_guides"))
+                   bg = set_tkLabel()$ylabelBackground,
+                   fg = set_tkLabel()$ylabelForeground,
+                   borderwidth = set_tkLabel()$ylabelBorderwidth,
+                   relief = set_tkLabel()$ylabelRelief)
       )
       tcltk::tkgrid(yAxisLabel,
                     row = start.ypos + (i - 1)* rowspan,
@@ -288,7 +297,10 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
       tcltk::tcl('label',
                  as.character(loon::l_subwin(parent,'label')),
                  text= xlab,
-                 background = loon::l_getOption("background"))
+                 bg = set_tkLabel()$xlabelBackground,
+                 fg = set_tkLabel()$xlabelForeground,
+                 borderwidth = set_tkLabel()$xlabelBorderwidth,
+                 relief = set_tkLabel()$xlabelRelief)
     )
     tcltk::tkgrid(xlabel,
                   row = rowspan * nrow + start.ypos,
@@ -303,7 +315,10 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
       tcltk::tcl('label',
                  as.character(loon::l_subwin(parent,'label')),
                  text= paste(paste0(" ", strsplit(ylab, "")[[1]], " "), collapse = "\n"),
-                 background = loon::l_getOption("background"))
+                 bg = set_tkLabel()$ylabelBackground,
+                 fg = set_tkLabel()$ylabelForeground,
+                 borderwidth = set_tkLabel()$ylabelBorderwidth,
+                 relief = set_tkLabel()$ylabelRelief)
     )
     tcltk::tkgrid(ylabel,
                   row = start.ypos,
