@@ -3,7 +3,34 @@
 
 ## Unexported functions in loon
 as_r_polygonGlyph_size <- getFromNamespace("as_r_polygonGlyph_size", "loon")
-get_scaledData <- getFromNamespace("get_scaledData", "loon")
+
+#' @title scale data
+#' @description It is mainly used in serial axes
+#' @param data A data frame
+#' @param sequence vector with variable names that defines the axes sequence
+#' @param scaling one of 'variable', 'data', 'observation' or 'none' to specify how the data is scaled.
+#' @param displayOrder the order of the display
+#' @param as.data.frame Return a matrix or a data.frame
+#' @export
+get_scaledData <- function(data,
+                           sequence = NULL,
+                           scaling = c('variable', 'data', 'observation', 'none'),
+                           displayOrder = NULL,
+                           as.data.frame = FALSE) {
+
+  if(missing(data)) return(NULL)
+
+  scaling <- match.arg(scaling)
+  displayOrder <- displayOrder %||% seq(nrow(data))
+
+  f <- getFromNamespace("get_scaledData", "loon")
+  d <- suppressWarnings(f(data = data, sequence = sequence, scaling = scaling, displayOrder = displayOrder))
+  if(as.data.frame)
+    as.data.frame(d, stringsAsFactors = FALSE)
+  else
+    d
+}
+
 as_r_serialaxesGlyph_size <- getFromNamespace("as_r_serialaxesGlyph_size", "loon")
 glyph_to_pch <- getFromNamespace("glyph_to_pch", "loon")
 get_display_color <- getFromNamespace("get_display_color", "loon")
@@ -32,3 +59,6 @@ l_allNDimStateNames <- function(plots) {
 ggname <- getFromNamespace("ggname", "ggplot2")
 compute_just <- getFromNamespace("compute_just", "ggplot2")
 message_wrap <- getFromNamespace("message_wrap", "ggplot2")
+set_sec_axis <- getFromNamespace("set_sec_axis", "ggplot2")
+new_aes <- getFromNamespace("new_aes", "ggplot2")
+ggplot_build_ggplot <- getFromNamespace("ggplot_build.ggplot", "ggplot2")
