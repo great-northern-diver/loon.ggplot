@@ -1,5 +1,5 @@
 loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggplotPanel_params,
-                               swapAxes, theme, panX, panY, deltaX, deltaY, zoomX, zoomY){
+                               swapAxes, theme, panX, panY, deltaX, deltaY, zoomX, zoomY) {
   # draw ggGuides?
   if (isCoordPolar) {
     if (inherits(loonPlot, "l_hist")) {
