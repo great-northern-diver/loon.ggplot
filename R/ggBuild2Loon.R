@@ -4,7 +4,7 @@ ggplot2Version <- utils::packageVersion("ggplot2")
 ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
 
   len_layers <- length(ggObj$layers)
-  ggBuild <-  suppressMessages(ggplot2::ggplot_build(ggObj))
+  ggBuild <-  suppressMessages(ggplot_build(ggObj))
   input <- ggObj$data
 
   ggLayout <- ggBuild$layout
