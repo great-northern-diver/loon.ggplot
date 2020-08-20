@@ -25,6 +25,7 @@ Imports:
     gridExtra,
     magrittr,
     dplyr,
+    scales,
     rlang
 Suggests:
     png,
