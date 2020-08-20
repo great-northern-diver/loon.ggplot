@@ -11,14 +11,16 @@ ggSerialAxes(
   showAxes = TRUE,
   showAxesLabels = TRUE,
   scaling = c("variable", "observation", "data", "none"),
-  layout = c("parallel", "radial"),
+  axesLayout = c("parallel", "radial"),
   displayOrder = NULL,
   title = "",
   showLabels = TRUE,
   color = NULL,
   size = NULL,
+  alpha = NULL,
   showGuides = TRUE,
-  showArea = FALSE
+  showArea = FALSE,
+  ymin = NULL
 )
 }
 \arguments{
@@ -35,7 +37,7 @@ ggSerialAxes(
 \item{scaling}{one of 'variable', 'data', 'observation' or 'none' to
 specify how the data is scaled. See Details for more information}
 
-\item{layout}{either "radial" or "parallel"}
+\item{axesLayout}{either "radial" or "parallel"}
 
 \item{displayOrder}{The display order of the observations.}
 
@@ -47,9 +49,13 @@ specify how the data is scaled. See Details for more information}
 
 \item{size}{Line width}
 
+\item{alpha}{Transparency}
+
 \item{showGuides}{Logical value to indicate whether guides should be shown or not}
 
 \item{showArea}{Logical value to indicate whether to display lines or area}
+
+\item{ymin}{A vector or a data.frame. When \code{showArea = TRUE}, it is the lower boundary of the ribbon.}
 }
 \value{
 a ggplot object
@@ -57,6 +63,9 @@ a ggplot object
 \description{
 The ggplot serialaxes graphics displays multivariate data either as
 a stacked star glyph plot, or as a parallel coordinate plot.
+}
+\details{
+It is deprecated now. Please check \code{\link{coord_serialaxes}}.
 }
 \examples{
 # Blank plot
@@ -70,6 +79,6 @@ ordSeq <- c(1, 2, 3, 1, 4, 2, 3, 4)
 ggSerialAxes(
        ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
        axesLabels = colnames(iris)[ordSeq],
-       layout = "radial"
+       axesLayout = "radial"
 )
 }

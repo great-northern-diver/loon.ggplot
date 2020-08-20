@@ -31,7 +31,7 @@ if(interactive()) {
               ),
               showItemLabels = TRUE
     )
-    # hover the mouse on top of any point
+    # hover the mouse on top of any point to check the information we set
 }
 }
 \seealso{

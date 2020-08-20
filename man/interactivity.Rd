@@ -2,7 +2,7 @@
 % Please edit documentation in R/interactive-ggproto.R
 \name{interactivity}
 \alias{interactivity}
-\title{Modify the \code{interactive} component}
+\title{Modify the interactive component}
 \usage{
 interactivity(
   linkingGroup = NULL,
@@ -56,18 +56,24 @@ a \code{ggproto} object
 \description{
 Set interactive components (e.g. \code{linking}, \code{selecting}, \code{itemLabel}, etc)
 }
+\details{
+In interactive graphics, there are several fundamental infrastructures, such as querying, linking and selecting.
+Component \code{interactivity} is used to set these features.
+\tabular{lll}{ \strong{Interactivity} \tab \strong{Description} \tab \strong{Subfunction}\cr
+  Linking \tab Linking several plots to discover the pattern of interest \tab \code{\link{linking}}\cr
+  Selecting \tab Highlight the subset of interest \tab \code{\link{selecting}}\cr
+  ItemLabel \tab Querying in interactive graphics \tab \code{\link{itemLabel}}\cr}
+}
 \examples{
 if(interactive()) {
-  # Modify the 'linkingGroup' and 'origin' of function `l_hist`
+  # Modify the 'linkingGroup' and 'origin' of a hist object
   l_ggplot(mtcars, mapping = aes(x = wt)) +
     geom_histogram() +
     interactivity(linkingGroup = "mt", origin = 2)
+  # linking with the histogram
   l_ggplot(mtcars, mapping = aes(x = wt, y = hp)) +
     geom_point(size = 4) +
     interactivity(linkingGroup = "mt") +
     facet_wrap(~cyl)
 }
-}
-\seealso{
-\code{\link{linking}}, \code{\link{selecting}}, \code{\link{itemLabel}}
 }

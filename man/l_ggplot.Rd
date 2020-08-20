@@ -29,35 +29,42 @@ S3 method \code{print.lggplot} will be rendered which will return a \code{loon} 
 }
 \examples{
 if(interactive()) {
-  p <- l_ggplot(mpg, aes(displ, cty)) +
-     geom_point(
-       size = 4,
-       mapping = aes(color = factor(cyl))
-     )
-  # p is a `lggplot` object, `print.lggplot(p)` will be called automatically.
-  # Then, a `lggplot` object will be transformed to a `loon` widget
-  p
-  p +
-    facet_grid(rows = vars(drv)) +
-    linking(linkingGroup = "mpg") +
-    ggtitle("displ versus cty")
+p <- l_ggplot(mpg, aes(displ, cty)) +
+    geom_point(
+      size = 4,
+      mapping = aes(color = factor(cyl))
+    )
+# p is a `lggplot` object, `print.lggplot(p)` will be called automatically.
+# Then, a `lggplot` object will be transformed to a `loon` widget
+p
 
-  # a linked bar plot
-  l_hist(mpg$class, linkingGroup = "mpg")
+\dontrun{
+# Assign a widget from current path
+# suppose the path of `p` is '.l0.ggplot'
+q <- l_getFromPath('.l0.ggplot')
+# q is a `loon` widget
+q
+}
 
-  \dontrun{
-  # Assign a widget from current path
-  # suppose the path of `p` is '.l0.ggplot'
-  q <- l_getFromPath('.l0.ggplot')
-  # q is a `loon` widget
-  q
-  }
+# An alternative way to return a real loon widget from `p` (a `lggplot` object)
+# is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`
+# this way can provide richer information (note that it will create a new widget).
+q <- loon.ggplot(p)
+q
 
-  # An alternative way to return a real loon widget from `p` (a `lggplot` object)
-  # is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`
-  # this way can provide richer information (note that it will create a new widget).
-  q <- loon.ggplot(p)
-  q
+# pipe more components
+p +
+  facet_grid(rows = vars(drv)) +
+  linking(linkingGroup = "mpg") +
+  ggtitle("displ versus cty")
+# a linked bar plot
+l_hist(mpg$class, linkingGroup = "mpg")
+
+# a 3D object
+# press the button key `R` to rotate the plot
+l_ggplot(mtcars,
+         mapping = aes(x = wt, y = hp, z = drat)) +
+   geom_point(size = 4)
 }
 }
 \seealso{
