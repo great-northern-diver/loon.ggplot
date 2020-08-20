@@ -2,6 +2,35 @@
   if (!is.null(a)) a else b
 }
 
+mbind <- function(new_mapping = aes(), mapping) {
+
+  if (!missing(mapping) && !inherits(mapping, "uneval") &&
+      !missing(new_mapping) && !inherits(new_mapping, "uneval")) {
+    stop("Mapping should be created with `aes()`.", call. = FALSE)
+  }
+
+  new_aes(new_mapping %<-% mapping)
+}
+
+is.waive <- function (x) inherits(x, "waiver")
+
+`%<-%` <- function(x, y) {
+  if(is.null(names(x)) || is.null(names(y)))
+    return(c(x,y))
+  else {
+
+    if(!is.list(x)) x <- as.list(x)
+    if(!is.list(y)) y <- as.list(y)
+
+    merged_list <- c(x, y)
+    list_names <- names(merged_list)
+    merged_list[duplicated(list_names, fromLast = TRUE)] <- NULL
+
+    return(merged_list[unique(list_names)])
+  }
+}
+
+
 is.ggmatrix <- function(x) {
   inherits(x, "ggmatrix")
 }
@@ -99,6 +128,30 @@ group_id <- function(data, uniGroup) {
          function(x) {
            which(group == x)[1]
          }, numeric(1))
+}
+
+set_tkLabel <- function(labelBackground = "gray80", labelForeground = "black", labelBorderwidth = 2, labelRelief = "groove",
+                        xlabelBackground = "white", xlabelForeground = "black", xlabelBorderwidth = 2, xlabelRelief = "solid",
+                        ylabelBackground = "white", ylabelForeground = "black", ylabelBorderwidth = 2, ylabelRelief = "solid",
+                        titleBackground = "white", titleForeground = "black", titleBorderwidth = 2, titleRelief = "solid") {
+  list(
+    labelBackground = labelBackground,
+    labelForeground = labelForeground,
+    labelBorderwidth = labelBorderwidth,
+    labelRelief = labelRelief,
+    xlabelBackground = xlabelBackground,
+    xlabelForeground = xlabelForeground,
+    xlabelBorderwidth = xlabelBorderwidth,
+    xlabelRelief = xlabelRelief,
+    ylabelBackground = ylabelBackground,
+    ylabelForeground = ylabelForeground,
+    ylabelBorderwidth = ylabelBorderwidth,
+    ylabelRelief = ylabelRelief,
+    titleBackground = titleBackground,
+    titleForeground = titleForeground,
+    titleBorderwidth = titleBorderwidth,
+    titleRelief = titleRelief
+  )
 }
 
 set_lineColor <- function(data, mapping, color) {
