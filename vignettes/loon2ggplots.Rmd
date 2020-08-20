@@ -248,7 +248,7 @@ include_graphics(path_concat(imageDirectory, "map.png"))
 # parallel axes plot
 ggplot(data = iris, 
        mapping = aes(colour = Species)) %>% 
-  ggSerialAxes(layout = "parallel") +
+  ggSerialAxes(axesLayout = "parallel") +
   theme(axis.text.x = element_text(angle = 30, hjust = 0.7))
 ```
 

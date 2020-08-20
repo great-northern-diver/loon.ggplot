@@ -104,27 +104,27 @@ test_that("test geom glyphs in ggplot", {
   g <- ggSerialAxes(
     ggObj = ggplot(data = iris, mapping = aes(colour = Species, size = Sepal.Length)),
     axesLabels = colnames(iris)[ordSeq],
-    layout = "radial"
+    axesLayout = "radial"
   )
   g
   expect_equal(class(g), c("gg", "ggplot"))
   g <- ggSerialAxes(
     ggObj = ggplot(data = iris, mapping = aes(colour = Species)),
-    layout = "radial",
+    axesLayout = "radial",
     size = 0.1
   )
   g
   expect_equal(class(g), c("gg", "ggplot"))
   g <- ggSerialAxes(
     ggObj = ggplot(data = iris, mapping = aes(size = Sepal.Length)),
-    layout = "radial",
+    axesLayout = "radial",
     color = "pink"
   )
   g
   expect_equal(class(g), c("gg", "ggplot"))
   g <- ggSerialAxes(
     ggObj = ggplot(data = iris),
-    layout = "radial",
+    axesLayout = "radial",
     color = "pink",
     size = 2,
     showArea = TRUE
