@@ -1,20 +1,22 @@
-modify_loon_plots <- function(plots_info = list()) {
+modify_loon_plots <- function(plotInfo = list()) {
 
-  args <- plots_info$args
-  indices <- plots_info$indices
+  args <- plotInfo$args
+  indices <- plotInfo$indices
 
-  plots <- plots_info$plots
-  display_info <- plots_info$display_info
+  plots <- plotInfo$plots
+  display_info <- plotInfo$display_info
+
+  isCoordSerialaxes <- plotInfo$isCoordSerialaxes
 
   # set linkingGroup
   lapply(plots,
          function(plot){
            loon::l_configure(plot, linkingGroup = args$linkingGroup,
-                             sync = plots_info$sync)
+                             sync = plotInfo$sync)
          }
   )
 
-  if (plots_info$panelNum == 1) {
+  if (plotInfo$panelNum == 1) {
     gp <- plots$x1y1
 
     model_layer_nDimStates <- l_nDimStateNames(gp)
@@ -22,13 +24,13 @@ modify_loon_plots <- function(plots_info = list()) {
     gp <- list(
       plots = plots,
       facet = list(
-        is_facet_wrap = plots_info$is_facet_wrap,
-        is_facet_grid = plots_info$is_facet_grid,
-        byCOLS = plots_info$byCOLS,
-        byROWS = plots_info$byROWS
+        is_facet_wrap = plotInfo$is_facet_wrap,
+        is_facet_grid = plotInfo$is_facet_grid,
+        byCOLS = plotInfo$byCOLS,
+        byROWS = plotInfo$byROWS
       ),
       titles = list(
-        title = plots_info$title,
+        title = plotInfo$title,
         colSubtitles = display_info$colSubtitles,
         rowSubtitles = display_info$rowSubtitles
       )
@@ -37,6 +39,9 @@ modify_loon_plots <- function(plots_info = list()) {
 
     model_layer_nDimStates <- l_allNDimStateNames(gp$plots)
   }
+
+  if(isCoordSerialaxes) return(gp)
+
   # set args
   new_args <- setNames(
     lapply(seq_len(length(args) + 1) - 1,
@@ -44,10 +49,14 @@ modify_loon_plots <- function(plots_info = list()) {
              if(j == 0) {
                gp
              } else {
-               if(names(args)[j] == "linkingKey") NULL
-               else if(names(args)[j] == "linkingGroup") NULL
+               # linking states
+               if(names(args)[j] %in% c("linkingKey", "linkingGroup", "sync")) NULL
+               # itemLabel state
                else if(names(args)[j] == "itemLabel") NULL
+               # 3D states
+               else if(names(args)[j] %in% c("z", "zlabel", "axisScaleFactor")) NULL
                else {
+                 # loon states
                  name <- names(args)[j]
                  if(!name %in% model_layer_nDimStates) return(args[[j]])
                  if(length(args[[j]]) == 1) return(args[[j]])
