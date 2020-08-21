@@ -147,6 +147,13 @@ layeredMapping_setup <- function(layer, axesLayout, mapping, ...) {
 
 layeredMapping_setup.GeomDensity <- function(layer, axesLayout, mapping, name) {
 
+  # useless; just to pass the CMD check
+  # or consider using the `globalVariables`
+  x <- numeric(0)
+  xmin <- numeric(0)
+  y <- numeric(0)
+  group <- numeric(0)
+
   if("fill" %in% name) {
     switch(axesLayout,
            "parallel" = mbind(
@@ -178,6 +185,16 @@ layeredMapping_setup.GeomFreqpoly <- function(layer, axesLayout, mapping, name) 
 }
 
 layeredMapping_setup.GeomBar <- function(layer, axesLayout, mapping) {
+
+  # useless; just to pass the CMD check
+  # or consider using the `globalVariables`
+  xmax <- numeric(0)
+  xmin <- numeric(0)
+  ymax <- numeric(0)
+  ymin <- numeric(0)
+  x <- numeric(0)
+  y <- numeric(0)
+  group <- numeric(0)
 
   switch(axesLayout,
          "parallel" = mbind(

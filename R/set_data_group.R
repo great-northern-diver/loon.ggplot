@@ -161,6 +161,6 @@ set_ymin <- function(ymin, n, p) {
     as.data.frame(matrix(rep(ymin, each = n), nrow = n))
   } else {
     # a data.frame or a list
-    as.data.frame(d, stringsAsFactors = FALSE)
+    as.data.frame(ymin, stringsAsFactors = FALSE)
   }
 }

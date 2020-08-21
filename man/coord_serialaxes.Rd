@@ -23,6 +23,8 @@ coord_serialaxes(
 \item{axesLabels}{A vector with variable names that defines the axes sequence.}
 
 \item{right}{The layer ('density', 'histogram', ...) is displayed on the left or right.}
+
+\item{...}{other arguments used to modify layers}
 }
 \description{
 It is used to visualize high dimensional data set.

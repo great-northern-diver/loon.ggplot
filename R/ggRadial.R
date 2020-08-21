@@ -76,6 +76,8 @@ ggRadialAes <- function(ggObj,
   guideX <- xpos + radius * cos(seq(0, 2 * base::pi, length=101))
   guideY <- ypos + radius * sin(seq(0, 2 * base::pi, length=101))
 
+  x <- numeric(0)
+  y <- numeric(0)
   guideArgs <- list(
     data = data.frame(
       x = guideX,

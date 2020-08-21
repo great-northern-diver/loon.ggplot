@@ -5,10 +5,12 @@
 #' @param displayOrder The order of the display
 #' @param axesLabels A vector with variable names that defines the axes sequence.
 #' @param right The layer ('density', 'histogram', ...) is displayed on the left or right.
+#' @param ... other arguments used to modify layers
 #' @details Serial axes coordinate system is different from other conventional coordinate system (Cartesian, Polar, ...).
 #' It does not have a formal transformation (i.e. in polar coordinate system, "x = rcos(theta)",
 #' "y = rsin(theta)"). In serial axes coordinate system, mapping aesthetics does not really require "x" or "y".
 #' To project a \code{geom} layer, users can customize function \code{\link{add_serialaxes_layers}}.
+#' @importFrom utils getFromNamespace
 #' @examples
 #' p <- ggplot(iris) +
 #'        geom_path(alpha = 0.2) +

@@ -4,6 +4,7 @@ ggplot2::aes
 GeomFreqpoly <- ggplot2::ggproto("GeomFreqpoly", GeomPath)
 
 #' @export
+#' @inherit ggplot2::geom_freqpoly
 geom_freqpoly <- function (mapping = NULL, data = NULL, stat = "bin", position = "identity",
                            ..., na.rm = FALSE, show.legend = NA, inherit.aes = TRUE) {
   params <- list(na.rm = na.rm, ...)
