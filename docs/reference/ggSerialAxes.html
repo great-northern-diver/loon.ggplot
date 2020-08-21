@@ -81,7 +81,7 @@ a stacked star glyph plot, or as a parallel coordinate plot." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -152,14 +152,16 @@ a stacked star glyph plot, or as a parallel coordinate plot.</p>
   <span class='kw'>showAxes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>showAxesLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>scaling</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"variable"</span>, <span class='st'>"observation"</span>, <span class='st'>"data"</span>, <span class='st'>"none"</span>),
-  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"parallel"</span>, <span class='st'>"radial"</span>),
+  <span class='kw'>axesLayout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"parallel"</span>, <span class='st'>"radial"</span>),
   <span class='kw'>displayOrder</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>,
   <span class='kw'>showLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>showGuides</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>showArea</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>showArea</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -191,7 +193,7 @@ a stacked star glyph plot, or as a parallel coordinate plot.</p>
 specify how the data is scaled. See Details for more information</p></td>
     </tr>
     <tr>
-      <th>layout</th>
+      <th>axesLayout</th>
       <td><p>either "radial" or "parallel"</p></td>
     </tr>
     <tr>
@@ -215,6 +217,10 @@ specify how the data is scaled. See Details for more information</p></td>
       <td><p>Line width</p></td>
     </tr>
     <tr>
+      <th>alpha</th>
+      <td><p>Transparency</p></td>
+    </tr>
+    <tr>
       <th>showGuides</th>
       <td><p>Logical value to indicate whether guides should be shown or not</p></td>
     </tr>
@@ -222,11 +228,18 @@ specify how the data is scaled. See Details for more information</p></td>
       <th>showArea</th>
       <td><p>Logical value to indicate whether to display lines or area</p></td>
     </tr>
+    <tr>
+      <th>ymin</th>
+      <td><p>A vector or a data.frame. When <code>showArea = TRUE</code>, it is the lower boundary of the ribbon.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a ggplot object</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>It is deprecated now. Please check <code><a href='coord_serialaxes.html'>coord_serialaxes</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Blank plot</span>
@@ -239,7 +252,7 @@ specify how the data is scaled. See Details for more information</p></td>
 <span class='fu'>ggSerialAxes</span>(
        <span class='kw'>ggObj</span> <span class='kw'>=</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Species</span>)),
        <span class='kw'>axesLabels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>iris</span>)[<span class='no'>ordSeq</span>],
-       <span class='kw'>layout</span> <span class='kw'>=</span> <span class='st'>"radial"</span>
+       <span class='kw'>axesLayout</span> <span class='kw'>=</span> <span class='st'>"radial"</span>
 )</div><div class='img'><img src='ggSerialAxes-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

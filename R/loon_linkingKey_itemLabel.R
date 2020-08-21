@@ -3,7 +3,7 @@ loonDefaultLinkingKey <- function(data) {
 }
 
 loonLinkingKey <- function(data, args) {
-  if (is.data.frame(data) & !"waiver" %in% class(data)) {
+  if (is.data.frame(data) & !is.waive(data)) {
     # check linkingKey
     if (is.null(args[['linkingKey']])) {
       # default linkingKey
@@ -21,7 +21,7 @@ loonLinkingKey <- function(data, args) {
 }
 
 loonItemLabel <- function(data, args) {
-  if (is.data.frame(data) & !"waiver" %in% class(data)) {
+  if (is.data.frame(data) & !is.waive(data)) {
     # check itemLabel
     if (is.null(args[['itemLabel']])) {
       # default itemLabel

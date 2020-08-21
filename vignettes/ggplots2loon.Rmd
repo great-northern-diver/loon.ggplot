@@ -74,8 +74,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       tidy = FALSE)
 library(knitr)
 set.seed(12314159)
-imageDirectory <- "./img/ggplots2loon"
-dataDirectory <- "./data/ggplots2loon"
+imageDirectory <- "./ggplots2loon"
+dataDirectory <- "./ggplots2loon"
 path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 
 library(ggplot2, quietly = TRUE)

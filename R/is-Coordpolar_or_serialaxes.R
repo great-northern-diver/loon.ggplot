@@ -5,3 +5,7 @@ is.CoordPolar <- function(ggplotPanel_params){
   isrRange <- is.null(ggplotPanel_params$r.range)
   isyRange & isxRange & !isthetaRange & !isrRange
 }
+
+is.CoordSerialaxes <- function(ggObj) {
+  "CoordSerialaxes" %in% class(ggObj$coordinates)
+}

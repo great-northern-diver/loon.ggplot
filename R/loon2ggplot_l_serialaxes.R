@@ -13,7 +13,7 @@ loon2ggplot.l_serialaxes <- function(target, ...) {
 
   ggObj <- ggplot2::ggplot(data = data) %>%
     ggSerialAxes(scaling = widget['scaling'],
-                 layout = widget['axesLayout'],
+                 axesLayout = widget['axesLayout'],
                  color = get_display_color(
                    as_hex6color(widget['color'][active_displayOrder]),
                    widget['selected'][active_displayOrder]

@@ -74,8 +74,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       tidy = FALSE)
 library(knitr)
 set.seed(12314159)
-imageDirectory <- "./img/loon2ggplots"
-dataDirectory <- "./data/loon2ggplots"
+imageDirectory <- "./loon2ggplots"
+dataDirectory <- "./loon2ggplots"
 path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
 
 library(ggplot2, quietly = TRUE)
@@ -242,13 +242,21 @@ include_graphics(path_concat(imageDirectory, "map.png"))
 ```
 
 
-* Providing serial axes plots (parallel coordinate or radial coordinate) via `ggSerialAxes()`
+* Providing serial axes plots (parallel coordinate or radial coordinate) via `coord_serialaxes()`
+
+  - In serial coordinate system, no `x` or `y` (even `group`) aesthetics are required; but we can set other scales, such as `colour`, `fill`, `size`, etc.
+  
+  - Layer `geom_path` is used to draw the serial lines; layer `geom_histogram`, `geom_freqpoly` and `geom_density` are used to draw the histograms, frequency lines and densities (for each variable). Users can also customize their own one dimensional layer (i.e. `geom_boxplot`, `geom_violin`, etc) by editing function `add_serialaxes_layers`.
 
 ```{r serialaxes, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 3, fig.align = "center", out.width = "70%"}
 # parallel axes plot
-ggplot(data = iris, 
-       mapping = aes(colour = Species)) %>% 
-  ggSerialAxes(layout = "parallel") +
+# Change function `ggplot` to `l_ggplot` to 
+# get an interactive loon serialaxes plot
+ggplot(iris, mapping = aes(colour = factor(Species))) +
+  geom_path(alpha = 0.2)  + 
+  coord_serialaxes() -> p
+p + 
+  geom_histogram(alpha = 0.8, mapping = aes(fill = factor(Species))) + 
   theme(axis.text.x = element_text(angle = 30, hjust = 0.7))
 ```
 

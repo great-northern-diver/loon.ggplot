@@ -1,15 +1,37 @@
-get_modelLayers <- function(len_layers, ggObj, isCoordPolar){
+get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSerialaxes = FALSE) {
+
   layerNames <- lapply(seq_len(len_layers),
                        function(j) {
                          className <- class(ggObj$layers[[j]]$geom)
                          className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
                        })
 
+  # check the coord
+  if(isCoordSerialaxes) {
+    serialaxesLayers <- which(
+      sapply(layerNames,
+             function(layerName) {
+               (length(layerName) == 1) && (("GeomPath" %in% layerName) || ("GeomRibbon" %in% layerName))
+             })
+    )
+
+    if(length(serialaxesLayers) > 1) {
+      warning("Only one layer can be active in serialaxes. The first layer will be picked by default")
+      serialaxesLayers <- serialaxesLayers[1]
+    }
+
+    return(list(pointLayers = numeric(0L),
+                histogramLayers = numeric(0L),
+                boxplotLayers = numeric(0L),
+                curveLayers = numeric(0L),
+                serialaxesLayers = serialaxesLayers))
+  }
+
   # take the point layer as l_plot
   pointLayers <- which(sapply(layerNames,
                               function(layerName){
                                 "GeomPoint" %in% layerName
-                              }) == TRUE
+                              })
   )
 
   histogramLayers <- which(sapply(layerNames,
@@ -20,48 +42,59 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar){
                                         FALSE
                                       } else TRUE
                                     } else FALSE
-                                  }) == TRUE
+                                  })
   )
 
   # boxlayer
   boxplotLayers <- which(sapply(layerNames,
                                 function(layerName){
                                   "GeomBoxplot" %in% layerName
-                                }) == TRUE
+                                })
   )
 
   # curvelayer
   curveLayers <- which(sapply(layerNames,
                               function(layerName){
                                 "GeomCurve" %in% layerName
-                              }) == TRUE
+                              })
   )
   list(pointLayers = pointLayers,
        histogramLayers = histogramLayers,
        boxplotLayers = boxplotLayers,
-       curveLayers = curveLayers)
+       curveLayers = curveLayers,
+       serialaxesLayers = numeric(0L))
 }
 
 get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
 
   pointLayers <- modelLayers$pointLayers
   histogramLayers <- modelLayers$histogramLayers
+  serialaxesLayers <- modelLayers$serialaxesLayers
+
   boxplotLayers <- modelLayers$boxplotLayers
 
   point_hist_layers <- c(pointLayers, histogramLayers)
+
   if (length(activeGeomLayers) == 0) {
-    if(length(point_hist_layers) != 0) {
-      activeGeomLayers <- min(point_hist_layers)
-      activeModel <- if(activeGeomLayers %in% pointLayers) "l_plot" else "l_hist"
+    if(length(c(point_hist_layers, serialaxesLayers)) != 0) {
+      activeGeomLayers <- if(length(serialaxesLayers) > 0) serialaxesLayers else min(point_hist_layers)
+      activeModel <- if (activeGeomLayers %in% serialaxesLayers) {
+        "l_serialaxes"
+      } else if(activeGeomLayers %in% pointLayers)
+        "l_plot"
+      else "l_hist"
     } else {
       activeModel <- "l_plot"
     }
   } else {
     if(max(activeGeomLayers) > len_layers)
       stop("the activeGeomLayers is out of bound", call. = FALSE)
-    canBeActive <- activeGeomLayers %in% c(point_hist_layers, boxplotLayers)
+    canBeActive <- activeGeomLayers %in% c(point_hist_layers, serialaxesLayers, boxplotLayers)
     if(all(canBeActive)) {
-      if(all(activeGeomLayers %in% pointLayers)) { # all point layers?
+
+      if(all(activeGeomLayers %in% serialaxesLayers)) {
+        activeModel <- "l_serialaxes"
+      } else if(all(activeGeomLayers %in% pointLayers)) { # all point layers?
         activeModel <- "l_plot"
       } else if(all(activeGeomLayers %in% histogramLayers)) { # all histogram layers?
         activeModel <- "l_hist"

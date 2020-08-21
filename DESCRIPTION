@@ -25,6 +25,7 @@ Imports:
     gridExtra,
     magrittr,
     dplyr,
+    scales,
     rlang
 Suggests:
     png,
@@ -35,7 +36,8 @@ Suggests:
     tidyverse,
     covr,
     maps,
-    nycflights13
+    nycflights13,
+    ggplot2movies
 LazyData: true
 RoxygenNote: 7.1.0
 Encoding: UTF-8

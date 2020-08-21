@@ -50,8 +50,13 @@ facet_wrap_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
     # pack column names
     lapply(1:length(colnames),
            function(k) {
-             colname <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
-                                                text= colnames[k], background = "grey80"))
+             colname <- as.character(tcltk::tcl('label',
+                                                as.character(loon::l_subwin(parent,'label')),
+                                                text= colnames[k],
+                                                bg = set_tkLabel()$labelBackground,
+                                                fg = set_tkLabel()$labelForeground,
+                                                borderwidth = set_tkLabel()$labelBorderwidth,
+                                                relief = set_tkLabel()$labelRelief))
              theRow <- layout$ROW[k] - 1
              theCOL <- layout$COL[k] - 1
              tcltk::tkgrid(colname,

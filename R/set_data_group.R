@@ -1,8 +1,9 @@
 set_data_group <- function(data = NULL,
                            mapping = ggplot2::aes(),
                            showArea = FALSE,
+                           ymin = NULL,
                            color = NULL,
-                           lineWidth = 0.5,
+                           lineWidth = NULL,
                            axesLayout = "parallel",
                            originalData = NULL) {
 
@@ -15,13 +16,16 @@ set_data_group <- function(data = NULL,
   stopifnot(
     exprs = {
       length(color) == 0 || length(color) == 1 || length(color) == n
-      length(lineWidth) == 1 || length(lineWidth) == n
+      length(lineWidth) == 0 || length(lineWidth) == 1 || length(lineWidth) == n
     }
   )
 
   if(length(color) == 0) color <- rep(NA, n)
   if(length(color) == 1) color <- rep(color, n)
+  if(length(lineWidth) == 0) lineWidth <- rep(NA, n)
   if(length(lineWidth) == 1) lineWidth <- rep(lineWidth, n)
+
+  ymin <- set_ymin(ymin, n, p)
 
   grouped_data <- switch(
     axesLayout,
@@ -34,7 +38,7 @@ set_data_group <- function(data = NULL,
                  if(showArea) {
                    data.frame(
                      x = c(xaxis, rev(xaxis)),
-                     y = as.numeric(c(data[i, ], rep(0, p))),
+                     y = as.numeric(c(data[i, ], ymin[i, ])),
                      group = rep(i, 2 * p),
                      color = rep(color[i], 2 * p),
                      stringsAsFactors = FALSE
@@ -88,26 +92,75 @@ set_data_group <- function(data = NULL,
     }
   )
 
-  # remove NA color
-  if(any(is.na(grouped_data$color))) grouped_data$color <- NULL
-  quo_color <- mapping$colour
+  # color includes NA; input color is NULL
+  # replace the NA color column
+  # to data mapping variable
+  if(any(is.na(grouped_data$color))) {
 
-  if(!rlang::is_empty(quo_color) && !is.null(originalData)) {
-    grouped_data <- cbind(
-      grouped_data,
-      color = rep(
-        rlang::eval_tidy(rlang::quo(!!quo_color),  originalData),
-        each = switch(axesLayout, "parallel" = p, "radial" = p + 1)
+    grouped_data$color <- NULL
+    quo_color <- mapping$colour
+
+    if(!rlang::is_empty(quo_color) && !is.null(originalData)) {
+      grouped_data <- cbind(
+        grouped_data,
+        color = rep(
+          rlang::eval_tidy(rlang::quo(!!quo_color),  originalData),
+          each = switch(axesLayout, "parallel" = p, "radial" = p + 1)
+        )
       )
-    )
+    }
+
   }
 
-  if(!is.null(grouped_data$color)) {
-    if(is.numeric(grouped_data$color)) {
-      warning("Color can only be discrete", call. = FALSE)
-      grouped_data$color <- as.character(grouped_data$color)
+  if(any(is.na(grouped_data$size))) {
+
+    grouped_data$size <- NULL
+    quo_size <- mapping$size
+
+    if(!rlang::is_empty(quo_size) && !is.null(originalData)) {
+      grouped_data <- cbind(
+        grouped_data,
+        size = rep(
+          rlang::eval_tidy(rlang::quo(!!quo_size),  originalData),
+          each = switch(axesLayout, "parallel" = p, "radial" = p + 1)
+        )
+      )
     }
   }
 
-  return(grouped_data)
+  # merge original data
+  switch(
+    axesLayout,
+    "parallel" = {
+      cbind(
+        grouped_data,
+        originalData[rep(seq(n), each = p), ],
+        row.names = NULL
+      )
+    },
+    "radial" = {
+      cbind(
+        grouped_data,
+        originalData[rep(seq(n), each = p + 1), ],
+        row.names = NULL
+      )
+    }
+  )
+}
+
+set_ymin <- function(ymin, n, p) {
+
+  ymin <- ymin %||% 0
+
+  if(is.atomic(ymin)) {
+    # a vector
+    if(!is.numeric(ymin))
+      stop("ymin must be numerical.")
+    ymin <- rep_len(ymin, p)
+
+    as.data.frame(matrix(rep(ymin, each = n), nrow = n))
+  } else {
+    # a data.frame or a list
+    as.data.frame(ymin, stringsAsFactors = FALSE)
+  }
 }

@@ -1,19 +1,19 @@
-pack_loon_plots <- function(plots_info = list(),
+pack_loon_plots <- function(plotInfo = list(),
                             ggObj,
                             parent = NULL,
                             tkLabels = NULL) {
 
-  plots <- plots_info$plots
-  display_info <- plots_info$display_info
+  plots <- plotInfo$plots
+  display_info <- plotInfo$display_info
 
   # get from environment
-  xlabel <- plots_info$xlabel
-  ylabel <- plots_info$ylabel
-  span <- plots_info$span
-  row.span <- plots_info$row.span
-  column.span <- plots_info$column.span
-  start.ypos <- plots_info$start.ypos
-  start.xpos <- plots_info$start.xpos
+  xlabel <- plotInfo$xlabel
+  ylabel <- plotInfo$ylabel
+  span <- plotInfo$span
+  row.span <- plotInfo$row.span
+  column.span <- plotInfo$column.span
+  start.ypos <- plotInfo$start.ypos
+  start.xpos <- plotInfo$start.xpos
 
   if(display_info$swapAxes) {
     label <- ylabel
@@ -30,7 +30,12 @@ pack_loon_plots <- function(plots_info = list(),
   if(!is.null(xlabel) & tkLabels){
     xlab <- as.character(tcltk::tcl('label',
                                     as.character(loon::l_subwin(parent,'label')),
-                                    text= xlabel, background = "white"))
+                                    text= xlabel,
+                                    bg = set_tkLabel()$xlabelBackground,
+                                    fg = set_tkLabel()$xlabelForeground,
+                                    borderwidth = set_tkLabel()$xlabelBorderwidth,
+                                    relief = set_tkLabel()$xlabelRelief
+                                    ))
     tcltk::tkgrid(xlab, row = row.span + start.ypos, column = start.xpos,
                   rowspan = 1, columnspan = column.span,
                   sticky="nesw")
@@ -40,7 +45,10 @@ pack_loon_plots <- function(plots_info = list(),
                                     as.character(loon::l_subwin(parent,'label')),
                                     text= paste(paste0(" ", strsplit(ylabel, "")[[1]], " "),
                                                 collapse = "\n"),
-                                    background = "white")
+                                    bg = set_tkLabel()$ylabelBackground,
+                                    fg = set_tkLabel()$ylabelForeground,
+                                    borderwidth = set_tkLabel()$ylabelBorderwidth,
+                                    relief = set_tkLabel()$ylabelRelief)
     )
     tcltk::tkgrid(ylab, row = start.ypos, column = 0,
                   rowspan = row.span, columnspan = 1,
@@ -48,14 +56,17 @@ pack_loon_plots <- function(plots_info = list(),
   }
 
   # is_facet_grid; subtitle by row?
-  if(!is.null(display_info$rowSubtitles) &  plots_info$is_facet_grid & tkLabels) {
+  if(!is.null(display_info$rowSubtitles) &  plotInfo$is_facet_grid & tkLabels) {
     uniqueRowSubtitles <- unique(display_info$rowSubtitles)
     for(i in 1:length(uniqueRowSubtitles)){
       rowSub <- as.character(tcltk::tcl('label',
                                         as.character(loon::l_subwin(parent,'label')),
                                         text= paste(paste0(" ", strsplit(uniqueRowSubtitles[i], "")[[1]], " "),
                                                     collapse = "\n"),
-                                        background = "grey90"))
+                                        bg = set_tkLabel()$labelBackground,
+                                        fg = set_tkLabel()$labelForeground,
+                                        borderwidth = set_tkLabel()$labelBorderwidth,
+                                        relief = set_tkLabel()$labelRelief))
       tcltk::tkgrid(rowSub,
                     row = start.ypos + (i - 1)* span,
                     column = start.xpos + column.span,
@@ -64,11 +75,15 @@ pack_loon_plots <- function(plots_info = list(),
     }
   }
   # is_facet_grid; subtitle by col?
-  if(!is.null(display_info$colSubtitles) &  plots_info$is_facet_grid & tkLabels) {
+  if(!is.null(display_info$colSubtitles) &  plotInfo$is_facet_grid & tkLabels) {
     uniqueColSubtitles <- unique(display_info$colSubtitles)
     for(i in 1:length(uniqueColSubtitles)){
       colSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
-                                        text= uniqueColSubtitles[i], background = "grey90"))
+                                        text= uniqueColSubtitles[i],
+                                        bg = set_tkLabel()$labelBackground,
+                                        fg = set_tkLabel()$labelForeground,
+                                        borderwidth = set_tkLabel()$labelBorderwidth,
+                                        relief = set_tkLabel()$labelRelief))
       tcltk::tkgrid(colSub,
                     row = start.ypos - 1,
                     column = start.xpos + (i - 1) * span,
@@ -77,16 +92,20 @@ pack_loon_plots <- function(plots_info = list(),
     }
   }
 
-  if(!is.null(plots_info$title) & tkLabels) {
+  if(!is.null(plotInfo$title) & tkLabels) {
     titleFont <- if(display_info$start.subtitlepos == start.ypos)
       tcltk::tkfont.create(size = 16)
     else
       tcltk::tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcltk::tcl('label',
                                    as.character(loon::l_subwin(parent,'label')),
-                                   text= plots_info$title))
+                                   text= plotInfo$title,
+                                   bg = set_tkLabel()$titleBackground,
+                                   fg = set_tkLabel()$titleForeground,
+                                   borderwidth = set_tkLabel()$titleBorderwidth,
+                                   relief = set_tkLabel()$titleRelief))
     tcltk::tkconfigure(tit, font = titleFont)
-    tcltk::tkgrid(tit, row = 0, column = title_pos(hjust = plots_info$ggBuild$plot$theme$plot.title$hjust,
+    tcltk::tkgrid(tit, row = 0, column = title_pos(hjust = plotInfo$ggBuild$plot$theme$plot.title$hjust,
                                                    start.xpos = start.xpos,
                                                    column.span = column.span),
                   rowspan = 1, columnspan = column.span,

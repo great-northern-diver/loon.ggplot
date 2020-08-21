@@ -1,6 +1,6 @@
 loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping, dataFrame,
                         activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
-                        itemLabel, showLabels, xlabel, ylabel, loonTitle) {
+                        itemLabel, showLabels, xlabel, ylabel, loonTitle, args) {
 
   if(length(activeGeomLayers) > 0) {
     # combine points data
@@ -16,8 +16,9 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                     num <- dim(data)[1]
                                     x <- data$x
                                     y <- data$y
+                                    z <- data$z
 
-                                    if(num != 0) {
+                                    if(num > 0) {
                                       activeLayer_itemLabel <- data$itemLabel
                                       activeLayer_linkingKey <- data$linkingKey
                                       color <- sapply(1:dim(data)[1],
@@ -38,7 +39,7 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                       size <- NULL
                                     }
 
-                                    if (is.null(activeLayer_itemLabel) | is.null(activeLayer_linkingKey)) {
+                                    if (is.null(activeLayer_itemLabel) || is.null(activeLayer_linkingKey)) {
                                       if(num != 0) {
                                         activeLayer_linkingKey <- if(activeGeomDim == len_linkingKey) {
                                           linkingKey[(count : (count + num - 1)) + 1]
@@ -54,8 +55,14 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                       }
                                     }
 
+                                    if(is.null(z)) {
+                                      # n (n > 0) dimension
+                                      if(length(x) > 0) z <- NA
+                                    }
+
                                     data.frame(x = x,
                                                y = y,
+                                               z = z,
                                                itemLabel = activeLayer_itemLabel,
                                                color = color,
                                                glyph = glyph,
@@ -63,9 +70,10 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
                                                linkingKey = activeLayer_linkingKey)
                                   }
     )
+
     combined.pointsData <- do.call(rbind, combined.pointsData)
-    combined.pointsData$color <- as.character( combined.pointsData$color)
-    combined.pointsData$glyph <- as.character( combined.pointsData$glyph)
+    combined.pointsData$color <- as.character(combined.pointsData$color)
+    combined.pointsData$glyph <- as.character(combined.pointsData$glyph)
     combined.pointsData$itemLabel <- as.character(combined.pointsData$itemLabel)
     combined.pointsData$linkingKey <- as.character(combined.pointsData$linkingKey)
 
@@ -77,7 +85,7 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
         warning("linkingKey may not match and will be set as the default loon one", call. = FALSE)
     }
   } else {
-    # used for boxplot
+    # mainly used for boxplot
     if(is.null(mapping$x) & !is.null(mapping$y)) {
 
       combined.pointsData <- data.frame(x = rep(0, dim(dataFrame)[1]),
@@ -109,6 +117,29 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
     }
   }
 
+  if(is.null(combined.pointsData$z)) {
+
+    plot <- loon::l_plot
+    zlabel <- NULL
+
+  } else {
+
+    if(all(is.na(combined.pointsData$z))) {
+
+      # a loon 2D plot
+      combined.pointsData$z <- NULL
+
+      plot <- loon::l_plot
+      zlabel <- NULL
+
+    } else {
+
+      plot <- loon::l_plot3D
+      zlabel <- rlang::as_label(mapping$z)
+
+    }
+  }
+
   # remove NA
   combined.pointsData <- na.omit(combined.pointsData)
 
@@ -122,29 +153,46 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
       x <- coordPolarxy$x
       y <- coordPolarxy$y
 
+      if(!is.null(combined.pointsData$z)) {
+        warning("The `l_plot3D` object does not accommodate the Cartesian coordinate", call. = FALSE)
+      }
+
+      z <- NULL
+
     } else {
       x <- combined.pointsData$x
       y <- combined.pointsData$y
+      z <- combined.pointsData$z
     }
 
-    # loon scatter plot
-    loon::l_plot(parent = parent,
-                 x = x,
-                 y = y,
-                 size = combined.pointsData$size,
-                 color = hex6to12(combined.pointsData$color),
-                 glyph = combined.pointsData$glyph,
-                 itemLabel = combined.pointsData$itemLabel,
-                 linkingKey = combined.pointsData$linkingKey,
-                 showGuides = showGuides,
-                 showScales = showScales,
-                 showLabels = showLabels,
-                 showItemLabels = TRUE,
-                 swapAxes = swapAxes,
-                 xlabel = if(is.null(xlabel)) "" else xlabel,
-                 ylabel = if(is.null(ylabel)) "" else ylabel,
-                 title = loonTitle)
+    plotList <- remove_null(
+      list(
+        parent = parent,
+        x = x,
+        y = y,
+        z = z,
+        size = combined.pointsData$size,
+        color = hex6to12(combined.pointsData$color),
+        glyph = combined.pointsData$glyph,
+        itemLabel = combined.pointsData$itemLabel,
+        linkingKey = combined.pointsData$linkingKey,
+        showGuides = showGuides,
+        showScales = showScales,
+        showLabels = showLabels,
+        showItemLabels = TRUE,
+        swapAxes = swapAxes,
+        xlabel = if(is.null(xlabel)) "" else xlabel,
+        ylabel = if(is.null(ylabel)) "" else ylabel,
+        zlabel = zlabel,
+        title = loonTitle
+      ),
+      as_list = FALSE)
+
+    # loon scatter plot (2D or 3D)
+    do.call(plot, plotList)
+
   } else {
+
     loon::l_plot(parent = parent,
                  showGuides = showGuides,
                  showScales = showScales,

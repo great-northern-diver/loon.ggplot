@@ -51,7 +51,8 @@ get_activeGeomLayers <- function(ggObj) {
   len_layers <- length(ggObj$layers)
 
   modelLayers <- get_modelLayers(len_layers, ggObj,
-                                 isCoordPolar = (!is.null(ggObj$coordinates$r)) && (!is.null(ggObj$coordinates$theta)))
+                                 isCoordPolar = (!is.null(ggObj$coordinates$r)) && (!is.null(ggObj$coordinates$theta)),
+                                 isCoordSerialaxes = is.CoordSerialaxes(ggObj))
 
   np <- length(modelLayers$pointLayers)
   nh <- length(modelLayers$histogramLayers)

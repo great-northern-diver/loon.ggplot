@@ -47,8 +47,9 @@
 
 
 <meta property="og:title" content="loon.ggplot — loon.ggplot" />
-<meta property="og:description" content="A bridge between loon widgets and gg objects. It can take either a loon widget
-or a gg object (ggplot or ggmatrix), then create a corresponding gg (or loon) graphics." />
+<meta property="og:description" content="A bridge between loon widgets and gg objects. It can take either a loon widget,
+a gg object (ggplot or GGally::ggmatrix) or
+a lggplot object, then create a corresponding gg (or loon) graphics." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -81,7 +82,7 @@ or a gg object (ggplot or ggmatrix), then create a corresponding gg (or loon) gr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -141,8 +142,9 @@ or a gg object (ggplot or ggmatrix), then create a corresponding gg (or loon) gr
     </div>
 
     <div class="ref-description">
-    <p>A bridge between <code>loon</code> widgets and <code>gg</code> objects. It can take either a <code>loon</code> widget
-or a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>), then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p>
+    <p>A bridge between <code>loon</code> widgets and <code>gg</code> objects. It can take either a <code>loon</code> widget,
+a <code>gg</code> object (<code>ggplot</code> or <code><a href='https://ggobi.github.io/ggally/reference/ggmatrix.html'>GGally::ggmatrix</a></code>) or
+a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p>
     </div>
 
     <pre class="usage"><span class='fu'>loon.ggplot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
@@ -151,6 +153,9 @@ or a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>), then
 <span class='fu'>loon.ggplot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for loon</span>
+<span class='fu'>loon.ggplot</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for lggplot</span>
 <span class='fu'>loon.ggplot</span>(<span class='no'>x</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,7 +163,7 @@ or a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>), then
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A <code>loon</code> widget or a <code>ggplot</code> object.</p></td>
+      <td><p>A <code>loon</code> widget, a <code>ggplot</code> object or a <code>lggplot</code> object.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -169,10 +174,11 @@ or a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>), then
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>If the input is a <code>ggplot</code> object, the output would be a <code>loon</code> widget; conversely, if the
-input is a <code>loon</code> widget, then it returns a <code>ggplot</code> object.</p>
+input is a <code>loon</code> widget, then it returns a <code>ggplot</code> object. If it is a <code>lggplot</code> object,
+<code>loon.ggplot</code> helps to return a <code>loon</code> widget.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='loon2ggplot.html'>loon2ggplot</a></code>, <code><a href='ggplot2loon.html'>ggplot2loon</a></code></p></div>
+    <div class='dont-index'><p><code><a href='loon2ggplot.html'>loon2ggplot</a></code>, <code><a href='ggplot2loon.html'>ggplot2loon</a></code>, <code><a href='l_ggplot.html'>l_ggplot</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
@@ -194,6 +200,16 @@ input is a <code>loon</code> widget, then it returns a <code>ggplot</code> objec
   <span class='co'># equivalent to `ggplot2loon(g)`</span>
   <span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>loon.ggplot</span>(<span class='no'>g</span>)
   <span class='no'>l</span> <span class='co'># a loon widget</span>
+
+<span class='co'>######### lggplot #########</span>
+  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mpg</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>displ</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
+       <span class='fu'>geom_histogram</span>()
+  <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>p</span>)
+  <span class='co'># Function `print.lggplot` is called automatically</span>
+  <span class='no'>p</span>
+  <span class='co'># Function `loon.ggplot` helps to return a loon widget</span>
+  <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'>loon.ggplot</span>(<span class='no'>p</span>)
+  <span class='no'>q</span>
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

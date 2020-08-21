@@ -3,6 +3,7 @@
 
 [![Build Status](https://travis-ci.org/z267xu/loon.ggplot.svg?branch=master)](https://travis-ci.org/great-northern-diver/loon.ggplot)
 [![Codecov test coverage](https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master)
+[![CRAN status](https://www.r-pkg.org/badges/version/loon.ggplot)](https://cran.r-project.org/web/packages/loon.ggplot/index.html)
 [![](https://cranlogs.r-pkg.org/badges/loon.ggplot)](https://cran.r-project.org/package=loon.ggplot)
 
 An R package to turn ggplot graphic data structures into interactive loon plots

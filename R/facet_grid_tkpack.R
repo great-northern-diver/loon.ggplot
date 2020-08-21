@@ -13,8 +13,6 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
     )
   )
 
-  label_color <- "grey80"
-
   if(is.null(showStrips)) {
     # pack plots
     lapply(1:length(lplots),
@@ -75,7 +73,10 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
                  colname <- as.character(tcltk::tcl('label',
                                                     as.character(loon::l_subwin(parent,'label')),
                                                     text= colnames[k],
-                                                    background = label_color)
+                                                    bg = set_tkLabel()$labelBackground,
+                                                    fg = set_tkLabel()$labelForeground,
+                                                    borderwidth = set_tkLabel()$labelBorderwidth,
+                                                    relief = set_tkLabel()$labelRelief)
                  )
                  tcltk::tkgrid(colname,
                                row = (i - 1) * rowspan + start.ypos,
@@ -95,7 +96,10 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
                    tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                               text= paste(paste0(" ", strsplit(rownames[k], "")[[1]], " "),
                                           collapse = "\n"),
-                              background = label_color)
+                              bg = set_tkLabel()$labelBackground,
+                              fg = set_tkLabel()$labelForeground,
+                              borderwidth = set_tkLabel()$labelBorderwidth,
+                              relief = set_tkLabel()$labelRelief)
                  )
 
                  tcltk::tkgrid(rowname,
@@ -116,7 +120,11 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
                function(k) {
                  colname <- as.character(tcltk::tcl('label',
                                                     as.character(loon::l_subwin(parent,'label')),
-                                                    text= colnames[k], background = label_color))
+                                                    text= colnames[k],
+                                                    bg = set_tkLabel()$labelBackground,
+                                                    fg = set_tkLabel()$labelForeground,
+                                                    borderwidth = set_tkLabel()$labelBorderwidth,
+                                                    relief = set_tkLabel()$labelRelief))
                  tcltk::tkgrid(colname,
                                row = (j - 1) * rowspan + start.ypos,
                                column= (i - 1) * columnspan + start.xpos + (k - 1) * span,
@@ -134,7 +142,10 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
                  rowname <- as.character(
                    tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
                               text= paste(paste0(" ", strsplit(rownames[k], "")[[1]], " "), collapse = "\n"),
-                              background = label_color)
+                              bg = set_tkLabel()$labelBackground,
+                              fg = set_tkLabel()$labelForeground,
+                              borderwidth = set_tkLabel()$labelBorderwidth,
+                              relief = set_tkLabel()$labelRelief)
                  )
 
                  tcltk::tkgrid(rowname,
@@ -195,8 +206,13 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
       # pack column names
       lapply(1:length(colnames),
              function(k) {
-               colname <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
-                                                  text= colnames[k], background = label_color))
+               colname <- as.character(tcltk::tcl('label',
+                                                  as.character(loon::l_subwin(parent,'label')),
+                                                  text= colnames[k],
+                                                  bg = set_tkLabel()$labelBackground,
+                                                  fg = set_tkLabel()$labelForeground,
+                                                  borderwidth = set_tkLabel()$labelBorderwidth,
+                                                  relief = set_tkLabel()$labelRelief))
                tcltk::tkgrid(colname,
                              row = if(byrow) {
                                (i - 1) * rowspan + start.ypos
@@ -218,9 +234,13 @@ facet_grid_tkpack <- function(plotId, ggLayout, showStrips, lplots, numofROW, nu
       lapply(1:length(rownames),
              function(k) {
                rowname <- as.character(
-                 tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
+                 tcltk::tcl('label',
+                            as.character(loon::l_subwin(parent,'label')),
                             text= paste(paste0(" ", strsplit(rownames[k], "")[[1]], " "), collapse = "\n"),
-                            background = label_color)
+                            bg = set_tkLabel()$labelBackground,
+                            fg = set_tkLabel()$labelForeground,
+                            borderwidth = set_tkLabel()$labelBorderwidth,
+                            relief = set_tkLabel()$labelRelief)
                )
 
                tcltk::tkgrid(rowname,
