@@ -39,7 +39,8 @@ add_serialaxes_layers.GeomPath <- function(layer, plot, object) {
   }
 
   if("fill" %in% names(mapping)) {
-    warning("The 'fill' aesthetics will be ignored. Maybe you want to set 'colour' in the `aes()` or use the `geom_ribbon()` instead?")
+    warning("The 'fill' aesthetics will be ignored. Maybe you want to set 'colour' in the `aes()` or use the `geom_ribbon()` instead?",
+            call. = FALSE)
   }
 
   switch(
@@ -182,8 +183,6 @@ add_serialaxes_layers.GeomDensity <- function(layer, plot, object) {
 
                           groupedData <- mapping_data(data, mapping, groupValue)
 
-                          groupid <<- groupid + groupNum
-
                           if(nrow(groupedData) == 0) {
                             groupedData <- data.frame(
                               x = trans_x_coord(x, y, len.xaxis, i,
@@ -204,6 +203,9 @@ add_serialaxes_layers.GeomDensity <- function(layer, plot, object) {
                                                            right = object$right)
                             groupedData$group <- group + groupid
                           }
+
+                          # re-group
+                          groupid <<- groupid + groupNum
 
                           groupedData_setup(layer = layer,
                                             groupedData = groupedData,
@@ -305,10 +307,8 @@ add_serialaxes_layers.GeomBar <- function(layer, plot, object) {
                           groupNum <- length(unique(group))
                           groupValue <- nrow(layeredData)/groupNum
 
-                          groupedData <- mapping_data(data, mapping, groupValue)
-
                           groupedData <- groupedData_setup(layer,
-                                                           groupedData = groupedData,
+                                                           groupedData = mapping_data(data, mapping, groupValue),
                                                            axesLayout = object$axesLayout,
                                                            xmax = xmax,
                                                            xmin = xmin,
@@ -317,49 +317,13 @@ add_serialaxes_layers.GeomBar <- function(layer, plot, object) {
                                                            group = group,
                                                            len.xaxis = len.xaxis,
                                                            i = i,
-                                                           right = object$right)    # Create a fake ggplot
-                          # to calculate the stats of such layer
-                          ithColumn <- scaledData[, i]
-                          newData <- cbind(ithColumn, data)
-                          newColnames <- c(ithName, colnames)
-                          newData <- stats::setNames(newData, newColnames)
+                                                           right = object$right)
 
-                          newPlot <- ggplot2::ggplot(data = newData)
-                          layer$mapping <- mbind(mapping, aes(x = !!rlang::sym(ithName)))
-                          newPlot$layers <- list(layer)
-                          layeredData <- suppressMessages(ggplot2::layer_data(newPlot, i = 1L))
-
-                          # recover the mapping
-                          layer$mapping <- layer_mapping
-
-                          x <- scale01(c(layeredData$xmin, layeredData$xmax))
-                          y <- scale01(c(layeredData$ymin, layeredData$ymax))
-                          n <- nrow(layeredData)
-
-                          xmin <- x[seq(n)]
-                          xmax <- x[-seq(n)]
-                          ymin <- y[seq(n)]* (delta - 0.05)
-                          ymax <- y[-seq(n)]* (delta - 0.05)
-
-                          group <- layeredData$group
-                          groupNum <- length(unique(group))
-                          groupValue <- nrow(layeredData)/groupNum
-
-                          groupedData <- mapping_data(data, mapping, groupValue)
-
-                          groupid <<- groupid + groupNum
-
-                          groupedData_setup(layer,
-                                            groupedData = groupedData,
-                                            axesLayout = object$axesLayout,
-                                            xmax = xmax,
-                                            xmin = xmin,
-                                            ymax = ymax,
-                                            ymin = ymin,
-                                            group = group + groupid,
-                                            len.xaxis = len.xaxis,
-                                            i = i,
-                                            right = object$right)
+                          # reset group
+                          group <- groupedData$group
+                          groupedData$group <- group + groupid
+                          groupid <<- groupid + length(unique(group))
+                          groupedData
                         })
 
   groupedData <- do.call(rbind, groupedData)
@@ -413,9 +377,12 @@ mapping_data <- function(data, mapping, groupValue) {
     as.data.frame(
       lapply(notDuplicated,
              function(i) {
-               m <- mapping[[i]]
-               rep(unique(rlang::eval_tidy(rlang::quo(!!m),  data)),
-                   each = groupValue)
+               # m <- mapping[[i]]
+               # rep(unique(rlang::eval_tidy(rlang::quo(!!m),  data)),
+               #     each = groupValue)
+               ## we want the original data, not the manipulated data
+               m <- mappingNamesInDataNames[i]
+               rep(unique(data[, m]), each = groupValue)
              }),
       stringsAsFactors = FALSE
     ),
