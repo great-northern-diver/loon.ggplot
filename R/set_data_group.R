@@ -3,7 +3,7 @@ set_data_group <- function(data = NULL,
                            showArea = FALSE,
                            ymin = NULL,
                            color = NULL,
-                           lineWidth = 0.5,
+                           lineWidth = NULL,
                            axesLayout = "parallel",
                            originalData = NULL) {
 
@@ -16,12 +16,13 @@ set_data_group <- function(data = NULL,
   stopifnot(
     exprs = {
       length(color) == 0 || length(color) == 1 || length(color) == n
-      length(lineWidth) == 1 || length(lineWidth) == n
+      length(lineWidth) == 0 || length(lineWidth) == 1 || length(lineWidth) == n
     }
   )
 
   if(length(color) == 0) color <- rep(NA, n)
   if(length(color) == 1) color <- rep(color, n)
+  if(length(lineWidth) == 0) lineWidth <- rep(NA, n)
   if(length(lineWidth) == 1) lineWidth <- rep(lineWidth, n)
 
   ymin <- set_ymin(ymin, n, p)
@@ -111,12 +112,21 @@ set_data_group <- function(data = NULL,
 
   }
 
-  # if(!is.null(grouped_data$color)) {
-  #   if(is.numeric(grouped_data$color)) {
-  #     warning("Color can only be discrete", call. = FALSE)
-  #     grouped_data$color <- as.character(grouped_data$color)
-  #   }
-  # }
+  if(any(is.na(grouped_data$size))) {
+
+    grouped_data$size <- NULL
+    quo_size <- mapping$size
+
+    if(!rlang::is_empty(quo_size) && !is.null(originalData)) {
+      grouped_data <- cbind(
+        grouped_data,
+        size = rep(
+          rlang::eval_tidy(rlang::quo(!!quo_size),  originalData),
+          each = switch(axesLayout, "parallel" = p, "radial" = p + 1)
+        )
+      )
+    }
+  }
 
   # merge original data
   switch(
