@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ggplot serialaxes — ggSerialAxes • loon.ggplot</title>
+<title>Serial axes coordinates — coord_serialaxes • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="ggplot serialaxes — ggSerialAxes" />
-<meta property="og:description" content="The ggplot serialaxes graphics displays multivariate data either as
-a stacked star glyph plot, or as a parallel coordinate plot." />
+<meta property="og:title" content="Serial axes coordinates — coord_serialaxes" />
+<meta property="og:description" content="It is used to visualize high dimensional data set." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -135,125 +134,64 @@ a stacked star glyph plot, or as a parallel coordinate plot." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>ggplot serialaxes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/ggSerialaxes.R'><code>R/ggSerialaxes.R</code></a></small>
-    <div class="hidden name"><code>ggSerialAxes.Rd</code></div>
+    <h1>Serial axes coordinates</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/coord_serialaxes.R'><code>R/coord_serialaxes.R</code></a></small>
+    <div class="hidden name"><code>coord_serialaxes.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The ggplot serialaxes graphics displays multivariate data either as
-a stacked star glyph plot, or as a parallel coordinate plot.</p>
+    <p>It is used to visualize high dimensional data set.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ggSerialAxes</span>(
-  <span class='no'>ggObj</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>axesLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>showAxes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>showAxesLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>scaling</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"variable"</span>, <span class='st'>"observation"</span>, <span class='st'>"data"</span>, <span class='st'>"none"</span>),
+    <pre class="usage"><span class='fu'>coord_serialaxes</span>(
   <span class='kw'>axesLayout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"parallel"</span>, <span class='st'>"radial"</span>),
+  <span class='kw'>scaling</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"variable"</span>, <span class='st'>"observation"</span>, <span class='st'>"data"</span>, <span class='st'>"none"</span>),
   <span class='kw'>displayOrder</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>showLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>showGuides</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>showArea</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>ymin</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+  <span class='kw'>axesLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>right</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>ggObj</th>
-      <td><p>A `ggplot` object</p></td>
+      <th>axesLayout</th>
+      <td><p>Serial axes layout, either "parallel" or "radial".</p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>A data frame for serialaxes. If `NULL`, data must be set in `ggObj`</p></td>
+      <th>scaling</th>
+      <td><p>One of 'variable', 'data', 'observation' or 'none' to specify how the data is scaled.</p></td>
+    </tr>
+    <tr>
+      <th>displayOrder</th>
+      <td><p>The order of the display</p></td>
     </tr>
     <tr>
       <th>axesLabels</th>
       <td><p>A vector with variable names that defines the axes sequence.</p></td>
     </tr>
     <tr>
-      <th>showAxes</th>
-      <td><p>Logical value to indicate whether axes should be shown or not</p></td>
-    </tr>
-    <tr>
-      <th>showAxesLabels</th>
-      <td><p>Logical value to indicate whether axes labels should be shown or not</p></td>
-    </tr>
-    <tr>
-      <th>scaling</th>
-      <td><p>one of 'variable', 'data', 'observation' or 'none' to
-specify how the data is scaled. See Details for more information</p></td>
-    </tr>
-    <tr>
-      <th>axesLayout</th>
-      <td><p>either "radial" or "parallel"</p></td>
-    </tr>
-    <tr>
-      <th>displayOrder</th>
-      <td><p>The display order of the observations.</p></td>
-    </tr>
-    <tr>
-      <th>title</th>
-      <td><p>title of the display</p></td>
-    </tr>
-    <tr>
-      <th>showLabels</th>
-      <td><p>Logical value to indicate whether label (mainly **title**) should be shown or not</p></td>
-    </tr>
-    <tr>
-      <th>color</th>
-      <td><p>Line color</p></td>
-    </tr>
-    <tr>
-      <th>size</th>
-      <td><p>Line width</p></td>
-    </tr>
-    <tr>
-      <th>alpha</th>
-      <td><p>Transparency</p></td>
-    </tr>
-    <tr>
-      <th>showGuides</th>
-      <td><p>Logical value to indicate whether guides should be shown or not</p></td>
-    </tr>
-    <tr>
-      <th>showArea</th>
-      <td><p>Logical value to indicate whether to display lines or area</p></td>
-    </tr>
-    <tr>
-      <th>ymin</th>
-      <td><p>A vector or a data.frame. When <code>showArea = TRUE</code>, it is the lower boundary of the ribbon.</p></td>
+      <th>right</th>
+      <td><p>The layer ('density', 'histogram', ...) is displayed on the left or right.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a ggplot object</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>It is deprecated now. Please check <code><a href='coord_serialaxes.html'>coord_serialaxes</a></code>.</p>
+    <p>Serial axes coordinate system is different from other conventional coordinate system (Cartesian, Polar, ...).
+It does not have a formal transformation (i.e. in polar coordinate system, "x = rcos(theta)",
+"y = rsin(theta)"). In serial axes coordinate system, mapping aesthetics does not really require "x" or "y".
+To project a <code>geom</code> layer, users can customize function <code><a href='add_serialaxes_layers.html'>add_serialaxes_layers</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Blank plot</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>)))
-<span class='co'># Add serial axes (returns a ggplot object)</span>
-<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'>ggSerialAxes</span>(<span class='no'>p</span>)
-<span class='no'>g</span></div><div class='img'><img src='ggSerialAxes-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># An eulerian path of iris variables</span>
-<span class='co'># ordSeq &lt;- PairViz::eulerian(4)</span>
-<span class='no'>ordSeq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>)
-<span class='fu'>ggSerialAxes</span>(
-       <span class='kw'>ggObj</span> <span class='kw'>=</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Species</span>)),
-       <span class='kw'>axesLabels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>iris</span>)[<span class='no'>ordSeq</span>],
-       <span class='kw'>axesLayout</span> <span class='kw'>=</span> <span class='st'>"radial"</span>
-)</div><div class='img'><img src='ggSerialAxes-2.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>iris</span>) +
+       <span class='fu'>geom_path</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.2</span>) +
+       <span class='fu'>coord_serialaxes</span>()
+<span class='co'># an 'iris' parallel coordinate plot.</span>
+<span class='no'>p</span></div><div class='img'><img src='coord_serialaxes-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># histogram layer (parallel coord)</span>
+<span class='no'>p</span> + <span class='fu'>geom_histogram</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.8</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>Species</span>)))</div><div class='img'><img src='coord_serialaxes-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># density layer</span>
+<span class='no'>p</span> + <span class='fu'>geom_density</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0.8</span>)</div><div class='img'><img src='coord_serialaxes-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

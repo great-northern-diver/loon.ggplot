@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the <code>itemLabel</code> component — itemLabel • loon.ggplot</title>
+<title>Position scales for continuous data (x, y &amp; z) — scale_multi • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Modify the <code>itemLabel</code> component — itemLabel" />
-<meta property="og:description" content="Querying in interactive graphics" />
+<meta property="og:title" content="Position scales for continuous data (x, y &amp; z) — scale_multi" />
+<meta property="og:description" content="Scaling the coordinates for 3D visualization" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -134,52 +134,77 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Modify the <code>itemLabel</code> component</h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
-    <div class="hidden name"><code>itemLabel.Rd</code></div>
+    <h1>Position scales for continuous data (x, y &amp; z)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/scale_multi.R'><code>R/scale_multi.R</code></a></small>
+    <div class="hidden name"><code>scale_multi.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Querying in interactive graphics</p>
+    <p>Scaling the coordinates for 3D visualization</p>
     </div>
 
-    <pre class="usage"><span class='fu'>itemLabel</span>(<span class='kw'>itemLabel</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>showItemLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>scale_multi</span>(<span class='kw'>trans</span> <span class='kw'>=</span> <span class='fu'><a href='scaleBox.html'>scaleBox</a></span>(<span class='kw'>center</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>itemLabel</th>
-      <td><p>The customized querying information.</p></td>
+      <th>trans</th>
+      <td><p>For continuous scales, the name of a transformation object or the object itself.
+Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p",
+"log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".
+A transformation object bundles together a transform, its inverse, and methods for generating breaks and labels.
+Transformation objects are defined in the scales package, and are called  &lt;name&gt;_trans (e.g., <code><a href='https://scales.r-lib.org//reference/boxcox_trans.html'>scales::boxcox_trans()</a></code>).
+You can create your own transformation with <code><a href='https://scales.r-lib.org//reference/trans_new.html'>scales::trans_new()</a></code>.</p></td>
     </tr>
     <tr>
-      <th>showItemLabels</th>
-      <td><p>A logical value. Show item labels or not. Default is <code>FALSE</code></p></td>
+      <th>...</th>
+      <td><p>Other arguments passed on to <code>scale_(x|y)_continuous()</code>. To set the position scales,
+three scales (x, y, z) has to be set simultaneously.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>ggproto</code> object</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>a list of the <code>ggproto</code> objects</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <div class='dont-index'><p><code><a href='linking.html'>linking</a></code>, <code><a href='selecting.html'>selecting</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
+    <p>In 3D rotation, different scales of variables x, y and z may cause an issue that the points appear to be
+off the window even with a minor tweak. Additionally, if one variable is in a large scale,
+the shape of the 3D plot may be dominated. Setting <code>scale_multi</code> can ensure the scales in the same measurement, as
+we rotate the plot, most points will stay inside the current view.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
 
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mpg</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>displ</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>cty</span>)) +
-    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
-    <span class='co'># push the states of scatter plot to the histogram</span>
-    <span class='fu'>itemLabel</span>(<span class='kw'>itemLabel</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>mpg</span>,
-                 <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span>(<span class='st'>"model: "</span>, <span class='no'>manufacturer</span>, <span class='st'>" "</span>, <span class='no'>model</span>, <span class='st'>"\n"</span>,
-                 <span class='st'>"year: "</span>, <span class='no'>year</span>, <span class='st'>"\n"</span>,
-                 <span class='st'>"drive way: "</span>, <span class='no'>drv</span>, <span class='st'>"\n"</span>,
-                 <span class='st'>"fuel type: "</span>, <span class='no'>fl</span>)
-              ),
-              <span class='kw'>showItemLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-    )
-    <span class='co'># hover the mouse on top of any point to check the information we set</span>
+<span class='no'>dsamp</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/sample_n.html'>sample_n</a></span>(<span class='no'>diamonds</span>, <span class='fl'>100</span>)
+
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># press `R`, then rotate with a minor tweak,</span>
+<span class='co'># Issues:</span>
+<span class='co'>#   1: the points are off the window</span>
+<span class='co'>#   2: Always in a line shape</span>
+<span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>dsamp</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>carat</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>price</span>,
+                    <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>depth</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>color</span>)) +
+  <span class='fu'>geom_point</span>()}
+
+<span class='co'># set scales</span>
+<span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>dsamp</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>carat</span>, <span class='kw'>y</span>  <span class='kw'>=</span><span class='no'>price</span>,
+                    <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>depth</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>color</span>)) +
+  <span class='fu'>geom_point</span>() +
+  <span class='fu'>scale_multi</span>()
+
+<span class='co'># customized `trans`</span>
+<span class='no'>logp1_base10_trans</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>scales</span><span class='kw ns'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/trans_new.html'>trans_new</a></span>(
+  <span class='kw'>name</span> <span class='kw'>=</span> <span class='st'>"logp"</span>,
+  <span class='kw'>trans</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span>(<span class='no'>x</span> + <span class='fl'>1</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fl'>10</span>),
+  <span class='kw'>inverse</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fl'>10</span>**<span class='no'>x</span> - <span class='fl'>1</span>,
+  <span class='kw'>breaks</span> <span class='kw'>=</span> <span class='kw pkg'>scales</span><span class='kw ns'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/breaks_log.html'>log_breaks</a></span>())
+
+<span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>dsamp</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>carat</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>price</span>,
+                    <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>depth</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>color</span>)) +
+  <span class='fu'>geom_point</span>() +
+  <span class='fu'>scale_multi</span>(<span class='kw'>trans</span> <span class='kw'>=</span> <span class='no'>logp1_base10_trans</span>)
 }</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
