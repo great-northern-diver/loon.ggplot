@@ -159,7 +159,7 @@ ggRadialSerialAxes <- function(ggObj,
                                displayOrder = NULL,
                                scaling = c("variable", "observation", "data", "none"),
                                color = NULL,
-                               lineWidth = 0.5,
+                               lineWidth = NULL,
                                alpha = NULL,
                                showArea = FALSE,
                                ymin = NULL) {

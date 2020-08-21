@@ -77,7 +77,7 @@ ggParallelSerialAxes <- function(ggObj,
                                  displayOrder = NULL,
                                  scaling = c("variable", "observation", "data", "none"),
                                  color = NULL,
-                                 lineWidth = 0.5,
+                                 lineWidth = NULL,
                                  alpha = NULL,
                                  showArea = FALSE,
                                  ymin = NULL) {
@@ -105,7 +105,6 @@ ggParallelSerialAxes <- function(ggObj,
   if(length(displayOrder) == 0) return(ggObj)
 
   mapping <- mapping %||% ggObj$mapping
-  lineWidth <- set_lineSize(data, mapping, lineWidth)
 
   grouped_data <- set_data_group(
     data = get_scaledData(data = data,
