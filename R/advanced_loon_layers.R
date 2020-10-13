@@ -71,7 +71,7 @@ loonLayer.GeomViolin <- function(widget,
                                         })
                id <- sapply(quantiles,
                             function(j) {
-                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea, na.rm = TRUE) * j)
                               which(abs_quantile_area == min(abs_quantile_area))
                             })
                linesData <- group_i_data[id, ]
@@ -108,7 +108,7 @@ loonLayer.GeomViolin <- function(widget,
                                         })
                id <- sapply(quantiles,
                             function(j) {
-                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea, na.rm = TRUE) * j)
                               which(abs_quantile_area == min(abs_quantile_area))
                             })
                linesData <- group_i_data[id, ]
@@ -647,7 +647,7 @@ loonLayer.GeomPath <- function(widget,
                                label = NULL,
                                ...) {
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     # path group
     if (parent == "root") {
       parent <- loon::l_layer_group(widget,
@@ -1132,7 +1132,7 @@ loonLayer.GeomRaster <- function(widget,
                                  ...) {
 
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     fillColor <- data$fill
     linesColor <- data$colour
