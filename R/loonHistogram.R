@@ -1,9 +1,9 @@
-#' @importFrom dplyr group_by summarise n
+#' @import dplyr
 
 loonHistogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
                           activeGeomLayers, panelIndex, dataFrame, mapping, numOfSubtitles,
                           parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                          xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
+                          xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
   x <- ggObj$layers[[activeGeomLayers]]$stat
   UseMethod("loonHistogram", x)
 }
@@ -14,7 +14,7 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
                                   activeGeomLayers, panelIndex, dataFrame,
                                   mapping, numOfSubtitles,
                                   parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                                  xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
+                                  xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
 
   # set binwidth
   ## panel i hist values
@@ -36,7 +36,7 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
     hist_x <- as.numeric(rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame))
   }
   # facet index
-  facet_id <- catch_facet_id(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
+  facet_id <- catch_facet_id(numOfSubtitles, hist_x, FacetWrap, FacetGrid,
                              layout, ggLayout, panelIndex, dataFrame)
   hist_values <- hist_x[facet_id]
 
@@ -98,7 +98,7 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
                                     activeGeomLayers, panelIndex, dataFrame,
                                     mapping, numOfSubtitles,
                                     parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                                    xlabel, ylabel, loonTitle, is_facet_wrap, is_facet_grid) {
+                                    xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
 
   hist_data <- ggBuild$data[[activeGeomLayers]]
   hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
@@ -115,7 +115,7 @@ loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_param
   }
 
   # grab the facet index
-  facet_id <- catch_facet_id(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
+  facet_id <- catch_facet_id(numOfSubtitles, hist_x, FacetWrap, FacetGrid,
                              layout, ggLayout, panelIndex, dataFrame)
   hist_values <- hist_x[facet_id]
   remove(hist_x)
@@ -555,7 +555,7 @@ position_operation.PositionDodge <- function(position, hist_values, activeGeomLa
       hist_values <- paste(hist_values, fill_var, sep = sep)
       message("Viewport is changed. Set `l_scaleto_world` to get the world view")
     } else
-      stop("The length of `hist_values` and `fill_var` does not match.", call. = FALSE)
+      rlang::abort("The length of `hist_values` and `fill_var` does not match.")
 
   } else {
     fill_var <- hist_values
@@ -568,16 +568,16 @@ position_operation.PositionDodge <- function(position, hist_values, activeGeomLa
 }
 
 # to get the right values in this facet
-catch_facet_id <- function(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
+catch_facet_id <- function(numOfSubtitles, hist_x, FacetWrap, FacetGrid,
                            layout, ggLayout, panelIndex, dataFrame) {
 
   # one facet
   if (numOfSubtitles == 0) {
     facet_id <- rep(TRUE, length(hist_x))
   } else {
-    mapping.names_pos <-   if(is_facet_wrap) {
+    mapping.names_pos <-   if(FacetWrap) {
       which(colnames(layout) == names(ggLayout$facet_params$facets))
-    } else if(is_facet_grid) {
+    } else if(FacetGrid) {
       which(colnames(layout) == c(names(ggLayout$facet_params$rows),names(ggLayout$facet_params$cols)))
     } else NULL
 
