@@ -16,9 +16,12 @@ loonSerialaxes <- function(ggBuild,
   layer <- ggObj$layers[[activeGeomLayers]]
 
   coordSerialAxes <- ggObj$coordinates
-  axesLabels <- coordSerialAxes$axesLabels %||% colnames(dataFrame)
-  displayOrder <- coordSerialAxes$displayOrder
-  axesLayout <- coordSerialAxes$axesLayout
+
+  if(!is.CoordSerialaxes(coordSerialAxes))
+    rlang::abort("No serialaxes coordinate is found")
+
+  axes.sequence <- char2null(coordSerialAxes$axes.sequence) %||% colnames(dataFrame)
+  axesLayout <- coordSerialAxes$axes.layout
   scaling <- coordSerialAxes$scaling
 
   showArea <- if(inherits(layer$geom, "GeomRibbon")) TRUE else FALSE
@@ -31,7 +34,7 @@ loonSerialaxes <- function(ggBuild,
 
   loon::l_serialaxes(
     data = dataFrame[index, ],
-    sequence = axesLabels,
+    sequence = axes.sequence,
     scaling = scaling,
     axesLayout = axesLayout ,
     showArea = showArea,
