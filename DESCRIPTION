@@ -17,6 +17,8 @@ Depends:
     ggplot2
 Imports:
     stats,
+    ggmulti,
+    glue,
     utils,
     grDevices,
     stringr,
@@ -25,11 +27,14 @@ Imports:
     gridExtra,
     magrittr,
     dplyr,
+    tidyr,
     scales,
+    gtable,
     rlang
 Suggests:
     png,
     tools,
+    tibble,
     testthat,
     knitr,
     rmarkdown,
