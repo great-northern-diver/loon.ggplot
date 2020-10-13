@@ -25,7 +25,7 @@ loon2ggplot <- function(target, ...) {
 
   if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
     error_info <- deparse(substitute(target))
-    stop(
+    rlang::abort(
       paste0(
         "Target should be a loon object. ",
         "Maybe you want to call `ggplot2loon(",
@@ -34,8 +34,7 @@ loon2ggplot <- function(target, ...) {
         "Or, just call `loon.ggplot(`",
         error_info,
         ")` for simplification."
-      ),
-      call. = FALSE
+      )
     )
   }
   UseMethod('loon2ggplot', target)
@@ -44,7 +43,7 @@ loon2ggplot <- function(target, ...) {
 #' @export
 #' @rdname loon2ggplot
 loon2ggplot.default <- function(target, ...) {
-  # stop('loon2ggplot default no valid inheritance')
+  # rlang::abort('loon2ggplot default no valid inheritance')
   # TODO
   ggObj <- list(...)$ggObj
   ggObj
@@ -54,7 +53,7 @@ loon2ggplot.default <- function(target, ...) {
 #' @export
 loon2ggplot.l_plot <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop(target, " does not exist", call. = FALSE)
+  loon::l_isLoonWidget(target) || rlang::abort(target, " does not exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
@@ -64,7 +63,7 @@ loon2ggplot.l_plot <- function(target, ...) {
 #' @export
 loon2ggplot.l_hist <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist", call. = FALSE)
+  loon::l_isLoonWidget(target) || rlang::abort("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
@@ -73,7 +72,7 @@ loon2ggplot.l_hist <- function(target, ...) {
 #' @export
 loon2ggplot.l_graph <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist", call. = FALSE)
+  loon::l_isLoonWidget(target) || rlang::abort("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl))
@@ -83,7 +82,7 @@ loon2ggplot.l_graph <- function(target, ...) {
 #' @export
 loon2ggplot.l_plot3D <- function(target, ...) {
 
-  loon::l_isLoonWidget(target) || stop("widget does not seem to exist", call. = FALSE)
+  loon::l_isLoonWidget(target) || rlang::abort("widget does not seem to exist")
   rl <- loon::l_create_handle(c(target, 'root'))
 
   axes_coords <- target["axesCoords"]
@@ -209,7 +208,7 @@ cartesian_gg <- function(target, ggObj) {
       panel.grid.minor = ggplot2::element_line(size = 0.5,
                                                linetype = 'solid',
                                                colour = as_hex6color(widget['guidelines'])),
-      panel.border = if(sum(margins) > 0)
+      panel.border = if(sum(margins, na.rm = TRUE) > 0)
         ggplot2::element_rect(colour = as_hex6color(widget['foreground']),
                               fill = NA,
                               size = 1) else ggplot2::element_blank(),
