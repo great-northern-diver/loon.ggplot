@@ -15,7 +15,7 @@ l_loonPlot <- function(ggObj, panelIndex, args,
   layout <- buildggObj$layout
 
   lenLayers <- length(ggObj$layers)
-  isCoordPolar <- is.CoordPolar(ggplotPanel_params[[panelIndex]])
+  isCoordPolar <- is.CoordPolar(ggObj$coordinates)
   dataFrame <- ggObj$data
 
   activeGeomLayers <- activeInfo$activeGeomLayers
@@ -58,8 +58,8 @@ l_loonPlot <- function(ggObj, panelIndex, args,
               "th one is the interactive one.", call. = FALSE)
     }
 
-    is_facet_wrap <- plotInfo$is_facet_wrap
-    is_facet_grid <- plotInfo$is_facet_grid
+    FacetWrap <- plotInfo$FacetWrap
+    FacetGrid <- plotInfo$FacetGrid
     ggLayout <- buildggObj$ggLayout
 
     loonHistogram(ggBuild = ggBuild,
@@ -81,8 +81,8 @@ l_loonPlot <- function(ggObj, panelIndex, args,
                   xlabel = xlabel,
                   ylabel = ylabel,
                   loonTitle = loonTitle,
-                  is_facet_wrap = is_facet_wrap,
-                  is_facet_grid = is_facet_grid)
+                  FacetWrap = FacetWrap,
+                  FacetGrid = FacetGrid)
 
 
   } else if(activeModel == "l_plot" & length(boxplot_point_layers) > 0) {
