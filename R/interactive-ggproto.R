@@ -72,7 +72,7 @@ interactivity <- function(linkingGroup = NULL,
                    check_itemLabel = function(self, data, params) {
 
                      if(!is.null(params$showItemLabels) && !is.logical(params$showItemLabels)) {
-                       stop("`showItemLabels` must be logical", call. = FALSE)
+                       rlang::abort("`showItemLabels` must be logical")
                      }
 
                      itemLabel <- params$itemLabel
@@ -88,7 +88,7 @@ interactivity <- function(linkingGroup = NULL,
                      if(is.null(selected)) return(NULL)
 
                      if(!is.logical(selected)) {
-                       stop("`selected` must be logical", call. = FALSE)
+                       rlang::abort("`selected` must be logical")
                      }
 
                      self$warn_nDim_states(data = data,
@@ -100,7 +100,7 @@ interactivity <- function(linkingGroup = NULL,
                      if(is.null(linkingKey)) return(NULL)
 
                      if(any(duplicated(linkingKey)))
-                       stop("The linkingKey is duplicated")
+                       rlang::abort("The linkingKey is duplicated")
 
                      self$warn_nDim_states(data = data,
                                            x = linkingKey)

@@ -96,7 +96,7 @@ ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
 
 #' @export
 ggplot2loon.default <- function(ggObj, ...) {
-  stop(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"), call. = FALSE)
+  rlang::abort(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"))
 }
 
 #' @export
@@ -107,7 +107,7 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
   if(inherits(ggObj, "loon")) {
     error_info <- deparse(substitute(ggObj))
-    stop(
+    rlang::abort(
       paste0(
         "'ggObj' should be a ggplot object. ",
         "Maybe you want to call `loon2ggplot(",
@@ -123,32 +123,32 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
-    stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"), call. = FALSE)
+    rlang::abort(paste(deparse(substitute(ggObj)), "is not a ggplot object"))
   }
   if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
-    stop("activeGeomLayers is a numeric argument", call. = FALSE)
+    rlang::abort("activeGeomLayers is a numeric argument")
   }
   if(!is.logical(ggGuides)) {
-    stop("ggGuides is a logical argument", call. = FALSE)
+    rlang::abort("ggGuides is a logical argument")
   }
   if(!is.logical(pack)) {
-    stop("pack is a logical argument", call. = FALSE)
+    rlang::abort("pack is a logical argument")
   }
   if(!is.null(tkLabels)) {
-    if(!is.logical(tkLabels)) stop("tkLabels is a logical argument", call. = FALSE)
+    if(!is.logical(tkLabels)) rlang::abort("tkLabels is a logical argument")
   }
   if(!is.numeric(exteriorLabelProportion)) {
-    stop("exteriorLabelProportion is a numerical argument", call. = FALSE)
+    rlang::abort("exteriorLabelProportion is a numerical argument")
   } else {
     if(exteriorLabelProportion >= 1 & length(exteriorLabelProportion) != 1) {
-      stop("exteriorLabelProportion is a single number between 0 to 1", call. = FALSE)
+      rlang::abort("exteriorLabelProportion is a single number between 0 to 1")
     }
   }
   if(!is.numeric(canvasHeight)) {
-    stop("canvasHeight is a numerical argument", call. = FALSE)
+    rlang::abort("canvasHeight is a numerical argument")
   }
   if(!is.numeric(canvasWidth)) {
-    stop("canvasWidth is a numerical argument", call. = FALSE)
+    rlang::abort("canvasWidth is a numerical argument")
   }
 
   plotInfo <- list()
@@ -170,21 +170,19 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   plotInfo$ylabel <- ggObj$labels$y
   plotInfo$xlabel <- ggObj$labels$x
   plotInfo$span <- round(1/exteriorLabelProportion)
-
   # serialaxes
-  isCoordSerialaxes <- is.CoordSerialaxes(ggObj)
-  plotInfo$isCoordSerialaxes <- isCoordSerialaxes
+  plotInfo$isCoordSerialaxes <- is.CoordSerialaxes(ggObj$coordinates)
 
   tkLabels <- tkLabels %||% plotInfo$panelNum != 1
 
   if (tkLabels) {
     # two ways to separate facets, facet_wrap or facet_grid
-    plotInfo$is_facet_wrap <- plotInfo$buildggObj$is_facet_wrap
-    plotInfo$is_facet_grid <- plotInfo$buildggObj$is_facet_grid
-    if(plotInfo$is_facet_wrap) {
+    plotInfo$FacetWrap <- plotInfo$buildggObj$FacetWrap
+    plotInfo$FacetGrid <- plotInfo$buildggObj$FacetGrid
+    if(plotInfo$FacetWrap) {
       plotInfo$byCOLS <- TRUE
       plotInfo$byROWS <- FALSE
-    } else if(plotInfo$is_facet_grid) {
+    } else if(plotInfo$FacetGrid) {
       # layout multiple facets by rows or by cols
       plotInfo$layoutByROWS <- names(plotInfo$ggBuild$layout$facet_params$rows)
       plotInfo$layoutByCOLS <- names(plotInfo$ggBuild$layout$facet_params$cols)
@@ -198,14 +196,14 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
     plotInfo$start.xpos <- ifelse(!is.null(plotInfo$ylabel), 1, 0)
     plotInfo$start.ypos <- plotInfo$start.subtitlepos <- if(!is.null(plotInfo$title)) {
-      ifelse(plotInfo$is_facet_grid & plotInfo$byCOLS, 2, 1)
+      ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 2, 1)
     } else {
-      ifelse(plotInfo$is_facet_grid & plotInfo$byCOLS, 1, 0)
+      ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 1, 0)
     }
     plotInfo$showLabels <- FALSE
   } else {
-    plotInfo$is_facet_wrap <- FALSE
-    plotInfo$is_facet_grid <- FALSE
+    plotInfo$FacetWrap <- FALSE
+    plotInfo$FacetGrid <- FALSE
     plotInfo$byCOLS <- FALSE
     plotInfo$byROWS <- FALSE
 
@@ -228,7 +226,7 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   plotInfo$column.span <- plotInfo$span * plotInfo$column
 
   sync <- args$sync %||% "pull"
-  if(!sync %in% c("pull", "push")) stop("not known sync", call. = FALSE)
+  if(!sync %in% c("pull", "push")) rlang::abort("not known sync")
   plotInfo$sync <- sync
   args$sync <- NULL
 
