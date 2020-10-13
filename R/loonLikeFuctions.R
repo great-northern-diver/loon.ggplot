@@ -28,7 +28,7 @@ l_configure.l_ggplot <- function(target, ...) {
   } else {
     # check sync
     sync <- args$sync
-    if(!sync %in% c("pull", "push")) stop("not known sync", call. = FALSE)
+    if(!sync %in% c("pull", "push")) rlang::abort("not known sync")
     states <- names(args)
     states <- states[-which(states == "sync")]
   }
@@ -36,7 +36,7 @@ l_configure.l_ggplot <- function(target, ...) {
   plots <- target$plots
 
   if (is.null(states) || any("" %in% states))
-    stop("configuration needs key=value pairs", call. = FALSE)
+    rlang::abort("configuration needs key=value pairs")
 
   for (state in states) {
 
@@ -62,10 +62,9 @@ l_configure.l_ggplot <- function(target, ...) {
 
                    plot[state] <- arg[[i]]
 
-                 } else stop(paste0("the length of argument ",
+                 } else rlang::abort(paste0("the length of argument ",
                                     state,
-                                    " should be equal to the length of facets"),
-                             call. = FALSE)
+                                    " should be equal to the length of facets"))
                } else {
 
                  plot[state] <- arg
