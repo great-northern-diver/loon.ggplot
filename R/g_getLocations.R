@@ -50,9 +50,8 @@ g_getLocations.l_pairs <- function(target) {
 
   if(length(dup_id) == 0) return(locations)
   if(length(dup_id) > 2) {
-    stop(
-      "`l_pairs()` can accept other objects (except `l_seiralaxes()`) having larger layout size? Fix me!",
-      call. = FALSE
+    rlang::abort(
+      "`l_pairs()` can accept other objects (except `l_seiralaxes()`) having larger layout size? Fix me!"
     )
   }
   layout_matrix[layout_matrix == dup_id] <- NA

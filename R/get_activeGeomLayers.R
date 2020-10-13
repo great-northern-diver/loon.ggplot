@@ -46,13 +46,13 @@
 get_activeGeomLayers <- function(ggObj) {
 
   if(!ggplot2::is.ggplot(ggObj)) {
-    stop(paste0(deparse(substitute(ggObj)), " is not a ggplot object"), call. = FALSE)
+    rlang::abort(paste0(deparse(substitute(ggObj)), " is not a ggplot object"))
   }
   len_layers <- length(ggObj$layers)
 
   modelLayers <- get_modelLayers(len_layers, ggObj,
-                                 isCoordPolar = (!is.null(ggObj$coordinates$r)) && (!is.null(ggObj$coordinates$theta)),
-                                 isCoordSerialaxes = is.CoordSerialaxes(ggObj))
+                                 isCoordPolar = is.CoordPolar(ggObj$coordinates),
+                                 isCoordSerialaxes = is.CoordSerialaxes(ggObj$coordinates))
 
   np <- length(modelLayers$pointLayers)
   nh <- length(modelLayers$histogramLayers)
