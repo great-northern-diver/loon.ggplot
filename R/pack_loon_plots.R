@@ -55,8 +55,8 @@ pack_loon_plots <- function(plotInfo = list(),
                   sticky="nesw")
   }
 
-  # is_facet_grid; subtitle by row?
-  if(!is.null(display_info$rowSubtitles) &  plotInfo$is_facet_grid & tkLabels) {
+  # FacetGrid; subtitle by row?
+  if(!is.null(display_info$rowSubtitles) &  plotInfo$FacetGrid & tkLabels) {
     uniqueRowSubtitles <- unique(display_info$rowSubtitles)
     for(i in 1:length(uniqueRowSubtitles)){
       rowSub <- as.character(tcltk::tcl('label',
@@ -74,8 +74,8 @@ pack_loon_plots <- function(plotInfo = list(),
                     sticky="nesw")
     }
   }
-  # is_facet_grid; subtitle by col?
-  if(!is.null(display_info$colSubtitles) &  plotInfo$is_facet_grid & tkLabels) {
+  # FacetGrid; subtitle by col?
+  if(!is.null(display_info$colSubtitles) &  plotInfo$FacetGrid & tkLabels) {
     uniqueColSubtitles <- unique(display_info$colSubtitles)
     for(i in 1:length(uniqueColSubtitles)){
       colSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
