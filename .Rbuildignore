@@ -13,3 +13,4 @@ codecov.yml
 ^docs$
 ^pkgdown$
 ^codecov\.yml$
+^\.github$
