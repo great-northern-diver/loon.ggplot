@@ -13,7 +13,31 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
   if(ggplot2Version > "2.2.1"){
     layout <- ggLayout$layout
     # panel_params
-    ggplotPanel_params <- reset_panel_params(ggBuild$layout$panel_params)
+
+    ggplotPanel_params <- lapply(ggBuild$layout$panel_params,
+                                 function(panel_param) {
+                                   # x
+                                   x.major_source <- panel_param$x.major_source %||% panel_param$x$breaks
+                                   x.minor_source <- panel_param$x.minor_source %||% panel_param$x$minor_breaks
+                                   x.labels <- panel_param$x.labels %||% panel_param$x$labels
+                                   # y
+                                   y.major_source <- panel_param$y.major_source %||% panel_param$y$breaks
+                                   y.minor_source <- panel_param$y.minor_source %||% panel_param$y$minor_breaks
+                                   y.labels <- panel_param$y.labels %||% panel_param$y$labels
+                                   # adjust major source
+                                   if(!is.numeric(x.major_source)) x.major_source <- attr(x.major_source, "pos")
+                                   if(!is.numeric(y.major_source)) y.major_source <- attr(y.major_source, "pos")
+
+                                   c(
+                                     panel_param,
+                                     list(x.major_source = x.major_source,
+                                          x.minor_source = x.minor_source,
+                                          x.labels = x.labels,
+                                          y.major_source = y.major_source,
+                                          y.minor_source = y.minor_source,
+                                          y.labels = y.labels)
+                                   )
+                                 })
   } else {
     layout <- ggLayout$panel_layout
     # panel_params
@@ -24,12 +48,12 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
       "before you start, make sure package `rlang` is installed"
     )
   }
-  is_facet_wrap <- !is.null(ggLayout$facet_params$facets)
-  is_facet_grid <- !is.null(ggLayout$facet_params$cols) & !is.null(ggBuild$layout$facet_params$rows)
+  FacetWrap <- is.FacetWrap(ggObj$facet)
+  FacetGrid <- is.FacetGrid(ggObj$facet)
 
-  mapping.names <-   if(is_facet_wrap) {
+  mapping.names <-   if(FacetWrap) {
     names(ggLayout$facet_params$facets)
-  } else if(is_facet_grid) {
+  } else if(FacetGrid) {
     c(names(ggLayout$facet_params$rows),names(ggLayout$facet_params$cols))
   } else NULL
 
@@ -82,8 +106,8 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
       if (length(pointsLayerId) != 0) {
         multiFacets <- FALSE
         wrap.num <- wrap_num(ggLayout = ggLayout,
-                             is_facet_wrap = is_facet_wrap,
-                             is_facet_grid = is_facet_grid,
+                             FacetWrap = FacetWrap,
+                             FacetGrid = FacetGrid,
                              tkLabels = FALSE)
         # is multiple facets?
         if(wrap.num > 0) {
@@ -121,7 +145,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
                 panelMatch <- sapply(mapping.names,
                                      function (mapping.name) {
                                        which(stringr::str_detect(mapping.name,
-                                                        colnames(input)) == TRUE)
+                                                                 colnames(input)) == TRUE)
                                      }
                 )
                 panelMatch.len <- length(panelMatch)
@@ -157,6 +181,20 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
                   # thus we have to do the loop from 1 to 18(3 * 6)
 
                   # give the number of loop and the depth in each loop
+
+                  cum_multiply <- function(vec) {
+                    rev_vec <- rev(vec)
+                    output <- c()
+                    for(i in 1: length(rev_vec) ){
+                      if (i == 1) {
+                        output[i] <- rev_vec[i]
+                      } else {
+                        output[i] <- output[i - 1] * rev_vec[i]
+                      }
+                    }
+                    rev(output)
+                  }
+
                   depth <- cum_multiply(panelLevels.len)
                   numOfLoop <- depth[1]
                   depth <- depth[-1]
@@ -203,47 +241,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
        ggLayout = ggLayout,
        layout = layout,
        ggplotPanel_params = ggplotPanel_params,
-       is_facet_wrap = is_facet_wrap,
-       is_facet_grid = is_facet_grid
+       FacetWrap = FacetWrap,
+       FacetGrid = FacetGrid
   )
-}
-
-cum_multiply <- function(vec) {
-  rev_vec <- rev(vec)
-  output <- c()
-  for(i in 1: length(rev_vec) ){
-    if (i == 1) {
-      output[i] <- rev_vec[i]
-    } else {
-      output[i] <- output[i - 1] * rev_vec[i]
-    }
-  }
-  rev(output)
-}
-
-reset_panel_params <- function(panel_params) {
-  lapply(panel_params,
-         function(panel_param) {
-           # x
-           x.major_source <- panel_param$x.major_source %||% panel_param$x$breaks
-           x.minor_source <- panel_param$x.minor_source %||% panel_param$x$minor_breaks
-           x.labels <- panel_param$x.labels %||% panel_param$x$labels
-           # y
-           y.major_source <- panel_param$y.major_source %||% panel_param$y$breaks
-           y.minor_source <- panel_param$y.minor_source %||% panel_param$y$minor_breaks
-           y.labels <- panel_param$y.labels %||% panel_param$y$labels
-           # adjust major source
-           if(!is.numeric(x.major_source)) x.major_source <- attr(x.major_source, "pos")
-           if(!is.numeric(y.major_source)) y.major_source <- attr(y.major_source, "pos")
-
-           c(
-             panel_param,
-             list(x.major_source = x.major_source,
-                  x.minor_source = x.minor_source,
-                  x.labels = x.labels,
-                  y.major_source = y.major_source,
-                  y.minor_source = y.minor_source,
-                  y.labels = y.labels)
-           )
-         })
 }
