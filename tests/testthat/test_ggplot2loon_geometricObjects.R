@@ -227,7 +227,7 @@ test_that("geometric layers (ggplot to loon)", {
 
   plotList <- list()
   for (i in 1:6) {
-    plotList[[i]] <- ggally_text(paste("Plot #", i, sep = ""))
+    plotList[[i]] <- suppressWarnings(ggally_text(paste("Plot #", i, sep = "")))
   }
   pm <- ggmatrix(
     plotList,
