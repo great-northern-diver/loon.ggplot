@@ -22,7 +22,7 @@ loonLayer.GeomPoint <- function(widget,
                                 ...){
 
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     coordinates <- ggObj$coordinates
     if(isCoordPolar){
       coordPolarxy <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanel_params)
@@ -41,7 +41,7 @@ loonLayer.GeomPoint <- function(widget,
                  data$fill[j]
                } else {
                  data$colour[j]
-              }
+               }
              })
     } else data$colour
     # l_layer_points cannot change the shape of the points so far
@@ -71,7 +71,7 @@ loonLayer.GeomRect <- function(widget,
                                ...) {
 
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     fillColor <- data$fill
     linesColor <- data$colour
@@ -212,8 +212,37 @@ loonLayer.GeomPolygon <- function(widget,
                                   ...){
 
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     # for map data
+
+    rearrangePolygonData <- function(data) {
+      na_x <- is.na(data$x)
+      na_y <- is.na(data$y)
+      if (all(na_x != na_y)) {
+        data <- data[!union(na_x, na_y), ]
+        return(data)
+      }
+
+      pos <- c(which(na_x), dim(data)[1])
+      npolygons <- length(pos)
+
+      if(npolygons > 1) {
+        group <- c()
+
+        for(i in 1:npolygons) {
+          if(i == 1)
+            group <- c(group, rep(i, pos[i]))
+          else
+            group <- c(group, rep(i, pos[i] - pos[i-1]))
+        }
+
+        data$group <- group
+        data <- data[!na_x, ]
+      }
+
+      return(data)
+    }
+
     data <- rearrangePolygonData(data)
     uniGroup <- unique(data$group)
     fillColor <- data$fill
@@ -252,7 +281,10 @@ loonLayer.GeomPolygon <- function(widget,
                                        name = "polygon",
                                        label = label)
 
-      color_id <- group_id(data, uniGroup)
+      color_id <- vapply(uniGroup,
+                         function(x) {
+                           which(data$group == x)[1]
+                         }, numeric(1L))
 
       if(isCoordPolar) {
 
@@ -315,7 +347,7 @@ loonLayer.GeomText <- function(widget,
                                label = NULL,
                                ...){
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     textsSize <- as_loon_size(data$size, "texts")
     textsColor <- data$colour
     textAnchor <- as_loon_hvjust(hjust = data$hjust, vjust = data$vjust)
@@ -396,7 +428,7 @@ loonLayer.GeomVline <- function(widget,
                                 label = NULL,
                                 ...) {
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     linesWidth <- as_loon_size(data$size, "lines")
     linesColor <- data$colour
@@ -478,7 +510,7 @@ loonLayer.GeomHline <- function(widget,
                                 label = NULL,
                                 ...){
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     linesWidth <- as_loon_size(data$size, "lines")
     linesColor <- data$colour
@@ -556,7 +588,7 @@ loonLayer.GeomAbline <- function(widget,
                                  label = NULL,
                                  ...){
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     linesWidth <- as_loon_size(data$size, "lines")
     linesColor <- (data$colour)
@@ -640,7 +672,7 @@ loonLayer.GeomSegment <- function(widget,
                                   label = NULL,
                                   ...){
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     linesWidth <- as_loon_size(data$size, "lines")
     linesColor <- (data$colour)
