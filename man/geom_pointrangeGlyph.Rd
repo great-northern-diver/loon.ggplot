@@ -2,7 +2,7 @@
 % Please edit documentation in R/deprecated_functions.R
 \name{geom_pointrangeGlyph}
 \alias{geom_pointrangeGlyph}
-\title{Vertical intervals: lines, crossbars & errorbars}
+\title{Pointrange}
 \usage{
 geom_pointrangeGlyph(
   mapping = NULL,
@@ -51,6 +51,14 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{ymin}{y min}
+
+\item{ymax}{y max}
+
+\item{showArea}{show area; deprecated now, please set `fill` or `colour` to control the shown area.}
+
+\item{linewidth}{line width}
+
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -66,84 +74,5 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-Various ways of representing a vertical interval defined by \code{x},
-\code{ymin} and \code{ymax}. Each case draws a single graphical object.
-}
-\section{Orientation}{
-
-
-This geom treats each axis differently and, thus, can thus have two orientations. Often the orientation is easy to deduce from a combination of the given mappings and the types of positional scales in use. Thus, ggplot2 will by default try to guess which orientation the layer should have. Under rare circumstances, the orientation is ambiguous and guessing may fail. In that case the orientation can be specified directly using the \code{orientation} parameter, which can be either \code{"x"} or \code{"y"}. The value gives the axis that the geom should run along, \code{"x"} being the default orientation you would expect for the geom.
-
-}
-
-\section{Aesthetics}{
-
-
-\code{geom_linerange()} understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-\item \strong{\code{x} \emph{or} \code{y}}
-\item \strong{\code{ymin} \emph{or} \code{xmin}}
-\item \strong{\code{ymax} \emph{or} \code{xmax}}
-\item \code{alpha}
-\item \code{colour}
-\item \code{group}
-\item \code{linetype}
-\item \code{size}
-}
-Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
-
-}
-
-\examples{
-# Create a simple example dataset
-df <- data.frame(
-  trt = factor(c(1, 1, 2, 2)),
-  resp = c(1, 5, 3, 4),
-  group = factor(c(1, 2, 1, 2)),
-  upper = c(1.1, 5.3, 3.3, 4.2),
-  lower = c(0.8, 4.6, 2.4, 3.6)
-)
-
-p <- ggplot(df, aes(trt, resp, colour = group))
-p + geom_linerange(aes(ymin = lower, ymax = upper))
-p + geom_pointrange(aes(ymin = lower, ymax = upper))
-p + geom_crossbar(aes(ymin = lower, ymax = upper), width = 0.2)
-p + geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2)
-
-# Flip the orientation by changing mapping
-ggplot(df, aes(resp, trt, colour = group)) +
-  geom_linerange(aes(xmin = lower, xmax = upper))
-
-# Draw lines connecting group means
-p +
-  geom_line(aes(group = group)) +
-  geom_errorbar(aes(ymin = lower, ymax = upper), width = 0.2)
-
-# If you want to dodge bars and errorbars, you need to manually
-# specify the dodge width
-p <- ggplot(df, aes(trt, resp, fill = group))
-p +
- geom_col(position = "dodge") +
- geom_errorbar(aes(ymin = lower, ymax = upper), position = "dodge", width = 0.25)
-
-# Because the bars and errorbars have different widths
-# we need to specify how wide the objects we are dodging are
-dodge <- position_dodge(width=0.9)
-p +
-  geom_col(position = dodge) +
-  geom_errorbar(aes(ymin = lower, ymax = upper), position = dodge, width = 0.25)
-
-# When using geom_errorbar() with position_dodge2(), extra padding will be
-# needed between the error bars to keep them aligned with the bars.
-p +
-geom_col(position = "dodge2") +
-geom_errorbar(
-  aes(ymin = lower, ymax = upper),
-  position = position_dodge2(width = 0.5, padding = 0.5)
-)
-}
-\seealso{
-\code{\link[ggplot2:stat_summary]{stat_summary()}} for examples of these guys in use,
-\code{\link[ggplot2:geom_smooth]{geom_smooth()}} for continuous analogue,
-\code{\link[ggplot2:geom_errorbarh]{geom_errorbarh()}} for a horizontal error bar.
+Pointrange
 }

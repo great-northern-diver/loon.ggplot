@@ -57,6 +57,8 @@ If not provided, \code{geom_point()} will be executed.}
 \item{polygon_y}{nested list of y-coordinates of polygons, one list element for each scatterplot point.
 If not provided, \code{geom_point()} will be executed.}
 
+\item{showArea}{show area; deprecated now, please set `fill` or `colour` to control the shown area.}
+
 \item{linewidth}{line width of the "glyph" object}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
@@ -73,46 +75,6 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
-\value{
-a \code{geom} layer
-}
 \description{
-Each point glyph can be a polygon object.
-Available polygons coords can be achieved in \code{\link[ggmulti]{polygon_glyph}}
-}
-\section{Aesthetics}{
-
-
-geom_..._glyph() understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-\item{\strong{x}}
-\item{\strong{y}}
-\item{alpha}
-\item{colour}
-\item{fill}
-\item{group}
-\item{shape}
-\item{size}
-\item{stroke}
-\item{linetype}
-}
-
-}
-
-\examples{
-# polygon glyph
-p <- ggplot(data = data.frame(x = 1:4, y = 1:4),
-            mapping = aes(x = x, y = y)) +
-  geom_polygon_glyph(polygon_x = list(x_star, x_cross, x_hexagon, x_airplane),
-                     polygon_y = list(y_star, y_cross, y_hexagon, y_airplane),
-                     colour = 'black', fill = 'red')
-p
-
-# the coords of each polygons can be achieved by calling function `ggplot_build`
-build <- ggplot2::ggplot_build(p)
-polygon_x <- build$data[[1]]$polygon_x
-polygon_y <- build$data[[1]]$polygon_y
-}
-\seealso{
-\code{\link[ggmulti]{geom_serialaxes_glyph}}, \code{\link[ggmulti]{geom_image_glyph}}
+Each point glyph can be a polygon object. Available polygons coords can be achieved in \code{\link{polygon_glyph}}
 }

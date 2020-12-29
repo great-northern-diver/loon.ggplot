@@ -9,6 +9,9 @@ layout_coords(target)
 \arguments{
 \item{target}{an object \code{ggplot2loon()} returns}
 }
+\value{
+a layout coordinate matrix
+}
 \description{
 return the layout matrix of a list of loon plots
 }

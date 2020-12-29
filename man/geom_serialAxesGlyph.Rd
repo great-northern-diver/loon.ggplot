@@ -57,9 +57,25 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
+\item{serialAxesData}{a serial axes numerical data set. If not provided, `geom_point()` will be called.}
+
+\item{sequence}{A vector with variable names that defines the axes sequence}
+
 \item{linewidth}{line width of the "glyph" object}
 
 \item{scaling}{one of 'variable', 'data', 'observation' or 'none' to specify how the data is scaled.}
+
+\item{axesLayout}{either "radial" or "parallel"}
+
+\item{showAxes}{boolean to indicate whether axes should be shown or not}
+
+\item{showArea}{show area; deprecated now, please set `fill` or `colour` to control the shown area.}
+
+\item{showEnclosing}{boolean to indicate whether enclosing should be shown or not}
+
+\item{axesColor}{axes color}
+
+\item{bboxColor}{bounding box color}
 
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
@@ -75,40 +91,6 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
-\value{
-a \code{geom} layer
-}
 \description{
-To visualize high dimensional data on scatterplot.
-Each point glyph is surrounded by a serialaxes object.
-}
-\section{Aesthetics}{
-
-
-geom_..._glyph() understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-\item{\strong{x}}
-\item{\strong{y}}
-\item{alpha}
-\item{colour}
-\item{fill}
-\item{group}
-\item{shape}
-\item{size}
-\item{stroke}
-\item{linetype}
-}
-
-}
-
-\examples{
-# serial axes glyph
-p <- ggplot(data = iris,
-            mapping = aes(x = Sepal.Length, y = Sepal.Width, colour = Species)) +
-  geom_serialaxes_glyph(serialaxes.data = iris[, -5],
-                        axes.layout = "radial")
-p
-}
-\seealso{
-\code{\link[ggmulti]{geom_polygon_glyph}}, \code{\link[ggmulti]{geom_image_glyph}}
+To visualize high dimensional data on scatterplot. Each point glyph is surrounded by a serialaxes object.
 }

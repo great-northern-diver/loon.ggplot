@@ -2,7 +2,7 @@
 % Please edit documentation in R/interactive-ggproto.R
 \name{interactivity}
 \alias{interactivity}
-\title{Modify the interactive component}
+\title{Modify the \code{interactivity} component}
 \usage{
 interactivity(
   linkingGroup = NULL,

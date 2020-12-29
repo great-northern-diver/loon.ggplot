@@ -52,6 +52,10 @@ to the paired geom/stat.}
 
 \item{images}{a list of images (a raster object, bitmap image). If not provided, \code{geom_point()} will be executed.}
 
+\item{width}{Numerical; width of image}
+
+\item{height}{Numerical; height of image}
+
 \item{na.rm}{If \code{FALSE}, the default, missing values are removed with
 a warning. If \code{TRUE}, missing values are silently removed.}
 
@@ -66,50 +70,6 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
-\value{
-a \code{geom} layer
-}
 \description{
 Each point glyph can be a image (png, jpeg, etc) object.
-}
-\section{Aesthetics}{
-
-
-geom_..._glyph() understands the following aesthetics (required aesthetics are in bold):
-\itemize{
-\item{\strong{x}}
-\item{\strong{y}}
-\item{alpha}
-\item{colour}
-\item{fill}
-\item{group}
-\item{shape}
-\item{size}
-\item{stroke}
-\item{linetype}
-}
-
-}
-
-\examples{
-\donttest{
-# image glyph
-if(requireNamespace("png")) {
-
-# Download images from github
-HeatsURL <- "https://raw.githubusercontent.com/z267xu/ggmulti/master/vignettes/highDim/heat.png"
-download.file(HeatsURL, destfile = "Heats.png", mode = 'wb')
-Heats <- png::readPNG("Heats.png")
-
-p <- ggplot(data = data.frame(x = 0, y = 0),
-            mapping = aes(x = x, y = y)) +
-       geom_image_glyph(images = Heats,
-                        units = "native")
-p
-
-}
-}
-}
-\seealso{
-\code{\link[ggmulti]{geom_serialaxes_glyph}}, \code{\link[ggmulti]{geom_polygon_glyph}}
 }
