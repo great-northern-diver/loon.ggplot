@@ -1,20 +1,18 @@
-#' @import dplyr
-
-loonHistogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
-                          activeGeomLayers, panelIndex, dataFrame, mapping, numOfSubtitles,
-                          parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                          xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
+l_histogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
+                        activeGeomLayers, panelIndex, dataFrame, mapping, numOfSubtitles,
+                        parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
+                        xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
   x <- ggObj$layers[[activeGeomLayers]]$stat
-  UseMethod("loonHistogram", x)
+  UseMethod("l_histogram", x)
 }
 
 
 
-loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
-                                  activeGeomLayers, panelIndex, dataFrame,
-                                  mapping, numOfSubtitles,
-                                  parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                                  xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
+l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
+                                activeGeomLayers, panelIndex, dataFrame,
+                                mapping, numOfSubtitles,
+                                parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
+                                xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
 
   # set binwidth
   ## panel i hist values
@@ -94,11 +92,11 @@ loonHistogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params,
                title = loonTitle)
 }
 
-loonHistogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
-                                    activeGeomLayers, panelIndex, dataFrame,
-                                    mapping, numOfSubtitles,
-                                    parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                                    xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
+l_histogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
+                                  activeGeomLayers, panelIndex, dataFrame,
+                                  mapping, numOfSubtitles,
+                                  parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
+                                  xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
 
   hist_data <- ggBuild$data[[activeGeomLayers]]
   hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
@@ -371,9 +369,11 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, flipped_aes, x.limi
         drops <- levels_bar[hist_data$y[na_x]]
         drop_count <- hist_data$count[na_x]
 
-        group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
-          dplyr::group_by(fill, hist_values) %>%
-          dplyr::summarise(n = dplyr::n())
+        # group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
+        #   dplyr::group_by(fill, hist_values) %>%
+        #   dplyr::summarise(n = dplyr::n())
+
+        group_by_table <- group(fill_var, hist_values)
 
         drop_fill <- group_by_table$fill[(group_by_table$hist_values %in% drops) &
                                            (group_by_table$n %in% drop_count)]
@@ -425,9 +425,11 @@ catch_bin_info.StatCount <- function(hist_values, hist_data, flipped_aes, x.limi
         drops <- levels_bar[hist_data$x[na_y]]
         drop_count <- hist_data$count[na_y]
 
-        group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
-          dplyr::group_by(fill, hist_values) %>%
-          dplyr::summarise(n = dplyr::n())
+        # group_by_table <- data.frame(fill = fill_var, hist_values = hist_values) %>%
+        #   dplyr::group_by(fill, hist_values) %>%
+        #   dplyr::summarise(n = dplyr::n())
+
+        group_by_table <- group(fill_var, hist_values)
 
         drop_fill <- group_by_table$fill[(group_by_table$hist_values %in% drops) &
                                            (group_by_table$n %in% drop_count)]
@@ -641,3 +643,34 @@ get_yshows <- function(mapping, layMapping) {
   }
   return("frequency")
 }
+
+## It is equivalent to
+# data.frame(x, y) %>%
+#  group_by(x, y) %>%
+#  summarise(n = n())
+group <- function(x, y) {
+  names <- c(deparse(substitute(x)), deparse(substitute(y)))
+
+  unix <- unique(x)
+  uniy <- unique(y)
+
+  xchar <- as.character(x)
+  ychar <- as.character(y)
+
+  expand <- expand.grid(unix, uniy)
+
+  n <- apply(expand,
+             MARGIN = 1,
+             function(v) {
+               v <- as.character(v)
+               sum(xchar == v[1] & ychar == v[2])
+             })
+
+  id <- setdiff(seq(length(n)), which(n == 0))
+
+  stats::setNames(
+    cbind(expand, n)[id, ],
+    c(names, "n")
+  )
+}
+
