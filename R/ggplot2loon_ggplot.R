@@ -30,7 +30,6 @@
 #' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
-#' @importFrom stringr str_detect
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @importFrom GGally ggmatrix
 #'
@@ -96,7 +95,7 @@ ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
 
 #' @export
 ggplot2loon.default <- function(ggObj, ...) {
-  rlang::abort(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"))
+  stop(deparse(substitute(ggObj)), " is not a 'ggplot' or 'ggmatrix' object", call. = FALSE)
 }
 
 #' @export
@@ -107,48 +106,45 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
   if(inherits(ggObj, "loon")) {
     error_info <- deparse(substitute(ggObj))
-    rlang::abort(
-      paste0(
-        "'ggObj' should be a ggplot object. ",
-        "Maybe you want to call `loon2ggplot(",
+    stop(
+        "'ggObj' should be a ggplot object. Maybe you want to call `loon2ggplot(",
         error_info,
-        ")`?",
-        "Or, just call `loon.ggplot(`",
+        ")`? Or, just call `loon.ggplot(",
         error_info,
-        ")` for simplification."
-      ),
-      call. = FALSE
+        ")` for simplification.",
+        call. = FALSE
     )
   }
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
-    rlang::abort(paste(deparse(substitute(ggObj)), "is not a ggplot object"))
+    stop(deparse(substitute(ggObj)), " is not a ggplot object.", call. = FALSE)
   }
   if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
-    rlang::abort("activeGeomLayers is a numeric argument")
+    stop("activeGeomLayers is a numeric argument", call. = FALSE)
   }
   if(!is.logical(ggGuides)) {
-    rlang::abort("ggGuides is a logical argument")
+    stop("ggGuides is a logical argument", call. = FALSE)
   }
   if(!is.logical(pack)) {
-    rlang::abort("pack is a logical argument")
+    stop("pack is a logical argument", call. = FALSE)
   }
   if(!is.null(tkLabels)) {
-    if(!is.logical(tkLabels)) rlang::abort("tkLabels is a logical argument")
+    if(!is.logical(tkLabels))
+      stop("tkLabels is a logical argument", call. = FALSE)
   }
   if(!is.numeric(exteriorLabelProportion)) {
-    rlang::abort("exteriorLabelProportion is a numerical argument")
+    stop("exteriorLabelProportion is a numerical argument", call. = FALSE)
   } else {
     if(exteriorLabelProportion >= 1 & length(exteriorLabelProportion) != 1) {
-      rlang::abort("exteriorLabelProportion is a single number between 0 to 1")
+      stop("exteriorLabelProportion is a single number between 0 to 1", call. = FALSE)
     }
   }
   if(!is.numeric(canvasHeight)) {
-    rlang::abort("canvasHeight is a numerical argument")
+    stop("canvasHeight is a numerical argument", call. = FALSE)
   }
   if(!is.numeric(canvasWidth)) {
-    rlang::abort("canvasWidth is a numerical argument")
+    stop("canvasWidth is a numerical argument", call. = FALSE)
   }
 
   plotInfo <- list()
@@ -226,7 +222,7 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   plotInfo$column.span <- plotInfo$span * plotInfo$column
 
   sync <- args$sync %||% "pull"
-  if(!sync %in% c("pull", "push")) rlang::abort("not known sync")
+  if(!sync %in% c("pull", "push")) stop("not known sync", call. = FALSE)
   plotInfo$sync <- sync
   args$sync <- NULL
 
