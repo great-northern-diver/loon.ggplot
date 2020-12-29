@@ -5,9 +5,7 @@
 char2null <- function(x, warn = FALSE, message = "") {
   if(length(x) == 0) {
     if(warn) {
-      rlang::abort(
-        glue::glue(message)
-      )
+      stop(warn, call. = FALSE)
     }
     return(NULL)
   }
@@ -24,7 +22,6 @@ is.ggmatrix_plot_obj <- function(x) {
   inherits(x, "ggmatrix_plot_obj")
 }
 
-
 # default aesthetics attributes in loon
 loon_default_setting <- function(x) {
   switch(x,
@@ -34,6 +31,12 @@ loon_default_setting <- function(x) {
          "linewidth" = 1,
          "radius" = 0.5,
          "boundaryLineWidth" = 1.3)
+}
+
+one_dim_state <- function(x) {
+  x <- na.omit(x)
+  if(length(x) == 0) return(NULL)
+  x[1L]
 }
 
 is.color <- function(colors) {
@@ -174,9 +177,8 @@ set_lineSize <- function(data, mapping, size) {
   }
 
   if(!is.numeric(size))
-    rlang::abort(
-      paste(sub("~", "", rlang::expr_text(mapping$size)), "is not a numerical variable")
-    )
+    stop(sub('~', '', rlang::expr_text(mapping$size)),
+         " is not a numerical variable.", call. = FALSE)
 
   return(size)
 }
@@ -197,8 +199,10 @@ as_ggplot_size <- function(size, power = NULL) {
     # arbitrary power
     size <- (size/as.numeric(loon::l_getOption("size")))^(power)
   } else {
-    rlang::warn(
-      glue::glue("size is {class(size)}, not numerical. It will be set as 1")
+    warning(
+      "size is ",
+      class(size),
+      " not numerical. It will be set as 1", call. = FALSE
     )
     size <- 1
   }
@@ -304,7 +308,7 @@ get_hjust <- function(just) {
 
 l_layer_getUngroupedChildren <- function(widget, target) {
 
-  loon::l_isLoonWidget(widget) || rlang::abort("widget does not seem to exist")
+  loon::l_isLoonWidget(widget) || stop("widget does not seem to exist", call. = FALSE)
   children <- loon::l_layer_getChildren(target)
   layer <- lapply(children,
                   function(child) {

@@ -52,7 +52,9 @@ scale_multi <- function(trans = scaleBox(center = TRUE), ...) {
   dotArgs <- list(...)
   if(!is.null(dotArgs$position)) {
     if(length(dotArgs$position) != 3) {
-      warning("The scales of x, y, z are set simultaneously. Position should be a vector to determine the x, y, z in order")
+      warning("The scales of x, y, z are set simultaneously. ",
+              "Position should be a vector to determine the x, y, z in order",
+              call. = FALSE)
       dotArgs$position <- NULL
 
       dotArgs_x <- dotArgs

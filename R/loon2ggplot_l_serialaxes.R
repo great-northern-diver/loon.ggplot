@@ -1,5 +1,4 @@
 #' @rdname loon2ggplot
-#' @importFrom glue glue
 #' @export
 loon2ggplot.l_serialaxes <- function(target, ...) {
 
@@ -14,7 +13,7 @@ loon2ggplot.l_serialaxes <- function(target, ...) {
   active_displayOrder <- displayOrder[active]
 
   if(widget['showArea']) {
-    rlang::warn("Not implemented yet; `showArea` will be set as FALSE")
+    warning("Not implemented yet; `showArea` will be set as FALSE", call. = FALSE)
   }
 
   p <- ggplot2::ggplot(data[active_displayOrder, ]) +
@@ -49,7 +48,7 @@ set_serialaxes_themes <- function(ggObj, sequence = NULL,
                                   showLabels = TRUE, showAxesLabels = TRUE,
                                   showGuides = TRUE, showAxes = TRUE) {
   if(missing(ggObj))
-    rlang::abort("ggObj is missing")
+    stop("ggObj is missing", call. = FALSE)
 
   if(is.null(sequence))
     return(ggObj)

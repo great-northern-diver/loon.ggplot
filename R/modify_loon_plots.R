@@ -82,8 +82,11 @@ facet_nDimStates <- function(state, indices) {
   len_indices <- length(unlist(indices))
 
   if(len_state != len_indices)
-    rlang::abort("The length of n dimensional state is ", len_state,
-                 " which is not equal to the length of the facet index ", len_indices)
+    stop("The length of n dimensional state is ",
+         len_state,
+         " which is not equal to the length of the facet index ",
+         len_indices,
+         call. = FALSE)
 
   if(length(indices) == 1) return(state[unlist(indices)])
 
