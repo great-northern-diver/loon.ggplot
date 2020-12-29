@@ -17,7 +17,6 @@ pch_to_glyph <- function(pch, alpha = NULL) {
       "5" = "odiamond",
       "23" = "cdiamond",
       {
-        # warning("pch type ", glyph, " will be mapped to circle")
         "circle"
       }
     )
@@ -44,7 +43,6 @@ pch_to_glyph <- function(pch, alpha = NULL) {
                  "5" = "odiamond",
                  "23" = "odiamond",
                  {
-                   # warning("pch type ", glyph, " will be mapped to circle")
                    "ocircle"
                  }
                )
