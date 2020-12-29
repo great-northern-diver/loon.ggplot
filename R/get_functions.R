@@ -6,6 +6,15 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
                          className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
                        })
 
+  if(length(layerNames) == 0)
+    return(
+      list(pointLayers = numeric(0L),
+           histogramLayers = numeric(0L),
+           boxplotLayers = numeric(0L),
+           curveLayers = numeric(0L),
+           serialaxesLayers = numeric(0L))
+    )
+
   # check the coord
   if(isCoordSerialaxes) {
     serialaxesLayers <- which(
@@ -16,7 +25,7 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
     )
 
     if(length(serialaxesLayers) > 1) {
-      warning("Only one layer can be active in serialaxes. The first layer will be picked by default")
+      warning("Only one layer can be active in serialaxes. The first layer will be picked by default", call. = FALSE)
       serialaxesLayers <- serialaxesLayers[1]
     }
 
@@ -28,21 +37,35 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
   }
 
   # take the point layer as l_plot
-  pointLayers <- which(sapply(layerNames,
-                              function(layerName){
-                                "GeomPoint" %in% layerName
-                              })
+  pointLayers <- which(
+    sapply(layerNames,
+           function(layerName){
+             any(layerName %in% c("GeomPoint", "GeomPolygonGlyph",
+                                  "GeomImageGlyph", "GeomSerialAxesGlyph"))
+           })
   )
 
-  histogramLayers <- which(sapply(layerNames,
-                                  function(layerName){
-                                    if("GeomBar" %in% layerName) {
-                                      if(isCoordPolar) {
-                                        warning("loon `l_hist` is built based on Cartesian coordinate system\n and does not accommodate polar coordinate system yet. \n If polar coords are used, the histograms or bar plots \n will be created as static polygons and will **not** be interactive.")
-                                        FALSE
-                                      } else TRUE
-                                    } else FALSE
-                                  })
+  histogramLayers <- which(
+    sapply(layerNames,
+           function(layerName){
+             if("GeomBar" %in% layerName) {
+               if(isCoordPolar) {
+                 warning("loon `l_hist` is built based on Cartesian coordinate system ",
+                 "and does not accommodate polar coordinate system yet. ",
+                 "If polar coords are used, the histograms or bar plots ",
+                 "will be created as static polygons and will **not** be interactive." , call. = FALSE)
+
+                 FALSE
+               } else TRUE
+               # TODO `l_hist` only accommodate one dimensional histogram
+               # "GeomBar_" would not be interactive
+               if("GeomBar_" %in% layerName) {
+                 warning("If `GeomBar_` object is called, the histograms or bar plots ",
+                 "will be created as static polygons and will **not** be interactive.", call. = FALSE)
+                 FALSE
+               } else TRUE
+             } else FALSE
+           })
   )
 
   # boxlayer
@@ -88,7 +111,7 @@ get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
     }
   } else {
     if(max(activeGeomLayers, na.rm = TRUE) > len_layers)
-      rlang::abort("the activeGeomLayers is out of bound")
+      stop("the activeGeomLayers is out of bound", call. = FALSE)
     canBeActive <- activeGeomLayers %in% c(point_hist_layers, serialaxesLayers, boxplotLayers)
     if(all(canBeActive)) {
 
@@ -105,16 +128,16 @@ get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
           activeGeomLayers <- activeGeomLayers[1]
         }
       } else if(any(activeGeomLayers %in% pointLayers) & any(activeGeomLayers %in% histogramLayers)) {
-        rlang::abort("histogram layer and point layer cannot be active at the same time")
+        stop("histogram layer and point layer cannot be active at the same time", call. = FALSE)
       } else if(any(activeGeomLayers %in% boxplotLayers) & any(activeGeomLayers %in% histogramLayers)){
-        rlang::abort("histogram layer and boxplot layer cannot be active at the same time")
+        stop("histogram layer and boxplot layer cannot be active at the same time", call. = FALSE)
       } else {
         # boxplot Layer?
         activeGeomLayers <- integer(0)
         activeModel <- "l_plot"
       }
     } else {
-      rlang::abort("This layer cannot be active")
+      stop("This layer cannot be active", call. = FALSE)
     }
   }
   list(activeModel = activeModel,
