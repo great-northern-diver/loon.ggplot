@@ -1,1 +1,35 @@
-destination: docs
+reference:
+
+  - title: Main Function
+    desc: The `loon.ggplot` main function
+    contents:
+    - loon.ggplot
+
+  - subtitle: A loon widget to a ggplot object
+    contents:
+    - loon2ggplot
+    - g_getLocations
+    - g_getPlots
+
+  - subtitle: A ggplot object to a loon widget
+    contents:
+    - ggplot2loon
+    - get_activeGeomLayers
+
+  - title: New way to create a loon widget
+    desc: Create a loon widget by the "ggplot rule"
+    contents:
+    - l_ggplot
+    - interactivity
+    - itemLabel
+    - linking
+    - selecting
+
+  - title: Accessories
+    desc: Some useful functions for the transformation
+    contents:
+    - layout_coords
+    - get_scaledData
+    - gg_pipe
+    - scaleBox
+    - scale_multi
