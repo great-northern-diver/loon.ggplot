@@ -144,8 +144,10 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
 
                 panelMatch <- sapply(mapping.names,
                                      function (mapping.name) {
-                                       which(stringr::str_detect(mapping.name,
-                                                                 colnames(input)) == TRUE)
+
+                                       which(grepl(mapping.name, colnames(input), ignore.case = TRUE))
+
+                                       # which(stringr::str_detect(mapping.name, colnames(input)) == TRUE)
                                      }
                 )
                 panelMatch.len <- length(panelMatch)
