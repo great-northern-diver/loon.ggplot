@@ -18,7 +18,7 @@ l_indices <- function(ggObj, panelIndex, args,
   activeModel <- activeInfo$activeModel
 
   # boxplot has a hidden scatterplot model layer
-  boxplot_point_layers <- c(modelLayers$boxplotLayers, activeGeomLayers)
+  boxplotPointLayers <- c(modelLayers$boxplotLayers, activeGeomLayers)
 
   if(activeModel == "l_serialaxes" & length(activeGeomLayers) > 0) {
 
@@ -54,7 +54,7 @@ l_indices <- function(ggObj, panelIndex, args,
                    ggLayout = ggLayout)
 
 
-  } else if(activeModel == "l_plot" & length(boxplot_point_layers) > 0) {
+  } else if(activeModel == "l_plot" & length(boxplotPointLayers) > 0) {
 
     l_plot_indices(ggBuild = ggBuild,
                    activeGeomLayers = activeGeomLayers,
