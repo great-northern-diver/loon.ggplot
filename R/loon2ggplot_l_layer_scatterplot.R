@@ -1,5 +1,5 @@
 #' @export
-#' @import ggmulti
+#' @importFrom ggmulti geom_polygon_glyph geom_serialaxes_glyph geom_image_glyph coord_serialaxes
 #' @rdname loon2ggplot
 loon2ggplot.l_layer_scatterplot <- function(target, ...) {
 
@@ -114,6 +114,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, ...) {
                           serialaxes.data = char2num.data.frame(gh['data'][aesthetic$index, ]),
                           axes.sequence = gh['sequence'],
                           scaling = gh['scaling'],
+                          andrews = gh['andrews'],
                           axes.layout = gh['axesLayout'],
                           show.axes = gh['showAxes'],
                           show.enclosing = gh['showEnclosing'],
