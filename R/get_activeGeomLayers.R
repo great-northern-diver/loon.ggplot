@@ -36,7 +36,7 @@
 #'     ) +
 #'     geom_line(aes(date, unemploy)) +
 #'     scale_fill_manual(values = c("blue", "red"))
-#'   # none can be active
+#'   # none can be interactive
 #'   agL <- get_activeGeomLayers(p2)
 #'   #transparency is not allowed in tcltk
 #'   ggplot2loon(p2, ggGuides = TRUE, activeGeomLayers = agL)
@@ -46,7 +46,7 @@
 get_activeGeomLayers <- function(ggObj) {
 
   if(!ggplot2::is.ggplot(ggObj)) {
-    rlang::abort(paste0(deparse(substitute(ggObj)), " is not a ggplot object"))
+    stop(deparse(substitute(ggObj)), " is not a ggplot object.", call. = FALSE)
   }
   len_layers <- length(ggObj$layers)
 
@@ -58,7 +58,7 @@ get_activeGeomLayers <- function(ggObj) {
   nh <- length(modelLayers$histogramLayers)
 
   if(np == 0 & nh == 0) {
-    message("no layers can be active")
+    message("no layers can be interactive")
     integer(0)
   } else if(np > 0 & nh == 0) {
 
