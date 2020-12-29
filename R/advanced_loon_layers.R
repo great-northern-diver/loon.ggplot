@@ -814,7 +814,7 @@ loonLayer.GeomCurve <- function(widget,
       }
       gridList <- grid.ls(print = FALSE)
       gridList.name <- gridList$name
-      xspline.name <- gridList.name[which(stringr::str_detect(gridList.name, "curve") == TRUE)]
+      xspline.name <- gridList.name[grepl("curve", gridList.name, ignore.case = TRUE)]
       # xspline.len <- length(xspline.name)
 
       lapply(1:n,
@@ -1240,10 +1240,11 @@ loonLayer.GeomRaster <- function(widget,
   } else NULL
 }
 
+
 get_mappingLabel <- function(layerGeom, name, label = NULL, i = NULL) {
 
   if(is.null(label)) {
-    if(is.null(layerGeom$mapping)) {
+    if(rlang::is_empty(layerGeom$mapping)) {
       paste(c(name, i), collapse = " ")
     } else {
       m <- length(layerGeom$mapping)
