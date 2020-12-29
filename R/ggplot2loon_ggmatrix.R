@@ -38,7 +38,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
                       } else if(is.ggmatrix_plot_obj(plot)) {
                         plot$fn(ggObj$data, plot$mapping)
                       } else {
-                        rlang::abort("not implemented so far")
+                        stop("not implemented so far", call. = FALSE)
                       }
                     }
   )
@@ -158,7 +158,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
             facet_grid_tkpack
           } else if(FacetWrap) {
             facet_wrap_tkpack
-          } else rlang::abort("only facet_wrap() and facet_grid() are allowed to separate facets")
+          } else stop("only facet_wrap() and facet_grid() are allowed to separate facets", call. = FALSE)
 
           do.call(
             fun,
