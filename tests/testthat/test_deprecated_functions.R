@@ -20,5 +20,5 @@ test_that("deprecated functions", {
       geom_serialAxesGlyph(serialAxesData = iris, axesLayout = "radial")
   )
   b <- ggplot_build(p)
-  expect_equal(length(b$data[[1]]$Sepal.Length), 150)
+  expect_equal(length(b$data[[1]]$serialaxes.data.Sepal.Length), 150)
 })
