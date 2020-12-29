@@ -12,52 +12,74 @@
 
 <meta name="author" content="Wayne Oldford and Zehao Xu" />
 
-<meta name="date" content="2020-10-12" />
+<meta name="date" content="2020-12-28" />
 
 <title>Pipes</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
 
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
 
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
 
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
 
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
 
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -345,13 +367,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">Pipes</h1>
 <h4 class="author">Wayne Oldford and Zehao Xu</h4>
-<h4 class="date">2020-10-12</h4>
+<h4 class="date">2020-12-28</h4>
 
 
 <div id="TOC">
 <ul>
 <li><a href="#using-gg_pipedata-ggplotobj">Using <code>gg_pipe(data, ggplotObj)</code></a></li>
-<li><a href="#using-lggplot">Using <code>lggplot()</code></a></li>
+<li><a href="#using-l_ggplot">Using <code>l_ggplot()</code></a></li>
 <li><a href="#just-use-loon-for-built-in-interactive-plots">Just use loon for built-in interactive plots</a></li>
 </ul>
 </div>
@@ -432,9 +454,9 @@ This connects nicely with <code>ggplot2</code>’s addition <code>+</code> opera
 <span id="cb7-12"><a href="#cb7-12"></a><span class="st">  </span><span class="kw">l_cget</span>(<span class="st">&#39;color&#39;</span>)  <span class="co"># Gets and returns the vector of point colours</span></span></code></pre></div>
 <p>In the <code>magrittr</code> package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful – not just <code>%&gt;%</code>.</p>
 </div>
-<div id="using-lggplot" class="section level3">
-<h3>Using <code>lggplot()</code></h3>
-<p>Additionally, using function <code>lggplot</code>, can also create a <code>loon</code> plot with <code>ggplot</code> pipe model.</p>
+<div id="using-l_ggplot" class="section level3">
+<h3>Using <code>l_ggplot()</code></h3>
+<p>Additionally, using function <code>l_ggplot</code>, can also create a <code>loon</code> plot with <code>ggplot</code> pipe model.</p>
 <p>The display of <code>ggplot</code> object relies on the default <code>print()</code> function in <code>R</code>. Function <code>l_ggplot</code>, inserts a new class <code>lggplot</code> into the original <code>ggplot</code> object. At the printing time, <a href="http://adv-r.had.co.nz/S3.html">S3 method</a> <code>print.lggplot()</code> will be executed to transform a <code>ggplot</code> plot to a <code>loon</code> plot.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>obj &lt;-<span class="st"> </span>mtcars <span class="op">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">transmission =</span> am, <span class="dt">weight =</span> wt) <span class="op">%&gt;%</span></span>

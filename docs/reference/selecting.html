@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the <code>selecting</code> component — selecting • loon.ggplot</title>
+<title>Modify the selecting component — selecting • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Modify the <code>selecting</code> component — selecting" />
+<meta property="og:title" content="Modify the selecting component — selecting" />
 <meta property="og:description" content="In interactive graphics, selecting is one of the most fundamental tool
 and used to highlight the subset of interest" />
 <meta property="og:image" content="/logo.png" />
@@ -145,7 +145,7 @@ and used to highlight the subset of interest" />
 and used to highlight the subset of interest</p>
     </div>
 
-    <pre class="usage"><span class='fu'>selecting</span>(<span class='kw'>selected</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>selectBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>selectionLogic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>selecting</span><span class='op'>(</span>selected <span class='op'>=</span> <span class='cn'>NULL</span>, selectBy <span class='op'>=</span> <span class='cn'>NULL</span>, selectionLogic <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,17 +180,18 @@ but also can delight or invert (the highlighted to delighted, vice verse) the el
     <div class='dont-index'><p><code><a href='linking.html'>linking</a></code>, <code><a href='itemLabel.html'>itemLabel</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
   <span class='co'># highlight the four gear cars</span>
-  <span class='no'>fourGear</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>FALSE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mtcars</span>))
-  <span class='no'>fourGear</span>[<span class='no'>mtcars</span>$<span class='no'>gear</span> <span class='kw'>==</span> <span class='fl'>4</span>] <span class='kw'>&lt;-</span> <span class='fl'>TRUE</span>
+  <span class='va'>fourGear</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>FALSE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>fourGear</span><span class='op'>[</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span> <span class='op'>==</span> <span class='fl'>4</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
 
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
-    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='co'># push the states of scatter plot to the histogram</span>
-    <span class='fu'>selecting</span>(<span class='kw'>selected</span> <span class='kw'>=</span> <span class='no'>fourGear</span>)
-}</div></pre>
+    <span class='fu'>selecting</span><span class='op'>(</span>selected <span class='op'>=</span> <span class='va'>fourGear</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -206,7 +207,7 @@ but also can delight or invert (the highlighted to delighted, vice verse) the el
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
