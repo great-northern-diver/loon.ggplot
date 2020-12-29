@@ -1,14 +1,14 @@
-loonSerialaxes <- function(ggBuild,
-                           index,
-                           ggObj,
-                           activeGeomLayers,
-                           panelIndex,
-                           dataFrame,
-                           parent,
-                           showGuides,
-                           linkingKey,
-                           showLabels,
-                           loonTitle) {
+l_serialaxesplot <- function(ggBuild,
+                             index,
+                             ggObj,
+                             activeGeomLayers,
+                             panelIndex,
+                             dataFrame,
+                             parent,
+                             showGuides,
+                             linkingKey,
+                             showLabels,
+                             loonTitle) {
 
 
   # The warning is given ahead; See function `loon.ggplot:::get_modelLayers`
@@ -18,7 +18,7 @@ loonSerialaxes <- function(ggBuild,
   coordSerialAxes <- ggObj$coordinates
 
   if(!is.CoordSerialaxes(coordSerialAxes))
-    rlang::abort("No serialaxes coordinate is found")
+   stop("No serialaxes coordinate is found", call. = FALSE)
 
   axes.sequence <- char2null(coordSerialAxes$axes.sequence) %||% colnames(dataFrame)
   axesLayout <- coordSerialAxes$axes.layout
