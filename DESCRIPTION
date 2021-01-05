@@ -13,9 +13,9 @@ Depends:
     R (>= 3.4.0),
     tcltk,
     methods,
-Imports:
     loon (> 1.2.3),
     ggplot2,
+Imports:
     stats,
     ggmulti,
     utils,
