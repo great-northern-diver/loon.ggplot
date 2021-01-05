@@ -148,7 +148,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-main-function" class="hasAnchor"><a href="#section-main-function" class="anchor"></a>Main Function</h2>
-          <p class="section-desc"><p>The <code>loon.ggplot</code> main function</p></p>
+          <p class="section-desc"><p>A bridge between <code>loon</code> widgets and <code>gg</code> objects. It can take either a <code>loon</code> widget, a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>) or a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p></p>
         </th>
       </tr>
       
@@ -167,7 +167,7 @@
       
       <tr>
         <th colspan="2">
-          <h3 id="section-a-loon-widget-to-a-ggplot-object" class="hasAnchor"><a href="#section-a-loon-widget-to-a-ggplot-object" class="anchor"></a>A loon widget to a ggplot object</h3>
+          <h3 id="section-an-interactive-loon-widget-to-a-static-ggplot-object" class="hasAnchor"><a href="#section-an-interactive-loon-widget-to-a-static-ggplot-object" class="anchor"></a>An interactive `loon` widget to a static `ggplot` object</h3>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -198,7 +198,7 @@
       
       <tr>
         <th colspan="2">
-          <h3 id="section-a-ggplot-object-to-a-loon-widget" class="hasAnchor"><a href="#section-a-ggplot-object-to-a-loon-widget" class="anchor"></a>A ggplot object to a loon widget</h3>
+          <h3 id="section-a-static-ggplot-object-to-an-interactive-loon-widget" class="hasAnchor"><a href="#section-a-static-ggplot-object-to-an-interactive-loon-widget" class="anchor"></a>A static `ggplot` object to an interactive `loon` widget</h3>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -222,8 +222,8 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-new-way-to-create-a-loon-widget" class="hasAnchor"><a href="#section-new-way-to-create-a-loon-widget" class="anchor"></a>New way to create a loon widget</h2>
-          <p class="section-desc"><p>Create a loon widget by the “ggplot rule”</p></p>
+          <h2 id="section-automatically-create-a-loon-widget-by-the-ggplot-rule-" class="hasAnchor"><a href="#section-automatically-create-a-loon-widget-by-the-ggplot-rule-" class="anchor"></a>Automatically create a `loon` widget by the &quot;ggplot rule&quot;</h2>
+          <p class="section-desc"><p>Function <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> returns a <code>lggplot</code> object, then “print” a <code>loon</code> plot automatically.</p></p>
         </th>
       </tr>
       
@@ -261,6 +261,12 @@
           <p><code><a href="selecting.html">selecting()</a></code> </p>
         </td>
         <td><p>Modify the <code>selecting</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.lggplot.html">print(<i>&lt;lggplot&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Explicitly draw plot</p></td>
       </tr>
     </tbody><tbody>
       <tr>
