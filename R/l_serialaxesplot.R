@@ -18,21 +18,21 @@ l_serialaxesplot <- function(ggBuild,
   coordSerialAxes <- ggObj$coordinates
 
   if(!is.CoordSerialaxes(coordSerialAxes))
-   stop("No serialaxes coordinate is found", call. = FALSE)
+    stop("No serialaxes coordinate is found", call. = FALSE)
 
-  axes.sequence <- char2null(coordSerialAxes$axes.sequence) %||% colnames(dataFrame)
+  axes.sequence <- get_axes.sequence(ggObj, activeGeomLayers)
   axesLayout <- coordSerialAxes$axes.layout
   scaling <- coordSerialAxes$scaling
 
   showArea <- if(inherits(layer$geom, "GeomRibbon")) TRUE else FALSE
 
-  activeLayer <- ggBuild$data[[activeGeomLayers]]
-  aesData <- activeLayer[activeLayer$PANEL == panelIndex, ]
+  activeLayerData <- ggBuild$data[[activeGeomLayers]]
+  aesData <- activeLayerData[activeLayerData$PANEL == panelIndex, ]
 
   color <- aesData$colour[which(!duplicated(aesData$group))]
   size <- aesData$size[which(!duplicated(aesData$group))]
 
-  loon::l_serialaxes(
+  args <- list(
     data = dataFrame[index, ],
     sequence = axes.sequence,
     scaling = scaling,
@@ -46,4 +46,37 @@ l_serialaxesplot <- function(ggBuild,
     parent  = parent,
     title = loonTitle
   )
+
+  if(packageVersion("loon") >= "1.3.2") {
+    args$andrews <- is.andrews(ggObj, activeGeomLayers)
+  }
+
+  do.call(loon::l_serialaxes, args)
+}
+
+
+get_axes.sequence <- function(ggObj, activeGeomLayers) {
+
+  coordSerialAxes <- ggObj$coordinates
+  if(!is.null(char2null(coordSerialAxes$axes.sequence)))
+    return(coordSerialAxes$axes.sequence)
+
+  layer <- ggObj$layers[[activeGeomLayers]]
+
+  # aesthetics will not be treated as the axes
+  axes.sequence <- setdiff(unique(c(names(ggObj$mapping), names(layer$mapping))),
+                           names(ggplot2::GeomPath$default_aes))
+
+  if(length(axes.sequence) == 0) {
+    warning("No legal axes found")
+    return(NULL)
+  }
+
+  axes.sequence
+}
+
+is.andrews <- function(ggObj, activeGeomLayers) {
+ layer <- ggObj$layers[[activeGeomLayers]]
+ stat <- layer$stat
+ inherits(stat, "StatDotProduct")
 }

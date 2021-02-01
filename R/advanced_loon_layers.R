@@ -872,7 +872,7 @@ loonLayer.GeomCurve <- function(widget,
 
     } else {
       answer <- FALSE
-      message("Segment will be drawn instead of curve")
+      message("A segment will be drawn instead of the curve")
 
       method <- get_stat_param(layerGeom, ...)
 
