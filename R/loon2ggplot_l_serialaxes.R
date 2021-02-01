@@ -16,19 +16,32 @@ loon2ggplot.l_serialaxes <- function(target, ...) {
     warning("Not implemented yet; `showArea` will be set as FALSE", call. = FALSE)
   }
 
+  stat <- "serialaxes"
+  if(utils::packageVersion("loon") >= "1.3.2") {
+    if(widget['andrews'])
+      stat <- "dotProduct"
+  }
+
+  axes.layout <- widget['axesLayout']
+  axes.sequence <- widget['sequence']
+  if(axes.layout == "radial" && stat == "serialaxes") {
+    axes.sequence <- c(axes.sequence, axes.sequence[1L])
+  }
+
   p <- ggplot2::ggplot(data[active_displayOrder, ]) +
     ggplot2::geom_path(
       color = get_display_color(
         as_hex6color(widget['color'][active_displayOrder]),
         widget['selected'][active_displayOrder]
       ),
-      size = as_r_line_size(widget['linewidth'][active_displayOrder])
+      size = as_r_line_size(widget['linewidth'][active_displayOrder]),
+      stat = stat
     ) +
     ggmulti::coord_serialaxes(direction = -1, # anticlock
                               start = 11, # at 11
-                              axes.layout = widget['axesLayout'],
+                              axes.layout = axes.layout,
                               scaling = widget['scaling'],
-                              axes.sequence = widget['sequence']) +
+                              axes.sequence = axes.sequence) +
     ggplot2::ggtitle(widget['title'])
 
   # set themes
