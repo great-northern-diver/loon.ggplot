@@ -1,23 +1,27 @@
 #' @title layout matrix
 #' @description return the layout matrix of a list of loon plots
 #' @param target an object \code{ggplot2loon()} returns
-
+#' @export
+#' @return a layout coordinate matrix
 layout_coords <- function(target) {
   UseMethod("layout_coords", target)
 }
 
+#' @export
 layout_coords.l_plot <- function(target) {
   ggLayout <- matrix(c(1,1), nrow = 1)
   colnames(ggLayout) <- c("row", "col")
   ggLayout
 }
 
+#' @export
 layout_coords.l_hist <- function(target) {
   ggLayout <- matrix(c(1,1), nrow = 1)
   colnames(ggLayout) <- c("row", "col")
   ggLayout
 }
 
+#' @export
 layout_coords.l_ggplot <- function(target) {
   plots <- target$plots
   ggLayout <- as.data.frame(

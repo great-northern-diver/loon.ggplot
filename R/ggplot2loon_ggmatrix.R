@@ -149,14 +149,14 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
           showStrips <- ggObj$showStrips
           layout <- ggLayout[[plotId]]$layout
 
-          is_facet_wrap <- !is.null(ggLayout[[plotId]]$facet_params$facets)
-          is_facet_grid <- !is.null(ggLayout[[plotId]]$facet_params$cols) & !is.null(ggLayout[[plotId]]$facet_params$rows)
+          FacetWrap <- is.FacetWrap(ggObj$facet)
+          FacetGrid <- is.FacetGrid(ggObj$facet)
 
           # row subtitle names
-          fun <- if(is_facet_grid) {
+          fun <- if(FacetGrid) {
             # facets separated by facet_grid(), pack plots and labels
             facet_grid_tkpack
-          } else if(is_facet_wrap) {
+          } else if(FacetWrap) {
             facet_wrap_tkpack
           } else stop("only facet_wrap() and facet_grid() are allowed to separate facets", call. = FALSE)
 

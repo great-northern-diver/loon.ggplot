@@ -147,8 +147,8 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-main-function" class="hasAnchor"><a href="#section-main-function" class="anchor"></a>Main Function</h2>
+          <p class="section-desc"><p>A bridge between <code>loon</code> widgets and <code>gg</code> objects. It can take either a <code>loon</code> widget, a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>) or a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p></p>
         </th>
       </tr>
       
@@ -159,75 +159,28 @@
       <tr>
         
         <td>
-          <p><code><a href="add_serialaxes_layers.html">add_serialaxes_layers()</a></code> </p>
+          <p><code><a href="loon.ggplot.html">loon.ggplot()</a></code> </p>
         </td>
-        <td><p>Layers on serial axes coordinate</p></td>
-      </tr><tr>
+        <td><p>loon.ggplot</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-an-interactive-loon-widget-to-a-static-ggplot-object" class="hasAnchor"><a href="#section-an-interactive-loon-widget-to-a-static-ggplot-object" class="anchor"></a>An interactive `loon` widget to a static `ggplot` object</h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
         
         <td>
-          <p><code><a href="coord_serialaxes.html">coord_serialaxes()</a></code> </p>
+          <p><code><a href="loon2ggplot.html">loon2ggplot()</a></code> </p>
         </td>
-        <td><p>Serial axes coordinates</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="geom_imageGlyph.html">geom_imageGlyph()</a></code> </p>
-        </td>
-        <td><p>Add image glyph on scatter plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="geom_pointrangeGlyph.html">geom_pointrangeGlyph()</a></code> </p>
-        </td>
-        <td><p>Add pointrange glyph on scatter plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="geom_polygonGlyph.html">geom_polygonGlyph()</a></code> </p>
-        </td>
-        <td><p>Add polygon glyph on scatter plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="geom_serialAxesGlyph.html">geom_serialAxesGlyph()</a></code> </p>
-        </td>
-        <td><p>Add serialaxes glyph on scatter plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="geom_textGlyph.html">geom_textGlyph()</a></code> </p>
-        </td>
-        <td><p>Add text glyph on scatter plot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_activeGeomLayers.html">get_activeGeomLayers()</a></code> </p>
-        </td>
-        <td><p>active geom layers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_scaledData.html">get_scaledData()</a></code> </p>
-        </td>
-        <td><p>scale data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ggplot2loon.html">ggplot2loon()</a></code> </p>
-        </td>
-        <td><p><code>ggplot</code> to <code>loon</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ggSerialAxes.html">ggSerialAxes()</a></code> </p>
-        </td>
-        <td><p>ggplot serialaxes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gg_pipe.html">gg_pipe()</a></code> </p>
-        </td>
-        <td><p>Pipe ggplot object</p></td>
+        <td><p><code>loon</code> to <code>ggplot</code></p></td>
       </tr><tr>
         
         <td>
@@ -240,12 +193,56 @@
           <p><code><a href="g_getPlots.html">g_getPlots()</a></code> </p>
         </td>
         <td><p>get <code>ggplot</code>s</p></td>
+      </tr>
+    </tbody><tbody>
+      
+      <tr>
+        <th colspan="2">
+          <h3 id="section-a-static-ggplot-object-to-an-interactive-loon-widget" class="hasAnchor"><a href="#section-a-static-ggplot-object-to-an-interactive-loon-widget" class="anchor"></a>A static `ggplot` object to an interactive `loon` widget</h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="ggplot2loon.html">ggplot2loon()</a></code> </p>
+        </td>
+        <td><p><code>ggplot</code> to <code>loon</code></p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_activeGeomLayers.html">get_activeGeomLayers()</a></code> </p>
+        </td>
+        <td><p>active geom layers</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-automatically-create-a-loon-widget-by-the-ggplot-rule-" class="hasAnchor"><a href="#section-automatically-create-a-loon-widget-by-the-ggplot-rule-" class="anchor"></a>Automatically create a `loon` widget by the &quot;ggplot rule&quot;</h2>
+          <p class="section-desc"><p>Function <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> returns a <code>lggplot</code> object, then “print” a <code>loon</code> plot automatically.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
+        </td>
+        <td><p>Automatically create a loon widget</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="interactivity.html">interactivity()</a></code> </p>
         </td>
-        <td><p>Modify the interactive component</p></td>
+        <td><p>Modify the <code>interactivity</code> component</p></td>
       </tr><tr>
         
         <td>
@@ -255,51 +252,52 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="layout_coords.html">layout_coords()</a></code> </p>
-        </td>
-        <td><p>layout matrix</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="lggplot.html">lggplot()</a></code> </p>
-        </td>
-        <td><p>Automatically create a loon widget</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="linking.html">linking()</a></code> </p>
         </td>
         <td><p>Modify the <code>linking</code> component</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="loon.ggplot.html">loon.ggplot()</a></code> </p>
+          <p><code><a href="selecting.html">selecting()</a></code> </p>
         </td>
-        <td><p>loon.ggplot</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="loon2ggplot.html">loon2ggplot()</a></code> </p>
-        </td>
-        <td><p><code>loon</code> to <code>ggplot</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
-        </td>
-        <td><p>Automatically create a loon widget</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="polygonGlyph.html">x_star</a></code> <code><a href="polygonGlyph.html">y_star</a></code> <code><a href="polygonGlyph.html">x_cross</a></code> <code><a href="polygonGlyph.html">y_cross</a></code> <code><a href="polygonGlyph.html">x_hexagon</a></code> <code><a href="polygonGlyph.html">y_hexagon</a></code> <code><a href="polygonGlyph.html">x_airplane</a></code> <code><a href="polygonGlyph.html">y_airplane</a></code> </p>
-        </td>
-        <td><p>Polygon glyph coordinates</p></td>
+        <td><p>Modify the <code>selecting</code> component</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="print.lggplot.html">print(<i>&lt;lggplot&gt;</i>)</a></code> </p>
         </td>
         <td><p>Explicitly draw plot</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-accessories" class="hasAnchor"><a href="#section-accessories" class="anchor"></a>Accessories</h2>
+          <p class="section-desc"><p>Some useful functions for the transformation</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="layout_coords.html">layout_coords()</a></code> </p>
+        </td>
+        <td><p>layout matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_scaledData.html">get_scaledData()</a></code> </p>
+        </td>
+        <td><p>scale data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gg_pipe.html">gg_pipe()</a></code> </p>
+        </td>
+        <td><p>Pipe ggplot object</p></td>
       </tr><tr>
         
         <td>
@@ -312,12 +310,6 @@
           <p><code><a href="scale_multi.html">scale_multi()</a></code> </p>
         </td>
         <td><p>Position scales for continuous data (x, y &amp; z)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="selecting.html">selecting()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>selecting</code> component</p></td>
       </tr>
     </tbody>
     </table>
@@ -337,7 +329,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

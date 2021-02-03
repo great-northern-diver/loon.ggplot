@@ -14,7 +14,7 @@
 #' we rotate the plot, most points will stay inside the current view.
 #' @return a list of the \code{ggproto} objects
 #' @export
-#' @importFrom scales trans_new
+#' @import scales
 #' @examples
 #' if(interactive()) {
 #'
@@ -52,7 +52,9 @@ scale_multi <- function(trans = scaleBox(center = TRUE), ...) {
   dotArgs <- list(...)
   if(!is.null(dotArgs$position)) {
     if(length(dotArgs$position) != 3) {
-      warning("The scales of x, y, z are set simultaneously. Position should be a vector to determine the x, y, z in order")
+      warning("The scales of x, y, z are set simultaneously. ",
+              "Position should be a vector to determine the x, y, z in order",
+              call. = FALSE)
       dotArgs$position <- NULL
 
       dotArgs_x <- dotArgs
@@ -95,7 +97,6 @@ scale_multi <- function(trans = scaleBox(center = TRUE), ...) {
 #' x, where 'numeric-alike' means that \code{as.numeric(.)} will be applied successfully
 #' if \code{is.numeric(.)} is not true.
 #' @return A \code{trans} object
-#' @importFrom scales censor
 #' @seealso \code{\link{l_scale3D}}
 #' @export
 scaleBox <- function(center = TRUE) {

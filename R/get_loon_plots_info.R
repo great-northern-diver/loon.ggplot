@@ -55,14 +55,17 @@ get_loon_plotInfo <- function(plotInfo = list(),
   rowSubtitles <- c()
   indices <- list()
   plots <- list()
+  # is polar coord?
+  isCoordPolar <- is.CoordPolar(ggObj$coordinates)
+
+  # subtitle
+  # if wrap number is larger than 0, multiple facets are displayed
+  numOfSubtitles <- wrap_num(buildggObj$ggLayout,
+                             plotInfo$FacetWrap,
+                             plotInfo$FacetGrid,
+                             tkLabels)
 
   for(i in seq_len(panelNum)) {
-    # subtitle
-    # if wrap number is larger than 0, multiple facets are displayed
-    numOfSubtitles <- wrap_num(buildggObj$ggLayout,
-                               plotInfo$is_facet_wrap,
-                               plotInfo$is_facet_grid,
-                               tkLabels)
 
     subtitle <- get_subtitle(plotInfo$layoutByROWS,
                              plotInfo$layoutByCOLS,
@@ -72,15 +75,15 @@ get_loon_plotInfo <- function(plotInfo = list(),
                              byROWS = plotInfo$byROWS,
                              byCOLS = plotInfo$byCOLS,
                              panelNum = i,
-                             is_facet_wrap = plotInfo$is_facet_wrap,
-                             is_facet_grid = plotInfo$is_facet_grid,
+                             FacetWrap = plotInfo$FacetWrap,
+                             FacetGrid = plotInfo$FacetGrid,
                              tkLabels = tkLabels)
     colSubtitle <- subtitle$colSubtitle
     rowSubtitle <- subtitle$rowSubtitle
     colSubtitles <- c(colSubtitles, colSubtitle)
     rowSubtitles <- c(rowSubtitles, rowSubtitle)
 
-    if(!is.null(colSubtitle) & !plotInfo$is_facet_grid & tkLabels & pack) {
+    if(!is.null(colSubtitle) & !plotInfo$FacetGrid & tkLabels & pack) {
       sub <- as.character(tcltk::tcl('label',
                                      as.character(loon::l_subwin(parent,'label')),
                                      text= colSubtitle,
@@ -96,22 +99,19 @@ get_loon_plotInfo <- function(plotInfo = list(),
                     sticky="nesw")
       start.subtitlepos <- start.ypos + numOfSubtitles
       newspan <- span - numOfSubtitles
-      if(newspan <= 0) stop(paste0("pick a larger span, at least larger than ", numOfSubtitles), call. = FALSE)
+      if(newspan <= 0) stop("pick a larger span, at least larger than ", numOfSubtitles, call. = FALSE)
     }
-
-    # is polar coord?
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params[[i]])
 
     if(isCoordPolar) {
       # theta can be only "x" or "y"
-      if(ggObj$coordinates$theta == "y")  swapAxes <- TRUE
+      theta <- ggObj$coordinates$theta %||% "x"
+      if(theta == "y")  swapAxes <- TRUE
       showGuides <- FALSE
       showScales <- FALSE
     } else {
       # if not polar coord
       # swap or not
-      if(which( names(ggplotPanel_params[[i]]) %in% "y.range"  == TRUE ) <
-         which( names(ggplotPanel_params[[i]]) %in% "x.range"  == TRUE )) swapAxes <- TRUE
+      swapAxes <- is.CoordFlip(ggObj$coordinates)
       # show ggGuides or not
       if (ggGuides) {
         showGuides <- FALSE
@@ -121,16 +121,9 @@ get_loon_plotInfo <- function(plotInfo = list(),
         # set panX, panY, deltaX, deltaY
         showGuides <- TRUE
         showScales <- get_showScales(ggObj$theme)
-        x.range <- if (swapAxes) {
-          ggplotPanel_params[[i]]$y.range
-        } else {
-          ggplotPanel_params[[i]]$x.range
-        }
-        y.range <- if (swapAxes) {
-          ggplotPanel_params[[i]]$x.range
-        } else {
-          ggplotPanel_params[[i]]$y.range
-        }
+        x.range <- plot_range("x.range", ggplotPanel_params[[i]], swapAxes)
+        y.range <- plot_range("y.range", ggplotPanel_params[[i]], swapAxes)
+
         panY <- y.range[1]
         panX <- x.range[1]
         deltaY <- diff(y.range) * zoomX

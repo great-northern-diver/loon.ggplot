@@ -1,1 +1,36 @@
-destination: docs
+reference:
+
+  - title: Main Function
+    desc: A bridge between `loon` widgets and `gg` objects. It can take either a `loon` widget, a `gg` object (`ggplot` or `ggmatrix`) or a `lggplot` object, then create a corresponding `gg` (or `loon`) graphics.
+    contents:
+    - loon.ggplot
+
+  - subtitle: An interactive `loon` widget to a static `ggplot` object
+    contents:
+    - loon2ggplot
+    - g_getLocations
+    - g_getPlots
+
+  - subtitle: A static `ggplot` object to an interactive `loon` widget
+    contents:
+    - ggplot2loon
+    - get_activeGeomLayers
+
+  - title: Automatically create a `loon` widget by the "ggplot rule"
+    desc: Function `l_ggplot()` returns a `lggplot` object, then "print" a `loon` plot automatically.
+    contents:
+    - l_ggplot
+    - interactivity
+    - itemLabel
+    - linking
+    - selecting
+    - print.lggplot
+
+  - title: Accessories
+    desc: Some useful functions for the transformation
+    contents:
+    - layout_coords
+    - get_scaledData
+    - gg_pipe
+    - scaleBox
+    - scale_multi

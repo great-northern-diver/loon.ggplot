@@ -111,8 +111,8 @@
 <p><code>loon.ggplot</code> can be achieved directly from github repo</p>
 <pre><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("https://github.com/great-northern-diver/loon.ggplot")</a></code></pre>
 <p>Launch R, then install the required package dependencies</p>
-<pre><code>install.packages("ggplot2")
-install.packages("loon")</code></pre>
+<pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("ggplot2")
+install.packages("loon")</a></code></pre>
 </div>
 <div id="basic" class="section level3">
 <h3 class="hasAnchor">
@@ -125,9 +125,9 @@ install.packages("loon")</code></pre>
 </li>
 </ul>
 <p>Consider the <code>mtcars</code> data set. Suppose we draw a scatterplot of the mileage <code>mpg</code> (miles per US gallon) versus the weight of the car <code>wt</code> in thousands of pounds and colour represents different cylinder numbers. In <code>ggplot2</code> this would be constructed as</p>
-<pre><code>library(ggplot2)
+<pre><code><a href="http://ggplot2.tidyverse.org">library(ggplot2)
 p &lt;- ggplot(mtcars, aes(wt, mpg, colour = as.factor(cyl))) + geom_point()
-p</code></pre>
+p</a></code></pre>
 <p><img src="reference/figures/mtcarsScatterPlot.png"></p>
 <p>We might also display a histogram of some other variate, say the engine’s horsepower <code>hp</code>. In <code>ggplot2</code> this would be constructed as</p>
 <pre><code>h &lt;- ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) + geom_histogram()
@@ -138,9 +138,9 @@ h</code></pre>
 </li>
 </ul>
 <p>the <code>"ggplot"</code> data structures <code>p</code> and <code>h</code> can be <strong>turned into interactive loon plot</strong>s using the <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code> function:</p>
-<pre><code>library(loon.ggplot)
+<pre><code><a href="https://rdrr.io/r/base/library.html">library(loon.ggplot)
 pl &lt;- ggplot2loon(p)
-hl &lt;- ggplot2loon(h)</code></pre>
+hl &lt;- ggplot2loon(h)</a></code></pre>
 <p><img src="reference/figures/scatterAndHist.gif"></p>
 <p>An alternative way of doing so is to replace <code>ggplot()</code> function to <code><a href="reference/l_ggplot.html">l_ggplot()</a></code> function. Then, follow the pipe rules of <code>ggplot()</code> but get a <code>loon</code> plot.</p>
 <pre class="{r}"><code># the scatter plot
@@ -185,7 +185,7 @@ class(hg)
 <p>Some functionalities are provided</p>
 <ul>
 <li>Adding glyphs on scatterplot like <code><a href="reference/geom_serialAxesGlyph.html">geom_serialAxesGlyph()</a></code>, <code><a href="reference/geom_polygonGlyph.html">geom_polygonGlyph()</a></code>, <code><a href="reference/geom_imageGlyph.html">geom_imageGlyph()</a></code> and etc.</li>
-<li>Providing serial axes plots (parallel coordinate and radial coordinate) via <code><a href="reference/ggSerialAxes.html">ggSerialAxes()</a></code>
+<li>Providing serial axes plots (parallel coordinate and radial coordinate) via <code>ggSerialAxes()</code>
 </li>
 </ul>
 </li>
@@ -251,7 +251,7 @@ l &lt;- loon.ggplot(g)</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

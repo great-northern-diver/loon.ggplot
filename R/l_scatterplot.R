@@ -1,6 +1,6 @@
-loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping, dataFrame,
-                        activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
-                        itemLabel, showLabels, xlabel, ylabel, loonTitle, args) {
+l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping, dataFrame,
+                          activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
+                          itemLabel, showLabels, xlabel, ylabel, loonTitle, args) {
 
   if(length(activeGeomLayers) > 0) {
     # combine points data
@@ -189,7 +189,10 @@ loonScatter <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping,
       as_list = FALSE)
 
     # loon scatter plot (2D or 3D)
-    do.call(plot, plotList)
+    p <- do.call(plot, plotList)
+
+    # widget is returned
+    add_glyph(p, ggBuild, activeGeomLayers)
 
   } else {
 

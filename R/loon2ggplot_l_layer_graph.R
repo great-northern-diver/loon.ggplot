@@ -1,5 +1,4 @@
 #' @rdname loon2ggplot
-#' @importFrom magrittr '%>%'
 #' @export
 loon2ggplot.l_layer_graph <- function(target, ...) {
 
@@ -14,24 +13,25 @@ loon2ggplot.l_layer_graph <- function(target, ...) {
 
   nav_ids <- loon::l_navigator_ids(widget)
 
+  # with pipe '%>%' may make the code more readable
   ggObj <- if(length(nav_ids) == 0) {
     # graph no navigators
-    ggObj %>%
-      ggEdges(states = states) %>%
-      ggNodes(states = states) %>%
-      ggLabels(states = states)
+    ggObj <- ggEdges(ggObj, states = states)
+    ggObj <- ggNodes(ggObj, states = states)
+    ggLabels(ggObj, states = states)
   } else {
     # graph with navigators
-    ggObj %>%
-      ggEdges(states = states) %>%
-      ggNavPaths(states = states,
-                 nav_ids = nav_ids,
-                 widget = widget) %>%
-      ggNodes(states = states) %>%
-      ggLabels(states = states) %>%
-      ggNavPoints(states = states,
-                  nav_ids = nav_ids,
-                  widget = widget)
+    ggObj <- ggEdges(ggObj, states = states)
+    ggObj <- ggNavPaths(ggObj,
+                        states = states,
+                        nav_ids = nav_ids,
+                        widget = widget)
+    ggObj <- ggNodes(ggObj, states = states)
+    ggObj <- ggLabels(ggObj, states = states)
+    ggNavPoints(ggObj,
+                states = states,
+                nav_ids = nav_ids,
+                widget = widget)
 
   }
 

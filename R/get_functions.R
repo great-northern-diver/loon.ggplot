@@ -6,6 +6,15 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
                          className[-which(className %in% c("ggproto"  ,"gg" ,"Geom"))]
                        })
 
+  if(length(layerNames) == 0)
+    return(
+      list(pointLayers = numeric(0L),
+           histogramLayers = numeric(0L),
+           boxplotLayers = numeric(0L),
+           curveLayers = numeric(0L),
+           serialaxesLayers = numeric(0L))
+    )
+
   # check the coord
   if(isCoordSerialaxes) {
     serialaxesLayers <- which(
@@ -16,7 +25,7 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
     )
 
     if(length(serialaxesLayers) > 1) {
-      warning("Only one layer can be active in serialaxes. The first layer will be picked by default")
+      warning("Only one layer can be active in serialaxes. The first layer will be picked by default", call. = FALSE)
       serialaxesLayers <- serialaxesLayers[1]
     }
 
@@ -28,21 +37,35 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
   }
 
   # take the point layer as l_plot
-  pointLayers <- which(sapply(layerNames,
-                              function(layerName){
-                                "GeomPoint" %in% layerName
-                              })
+  pointLayers <- which(
+    sapply(layerNames,
+           function(layerName){
+             any(layerName %in% c("GeomPoint", "GeomPolygonGlyph",
+                                  "GeomImageGlyph", "GeomSerialAxesGlyph"))
+           })
   )
 
-  histogramLayers <- which(sapply(layerNames,
-                                  function(layerName){
-                                    if("GeomBar" %in% layerName) {
-                                      if(isCoordPolar) {
-                                        warning("loon `l_hist` is built based on Cartesian coordinate system\n and does not accommodate polar coordinate system yet. \n If polar coords are used, the histograms or bar plots \n will be created as static polygons and will **not** be interactive.", call. = FALSE)
-                                        FALSE
-                                      } else TRUE
-                                    } else FALSE
-                                  })
+  histogramLayers <- which(
+    sapply(layerNames,
+           function(layerName){
+             if("GeomBar" %in% layerName) {
+               if(isCoordPolar) {
+                 warning("loon `l_hist` is built based on Cartesian coordinate system ",
+                 "and does not accommodate polar coordinate system yet. ",
+                 "If polar coords are used, the histograms or bar plots ",
+                 "will be created as static polygons and will **not** be interactive." , call. = FALSE)
+
+                 FALSE
+               } else TRUE
+               # TODO `l_hist` only accommodate one dimensional histogram
+               # "GeomBar_" would not be interactive
+               if("GeomBar_" %in% layerName) {
+                 warning("If `GeomBar_` object is called, the histograms or bar plots ",
+                 "will be created as static polygons and will **not** be interactive.", call. = FALSE)
+                 FALSE
+               } else TRUE
+             } else FALSE
+           })
   )
 
   # boxlayer
@@ -87,7 +110,7 @@ get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
       activeModel <- "l_plot"
     }
   } else {
-    if(max(activeGeomLayers) > len_layers)
+    if(max(activeGeomLayers, na.rm = TRUE) > len_layers)
       stop("the activeGeomLayers is out of bound", call. = FALSE)
     canBeActive <- activeGeomLayers %in% c(point_hist_layers, serialaxesLayers, boxplotLayers)
     if(all(canBeActive)) {
@@ -122,8 +145,8 @@ get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
 }
 
 get_subtitle <- function(layoutByROWS, layoutByCOLS, layout, ggLayout, numOfSubtitles,
-                         byROWS, byCOLS ,panelNum, is_facet_wrap, is_facet_grid, tkLabels){
-  if(is_facet_wrap | !tkLabels) {
+                         byROWS, byCOLS ,panelNum, FacetWrap, FacetGrid, tkLabels){
+  if(FacetWrap | !tkLabels) {
     colSubtitle <- if (numOfSubtitles > 0) {
       paste(
         sapply(
@@ -134,7 +157,7 @@ get_subtitle <- function(layoutByROWS, layoutByCOLS, layout, ggLayout, numOfSubt
       )
     } else NULL
     rowSubtitle <- NULL
-  } else if(is_facet_grid) {
+  } else if(FacetGrid) {
     if(byROWS & !byCOLS) {
       rowSubtitle <- paste(sapply(layout[panelNum, layoutByROWS], as.character), collapse = "\n")
       colSubtitle <- NULL

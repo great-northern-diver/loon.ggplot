@@ -47,7 +47,7 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
     ) +
     geom_line(aes(date, unemploy)) +
     scale_fill_manual(values = c("blue", "red"))
-  # none can be active
+  # none can be interactive
   agL <- get_activeGeomLayers(p2)
   #transparency is not allowed in tcltk
   ggplot2loon(p2, ggGuides = TRUE, activeGeomLayers = agL)

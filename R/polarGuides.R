@@ -31,14 +31,14 @@ polarGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
 
   # drawing ovals
   if(length(r.major) >= 1) {
-    r.minor <- c(r.major, max(r.range) + diff(r.range)/8)
-  } else r.minor <- c(min(r.range), max(r.range) + diff(r.range)/8)
+    r.minor <- c(r.major, max(r.range, na.rm = TRUE) + diff(r.range, na.rm = TRUE)/8)
+  } else r.minor <- c(min(r.range, na.rm = TRUE), max(r.range, na.rm = TRUE) + diff(r.range, na.rm = TRUE)/8)
 
-  radii <- (r.minor - r.range[1])/ diff(r.range)
-  textRadii <- (r.major - r.range[1])/ diff(r.range)
-  maxRadius <- max(radii)
-  angles <- 2 * pi * (theta.minor - theta.range[1])/diff(theta.range)
-  textAngles <- 2 * pi * (theta.major - theta.range[1])/diff(theta.range)
+  radii <- (r.minor - r.range[1])/ diff(r.range, na.rm = TRUE)
+  textRadii <- (r.major - r.range[1])/ diff(r.range, na.rm = TRUE)
+  maxRadius <- max(radii, na.rm = TRUE)
+  angles <- 2 * pi * (theta.minor - theta.range[1])/diff(theta.range, na.rm = TRUE)
+  textAngles <- 2 * pi * (theta.major - theta.range[1])/diff(theta.range, na.rm = TRUE)
   # set group
   guidesGroup <- loon::l_layer_group(widget, "Polar Guides")
   # draw background

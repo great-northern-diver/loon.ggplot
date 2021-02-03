@@ -85,8 +85,7 @@ print.lggplot <- function(x, ...) {
 #' @inheritParams l_ggplot
 lggplot <- function(data = NULL, mapping = aes(), ...,
                     environment = parent.frame()) {
-  warning("`lggplot()` is deprecated now. Please use `l_ggplot()`",
-          call. = FALSE)
+  warning("`lggplot()` is deprecated now. Please use `l_ggplot()` instead", call. = FALSE)
   l_ggplot(data = data, mapping = mapping, ...,
            environment = environment)
 }

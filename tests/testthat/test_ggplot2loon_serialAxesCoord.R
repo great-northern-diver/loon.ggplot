@@ -3,77 +3,50 @@ library(dplyr)
 library(magrittr)
 library(tidyverse)
 library(GGally)
-
-test_that("test serialaxes ggplot",
-          {
-            # histogram
-            ### parallel
-            ggplot(iris) +
-              geom_path(alpha = 0.2) +
-              geom_histogram(alpha = 0.8,
-                             mapping = aes(fill = factor(Species))) +
-              coord_serialaxes() -> p
-            x <- ggplot_build(p)
-            expect_equal(length(x$plot$layers), 2)
-            expect_true("CoordSerialaxes" %in% class(p$coordinates))
-            expect_false("CoordSerialaxes" %in% class(x$coordinates))
-
-            ### radial
-            p$coordinates$axesLayout <- "radial"
-            x <- ggplot_build(p)
-            expect_false("CoordSerialaxes" %in% class(x$coordinates))
-
-            # freqpoly
-            ### parallel
-            suppressWarnings(
-              ggplot(iris) +
-                geom_path(alpha = 0.2) +
-                geom_freqpoly(alpha = 0.8,
-                              mapping = aes(fill = factor(Species))) +
-                coord_serialaxes() -> p
-            )
-            x <- ggplot_build(p)
-            expect_equal(length(x$plot$layers), 2)
-
-            ### radial
-            p$coordinates$axesLayout <- "radial"
-            x <- ggplot_build(p)
-            expect_false("CoordSerialaxes" %in% class(x$coordinates))
-
-            # density
-            ### parallel
-            ggplot(mtcars) +
-              geom_path(alpha = 0.2, mapping = aes(colour = factor(cyl))) +
-              geom_density(alpha = 0.8,
-                           mapping = aes(fill = factor(cyl))) +
-              coord_serialaxes() -> p
-            x <- ggplot_build(p)
-            expect_true("CoordSerialaxes" %in% class(p$coordinates))
-            expect_false("CoordSerialaxes" %in% class(x$coordinates))
-
-            ### radial
-            p$coordinates$axesLayout <- "radial"
-            x <- ggplot_build(p)
-            expect_false("CoordSerialaxes" %in% class(x$coordinates))
-          })
+library(ggmulti)
 
 test_that("test serialaxes ggplot 2 loon",
           {
             l_ggplot(iris, mapping = aes(colour = factor(Species))) +
               geom_path(alpha = 0.2) +
-              coord_serialaxes() -> p
+              ggmulti::coord_serialaxes(axes.sequence = colnames(iris)) -> p
             q <- loon.ggplot(p)
             expect_true("l_serialaxes" %in% class(q))
             expect_equal(q['axesLayout'], "parallel")
 
-            p$coordinates$axesLayout <- "radial"
+            p$coordinates$axes.layout <- "radial"
             q <- loon.ggplot(p)
             expect_true("l_serialaxes" %in% class(q))
             expect_equal(q['axesLayout'], "radial")
 
-            l_ggplot(iris, mapping = aes(colour = factor(Species))) +
-              geom_ribbon(alpha = 0.2) +
-              coord_serialaxes() -> p
+            l_ggplot(iris, mapping = aes(Sepal.Length = Sepal.Length,
+                                         Sepal.Width = Sepal.Width,
+                                         Petal.Length = Petal.Length,
+                                         Petal.Width = Petal.Width,
+                                         colour = factor(Species))) +
+              geom_serialaxes(alpha = 0.2) +
+              geom_serialaxes_density(alpha = 0.2) +
+              geom_serialaxes_hist() +
+              geom_serialaxes_quantile(quantiles = c(0.25, 0.5, 0.75),
+                                       colour = c("red", "blue", "green"),
+                                       size = 4) -> p
+            expect_warning(q <- loon.ggplot(p))
+            expect_true("l_plot" %in% class(q))
+
+            l <- l_layer_getChildren(q)
+            expect_true(length(l) == 5)
+
+            p <- mpg %>%
+              dplyr::filter(drv != "f") %>%
+              l_ggplot(mapping = aes(x = drv, y = cty, fill = factor(cyl))) +
+              geom_density_(alpha = 0.1)
             q <- loon.ggplot(p)
-            expect_true(q['showArea'])
+            expect_true("l_plot" %in% class(q))
+
+            p <- mpg %>%
+              dplyr::filter(drv != "f") %>%
+              l_ggplot(mapping = aes(x = drv, y = cty, fill = factor(cyl))) +
+              geom_hist_(alpha = 0.1)
+            expect_warning(q <- loon.ggplot(p))
+            expect_true("l_plot" %in% class(q))
           })

@@ -24,8 +24,8 @@ modify_loon_plots <- function(plotInfo = list()) {
     gp <- list(
       plots = plots,
       facet = list(
-        is_facet_wrap = plotInfo$is_facet_wrap,
-        is_facet_grid = plotInfo$is_facet_grid,
+        FacetWrap = plotInfo$FacetWrap,
+        FacetGrid = plotInfo$FacetGrid,
         byCOLS = plotInfo$byCOLS,
         byROWS = plotInfo$byROWS
       ),
@@ -82,8 +82,10 @@ facet_nDimStates <- function(state, indices) {
   len_indices <- length(unlist(indices))
 
   if(len_state != len_indices)
-    stop("The length of n dimensional state is ", len_state,
-         " which is not equal to the length of the facet index ", len_indices,
+    stop("The length of n dimensional state is ",
+         len_state,
+         " which is not equal to the length of the facet index ",
+         len_indices,
          call. = FALSE)
 
   if(length(indices) == 1) return(state[unlist(indices)])

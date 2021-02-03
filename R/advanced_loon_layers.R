@@ -71,7 +71,7 @@ loonLayer.GeomViolin <- function(widget,
                                         })
                id <- sapply(quantiles,
                             function(j) {
-                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea, na.rm = TRUE) * j)
                               which(abs_quantile_area == min(abs_quantile_area))
                             })
                linesData <- group_i_data[id, ]
@@ -108,7 +108,7 @@ loonLayer.GeomViolin <- function(widget,
                                         })
                id <- sapply(quantiles,
                             function(j) {
-                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea) * j)
+                              abs_quantile_area <- abs(cumulativeArea - max(cumulativeArea, na.rm = TRUE) * j)
                               which(abs_quantile_area == min(abs_quantile_area))
                             })
                linesData <- group_i_data[id, ]
@@ -647,7 +647,7 @@ loonLayer.GeomPath <- function(widget,
                                label = NULL,
                                ...) {
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     # path group
     if (parent == "root") {
       parent <- loon::l_layer_group(widget,
@@ -814,7 +814,7 @@ loonLayer.GeomCurve <- function(widget,
       }
       gridList <- grid.ls(print = FALSE)
       gridList.name <- gridList$name
-      xspline.name <- gridList.name[which(stringr::str_detect(gridList.name, "curve") == TRUE)]
+      xspline.name <- gridList.name[grepl("curve", gridList.name, ignore.case = TRUE)]
       # xspline.len <- length(xspline.name)
 
       lapply(1:n,
@@ -872,7 +872,7 @@ loonLayer.GeomCurve <- function(widget,
 
     } else {
       answer <- FALSE
-      message("Segment will be drawn instead of curve")
+      message("A segment will be drawn instead of the curve")
 
       method <- get_stat_param(layerGeom, ...)
 
@@ -1132,7 +1132,7 @@ loonLayer.GeomRaster <- function(widget,
                                  ...) {
 
   if(dim(data)[1] != 0) {
-    isCoordPolar <- is.CoordPolar(ggplotPanel_params)
+    isCoordPolar <- is.CoordPolar(ggObj$coordinates)
     n <- dim(data)[1]
     fillColor <- data$fill
     linesColor <- data$colour
@@ -1240,10 +1240,11 @@ loonLayer.GeomRaster <- function(widget,
   } else NULL
 }
 
+
 get_mappingLabel <- function(layerGeom, name, label = NULL, i = NULL) {
 
   if(is.null(label)) {
-    if(is.null(layerGeom$mapping)) {
+    if(rlang::is_empty(layerGeom$mapping)) {
       paste(c(name, i), collapse = " ")
     } else {
       m <- length(layerGeom$mapping)

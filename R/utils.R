@@ -2,34 +2,17 @@
   if (!is.null(a)) a else b
 }
 
-mbind <- function(new_mapping = aes(), mapping) {
-
-  if (!missing(mapping) && !inherits(mapping, "uneval") &&
-      !missing(new_mapping) && !inherits(new_mapping, "uneval")) {
-    stop("Mapping should be created with `aes()`.", call. = FALSE)
+char2null <- function(x, warn = FALSE, message = "") {
+  if(length(x) == 0) {
+    if(warn) {
+      stop(warn, call. = FALSE)
+    }
+    return(NULL)
   }
-
-  new_aes(new_mapping %<-% mapping)
+  x
 }
 
 is.waive <- function (x) inherits(x, "waiver")
-
-`%<-%` <- function(x, y) {
-  if(is.null(names(x)) || is.null(names(y)))
-    return(c(x,y))
-  else {
-
-    if(!is.list(x)) x <- as.list(x)
-    if(!is.list(y)) y <- as.list(y)
-
-    merged_list <- c(x, y)
-    list_names <- names(merged_list)
-    merged_list[duplicated(list_names, fromLast = TRUE)] <- NULL
-
-    return(merged_list[unique(list_names)])
-  }
-}
-
 
 is.ggmatrix <- function(x) {
   inherits(x, "ggmatrix")
@@ -48,6 +31,12 @@ loon_default_setting <- function(x) {
          "linewidth" = 1,
          "radius" = 0.5,
          "boundaryLineWidth" = 1.3)
+}
+
+one_dim_state <- function(x) {
+  x <- na.omit(x)
+  if(length(x) == 0) return(NULL)
+  x[1L]
 }
 
 is.color <- function(colors) {
@@ -78,13 +67,6 @@ is.color <- function(colors) {
   is_color
 }
 
-valid_color <- function(x) {
-  if(any(!is.color(x)))
-    gg_color_hue(length(x))
-  else
-    x
-}
-
 remove_null <- function(..., as_list = TRUE) {
   if(as_list)
     Filter(Negate(is.null),
@@ -94,41 +76,18 @@ remove_null <- function(..., as_list = TRUE) {
     Filter(Negate(is.null), ...)
 }
 
-rearrangePolygonData <- function(data) {
-  na_x <- is.na(data$x)
-  na_y <- is.na(data$y)
-  if (all(na_x != na_y)) {
-    data <- data[!union(na_x, na_y), ]
-    return(data)
-  }
-
-  pos <- c(which(na_x), dim(data)[1])
-  npolygons <- length(pos)
-
-  if(npolygons > 1) {
-    group <- c()
-
-    for(i in 1:npolygons) {
-      if(i == 1)
-        group <- c(group, rep(i, pos[i]))
-      else
-        group <- c(group, rep(i, pos[i] - pos[i-1]))
+plot_range <- function(x = "x.range", panelParams, flip = FALSE) {
+  if(flip) {
+    x <- if(grepl("x", x)) {
+      gsub("x", "y", x)
+    } else {
+      gsub("y", "x", x)
     }
-
-    data$group <- group
-    data <- data[!na_x, ]
   }
 
-  return(data)
+  panelParams[[x]] %||% c(0, 1)
 }
 
-group_id <- function(data, uniGroup) {
-  group <- data$group
-  vapply(uniGroup,
-         function(x) {
-           which(group == x)[1]
-         }, numeric(1))
-}
 
 set_tkLabel <- function(labelBackground = "gray80", labelForeground = "black", labelBorderwidth = 2, labelRelief = "groove",
                         xlabelBackground = "white", xlabelForeground = "black", xlabelBorderwidth = 2, xlabelRelief = "solid",
@@ -165,8 +124,8 @@ set_lineColor <- function(data, mapping, color) {
 
     color <- if(is.numeric(color)) {
 
-      minColor <- min(color)
-      maxColor <- max(color)
+      minColor <- min(color, na.rm = TRUE)
+      maxColor <- max(color, na.rm = TRUE)
       n <- length(color)
 
       minRGB <- grDevices::col2rgb("lightblue")
@@ -218,20 +177,36 @@ set_lineSize <- function(data, mapping, size) {
   }
 
   if(!is.numeric(size))
-    stop(
-      paste(sub("~", "", rlang::expr_text(mapping$size)), "is not a numerical variable"),
-      call. = FALSE
-    )
+    stop(sub('~', '', rlang::expr_text(mapping$size)),
+         " is not a numerical variable.", call. = FALSE)
 
   return(size)
 }
 
-wrap_num <- function(ggLayout, is_facet_wrap, is_facet_grid, tkLabels){
-  if(is_facet_wrap | !tkLabels) {
+wrap_num <- function(ggLayout, FacetWrap, FacetGrid, tkLabels){
+  if(FacetWrap | !tkLabels) {
     length(names(ggLayout$facet_params$facets))
-  } else if(is_facet_grid) {
+  } else if(FacetGrid) {
     length(names(ggLayout$facet_params$rows)) + length(names(ggLayout$facet_params$cols))
   } else 0
+}
+
+as_ggplot_size <- function(size, power = NULL) {
+
+  power <- power %||% 1/4
+
+  if (is.numeric(size)) {
+    # arbitrary power
+    size <- (size/as.numeric(loon::l_getOption("size")))^(power)
+  } else {
+    warning(
+      "size is ",
+      class(size),
+      " not numerical. It will be set as 1", call. = FALSE
+    )
+    size <- 1
+  }
+  size
 }
 
 as_r_text_size <- function(size, digits = 2) {
@@ -242,9 +217,18 @@ as_r_point_size <- function(size, digits = 2) {
   round(2*log(size), digits)
 }
 
+utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
+                         "height", "positive", "setup_mapping", "x", "y",
+                         "ymax", "ymin"))
+
 as_r_line_size <- function(size, digits = 2) {
   round(size/.pt, digits)
 }
+
+adjust_image_size <- function(x) {
+  x/50
+}
+
 
 pixels_2_lines <- function(x, digits = 2) {
   round(x / 100, digits)
@@ -340,6 +324,15 @@ l_layer_getUngroupedChildren <- function(widget, target) {
 
   unlist(layer, recursive = TRUE)
 }
+
+not_in_column_names <- function(colnames, name = "", pattern = "") {
+
+  while(name %in% colnames) {
+    name <- paste0(name, pattern)
+  }
+  name
+}
+
 ################################ TODO List ################################
 
 ## loon.ggplot

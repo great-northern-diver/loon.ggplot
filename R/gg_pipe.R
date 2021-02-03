@@ -51,8 +51,9 @@ gg_pipe <- function(data, ggObj) {
   subs <- substitute(ggObj)
   # convert a call object to a character
   dep <- deparse(subs)
-  if (any(stringr::str_detect(dep, "ggplot"))) {
-    ggplot_id <- which(stringr::str_detect(dep, "ggplot") == TRUE)
+  # stringr::str_detect(dep, "ggplot")
+  if (any(grepl("ggplot", dep))) {
+    ggplot_id <- which(grepl("ggplot", dep))
     if (length(ggplot_id) > 1) {
       stop("only one ggplot model can be handled", call. = FALSE)
     } else {

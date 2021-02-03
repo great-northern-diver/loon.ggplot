@@ -1,4 +1,4 @@
-#' @title Modify the interactive component
+#' @title Modify the \code{interactivity} component
 #' @description Set interactive components (e.g. \code{linking}, \code{selecting}, \code{itemLabel}, etc)
 #' @inheritParams linking
 #' @inheritParams selecting
@@ -63,10 +63,12 @@ interactivity <- function(linkingGroup = NULL,
                    warn_nDim_states = function(data, x) {
                      n <- nrow(data) %||% 0
                      if(length(x) != n && length(x) != 1) {
-                       warning("The length of ", deparse(substitute(x)), " is ", length(x),
-                               " that does not match the number of observations(",
-                               n, ")",
-                               call. = FALSE)
+                       warning(
+                         "The length of ", deparse(substitute(x)),
+                         " is ", length(x),
+                         " that does not match the number of observations(" ,
+                         n, ")."
+                       )
                      }
                    },
                    check_itemLabel = function(self, data, params) {
@@ -100,7 +102,7 @@ interactivity <- function(linkingGroup = NULL,
                      if(is.null(linkingKey)) return(NULL)
 
                      if(any(duplicated(linkingKey)))
-                       stop("The linkingKey is duplicated")
+                       stop("The linkingKey is duplicated", call. = FALSE)
 
                      self$warn_nDim_states(data = data,
                                            x = linkingKey)

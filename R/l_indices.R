@@ -11,14 +11,14 @@ l_indices <- function(ggObj, panelIndex, args,
   layout <- buildggObj$layout
 
   lenLayers <- length(ggObj$layers)
-  isCoordPolar <- is.CoordPolar(ggplotPanel_params[[panelIndex]])
+  isCoordPolar <- is.CoordPolar(ggObj$coordinates)
   dataFrame <- ggObj$data
 
   activeGeomLayers <- activeInfo$activeGeomLayers
   activeModel <- activeInfo$activeModel
 
   # boxplot has a hidden scatterplot model layer
-  boxplot_point_layers <- c(modelLayers$boxplotLayers, activeGeomLayers)
+  boxplotPointLayers <- c(modelLayers$boxplotLayers, activeGeomLayers)
 
   if(activeModel == "l_serialaxes" & length(activeGeomLayers) > 0) {
 
@@ -29,8 +29,8 @@ l_indices <- function(ggObj, panelIndex, args,
 
   } else if (activeModel == "l_hist" & length(activeGeomLayers) > 0) {
 
-    is_facet_wrap <- plotInfo$is_facet_wrap
-    is_facet_grid <- plotInfo$is_facet_grid
+    FacetWrap <- plotInfo$FacetWrap
+    FacetGrid <- plotInfo$FacetGrid
     ggLayout <- buildggObj$ggLayout
 
     if (is.data.frame(dataFrame) & !is.waive(dataFrame)) {
@@ -48,13 +48,13 @@ l_indices <- function(ggObj, panelIndex, args,
                    mapping = mapping,
                    dataFrame = dataFrame,
                    numOfSubtitles = numOfSubtitles,
-                   is_facet_wrap = is_facet_wrap,
-                   is_facet_grid = is_facet_grid,
+                   FacetWrap = FacetWrap,
+                   FacetGrid = FacetGrid,
                    layout = layout,
                    ggLayout = ggLayout)
 
 
-  } else if(activeModel == "l_plot" & length(boxplot_point_layers) > 0) {
+  } else if(activeModel == "l_plot" & length(boxplotPointLayers) > 0) {
 
     l_plot_indices(ggBuild = ggBuild,
                    activeGeomLayers = activeGeomLayers,
@@ -85,7 +85,7 @@ l_serialaxes_indices <- function(ggBuild, activeGeomLayers, panelIndex, ggObj) {
   if(inherits(layer$geom, "GeomRibbon") || inherits(layer$geom, "GeomPath")) {
 
     # Each line is repeated by the same times
-    offset <- sum(aesData$group == aesData$group[1])
+    offset <- sum(aesData$group == aesData$group[1], na.rm = TRUE)
     unique(ceiling(indices/offset))
 
   } else NULL
@@ -93,7 +93,7 @@ l_serialaxes_indices <- function(ggBuild, activeGeomLayers, panelIndex, ggObj) {
 
 # it is a wrapper of the function `catch_facet_id`
 l_hist_indices <- function(ggBuild, activeGeomLayers, panelIndex, mapping, dataFrame,
-                           numOfSubtitles, is_facet_wrap, is_facet_grid,
+                           numOfSubtitles, FacetWrap, FacetGrid,
                            layout, ggLayout) {
 
   hist_data <- ggBuild$data[[activeGeomLayers]]
@@ -106,6 +106,6 @@ l_hist_indices <- function(ggBuild, activeGeomLayers, panelIndex, mapping, dataF
     rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame)
   }
 
-  catch_facet_id(numOfSubtitles, hist_x, is_facet_wrap, is_facet_grid,
+  catch_facet_id(numOfSubtitles, hist_x, FacetWrap, FacetGrid,
                  layout, ggLayout, panelIndex, dataFrame)
 }

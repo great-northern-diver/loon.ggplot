@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Add serialaxes glyph on scatter plot — geom_serialAxesGlyph • loon.ggplot</title>
+<title>Add serialaxes glyphs on scatter plot — geom_serialAxesGlyph • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Add serialaxes glyph on scatter plot — geom_serialAxesGlyph" />
-<meta property="og:description" content="The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph." />
+<meta property="og:title" content="Add serialaxes glyphs on scatter plot — geom_serialAxesGlyph" />
+<meta property="og:description" content="To visualize high dimensional data on scatterplot. Each point glyph is surrounded by a serialaxes object." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -134,35 +134,35 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Add serialaxes glyph on scatter plot</h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/geom-serialAxesGlyph.R'><code>R/geom-serialAxesGlyph.R</code></a></small>
+    <h1>Add serialaxes glyphs on scatter plot</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/deprecated_functions.R'><code>R/deprecated_functions.R</code></a></small>
     <div class="hidden name"><code>geom_serialAxesGlyph.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The glyph geom is used to create scatterplots with a variety glyphs such as polygon glyph, serialaxes glyph, image glyph, point range glyph and text glyph.</p>
+    <p>To visualize high dimensional data on scatterplot. Each point glyph is surrounded by a serialaxes object.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geom_serialAxesGlyph</span>(
-  <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='no'>...</span>,
-  <span class='no'>serialAxesData</span>,
-  <span class='kw'>sequence</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>linewidth</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>scaling</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"variable"</span>, <span class='st'>"data"</span>, <span class='st'>"observation"</span>, <span class='st'>"none"</span>),
-  <span class='kw'>axesLayout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"parallel"</span>, <span class='st'>"radial"</span>),
-  <span class='kw'>showAxes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>showArea</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>showEnclosing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>axesColor</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
-  <span class='kw'>bboxColor</span> <span class='kw'>=</span> <span class='st'>"black"</span>,
-  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>geom_serialAxesGlyph</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"identity"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  <span class='va'>serialAxesData</span>,
+  sequence <span class='op'>=</span> <span class='cn'>NULL</span>,
+  linewidth <span class='op'>=</span> <span class='fl'>1</span>,
+  scaling <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"variable"</span>, <span class='st'>"data"</span>, <span class='st'>"observation"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  axesLayout <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"parallel"</span>, <span class='st'>"radial"</span><span class='op'>)</span>,
+  showAxes <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  showArea <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  showEnclosing <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  axesColor <span class='op'>=</span> <span class='st'>"black"</span>,
+  bboxColor <span class='op'>=</span> <span class='st'>"black"</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -200,27 +200,26 @@ a call to a position adjustment function.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Other arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer</a></code>.
-These are often aesthetics, used to set an aesthetic to a fixed value,
-like <code>colour = "red"</code> or <code>size = 3</code>.
-They may also be parameters to the paired geom/stat.</p></td>
+      <td><p>Other arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>layer()</a></code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p></td>
     </tr>
     <tr>
       <th>serialAxesData</th>
-      <td><p>a serial axes numerical data set. If not provided, <code>geom_point()</code> will be called.</p></td>
+      <td><p>a serial axes numerical data set. If not provided, `geom_point()` will be called.</p></td>
     </tr>
     <tr>
       <th>sequence</th>
-      <td><p>vector with variable names that defines the axes sequence</p></td>
+      <td><p>A vector with variable names that defines the axes sequence</p></td>
     </tr>
     <tr>
       <th>linewidth</th>
-      <td><p>line width of serial axes plot</p></td>
+      <td><p>line width of the "glyph" object</p></td>
     </tr>
     <tr>
       <th>scaling</th>
-      <td><p>one of 'variable', 'data', 'observation' or 'none' to
-specify how the data is scaled. See Details for more information</p></td>
+      <td><p>one of 'variable', 'data', 'observation' or 'none' to specify how the data is scaled.</p></td>
     </tr>
     <tr>
       <th>axesLayout</th>
@@ -232,7 +231,7 @@ specify how the data is scaled. See Details for more information</p></td>
     </tr>
     <tr>
       <th>showArea</th>
-      <td><p>boolean to indicate whether area should be shown or not</p></td>
+      <td><p>show area; deprecated now, please set `fill` or `colour` to control the shown area.</p></td>
     </tr>
     <tr>
       <th>showEnclosing</th>
@@ -248,8 +247,8 @@ specify how the data is scaled. See Details for more information</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
-      <td><p>If <code>FALSE</code>, the default, missing values are removed with a warning.
-If `TRUE`, missing values are silently removed.</p></td>
+      <td><p>If <code>FALSE</code>, the default, missing values are removed with
+a warning. If <code>TRUE</code>, missing values are silently removed.</p></td>
     </tr>
     <tr>
       <th>show.legend</th>
@@ -268,21 +267,7 @@ the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.or
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>geom</code> layer</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='geom_polygonGlyph.html'>geom_polygonGlyph</a></code>, <code><a href='geom_imageGlyph.html'>geom_imageGlyph</a></code>, <code><a href='geom_pointrangeGlyph.html'>geom_pointrangeGlyph</a></code>,
-<code><a href='geom_textGlyph.html'>geom_textGlyph</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># serial axes glyph</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>,
-            <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Sepal.Length</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Sepal.Width</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>Species</span>)) +
-  <span class='fu'>geom_serialAxesGlyph</span>(<span class='kw'>serialAxesData</span> <span class='kw'>=</span> <span class='no'>iris</span>[, -<span class='fl'>5</span>],
-                       <span class='kw'>axesLayout</span> <span class='kw'>=</span> <span class='st'>"radial"</span>)
-<span class='no'>p</span></div><div class='img'><img src='geom_serialAxesGlyph-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -298,7 +283,7 @@ the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.or
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

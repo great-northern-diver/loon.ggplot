@@ -15,10 +15,10 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
   ylabel <- if (ylabel == "") NULL else ylabel
 
 
-  # is_facet_wrap or is_facet_grid
-  facet <- target$facet %||% list(is_facet_wrap = FALSE, is_facet_grid = FALSE)
-  is_facet_wrap <- facet$is_facet_wrap
-  is_facet_grid <- facet$is_facet_grid
+  # FacetWrap or FacetGrid
+  facet <- target$facet %||% list(FacetWrap = FALSE, FacetGrid = FALSE)
+  FacetWrap <- facet$FacetWrap
+  FacetGrid <- facet$FacetGrid
 
   # title column subtitle or row subtitle
   titles <- target$titles %||% list(title = "", colSubtitles = NULL, rowSubtitles = NULL)
@@ -39,7 +39,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
     core=list(bg_params = list(fill = "grey90", col=NA))
   )
 
-  if(is_facet_wrap & length(colSubtitles) + length(rowSubtitles) > 0) {
+  if(FacetWrap & length(colSubtitles) + length(rowSubtitles) > 0) {
     subtitle <- c(colSubtitles, rowSubtitles)
     # loon grobs
     lgrobs <- do.call(gList,
@@ -77,7 +77,7 @@ l_get_arrangeGrobArgs.l_ggplot <- function(target){
       layout_matrix[nrow, ] <- c(rep(nrow, lastRowFacets) , rep(NA, (ncol - lastRowFacets)))
     }
 
-  } else if(is_facet_grid & length(colSubtitles) + length(rowSubtitles) > 0) {
+  } else if(FacetGrid & length(colSubtitles) + length(rowSubtitles) > 0) {
 
     if(facet$byCOLS & !facet$byROWS) {
       # loon grobs

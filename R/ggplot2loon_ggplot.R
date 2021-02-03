@@ -30,7 +30,6 @@
 #' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
-#' @importFrom stringr str_detect
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @importFrom GGally ggmatrix
 #'
@@ -96,7 +95,7 @@ ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
 
 #' @export
 ggplot2loon.default <- function(ggObj, ...) {
-  stop(paste(deparse(substitute(ggObj)), "is not a 'ggplot' or 'ggmatrix' object"), call. = FALSE)
+  stop(deparse(substitute(ggObj)), " is not a 'ggplot' or 'ggmatrix' object", call. = FALSE)
 }
 
 #' @export
@@ -108,22 +107,18 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   if(inherits(ggObj, "loon")) {
     error_info <- deparse(substitute(ggObj))
     stop(
-      paste0(
-        "'ggObj' should be a ggplot object. ",
-        "Maybe you want to call `loon2ggplot(",
+        "'ggObj' should be a ggplot object. Maybe you want to call `loon2ggplot(",
         error_info,
-        ")`?",
-        "Or, just call `loon.ggplot(`",
+        ")`? Or, just call `loon.ggplot(",
         error_info,
-        ")` for simplification."
-      ),
-      call. = FALSE
+        ")` for simplification.",
+        call. = FALSE
     )
   }
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
-    stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"), call. = FALSE)
+    stop(deparse(substitute(ggObj)), " is not a ggplot object.", call. = FALSE)
   }
   if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
     stop("activeGeomLayers is a numeric argument", call. = FALSE)
@@ -135,7 +130,8 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
     stop("pack is a logical argument", call. = FALSE)
   }
   if(!is.null(tkLabels)) {
-    if(!is.logical(tkLabels)) stop("tkLabels is a logical argument", call. = FALSE)
+    if(!is.logical(tkLabels))
+      stop("tkLabels is a logical argument", call. = FALSE)
   }
   if(!is.numeric(exteriorLabelProportion)) {
     stop("exteriorLabelProportion is a numerical argument", call. = FALSE)
@@ -170,21 +166,19 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   plotInfo$ylabel <- ggObj$labels$y
   plotInfo$xlabel <- ggObj$labels$x
   plotInfo$span <- round(1/exteriorLabelProportion)
-
   # serialaxes
-  isCoordSerialaxes <- is.CoordSerialaxes(ggObj)
-  plotInfo$isCoordSerialaxes <- isCoordSerialaxes
+  plotInfo$isCoordSerialaxes <- is.CoordSerialaxes(ggObj$coordinates)
 
   tkLabels <- tkLabels %||% plotInfo$panelNum != 1
 
   if (tkLabels) {
     # two ways to separate facets, facet_wrap or facet_grid
-    plotInfo$is_facet_wrap <- plotInfo$buildggObj$is_facet_wrap
-    plotInfo$is_facet_grid <- plotInfo$buildggObj$is_facet_grid
-    if(plotInfo$is_facet_wrap) {
+    plotInfo$FacetWrap <- plotInfo$buildggObj$FacetWrap
+    plotInfo$FacetGrid <- plotInfo$buildggObj$FacetGrid
+    if(plotInfo$FacetWrap) {
       plotInfo$byCOLS <- TRUE
       plotInfo$byROWS <- FALSE
-    } else if(plotInfo$is_facet_grid) {
+    } else if(plotInfo$FacetGrid) {
       # layout multiple facets by rows or by cols
       plotInfo$layoutByROWS <- names(plotInfo$ggBuild$layout$facet_params$rows)
       plotInfo$layoutByCOLS <- names(plotInfo$ggBuild$layout$facet_params$cols)
@@ -198,14 +192,14 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
 
     plotInfo$start.xpos <- ifelse(!is.null(plotInfo$ylabel), 1, 0)
     plotInfo$start.ypos <- plotInfo$start.subtitlepos <- if(!is.null(plotInfo$title)) {
-      ifelse(plotInfo$is_facet_grid & plotInfo$byCOLS, 2, 1)
+      ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 2, 1)
     } else {
-      ifelse(plotInfo$is_facet_grid & plotInfo$byCOLS, 1, 0)
+      ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 1, 0)
     }
     plotInfo$showLabels <- FALSE
   } else {
-    plotInfo$is_facet_wrap <- FALSE
-    plotInfo$is_facet_grid <- FALSE
+    plotInfo$FacetWrap <- FALSE
+    plotInfo$FacetGrid <- FALSE
     plotInfo$byCOLS <- FALSE
     plotInfo$byROWS <- FALSE
 
