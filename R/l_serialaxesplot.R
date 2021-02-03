@@ -47,7 +47,7 @@ l_serialaxesplot <- function(ggBuild,
     title = loonTitle
   )
 
-  if(packageVersion("loon") >= "1.3.2") {
+  if(utils::packageVersion("loon") >= "1.3.2") {
     args$andrews <- is.andrews(ggObj, activeGeomLayers)
   }
 
