@@ -62,15 +62,15 @@ get_activeGeomLayers <- function(ggObj) {
     integer(0)
   } else if(np > 0 & nh == 0) {
 
-    setNames(modelLayers$pointLayers, rep("geom_point", np))
+    setNames(modelLayers$pointLayers, rep("l_point", np))
 
   } else if(np == 0 & nh > 0) {
 
-    setNames(modelLayers$histogramLayers, rep("geom_histogram", nh))
+    setNames(modelLayers$histogramLayers, rep("l_hist", nh))
 
   } else {
 
     setNames(c(modelLayers$histogramLayers, modelLayers$histogramLayers),
-             c(rep("geom_point", np), rep("geom_histogram", nh)))
+             c(rep("l_point", np), rep("l_hist", nh)))
   }
 }
