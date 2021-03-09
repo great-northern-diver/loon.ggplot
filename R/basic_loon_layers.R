@@ -988,7 +988,8 @@ loonLayer.GeomSerialAxesGlyph <- function(widget,
 
   axes.layout <- one_dim_state(data$axes.layout)
   scaling <- one_dim_state(data$scaling)
-  andrews <- one_dim_state(data$andrews)
+  # In the new ggmulti version, the andrews (logical) can be accessed
+  andrews <- one_dim_state(data$andrews) %||% FALSE
   show.enclosing <-  one_dim_state(data$show.enclosing)
   show.axes <- one_dim_state(data$show.axes)
   axescolour <- one_dim_state(data$axescolour)
