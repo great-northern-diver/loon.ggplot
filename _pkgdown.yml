@@ -34,3 +34,6 @@ reference:
     - gg_pipe
     - scaleBox
     - scale_multi
+    - loonLayers
+    - is.CoordPolar
+    - Cartesianxy2Polarxy
