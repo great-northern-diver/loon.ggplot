@@ -1,4 +1,4 @@
-l_histogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
+l_histogram <- function(ggBuild, ggLayout, layout, ggplotPanelParams, ggObj,
                         activeGeomLayers, panelIndex, dataFrame, mapping, numOfSubtitles,
                         parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
                         xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
@@ -8,7 +8,7 @@ l_histogram <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
 
 
 
-l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
+l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanelParams, ggObj,
                                 activeGeomLayers, panelIndex, dataFrame,
                                 mapping, numOfSubtitles,
                                 parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
@@ -46,7 +46,7 @@ l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params, g
                              facet_id, in_limits, dataFrame, ggObj,
                              activeGeomLayers,
                              panelIndex = panelIndex,
-                             ggplotPanel_params = ggplotPanel_params,
+                             ggplotPanelParams = ggplotPanelParams,
                              binwidth = binwidth)
 
   hist_values <- bin_info$hist_values
@@ -92,7 +92,7 @@ l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanel_params, g
                title = loonTitle)
 }
 
-l_histogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanel_params, ggObj,
+l_histogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanelParams, ggObj,
                                   activeGeomLayers, panelIndex, dataFrame,
                                   mapping, numOfSubtitles,
                                   parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
@@ -190,7 +190,7 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, flipped_aes, x.limits
                                    ggObj, activeGeomLayers, ...) {
   args <- list(...)
   panelIndex <- args$panelIndex
-  ggplotPanel_params <- args$ggplotPanel_params
+  ggplotPanelParams <- args$ggplotPanelParams
   binwidth <- args$binwidth
 
   position <- ggObj$layers[[activeGeomLayers]]$position
@@ -232,14 +232,14 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, flipped_aes, x.limits
     in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
 
     if (!is.null(y.limits)) {
-      if(is.na(y.limits[1])) y.limits[1] <- ggplotPanel_params[[panelIndex]]$y.range[1]
-      if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[panelIndex]]$y.range[2]
+      if(is.na(y.limits[1])) y.limits[1] <- ggplotPanelParams[[panelIndex]]$y.range[1]
+      if(is.na(y.limits[2])) y.limits[2] <- ggplotPanelParams[[panelIndex]]$y.range[2]
       in_y.limits <- (hist_values > y.limits[1]) & (hist_values < y.limits[2])
     }
 
     if (!is.null(x.limits)) {
-      if(is.na(x.limits[1])) x.limits[1] <- max(0, ggplotPanel_params[[panelIndex]]$x.range[1])
-      if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[panelIndex]]$x.range[2]
+      if(is.na(x.limits[1])) x.limits[1] <- max(0, ggplotPanelParams[[panelIndex]]$x.range[1])
+      if(is.na(x.limits[2])) x.limits[2] <- ggplotPanelParams[[panelIndex]]$x.range[2]
       binsLim <- getBins(start_value = start_value,
                          end_value = end_value,
                          binwidth = binwidth,
@@ -257,14 +257,14 @@ catch_bin_info.StatBin <- function(hist_values, hist_data, flipped_aes, x.limits
     in_x.limits <- in_y.limits <- rep(TRUE, length(hist_values))
 
     if (!is.null(x.limits)) {
-      if(is.na(x.limits[1])) x.limits[1] <- ggplotPanel_params[[panelIndex]]$x.range[1]
-      if(is.na(x.limits[2])) x.limits[2] <- ggplotPanel_params[[panelIndex]]$x.range[2]
+      if(is.na(x.limits[1])) x.limits[1] <- ggplotPanelParams[[panelIndex]]$x.range[1]
+      if(is.na(x.limits[2])) x.limits[2] <- ggplotPanelParams[[panelIndex]]$x.range[2]
       in_x.limits <- hist_values > x.limits[1] & hist_values < x.limits[2]
     }
 
     if (!is.null(y.limits)) {
-      if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanel_params[[panelIndex]]$y.range[1])
-      if(is.na(y.limits[2])) y.limits[2] <- ggplotPanel_params[[panelIndex]]$y.range[2]
+      if(is.na(y.limits[1])) y.limits[1] <- max(0, ggplotPanelParams[[panelIndex]]$y.range[1])
+      if(is.na(y.limits[2])) y.limits[2] <- ggplotPanelParams[[panelIndex]]$y.range[2]
 
       binsLim <- getBins(start_value = start_value,
                          end_value = end_value,

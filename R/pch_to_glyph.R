@@ -1,7 +1,11 @@
 pch_to_glyph <- function(pch, alpha = NULL) {
   len <- length(pch)
 
-  switchPch <- function(pch){
+  if(len == 0) return("circle")
+
+  switchPch <- function(pch) {
+
+
     switch(
       as.character(pch),
       "16" = "circle" ,
@@ -22,7 +26,7 @@ pch_to_glyph <- function(pch, alpha = NULL) {
     )
   }
 
-  vapply(1:len,
+  vapply(seq(len),
          function(i) {
            if(is.na(alpha[i]) || is.null(alpha[i])){
              switchPch(pch[i])

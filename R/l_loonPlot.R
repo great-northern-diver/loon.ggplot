@@ -10,7 +10,7 @@ l_loonPlot <- function(ggObj, panelIndex, args,
   itemLabel <- plotInfo$itemLabel
 
   # gg build
-  ggplotPanel_params <- buildggObj$ggplotPanel_params
+  ggplotPanelParams <- buildggObj$ggplotPanelParams
   ggBuild <- buildggObj$ggBuild
   layout <- buildggObj$layout
 
@@ -69,7 +69,7 @@ l_loonPlot <- function(ggObj, panelIndex, args,
     l_histogram(ggBuild = ggBuild,
                 ggLayout = ggLayout,
                 layout = layout,
-                ggplotPanel_params = ggplotPanel_params,
+                ggplotPanelParams = ggplotPanelParams,
                 ggObj = ggObj,
                 activeGeomLayers = activeGeomLayers,
                 panelIndex = panelIndex,
@@ -93,7 +93,7 @@ l_loonPlot <- function(ggObj, panelIndex, args,
 
     l_scatterplot(ggBuild = ggBuild,
                   ggObj = ggObj,
-                  ggplotPanel_params = ggplotPanel_params,
+                  ggplotPanelParams = ggplotPanelParams,
                   panelIndex = panelIndex,
                   mapping = mapping,
                   dataFrame = dataFrame,

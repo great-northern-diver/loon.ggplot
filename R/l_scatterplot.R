@@ -1,4 +1,4 @@
-l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mapping, dataFrame,
+l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping, dataFrame,
                           activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, linkingKey,
                           itemLabel, showLabels, xlabel, ylabel, loonTitle, args) {
 
@@ -8,7 +8,7 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
     activeGeomDim <- activeGeomDim(ggBuild, activeGeomLayers, panelIndex)
     len_linkingKey <- length(linkingKey)
     len_itemLabel <- length(itemLabel)
-    combined.pointsData <- lapply(activeGeomLayers,
+    combinedPointsData <- lapply(activeGeomLayers,
                                   function(activeGeomLayer) {
 
                                     activeLayer <- ggBuild$data[[activeGeomLayer]]
@@ -21,16 +21,20 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
                                     if(num > 0) {
                                       activeLayer_itemLabel <- data$itemLabel
                                       activeLayer_linkingKey <- data$linkingKey
-                                      color <- sapply(1:dim(data)[1],
-                                                      function(j){
-                                                        if(data$shape[j] %in% 21:24 ){
+                                      color <- sapply(seq(num),
+                                                      function(j) {
+
+                                                        if(is.null(data$shape[j]))
+                                                          return(data$colour[j] %||% data$fill[j])
+
+                                                        if(data$shape[j] %in% 21:24) {
                                                           data$fill[j]
-                                                        }else {
+                                                        } else {
                                                           data$colour[j]
                                                         }
                                                       })
                                       glyph <- pch_to_glyph(data$shape, data$alpha)
-                                      size <- as_loon_size( data$size , "points" )
+                                      size <- as_loon_size(data$size , "points")
                                     } else {
                                       activeLayer_linkingKey <- NULL
                                       activeLayer_itemLabel <- NULL
@@ -71,15 +75,21 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
                                   }
     )
 
-    combined.pointsData <- do.call(rbind, combined.pointsData)
-    combined.pointsData$color <- as.character(combined.pointsData$color)
-    combined.pointsData$glyph <- as.character(combined.pointsData$glyph)
-    combined.pointsData$itemLabel <- as.character(combined.pointsData$itemLabel)
-    combined.pointsData$linkingKey <- as.character(combined.pointsData$linkingKey)
+    combinedPointsData <- do.call(rbind, combinedPointsData)
+    if(!is.null(combinedPointsData$color) && all(is.na(combinedPointsData$color))) {
+      # ALL NA
+      combinedPointsData$color <- loon::l_getOption("color")
+    } else {
+      combinedPointsData$color <- as.character(combinedPointsData$color)
+    }
 
-    isDuplicated_linkingKey <- duplicated(combined.pointsData$linkingKey)
+    combinedPointsData$glyph <- as.character(combinedPointsData$glyph)
+    combinedPointsData$itemLabel <- as.character(combinedPointsData$itemLabel)
+    combinedPointsData$linkingKey <- as.character(combinedPointsData$linkingKey)
+
+    isDuplicated_linkingKey <- duplicated(combinedPointsData$linkingKey)
     if(any(isDuplicated_linkingKey)) {
-      combined.pointsData$linkingKey <- 0:(dim(combined.pointsData)[1] - 1)
+      combinedPointsData$linkingKey <- 0:(dim(combinedPointsData)[1] - 1)
       # generate warning once
       if(panelIndex == 1)
         warning("linkingKey may not match and will be set as the default loon one", call. = FALSE)
@@ -88,46 +98,46 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
     # mainly used for boxplot
     if(is.null(mapping$x) & !is.null(mapping$y)) {
 
-      combined.pointsData <- data.frame(x = rep(0, dim(dataFrame)[1]),
+      combinedPointsData <- data.frame(x = rep(0, dim(dataFrame)[1]),
                                         y = rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame))
     } else if(!is.null(mapping$x) & is.null(mapping$y)) {
 
-      combined.pointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
+      combinedPointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
                                         y = rep(0, dim(dataFrame)[1]))
     } else {
       # both zero or both non zero
-      combined.pointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
+      combinedPointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
                                         y = rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame))
     }
 
     # some default settings, need more thought
-    if(length(combined.pointsData$x) > 0 & length(combined.pointsData$y) > 0) {
+    if(length(combinedPointsData$x) > 0 & length(combinedPointsData$y) > 0) {
 
-      if(!is.numeric(combined.pointsData$x))
-        combined.pointsData$x <- as.numeric(factor(combined.pointsData$x))
-      if(!is.numeric(combined.pointsData$y))
-        combined.pointsData$y <- as.numeric(factor(combined.pointsData$y))
+      if(!is.numeric(combinedPointsData$x))
+        combinedPointsData$x <- as.numeric(factor(combinedPointsData$x))
+      if(!is.numeric(combinedPointsData$y))
+        combinedPointsData$y <- as.numeric(factor(combinedPointsData$y))
 
-      combined.pointsData$y <- as.numeric(combined.pointsData$y)
-      combined.pointsData$size <- loon_default_setting("size")
-      combined.pointsData$color <- loon_default_setting("color")
-      combined.pointsData$glyph <- loon_default_setting("glyph")
-      combined.pointsData$itemLabel <- itemLabel
-      combined.pointsData$linkingKey <- linkingKey
+      combinedPointsData$y <- as.numeric(combinedPointsData$y)
+      combinedPointsData$size <- loon_default_setting("size")
+      combinedPointsData$color <- loon_default_setting("color")
+      combinedPointsData$glyph <- loon_default_setting("glyph")
+      combinedPointsData$itemLabel <- itemLabel
+      combinedPointsData$linkingKey <- linkingKey
     }
   }
 
-  if(is.null(combined.pointsData$z)) {
+  if(is.null(combinedPointsData$z)) {
 
     plot <- loon::l_plot
     zlabel <- NULL
 
   } else {
 
-    if(all(is.na(combined.pointsData$z))) {
+    if(all(is.na(combinedPointsData$z))) {
 
       # a loon 2D plot
-      combined.pointsData$z <- NULL
+      combinedPointsData$z <- NULL
 
       plot <- loon::l_plot
       zlabel <- NULL
@@ -141,28 +151,28 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
   }
 
   # remove NA
-  combined.pointsData <- na.omit(combined.pointsData)
+  combinedPointsData <- na.omit(combinedPointsData)
 
-  if(dim(combined.pointsData)[1] > 0) {
+  if(dim(combinedPointsData)[1] > 0) {
 
     if(isCoordPolar) {
       coordPolarxy <- Cartesianxy2Polarxy(NULL,
                                           coordinates = ggObj$coordinates,
-                                          data = combined.pointsData,
-                                          ggplotPanel_params = ggplotPanel_params[[panelIndex]])
+                                          data = combinedPointsData,
+                                          ggplotPanelParams = ggplotPanelParams[[panelIndex]])
       x <- coordPolarxy$x
       y <- coordPolarxy$y
 
-      if(!is.null(combined.pointsData$z)) {
+      if(!is.null(combinedPointsData$z)) {
         warning("The `l_plot3D` object does not accommodate the Cartesian coordinate", call. = FALSE)
       }
 
       z <- NULL
 
     } else {
-      x <- combined.pointsData$x
-      y <- combined.pointsData$y
-      z <- combined.pointsData$z
+      x <- combinedPointsData$x
+      y <- combinedPointsData$y
+      z <- combinedPointsData$z
     }
 
     plotList <- remove_null(
@@ -171,11 +181,11 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
         x = x,
         y = y,
         z = z,
-        size = combined.pointsData$size,
-        color = hex6to12(combined.pointsData$color),
-        glyph = combined.pointsData$glyph,
-        itemLabel = combined.pointsData$itemLabel,
-        linkingKey = combined.pointsData$linkingKey,
+        size = combinedPointsData$size,
+        color = hex6to12(combinedPointsData$color),
+        glyph = combinedPointsData$glyph,
+        itemLabel = combinedPointsData$itemLabel,
+        linkingKey = combinedPointsData$linkingKey,
         showGuides = showGuides,
         showScales = showScales,
         showLabels = showLabels,
@@ -192,7 +202,23 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanel_params, panelIndex, mappin
     p <- do.call(plot, plotList)
 
     # widget is returned
-    add_glyph(p, ggBuild, activeGeomLayers)
+    tryCatch(
+      expr = {
+        add_glyph(p, ggBuild, activeGeomLayers)
+      },
+      error = function(e) {
+
+        if(length(activeGeomLayers) > 1) {
+          warning("If the non-primitive glyphs are set (e.g. serialaxes, polygon, text, ...), ",
+                  "the length of the `activeGeomLayers` can only be set as 1. Currently, it is ",
+                  length(activeGeomLayers), ".",
+                  call. = FALSE
+          )
+        }
+      }
+    )
+
+    p
 
   } else {
 
