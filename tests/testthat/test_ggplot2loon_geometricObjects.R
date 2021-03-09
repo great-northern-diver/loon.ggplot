@@ -3,6 +3,8 @@ library(dplyr)
 library(magrittr)
 library(tidyverse)
 library(GGally)
+library(ggmulti)
+library(hexbin)
 
 test_that("geometric layers (ggplot to loon)", {
 
