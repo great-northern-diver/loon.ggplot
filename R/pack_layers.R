@@ -22,8 +22,8 @@ pack_layers <- function(loonPlot, ggObj, buildggObj, panelIndex,
                                     data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == panelIndex, ],
                                     ggplotPanelParams = ggplotPanelParams[[panelIndex]],
                                     ggObj = ggObj,
-                                    special = list(curve = list(which_curve = j,
-                                                                curveLayers = curveLayers))
+                                    curveAdditionalArgs = list(curve = list(which_curve = j,
+                                                                            curveLayers = curveLayers))
                           )
                         })
 
@@ -43,7 +43,6 @@ pack_layers <- function(loonPlot, ggObj, buildggObj, panelIndex,
     }
   }
 
-  # special case
   if (length(boxplotLayers) != 0 && activeModel == "l_plot" && length(activeGeomLayers) == 0) {
     # hidden points layer
     loon::l_layer_hide(loonPlot, "model")
