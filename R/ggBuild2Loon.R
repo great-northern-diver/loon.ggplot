@@ -14,7 +14,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
     layout <- ggLayout$layout
     # panel_params
 
-    ggplotPanel_params <- lapply(ggBuild$layout$panel_params,
+    ggplotPanelParams <- lapply(ggBuild$layout$panel_params,
                                  function(panel_param) {
                                    # x
                                    x.major_source <- panel_param$x.major_source %||% panel_param$x$breaks
@@ -41,7 +41,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
   } else {
     layout <- ggLayout$panel_layout
     # panel_params
-    ggplotPanel_params <- ggBuild$layout$panel_ranges
+    ggplotPanelParams <- ggBuild$layout$panel_ranges
     message(
       "devtools version ggplot2 is highly recommanded in `loon.ggplot`\n",
       "install it with: `devtools::install_github('tidyverse/ggplot2')`\n",
@@ -72,7 +72,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
         for(j in 1:length(unique_panel)){
           isPanel.j <- buildData$PANEL == j
           if (!is.null(buildData$x)) {
-            x.range <- ggplotPanel_params[[j]]$x.range
+            x.range <- ggplotPanelParams[[j]]$x.range
             buildData_x_panel_j <- buildData$x[isPanel.j]
             ggBuild_data[[i]]$x[isPanel.j][is.infinite(buildData_x_panel_j) &
                                              buildData_x_panel_j < 0] <- x.range[1]
@@ -80,7 +80,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
                                              buildData_x_panel_j > 0] <- x.range[2]
           }
           if (!is.null(buildData$y)) {
-            y.range <- ggplotPanel_params[[j]]$y.range
+            y.range <- ggplotPanelParams[[j]]$y.range
             buildData_y_panel_j <- buildData$y[isPanel.j]
             ggBuild_data[[i]]$y[isPanel.j][is.infinite(buildData_y_panel_j) &
                                              buildData_y_panel_j < 0] <- y.range[1]
@@ -242,7 +242,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
   list(ggBuild = ggBuild,
        ggLayout = ggLayout,
        layout = layout,
-       ggplotPanel_params = ggplotPanel_params,
+       ggplotPanelParams = ggplotPanelParams,
        FacetWrap = FacetWrap,
        FacetGrid = FacetGrid
   )

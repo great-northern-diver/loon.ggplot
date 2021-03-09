@@ -19,7 +19,7 @@ get_loon_plotInfo <- function(plotInfo = list(),
   isCoordSerialaxes <- plotInfo$isCoordSerialaxes
 
   layout <- buildggObj$layout
-  ggplotPanel_params <- buildggObj$ggplotPanel_params
+  ggplotPanelParams <- buildggObj$ggplotPanelParams
   panelNum <- dim(layout)[1]
 
   # facet and location
@@ -121,8 +121,8 @@ get_loon_plotInfo <- function(plotInfo = list(),
         # set panX, panY, deltaX, deltaY
         showGuides <- TRUE
         showScales <- get_showScales(ggObj$theme)
-        x.range <- plot_range("x.range", ggplotPanel_params[[i]], swapAxes)
-        y.range <- plot_range("y.range", ggplotPanel_params[[i]], swapAxes)
+        x.range <- plot_range("x.range", ggplotPanelParams[[i]], swapAxes)
+        y.range <- plot_range("y.range", ggplotPanelParams[[i]], swapAxes)
 
         panY <- y.range[1]
         panX <- x.range[1]
@@ -134,7 +134,8 @@ get_loon_plotInfo <- function(plotInfo = list(),
     loonTitle <- paste(c(title,
                          colSubtitle,
                          rowSubtitle), collapse = "\n")
-    if (lenLayers > 0) {
+
+    if (lenLayers > 0 && all(activeGeomLayers > 0)) {
 
       modelLayers <- get_modelLayers(lenLayers, ggObj, isCoordPolar, isCoordSerialaxes)
 
@@ -157,10 +158,13 @@ get_loon_plotInfo <- function(plotInfo = list(),
                              swapAxes = swapAxes, xlabel = xlabel, ylabel = ylabel,
                              loonTitle = loonTitle)
 
-      pack_layers(loonPlot = loonPlot, ggObj = ggObj, buildggObj = buildggObj,
-                  panelIndex = i, activeInfo = activeInfo, modelLayers = modelLayers)
-
     } else {
+
+      modelLayers <- list()
+      activeInfo <- list()
+
+      activeInfo$activeGeomLayers <- activeGeomLayers
+      activeInfo$activeModel <- "l_plot"
 
       loonPlot <- loon::l_plot(parent = parent,
                                showGuides = showGuides,
@@ -171,6 +175,9 @@ get_loon_plotInfo <- function(plotInfo = list(),
                                ylabel = if(is.null(ylabel)) "" else ylabel,
                                title = loonTitle)
     }
+
+    pack_layers(loonPlot = loonPlot, ggObj = ggObj, buildggObj = buildggObj,
+                panelIndex = i, activeInfo = activeInfo, modelLayers = modelLayers)
 
     # resize loon plot
     if(pack) {
@@ -231,7 +238,7 @@ get_loon_plotInfo <- function(plotInfo = list(),
                          loonPlot = loonPlot,
                          ggGuides = ggGuides,
                          panelIndex = i,
-                         ggplotPanel_params = ggplotPanel_params,
+                         ggplotPanelParams = ggplotPanelParams,
                          swapAxes = swapAxes,
                          theme = ggObj$theme,
                          panX=panX,
