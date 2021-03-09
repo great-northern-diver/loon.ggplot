@@ -39,6 +39,7 @@ Suggests:
     tidyverse,
     covr,
     maps,
+    hexbin,
     nycflights13,
     ggplot2movies
 LazyData: true
