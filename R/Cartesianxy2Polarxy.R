@@ -1,13 +1,39 @@
-Cartesianxy2Polarxy <- function(layerGeom, coordinates, data, ggplotPanel_params, ...){
+#' @title Transform the x, y positions from a Cartesian coordinate to a polar coordinate
+#' @description Used in the `loonLayer` construction to access the x, y positions embedded in the
+#' polar coordinate system.
+#' @param layerGeom A \code{ggplot} layer object
+#' @param coordinates A \code{ggplot} object coordinate system
+#' @param data the data used for the transformation
+#' @param ggplotPanelParams some non-data panel parameters,
+#' i.e. the range of theta, the range of radius, theta major, theta minor, etc. It is obtained from the
+#' \code{ggplot_build(p)$layout$panel_params} where "p" is a \code{ggplot} object
+#' @param ... for further use
+#' @export
+#' @examples
+#' p <- ggplot(mtcars, aes(wt, mpg)) +
+#'        geom_point() +
+#'        coord_polar()
+#'
+#' layerGeom <- p$layers[[1L]]$geom
+#' coordinates <- p$coordinates
+#' build <- ggplot_build(p)
+#' data <- build$data[[1L]]
+#' ggplotPanelParams <- build$layout$panel_params[[1L]]
+#'
+#' polarXY <- Cartesianxy2Polarxy(layerGeom, coordinates, data, ggplotPanelParams)
+#' plot(polarXY$x, polarXY$y)
+
+Cartesianxy2Polarxy <- function(layerGeom, coordinates, data, ggplotPanelParams, ...){
   UseMethod("Cartesianxy2Polarxy", layerGeom$geom)
 }
 
-Cartesianxy2Polarxy.default <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
+#' @export
+Cartesianxy2Polarxy.default <- function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...){
   x <- data$x
   y <- data$y
   theta <- coordinates$theta
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   if(theta == "x"){
     angle <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
     x <- sin(angle) * (y - r.range[1]) / (r.range[2] - r.range[1])
@@ -23,10 +49,10 @@ Cartesianxy2Polarxy.default <- function(layerGeom = NULL, coordinates, data, ggp
 }
 
 
-
-Cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+#' @export
+Cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...){
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   theta <- coordinates$theta
   # arbitrary choice
   seqLen <- 50
@@ -62,10 +88,10 @@ Cartesianxy2Polarxy.GeomRect <-  function(layerGeom = NULL, coordinates, data, g
 }
 
 
-
-Cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+#' @export
+Cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...){
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   theta <- coordinates$theta
   if(theta == "x"){
     x <- rep(data$xintercept, 2)
@@ -84,10 +110,10 @@ Cartesianxy2Polarxy.GeomVline <- function(layerGeom = NULL, coordinates, data, g
 }
 
 
-
-Cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+#' @export
+Cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...){
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   theta <- coordinates$theta
   if(theta == "x"){
     angle <- seq(0, 2*pi, length.out = 50)
@@ -106,11 +132,11 @@ Cartesianxy2Polarxy.GeomHline <- function(layerGeom = NULL, coordinates, data, g
 }
 
 
+#' @export
+Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...) {
 
-Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params) {
-
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   theta <- coordinates$theta
 
   if(theta == "x"){
@@ -125,18 +151,18 @@ Cartesianxy2Polarxy.GeomAbline <- function(layerGeom = NULL, coordinates, data, 
     x <- NA
     y <- NA
   }
-  Cartesianxy2Polarxy.GeomPath(NULL, coordinates, data = data.frame(x = x, y = y), ggplotPanel_params)
+  Cartesianxy2Polarxy.GeomPath(NULL, coordinates, data = data.frame(x = x, y = y), ggplotPanelParams, ...)
 }
 
 
-
-Cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
+#' @export
+Cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...){
   # arbitrary choice
   seqLen <- 50
   x <- seq(data$x, data$xend, length.out = seqLen)
   y <- seq(data$y, data$yend, length.out = seqLen)
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   theta <- coordinates$theta
   if(theta == "x"){
     angle <- 2*pi * (x - theta.range[1]) / (theta.range[2] - theta.range[1])
@@ -153,11 +179,11 @@ Cartesianxy2Polarxy.GeomSegment <- function(layerGeom = NULL, coordinates, data,
 }
 
 
-
-Cartesianxy2Polarxy.GeomPath <- function(layerGeom = NULL, coordinates, data, ggplotPanel_params){
+#' @export
+Cartesianxy2Polarxy.GeomPath <- function(layerGeom = NULL, coordinates, data, ggplotPanelParams, ...){
   n <- dim(data)[1]
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
   theta <- coordinates$theta
   x <- list()
   y <- list()
