@@ -41,6 +41,8 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
     sapply(layerNames,
            function(layerName){
              any(layerName %in% c("GeomPoint", "GeomPolygonGlyph",
+                                  "GeomText", "GeomTextGlyph",
+                                  "GeomPointrange", "GeomPointrangeGlyph",
                                   "GeomImageGlyph", "GeomSerialAxesGlyph"))
            })
   )
@@ -99,7 +101,7 @@ get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
   point_hist_layers <- c(pointLayers, histogramLayers)
 
   if (length(activeGeomLayers) == 0) {
-    if(length(c(point_hist_layers, serialaxesLayers)) != 0) {
+    if(length(c(point_hist_layers, serialaxesLayers)) > 0) {
       activeGeomLayers <- if(length(serialaxesLayers) > 0) serialaxesLayers else min(point_hist_layers)
       activeModel <- if (activeGeomLayers %in% serialaxesLayers) {
         "l_serialaxes"

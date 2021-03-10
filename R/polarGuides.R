@@ -1,5 +1,5 @@
 
-polarGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
+polarGuides <- function(widget, ggplotPanelParams, swapAxes, theme){
 
   panel.background_fill <- if(is.null(theme$panel.background$fill) & length(theme) == 0)  {
     widget['guidesBackground']
@@ -15,19 +15,19 @@ polarGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
 
   axis.text_size <- as.loon_axisSize(as.numeric(theme$axis.text$size))
 
-  theta.range <- ggplotPanel_params$theta.range
-  r.range <- ggplotPanel_params$r.range
+  theta.range <- ggplotPanelParams$theta.range
+  r.range <- ggplotPanelParams$r.range
 
   # theta labels
-  theta.major <- ggplotPanel_params$theta.major
-  theta.labels <- ggplotPanel_params$theta.labels
+  theta.major <- ggplotPanelParams$theta.major
+  theta.labels <- ggplotPanelParams$theta.labels
 
   # radius labels
-  r.major <- ggplotPanel_params$r.major
-  r.labels <- ggplotPanel_params$r.labels
+  r.major <- ggplotPanelParams$r.major
+  r.labels <- ggplotPanelParams$r.labels
 
   # drawing lines
-  theta.minor <- if(is.null(ggplotPanel_params$theta.minor)) theta.major else ggplotPanel_params$theta.minor
+  theta.minor <- if(is.null(ggplotPanelParams$theta.minor)) theta.major else ggplotPanelParams$theta.minor
 
   # drawing ovals
   if(length(r.major) >= 1) {

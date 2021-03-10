@@ -22,7 +22,7 @@ l_add_glyph.GeomPolygonGlyph <- function(widget, ggBuild, activeGeomLayer) {
   showArea <- !any(is.na(fill))
   g <- loon::l_glyph_add_polygon(widget,
                                  x = glyph_data$polygon_x,
-                                 y = -glyph_data$polygon_y,
+                                 y = lapply(glyph_data$polygon_y, `-`),
                                  linewidth = glyph_data$linewidth,
                                  showArea = showArea)
   if(showArea) widget['color'] <- fill
@@ -30,15 +30,62 @@ l_add_glyph.GeomPolygonGlyph <- function(widget, ggBuild, activeGeomLayer) {
   widget['glyph'] <- g
 }
 
+l_add_glyph.GeomText <- function(widget, ggBuild, activeGeomLayer) {
+
+  glyph_data <- ggBuild$data[[activeGeomLayer]]
+  label <- glyph_data$label
+  if(any(grepl("[\r\n\t\a' ']", label))) {
+    message("The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.",
+            "They will be replaced by the underscore `_`.",
+            "If you do not want the text to be interactive, ",
+            "set `activeGeomLayers = 0L`")
+    # remove space \r, \n, \t, ...
+    label <- gsub("[\r\n\t\a' ']", "_", label)
+  }
+
+  g <- loon::l_glyph_add_text(widget, text = label)
+  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "text")
+  widget['glyph'] <- g
+}
+
+l_add_glyph.GeomTextGlyph <- function(widget, ggBuild, activeGeomLayer) {
+  l_add_glyph.GeomText(widget, ggBuild, activeGeomLayer)
+}
+
+l_add_glyph.GeomPointrange <- function(widget, ggBuild, activeGeomLayer) {
+
+  glyph_data <- ggBuild$data[[activeGeomLayer]]
+
+  showArea <- if(any(glyph_data$shape %in% c(0, 1, 2))) {
+    TRUE
+  } else FALSE
+
+  g <- loon::l_glyph_add_pointrange(widget,
+                                    showArea = showArea,
+                                    ymin = glyph_data$ymin,
+                                    ymax = glyph_data$ymax)
+
+  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "pointrange")
+  widget['glyph'] <- g
+}
+
+l_add_glyph.GeomPointrangeGlyph <- function(widget, ggBuild, activeGeomLayer) {
+  l_add_glyph.GeomPointrange(widget, ggBuild, activeGeomLayer)
+}
+
 l_add_glyph.GeomSerialAxesGlyph <- function(widget, ggBuild, activeGeomLayer) {
 
   glyph_data <- ggBuild$data[[activeGeomLayer]]
   fill <- glyph_data$fill
   showArea <- !any(is.na(fill))
+
+
+
   g <- loon::l_glyph_add_serialaxes(widget,
                                     data = glyph_data[, grepl("serialaxes.data", colnames(glyph_data))],
                                     linewidth = glyph_data$linewidth,
                                     scaling = one_dim_state(glyph_data$scaling),
+                                    andrews = one_dim_state(glyph_data$andrews),
                                     axesLayout = one_dim_state(glyph_data$axes.layout),
                                     showAxes = one_dim_state(glyph_data$show.axes),
                                     showEnclosing = one_dim_state(glyph_data$show.enclosing),
@@ -61,7 +108,26 @@ l_add_glyph.GeomImageGlyph <- function(widget, ggBuild, activeGeomLayer) {
                                     image <- images[[i]]
                                     # save raster
                                     temporary_path <- set_temporary_path(i)
-                                    png::writePNG(image, temporary_path)
+                                    if(grDevices::is.raster(image)) {
+                                      nc <- ncol(image)
+                                      nr <- nrow(image)
+                                      image <- grDevices::col2rgb(image, alpha = FALSE)/255
+                                      dim(image) <- c(3, nc, nr)
+                                    }
+                                    tryCatch(
+                                      expr = {
+                                        png::writePNG(image, temporary_path)
+                                      },
+                                      error = function(e) {
+                                        warning(
+                                          "The class of the input image is ", class(image),
+                                          ", which cannot be handled yet. Welcome to report to ",
+                                          "https://github.com/great-northern-diver/loon.ggplot/issues",
+                                          call. = FALSE
+                                        )
+                                      }
+                                    )
+
                                     temporary_path
                                   })
   # load images
@@ -73,27 +139,32 @@ l_add_glyph.GeomImageGlyph <- function(widget, ggBuild, activeGeomLayer) {
              file.remove(temporary_path)
            }
          })
-  g <- loon::l_glyph_add_image(widget,
-                               imgs)
+  g <- loon::l_glyph_add_image(widget, imgs)
   widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "image")
   widget['glyph'] <- g
 }
 
 set_temporary_path <- function(i) {
 
+  tmp <- tempdir()
   temp <- "temporary_image"
 
-  while(file.exists(paste0(temp, i, ".png"))) {
+  while(file.exists(paste0(tmp, "\\", temp, i, ".png"))) {
     i <- i + 1
   }
 
-  return(paste0(temp, i, ".png"))
+  return(paste0(tmp, "\\", temp, i, ".png"))
 }
 
+# TODO: the numbers in this function deserve more research, either practically or theoretically
 as_loon_glyph_size <- function(x, type = "image") {
   switch(type,
-         "image" = 600 * x,
+         "image" = 4 * x,
+         "text" = 3 * x,
+         "polygon" = 4 * x,
+         "serialaxes" = 4 * x,
+         "pointrange" = 8 * x,
          {
-           4 * x
+           x
          })
 }

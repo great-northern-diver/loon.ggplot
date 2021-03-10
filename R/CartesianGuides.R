@@ -1,5 +1,5 @@
 
-CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
+CartesianGuides <- function(widget, ggplotPanelParams, swapAxes, theme){
 
   panel.background_fill <- theme$panel.background$fill %||% widget['guidesBackground']
 
@@ -12,40 +12,40 @@ CartesianGuides <- function(widget, ggplotPanel_params, swapAxes, theme){
 
   if (swapAxes) {
 
-    x.range <- ggplotPanel_params$y.range
-    y.range <- ggplotPanel_params$x.range
+    x.range <- ggplotPanelParams$y.range
+    y.range <- ggplotPanelParams$x.range
 
     # x labels
-    x.major_source <- ggplotPanel_params$y.major_source
-    x.labels <- ggplotPanel_params$y.labels
+    x.major_source <- ggplotPanelParams$y.major_source
+    x.labels <- ggplotPanelParams$y.labels
 
     # y labels
-    y.major_source <- ggplotPanel_params$x.major_source
-    y.labels <- ggplotPanel_params$x.labels
+    y.major_source <- ggplotPanelParams$x.major_source
+    y.labels <- ggplotPanelParams$x.labels
 
     # drawing lines
-    x.minor_source <- ggplotPanel_params$y.minor_source %||% x.major_source
-    y.minor_source <- ggplotPanel_params$x.minor_source %||% y.major_source
+    x.minor_source <- ggplotPanelParams$y.minor_source %||% x.major_source
+    y.minor_source <- ggplotPanelParams$x.minor_source %||% y.major_source
 
   } else {
 
-    x.range <- ggplotPanel_params$x.range
-    y.range <- ggplotPanel_params$y.range
+    x.range <- ggplotPanelParams$x.range
+    y.range <- ggplotPanelParams$y.range
 
     # x labels
-    x.major_source <- ggplotPanel_params$x.major_source
-    x.labels <- ggplotPanel_params$x.labels %||% ggplotPanel_params$x.sec$limits
+    x.major_source <- ggplotPanelParams$x.major_source
+    x.labels <- ggplotPanelParams$x.labels %||% ggplotPanelParams$x.sec$limits
     if(is.numeric(x.labels)) x.labels <- x.major_source
 
     # y labels
-    y.major_source <- ggplotPanel_params$y.major_source
-    y.labels <- ggplotPanel_params$y.labels %||% ggplotPanel_params$y.sec$limits
+    y.major_source <- ggplotPanelParams$y.major_source
+    y.labels <- ggplotPanelParams$y.labels %||% ggplotPanelParams$y.sec$limits
     if(is.numeric(y.labels)) y.labels <- y.major_source
 
     # drawing lines
-    x.minor_source <- ggplotPanel_params$x.minor_source %||% x.major_source
+    x.minor_source <- ggplotPanelParams$x.minor_source %||% x.major_source
 
-    y.minor_source <- ggplotPanel_params$y.minor_source %||% y.major_source
+    y.minor_source <- ggplotPanelParams$y.minor_source %||% y.major_source
 
 
   }

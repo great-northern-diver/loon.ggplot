@@ -71,22 +71,47 @@ interactivity <- function(linkingGroup = NULL,
                        )
                      }
                    },
+                   evalObj = function(data, params, x) {
+
+                     obj <- params[[x]]
+                     if(is.null(obj)) return(params)
+
+                     if(rlang::is_formula(obj)) {
+                       params[[x]] <- eval(obj[[2]], data)
+                     } else if (is.atomic(obj)) {
+                       # obj can be evaluated
+                       NULL
+                     } else {
+                       params[[x]] <- tryCatch(
+                         expr = {eval(obj, data)},
+                         error = function(e) {
+                           # unknown expression
+                           return(NULL)
+                         }
+                       )
+                     }
+
+                     return(params)
+                   },
                    check_itemLabel = function(self, data, params) {
 
                      if(!is.null(params$showItemLabels) && !is.logical(params$showItemLabels)) {
                        stop("`showItemLabels` must be logical", call. = FALSE)
                      }
 
+                     params <- self$evalObj(data, params, "itemLabel")
                      itemLabel <- params$itemLabel
-                     if(is.null(itemLabel)) return(params)
+                     if(is.null(itemLabel)) return(NULL)
 
                      self$warn_nDim_states(data = data,
                                            x = itemLabel)
+
+                     self$params <- params
                    },
                    check_selected = function(self, data, params) {
 
+                     params <- self$evalObj(data, params, "selected")
                      selected <- params$selected
-
                      if(is.null(selected)) return(NULL)
 
                      if(!is.logical(selected)) {
@@ -95,9 +120,12 @@ interactivity <- function(linkingGroup = NULL,
 
                      self$warn_nDim_states(data = data,
                                            x = selected)
+
+                     self$params <- params
                    },
                    check_linkingKey = function(self, data, params) {
 
+                     params <- self$evalObj(data, params, "linkingKey")
                      linkingKey <- params$linkingKey
                      if(is.null(linkingKey)) return(NULL)
 
@@ -106,6 +134,7 @@ interactivity <- function(linkingGroup = NULL,
 
                      self$warn_nDim_states(data = data,
                                            x = linkingKey)
+                     self$params <- params
                    }
 
   )

@@ -6,7 +6,7 @@ l_indices <- function(ggObj, panelIndex, args,
   buildggObj <- plotInfo$buildggObj
 
   # gg build
-  ggplotPanel_params <- buildggObj$ggplotPanel_params
+  ggplotPanelParams <- buildggObj$ggplotPanelParams
   ggBuild <- buildggObj$ggBuild
   layout <- buildggObj$layout
 

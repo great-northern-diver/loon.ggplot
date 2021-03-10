@@ -3,12 +3,14 @@ library(dplyr)
 library(magrittr)
 library(tidyverse)
 library(GGally)
+library(ggmulti)
+library(hexbin)
 
 test_that("geometric layers (ggplot to loon)", {
 
   # point
   p<- ggplot(mtcars, aes(mpg, wt)) + geom_point( aes(colour = "darkblue"))
-  expect_equal(get_activeGeomLayers(p), c(geom_point = 1))
+  expect_equal(get_activeGeomLayers(p), c(l_point = 1))
   g <- ggplot2loon(p)
   expect_is(g, c("l_plot", "loon"))
 
@@ -78,7 +80,7 @@ test_that("geometric layers (ggplot to loon)", {
     annotate("text", x = xrng[1], y = yrng[2], label = caption,
              hjust = 0, vjust = 1, size = 4
     )
-  g <- ggplot2loon(p)
+  g <- ggplot2loon(p, activeGeomLayers = 0L)
   expect_equal(class(g), c("l_plot", "loon"))
 
   mod_coef <- coef(lm(log10( mpg)~ log10(hp), data = mtcars))
@@ -298,4 +300,58 @@ test_that("test some helper functions", {
   h <- l_hist(iris)
   l <- layout_coords(h)
   expect_is(l, "matrix")
+})
+
+
+test_that("test static objects", {
+  # polygon
+  p <- ggplot(data = data.frame(x = (1:4) * 1000, y = (1:4) * 10),
+              mapping = aes(x = x, y = y)) +
+    geom_polygon_glyph(polygon_x = list(x_star, x_cross, x_hexagon, x_airplane),
+                       polygon_y = list(y_star, y_cross, y_hexagon, y_airplane),
+                       colour = 'black', fill = 'red')
+  lp <- loon.ggplot(p, activeGeomLayers = 0L)
+  layers <- loon::l_layer_getChildren(lp)
+  childrenLayers <- loon::l_layer_getChildren(loon::l_create_handle(c(lp, layers[1])))
+  expect_equal(length(childrenLayers), 4)
+
+  # radial
+  p <- ggplot(data = olive[1:100,],
+              mapping = aes(x = oleic, y = stearic)) +
+    geom_serialaxes_glyph(serialaxes.data = olive[1:100, -c(1, 2)],
+                          show.axes = TRUE,
+                          show.enclosing = TRUE,
+                          axes.layout = "radial")
+  lp <- loon.ggplot(p, activeGeomLayers = 0L)
+  layers <- loon::l_layer_getChildren(lp)
+  childrenLayers <- loon::l_layer_getChildren(loon::l_create_handle(c(lp, layers[1])))
+  expect_equal(length(childrenLayers), 3)
+
+  # parallel
+  p <- ggplot(data = olive[1:100,],
+              mapping = aes(x = oleic, y = stearic)) +
+    geom_serialaxes_glyph(serialaxes.data = olive[1:100, -c(1, 2)],
+                          show.axes = TRUE,
+                          show.enclosing = TRUE,
+                          axes.layout = "parallel")
+  lp <- loon.ggplot(p, activeGeomLayers = 0L)
+  layers <- loon::l_layer_getChildren(lp)
+  childrenLayers <- loon::l_layer_getChildren(loon::l_create_handle(c(lp, layers[1])))
+  expect_equal(length(childrenLayers), 3)
+
+  # image
+  image <- as.raster(matrix(seq(0, 1, length.out = 15), ncol = 5, nrow = 3))
+  mat <- matrix(c(0,0,0,0, 1,1), ncol=2)
+
+  p <- ggplot(data = data.frame(x = c(1, 2), y = c(1, 2)),
+              mapping = aes(x = x, y = y)) +
+    geom_image_glyph(images = list(image, mat),
+                     units = "cm",
+                     imagewidth = 1,
+                     imageheight = 1)
+  lp <- loon.ggplot(p, activeGeomLayers = 0L)
+  layers <- loon::l_layer_getChildren(lp)
+  childrenLayers <- loon::l_layer_getChildren(loon::l_create_handle(c(lp, layers[1])))
+  expect_equal(length(childrenLayers), 2)
+
 })

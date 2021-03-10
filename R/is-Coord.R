@@ -1,4 +1,8 @@
-is.CoordPolar <- function(coord){
+#' @title Is polar coordinate system?
+#' @description Determine whether the \code{ggplot} object has polar coordinate system
+#' @param coord A \code{ggplot} object coordinate system
+#' @export
+is.CoordPolar <- function(coord) {
   "CoordPolar" %in% class(coord)
 }
 

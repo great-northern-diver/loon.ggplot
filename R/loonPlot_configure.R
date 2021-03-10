@@ -1,4 +1,4 @@
-loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggplotPanel_params,
+loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggplotPanelParams,
                                swapAxes, theme, panX, panY, deltaX, deltaY, zoomX, zoomY) {
   # draw ggGuides?
   if (isCoordPolar) {
@@ -7,7 +7,7 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
         warning("l_hist only works with Cartesian coordinates", call. = FALSE)
     } else {
       if (ggGuides) {
-        polarGuides <- polarGuides(loonPlot, ggplotPanel_params[[panelIndex]], swapAxes, theme)
+        polarGuides <- polarGuides(loonPlot, ggplotPanelParams[[panelIndex]], swapAxes, theme)
         # lower to bottom
         children <- loon::l_layer_getChildren(loonPlot)
         # the length of children is at least two
@@ -24,7 +24,7 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
     }
   } else {
     if (ggGuides) {
-      CartesianGuides <- CartesianGuides(loonPlot, ggplotPanel_params[[panelIndex]], swapAxes, theme)
+      CartesianGuides <- CartesianGuides(loonPlot, ggplotPanelParams[[panelIndex]], swapAxes, theme)
       # lower to bottom
       children <- loon::l_layer_getChildren(loonPlot)
       # the length of children is at least two
