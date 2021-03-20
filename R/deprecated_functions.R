@@ -1,18 +1,36 @@
-#' @title Add image glyphs on scatter plot
-#' @description Each point glyph can be a image (png, jpeg, etc) object.
+#' Automatically create a loon widget (deprecated)
+#' @export
+#' @inheritParams l_ggplot
+#' @keywords internal
+#' @name lggplot-deprecated
+#' @section \code{lggplot}:
+#' For \code{lggplot}, use \code{\link{l_ggplot}}.
+#'
+lggplot <- function(data = NULL, mapping = aes(), ...,
+                    environment = parent.frame()) {
+
+  .Deprecated("l_ggplot", package= "loon.ggplot")
+  l_ggplot(data = data, mapping = mapping, ...,
+           environment = environment)
+}
+
+#' image glyph (deprecated)
 #' @export
 #' @inheritParams ggmulti::geom_image_glyph
 #' @param width Numerical; width of image
 #' @param height Numerical; height of image
+#' @name geom_imageGlyph-deprecated
+#' @keywords internal
+#' @section \code{geom_imageGlyph}:
+#' For \code{geom_imageGlyph}, use \code{\link{geom_image_glyph}}.
+#'
 geom_imageGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                             position = 'identity', ...,
                             images, width = 4, height = 3, na.rm = FALSE,
                             show.legend = NA,
                             inherit.aes = TRUE) {
-  warning(
-    "Function `geom_imageGlyph` is deprecated, ",
-    "please use function `geom_image_glyph` in package 'ggmulti'", call. = FALSE
-  )
+
+  .Deprecated("geom_image_glyph", package= "loon.ggplot")
 
   if(missing(images)) {
     images <- NULL
@@ -27,20 +45,22 @@ geom_imageGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
   )
 }
 
-#' @title Add polygon glyphs on scatter plot
-#' @description Each point glyph can be a polygon object. Available polygons coords can be achieved in \code{\link{polygon_glyph}}
+#' polygon glyph (deprecated)
 #' @export
 #' @inheritParams ggmulti::geom_polygon_glyph
 #' @param showArea show area; deprecated now, please set `fill` or `colour` to control the shown area.
+#' @name geom_polygonGlyph-deprecated
+#' @keywords internal
+#' @section \code{geom_polygonGlyph}:
+#' For \code{geom_polygonGlyph}, use \code{\link{geom_polygon_glyph}}.
+#'
 geom_polygonGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                               position = 'identity', ...,
                               polygon_x, polygon_y, showArea = TRUE, linewidth = 1,
                               na.rm = FALSE, show.legend = NA,
                               inherit.aes = TRUE) {
-  warning(
-    "Function `geom_polygonGlyph` is deprecated, ",
-    "please use function `geom_polygon_glyph` in package 'ggmulti'", call. = FALSE
-  )
+
+  .Deprecated("geom_polygon_glyph", package= "loon.ggplot")
 
   if(missing(polygon_x) || missing(polygon_y)) {
     polygon_x <- NULL
@@ -57,8 +77,7 @@ geom_polygonGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
   )
 }
 
-#' @title Add serialaxes glyphs on scatter plot
-#' @description To visualize high dimensional data on scatterplot. Each point glyph is surrounded by a serialaxes object.
+#' serialaxes glyph (deprecated)
 #' @export
 #' @inheritParams ggmulti::geom_serialaxes_glyph
 #' @param serialAxesData a serial axes numerical data set. If not provided, `geom_point()` will be called.
@@ -69,6 +88,13 @@ geom_polygonGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
 #' @param showEnclosing boolean to indicate whether enclosing should be shown or not
 #' @param axesColor axes color
 #' @param bboxColor bounding box color
+#'
+#' @name geom_serialAxesGlyph-deprecated
+#' @keywords internal
+#' @section \code{geom_serialAxesGlyph}:
+#' For \code{geom_serialAxesGlyph}, use \code{\link{geom_serialaxes_glyph}}.
+#'
+#'
 geom_serialAxesGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                                  position = 'identity', ...,
                                  serialAxesData, sequence = NULL, linewidth = 1,
@@ -77,11 +103,8 @@ geom_serialAxesGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                                  showAxes = FALSE, showArea = FALSE,  showEnclosing = FALSE,
                                  axesColor = "black", bboxColor = 'black',na.rm = FALSE, show.legend = NA,
                                  inherit.aes = TRUE) {
-  warning(
-    "Function `geom_polygonGlyph` is deprecated, ",
-    "please use function `geom_polygon_glyph` in package 'ggmulti'",
-    call. = FALSE
-  )
+
+  .Deprecated("geom_serialaxes_glyph", package= "loon.ggplot")
 
   if(missing(serialAxesData)) {
     serialAxesData <- NULL
@@ -101,22 +124,25 @@ geom_serialAxesGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
   )
 }
 
-#' @title Pointrange
+#' pointrange glyph (deprecated)
 #' @export
 #' @inheritParams ggplot2::geom_pointrange
 #' @param ymin y min
 #' @param ymax y max
 #' @param showArea show area; deprecated now, please set `fill` or `colour` to control the shown area.
 #' @param linewidth line width
+#'
+#' @name geom_pointrangeGlyph-deprecated
+#' @keywords internal
+#' @section \code{geom_pointrangeGlyph}:
+#' For \code{geom_pointrangeGlyph}, use \code{\link{geom_pointrange}}.
+#'
 geom_pointrangeGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                                  position = 'identity', ...,
                                  ymin, ymax, showArea = TRUE, linewidth = 1,
                                  na.rm = FALSE, show.legend = NA,
                                  inherit.aes = TRUE) {
-  warning(
-    "Function `geom_pointrangeGlyph` is deprecated, ",
-    "please use function `ggplot2::geom_pointrange` instead.", call. = FALSE
-  )
+  .Deprecated("geom_pointrange", package= "loon.ggplot")
 
   ggplot2::geom_pointrange(
     mapping = mapping,
@@ -130,16 +156,22 @@ geom_pointrangeGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
   )
 }
 
-#' @title Text
+#' text glyph (deprecated)
 #' @export
 #' @inheritParams ggplot2::geom_text
 #' @param text The test to display
+#'
+#' @name geom_textGlyph-deprecated
+#' @keywords internal
+#' @section \code{geom_textGlyph}:
+#' For \code{geom_textGlyph}, use \code{\link{geom_text}}.
+#'
 geom_textGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
                            position = 'identity', ..., text,
                            na.rm = FALSE, show.legend = NA,
                            inherit.aes = TRUE) {
-  warning(
-    "Function `geom_textGlyph` is deprecated, please use function `ggplot2::geom_text` instead.", call. = FALSE)
+
+  .Deprecated("geom_text", package= "loon.ggplot")
 
   ggplot2::geom_text(
     mapping = mapping,

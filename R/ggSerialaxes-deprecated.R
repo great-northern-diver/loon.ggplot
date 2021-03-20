@@ -21,9 +21,11 @@
 #'
 #' @return a ggplot object
 #'
-#' @details
-#' So far, `ggSerialAxes` is deprecated and will not be maintained any more. Create serial axes
-#' in `ggplot`, see \code{help("coord_serialaxes", ggmulti)} for more details.
+#'
+#' @keywords internal
+#' @name ggSerialAxes-deprecated
+#' @section \code{ggSerialAxes}:
+#' For \code{ggSerialAxes}, use \code{\link{coord_serialaxes}}.
 #'
 #' @export
 #' @examples
@@ -49,6 +51,8 @@ ggSerialAxes <- function(ggObj,
                          title = "", showLabels = TRUE,
                          color = NULL, size = NULL,
                          showGuides = TRUE, showArea = FALSE) {
+
+  .Deprecated("coord_serialaxes", package= "loon.ggplot")
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
