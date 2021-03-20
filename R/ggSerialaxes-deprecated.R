@@ -29,6 +29,7 @@
 #'
 #' @export
 #' @examples
+#' \dontrun{
 #' # Blank plot
 #' p <- ggplot(data = mtcars, mapping = aes(colour = factor(cyl)))
 #' # Add serial axes (returns a ggplot object)
@@ -42,6 +43,7 @@
 #'        axesLabels = colnames(iris)[ordSeq],
 #'        layout = "radial"
 #' )
+#' }
 
 ggSerialAxes <- function(ggObj,
                          data = NULL, axesLabels = NULL,

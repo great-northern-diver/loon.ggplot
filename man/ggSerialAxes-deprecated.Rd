@@ -65,6 +65,7 @@ For \code{ggSerialAxes}, use \code{\link{coord_serialaxes}}.
 }
 
 \examples{
+\dontrun{
 # Blank plot
 p <- ggplot(data = mtcars, mapping = aes(colour = factor(cyl)))
 # Add serial axes (returns a ggplot object)
@@ -78,5 +79,6 @@ ggSerialAxes(
        axesLabels = colnames(iris)[ordSeq],
        layout = "radial"
 )
+}
 }
 \keyword{internal}
