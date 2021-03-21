@@ -79,13 +79,4 @@ print.lggplot <- function(x, ...) {
   invisible(p)
 }
 
-#' @title Automatically create a loon widget
-#' @export
-#' @description It is retired. See \code{\link{l_ggplot}}
-#' @inheritParams l_ggplot
-lggplot <- function(data = NULL, mapping = aes(), ...,
-                    environment = parent.frame()) {
-  warning("`lggplot()` is deprecated now. Please use `l_ggplot()` instead", call. = FALSE)
-  l_ggplot(data = data, mapping = mapping, ...,
-           environment = environment)
-}
+

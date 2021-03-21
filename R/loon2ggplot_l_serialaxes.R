@@ -17,10 +17,8 @@ loon2ggplot.l_serialaxes <- function(target, ...) {
   }
 
   stat <- "serialaxes"
-  if(utils::packageVersion("loon") >= "1.3.2") {
-    if(widget['andrews'])
-      stat <- "dotProduct"
-  }
+  if(widget['andrews'])
+    stat <- "dotProduct"
 
   axes.layout <- widget['axesLayout']
   axes.sequence <- widget['sequence']

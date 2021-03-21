@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • loon.ggplot</title>
+<title>Automatically create a loon widget (deprecated) — lggplot-deprecated • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Automatically create a loon widget (deprecated) — lggplot-deprecated" />
+<meta property="og:description" content="Automatically create a loon widget (deprecated)" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -136,22 +137,51 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Automatically create a loon widget (deprecated)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/deprecated_functions.R'><code>R/deprecated_functions.R</code></a></small>
+    <div class="hidden name"><code>lggplot-deprecated.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="ggplots2loon.html">ggplots --&gt; loon plots</a></dt>
-        <dd></dt>
-        <dt><a href="loon2ggplots.html">loon plots --&gt; ggplots</a></dt>
-        <dd></dt>
-        <dt><a href="pipes.html">Pipes</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Automatically create a loon widget (deprecated)</p>
     </div>
+
+    <pre class="usage"><span class='fu'>lggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='cn'>NULL</span>, mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span>, environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>Default dataset to use for plot. If not already a data.frame, will be converted to one by fortify().
+If not specified, must be supplied in each layer added to the plot.</p></td>
+    </tr>
+    <tr>
+      <th>mapping</th>
+      <td><p>Default list of aesthetic mappings to use for plot.
+If not specified, must be supplied in each layer added to the plot.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed on to methods. Not currently used.</p></td>
+    </tr>
+    <tr>
+      <th>environment</th>
+      <td><p>DEPRECATED. Used prior to tidy evaluation.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="lggplot"><a class="anchor" href="#lggplot"></a><code>lggplot</code></h2>
+
+    
+
+<p>For <code>lggplot</code>, use <code><a href='l_ggplot.html'>l_ggplot</a></code>.</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

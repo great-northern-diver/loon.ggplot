@@ -47,9 +47,8 @@ l_serialaxesplot <- function(ggBuild,
     title = loonTitle
   )
 
-  if(utils::packageVersion("loon") >= "1.3.2") {
-    args$andrews <- is.andrews(ggObj, activeGeomLayers)
-  }
+  args$andrews <- is.andrews(ggObj, activeGeomLayers)
+
 
   do.call(loon::l_serialaxes, args)
 }

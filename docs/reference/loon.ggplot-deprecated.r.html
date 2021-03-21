@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • loon.ggplot</title>
+<title>Add image glyphs on scatter plot — geom_imageGlyph-deprecated • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Add image glyphs on scatter plot — geom_imageGlyph-deprecated" />
+<meta property="og:description" content="Each point glyph can be a image (png, jpeg, etc) object." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -136,22 +137,115 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Add image glyphs on scatter plot</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/deprecated_functions.R'><code>R/deprecated_functions.R</code></a></small>
+    <div class="hidden name"><code>loon.ggplot-deprecated.r.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="ggplots2loon.html">ggplots --&gt; loon plots</a></dt>
-        <dd></dt>
-        <dt><a href="loon2ggplots.html">loon plots --&gt; ggplots</a></dt>
-        <dd></dt>
-        <dt><a href="pipes.html">Pipes</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Each point glyph can be a image (png, jpeg, etc) object.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>geom_imageGlyph</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"identity"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  <span class='va'>images</span>,
+  width <span class='op'>=</span> <span class='fl'>4</span>,
+  height <span class='op'>=</span> <span class='fl'>3</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>mapping</th>
+      <td><p>Set of aesthetic mappings created by <code><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes()</a></code> or
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
+default), it is combined with the default mapping at the top level of the
+plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>The data to be displayed in this layer. There are three
+options:</p>
+<p>If <code>NULL</code>, the default, the data is inherited from the plot
+data as specified in the call to <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot()</a></code>.</p>
+<p>A <code>data.frame</code>, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> for which variables will be created.</p>
+<p>A <code>function</code> will be called with a single argument,
+the plot data. The return value must be a <code>data.frame</code>, and
+will be used as the layer data. A <code>function</code> can be created
+from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p></td>
+    </tr>
+    <tr>
+      <th>stat</th>
+      <td><p>The statistical transformation to use on the data for this
+layer, as a string.</p></td>
+    </tr>
+    <tr>
+      <th>position</th>
+      <td><p>Position adjustment, either as a string, or the result of
+a call to a position adjustment function.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>layer()</a></code>. These are
+often aesthetics, used to set an aesthetic to a fixed value, like
+<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
+to the paired geom/stat.</p></td>
+    </tr>
+    <tr>
+      <th>images</th>
+      <td><p>a list of images (a raster object, bitmap image). If not provided, <code>geom_point()</code> will be executed.</p></td>
+    </tr>
+    <tr>
+      <th>width</th>
+      <td><p>Numerical; width of image</p></td>
+    </tr>
+    <tr>
+      <th>height</th>
+      <td><p>Numerical; height of image</p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>If <code>FALSE</code>, the default, missing values are removed with
+a warning. If <code>TRUE</code>, missing values are silently removed.</p></td>
+    </tr>
+    <tr>
+      <th>show.legend</th>
+      <td><p>logical. Should this layer be included in the legends?
+<code>NA</code>, the default, includes if any aesthetics are mapped.
+<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.</p></td>
+    </tr>
+    <tr>
+      <th>inherit.aes</th>
+      <td><p>If <code>FALSE</code>, overrides the default aesthetics,
+rather than combining with them. This is most useful for helper functions
+that define both data and aesthetics and shouldn't inherit behaviour from
+the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.org/reference/borders.html'>borders()</a></code>.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="geom-imageglyph"><a class="anchor" href="#geom-imageglyph"></a><code>geom_imageGlyph</code></h2>
+
+    
+
+<p>For <code>geom_imageGlyph</code>, use <code>geom_image_glyph</code>.</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

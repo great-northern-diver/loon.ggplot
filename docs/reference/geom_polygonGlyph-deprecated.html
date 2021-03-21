@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pointrange — geom_pointrangeGlyph • loon.ggplot</title>
+<title>polygon glyph (deprecated) — geom_polygonGlyph-deprecated • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Pointrange — geom_pointrangeGlyph" />
-<meta property="og:description" content="Pointrange" />
+<meta property="og:title" content="polygon glyph (deprecated) — geom_polygonGlyph-deprecated" />
+<meta property="og:description" content="polygon glyph (deprecated)" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,23 +137,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Pointrange</h1>
+    <h1>polygon glyph (deprecated)</h1>
     <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/deprecated_functions.R'><code>R/deprecated_functions.R</code></a></small>
-    <div class="hidden name"><code>geom_pointrangeGlyph.Rd</code></div>
+    <div class="hidden name"><code>geom_polygonGlyph-deprecated.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Pointrange</p>
+    <p>polygon glyph (deprecated)</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geom_pointrangeGlyph</span><span class='op'>(</span>
+    <pre class="usage"><span class='fu'>geom_polygonGlyph</span><span class='op'>(</span>
   mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
   data <span class='op'>=</span> <span class='cn'>NULL</span>,
   stat <span class='op'>=</span> <span class='st'>"identity"</span>,
   position <span class='op'>=</span> <span class='st'>"identity"</span>,
   <span class='va'>...</span>,
-  <span class='va'>ymin</span>,
-  <span class='va'>ymax</span>,
+  <span class='va'>polygon_x</span>,
+  <span class='va'>polygon_y</span>,
   showArea <span class='op'>=</span> <span class='cn'>TRUE</span>,
   linewidth <span class='op'>=</span> <span class='fl'>1</span>,
   na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
@@ -203,12 +203,14 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 to the paired geom/stat.</p></td>
     </tr>
     <tr>
-      <th>ymin</th>
-      <td><p>y min</p></td>
+      <th>polygon_x</th>
+      <td><p>nested list of x-coordinates of polygons, one list element for each scatterplot point.
+If not provided, <code>geom_point()</code> will be executed.</p></td>
     </tr>
     <tr>
-      <th>ymax</th>
-      <td><p>y max</p></td>
+      <th>polygon_y</th>
+      <td><p>nested list of y-coordinates of polygons, one list element for each scatterplot point.
+If not provided, <code>geom_point()</code> will be executed.</p></td>
     </tr>
     <tr>
       <th>showArea</th>
@@ -216,7 +218,7 @@ to the paired geom/stat.</p></td>
     </tr>
     <tr>
       <th>linewidth</th>
-      <td><p>line width</p></td>
+      <td><p>line width of the "glyph" object</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -240,6 +242,11 @@ the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.or
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="geom-polygonglyph"><a class="anchor" href="#geom-polygonglyph"></a><code>geom_polygonGlyph</code></h2>
+
+    
+
+<p>For <code>geom_polygonGlyph</code>, use <code>geom_polygon_glyph</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

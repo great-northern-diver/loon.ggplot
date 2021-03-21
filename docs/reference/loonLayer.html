@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • loon.ggplot</title>
+<title>Transform geom layers to loon layers — loonLayer • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,9 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Transform geom layers to loon layers — loonLayer" />
+<meta property="og:description" content="Function loonLayer is used to create loon non-interactive layers.
+For some ggplot2 extension packages, one can edit this function to realize the transformation." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +68,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -136,22 +138,70 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Transform geom layers to loon layers</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/basic_loon_layers.R'><code>R/basic_loon_layers.R</code></a></small>
+    <div class="hidden name"><code>loonLayer.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="ggplots2loon.html">ggplots --&gt; loon plots</a></dt>
-        <dd></dt>
-        <dt><a href="loon2ggplots.html">loon plots --&gt; ggplots</a></dt>
-        <dd></dt>
-        <dt><a href="pipes.html">Pipes</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Function <code>loonLayer</code> is used to create <code>loon</code> non-interactive layers.
+For some <code>ggplot2</code> extension packages, one can edit this function to realize the transformation.</p>
     </div>
+
+    <pre class="usage"><span class='fu'>loonLayer</span><span class='op'>(</span>
+  <span class='va'>widget</span>,
+  <span class='va'>layerGeom</span>,
+  <span class='va'>data</span>,
+  <span class='va'>ggplotPanelParams</span>,
+  <span class='va'>ggObj</span>,
+  <span class='va'>parent</span>,
+  <span class='va'>label</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>widget</th>
+      <td><p>a <code>loon</code> widget</p></td>
+    </tr>
+    <tr>
+      <th>layerGeom</th>
+      <td><p>a <code>ggplot</code> <code>Geom</code> layer object</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>a data frame (i.e. <code>x</code>, <code>y</code>, etc) of this particular layer</p></td>
+    </tr>
+    <tr>
+      <th>ggplotPanelParams</th>
+      <td><p><code>ggplot</code> panel parameters</p></td>
+    </tr>
+    <tr>
+      <th>ggObj</th>
+      <td><p>the <code>ggplot</code> object</p></td>
+    </tr>
+    <tr>
+      <th>parent</th>
+      <td><p>a valid Tk parent widget path.</p></td>
+    </tr>
+    <tr>
+      <th>label</th>
+      <td><p>label used in the layers inspector</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>not for users</p></td>
+    </tr>
+    </table>
+
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
