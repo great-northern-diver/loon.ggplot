@@ -1,7 +1,6 @@
 context("test polar coordinate system (ggplot to loon)")
 library(dplyr)
 library(magrittr)
-library(tidyverse)
 library(GGally)
 library(png)
 

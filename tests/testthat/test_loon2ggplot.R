@@ -1,7 +1,6 @@
 context("test (loon to ggplot)")
 library(dplyr)
 library(magrittr)
-library(tidyverse)
 library(GGally)
 
 test_that("test l_plot (loon to ggplot)", {
