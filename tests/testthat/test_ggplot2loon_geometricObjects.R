@@ -1,7 +1,6 @@
 context("test geometric objects (ggplot to loon)")
 library(dplyr)
 library(magrittr)
-library(tidyverse)
 library(GGally)
 library(ggmulti)
 library(hexbin)

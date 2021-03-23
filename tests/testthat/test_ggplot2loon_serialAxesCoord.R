@@ -1,7 +1,6 @@
 context("test serialaxes (ggplot to loon)")
 library(dplyr)
 library(magrittr)
-library(tidyverse)
 library(GGally)
 library(ggmulti)
 

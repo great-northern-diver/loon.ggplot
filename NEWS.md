@@ -1,3 +1,9 @@
+# loon.ggplot 1.1.1
+
+* Package `ggmulti` is set as `Depends` (more priority) rather than `Imports`
+
+* Remove `tidyverse` dependency 
+
 # loon.ggplot 1.1.0
 
 * When a `loon` widget --> a `ggplot` object, several things are changed here

@@ -1,7 +1,6 @@
 context("test interactive components")
 library(dplyr)
 library(magrittr)
-library(tidyverse)
 
 test_that("test linking", {
   p0 <- l_plot(mtcars, linkingGroup = "mtcars")

@@ -1,5 +1,4 @@
 context("test deprecated functions")
-library(tidyverse)
 library(ggmulti)
 library(testthat)
 
