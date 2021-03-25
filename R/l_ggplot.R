@@ -76,7 +76,7 @@ l_ggplot <- function(data = NULL, mapping = aes(), ...,
 print.lggplot <- function(x, ...) {
 
   p <- loon.ggplot(x, ...)
-  invisible(p)
+  print(p)
 }
 
 
