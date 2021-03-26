@@ -66,28 +66,37 @@ l_loonPlot <- function(ggObj, panelIndex, args,
     FacetGrid <- plotInfo$FacetGrid
     ggLayout <- buildggObj$ggLayout
 
-    l_histogram(ggBuild = ggBuild,
-                ggLayout = ggLayout,
-                layout = layout,
-                ggplotPanelParams = ggplotPanelParams,
-                ggObj = ggObj,
-                activeGeomLayers = activeGeomLayers,
-                panelIndex = panelIndex,
-                dataFrame = dataFrame,
-                mapping = mapping,
-                numOfSubtitles = numOfSubtitles,
-                parent = parent,
-                showGuides = showGuides,
-                showScales = showScales,
-                swapAxes = swapAxes,
-                linkingKey = linkingKey,
-                showLabels = plotInfo$showLabels,
-                xlabel = xlabel,
-                ylabel = ylabel,
-                loonTitle = loonTitle,
-                FacetWrap = FacetWrap,
-                FacetGrid = FacetGrid)
+    h <- l_histogram(ggBuild = ggBuild,
+                     ggLayout = ggLayout,
+                     layout = layout,
+                     ggplotPanelParams = ggplotPanelParams,
+                     ggObj = ggObj,
+                     activeGeomLayers = activeGeomLayers,
+                     panelIndex = panelIndex,
+                     dataFrame = dataFrame,
+                     mapping = mapping,
+                     numOfSubtitles = numOfSubtitles,
+                     parent = parent,
+                     showGuides = showGuides,
+                     showScales = showScales,
+                     swapAxes = swapAxes,
+                     linkingKey = linkingKey,
+                     showLabels = plotInfo$showLabels,
+                     xlabel = xlabel,
+                     ylabel = ylabel,
+                     loonTitle = loonTitle,
+                     FacetWrap = FacetWrap,
+                     FacetGrid = FacetGrid)
 
+    sync <- plotInfo$sync
+    linkingGroup <- args$linkingGroup
+
+    if(is.null(linkingGroup)) return(h)
+    # sync can only be pull or push
+    if(sync == "push") return(h)
+
+    h['colorStackingOrder'] <- "selected"
+    return(h)
 
   } else if(activeModel == "l_plot" & length(boxplotPointLayers) > 0) {
 
