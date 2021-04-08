@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -157,8 +157,8 @@
 Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms", "identity", "log", "log10", "log1p",
 "log2", "logit", "modulus", "probability", "probit", "pseudo_log", "reciprocal", "reverse", "sqrt" and "time".
 A transformation object bundles together a transform, its inverse, and methods for generating breaks and labels.
-Transformation objects are defined in the scales package, and are called  &lt;name&gt;_trans (e.g., <code><a href='https://scales.r-lib.org//reference/boxcox_trans.html'>scales::boxcox_trans()</a></code>).
-You can create your own transformation with <code><a href='https://scales.r-lib.org//reference/trans_new.html'>scales::trans_new()</a></code>.</p></td>
+Transformation objects are defined in the scales package, and are called  &lt;name&gt;_trans (e.g., <code><a href='https://scales.r-lib.org/reference/boxcox_trans.html'>scales::boxcox_trans()</a></code>).
+You can create your own transformation with <code><a href='https://scales.r-lib.org/reference/trans_new.html'>scales::trans_new()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -198,11 +198,11 @@ we rotate the plot, most points will stay inside the current view.</p>
   <span class='fu'>scale_multi</span><span class='op'>(</span><span class='op'>)</span>
 
 <span class='co'># customized `trans`</span>
-<span class='va'>logp1_base10_trans</span> <span class='op'>&lt;-</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/trans_new.html'>trans_new</a></span><span class='op'>(</span>
+<span class='va'>logp1_base10_trans</span> <span class='op'>&lt;-</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/trans_new.html'>trans_new</a></span><span class='op'>(</span>
   name <span class='op'>=</span> <span class='st'>"logp"</span>,
   trans <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>x</span> <span class='op'>+</span> <span class='fl'>1</span>, base <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
   inverse <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fl'>10</span><span class='op'>**</span><span class='va'>x</span> <span class='op'>-</span> <span class='fl'>1</span>,
-  breaks <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org//reference/breaks_log.html'>log_breaks</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+  breaks <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/breaks_log.html'>log_breaks</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>dsamp</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>carat</span>, y <span class='op'>=</span> <span class='va'>price</span>,
                     z <span class='op'>=</span> <span class='va'>depth</span>, colour <span class='op'>=</span> <span class='va'>color</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>

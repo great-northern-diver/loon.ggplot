@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -195,12 +195,19 @@ but only one <code>geom_histogram()</code> can be set as an active geom layer)</
     <div class='dont-index'><p><code><a href='selecting.html'>selecting</a></code>, <code><a href='itemLabel.html'>itemLabel</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>l_hist</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>hp</span>, linkingGroup <span class='op'>=</span> <span class='st'>"mtcars"</span><span class='op'>)</span>
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='co'># push the states of scatter plot to the histogram</span>
-    <span class='fu'>linking</span><span class='op'>(</span>linkingGroup <span class='op'>=</span> <span class='st'>"mtcars"</span>, sync <span class='op'>=</span> <span class='st'>"push"</span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"dplyr"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>h</span> <span class='op'>&lt;-</span> <span class='fu'>l_hist</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>hp</span>,
+              linkingKey <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>,
+              linkingGroup <span class='op'>=</span> <span class='st'>"mtcars"</span><span class='op'>)</span>
+
+  <span class='va'>mtcars</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>mutate</span><span class='op'>(</span>carName <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+       <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
+       <span class='co'># push the states of scatter plot to the histogram</span>
+       <span class='fu'>linking</span><span class='op'>(</span>linkingGroup <span class='op'>=</span> <span class='st'>"mtcars"</span>,
+               linkingKey <span class='op'>=</span> <span class='op'>~</span><span class='va'>carName</span>,
+               sync <span class='op'>=</span> <span class='st'>"push"</span><span class='op'>)</span>
 
   <span class='co'># set active layer</span>
   <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>

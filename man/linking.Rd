@@ -38,12 +38,19 @@ a \code{ggproto} object
 In interactive graphics, \code{linking} is often used to discover the patterns of interest in several plots.
 }
 \examples{
-if(interactive()) {
-  p <- l_hist(mtcars$hp, linkingGroup = "mtcars")
-  l_ggplot(mtcars, mapping = aes(x = wt, y = hp, color = factor(cyl))) +
-    geom_point(size = 4) +
-    # push the states of scatter plot to the histogram
-    linking(linkingGroup = "mtcars", sync = "push")
+if(interactive() && requireNamespace("dplyr")) {
+  h <- l_hist(mtcars$hp,
+              linkingKey = rownames(mtcars),
+              linkingGroup = "mtcars")
+
+  mtcars \%>\%
+    mutate(carName = rownames(mtcars)) \%>\%
+    l_ggplot(mapping = aes(x = wt, y = hp, color = factor(cyl))) +
+       geom_point(size = 4) +
+       # push the states of scatter plot to the histogram
+       linking(linkingGroup = "mtcars",
+               linkingKey = ~carName,
+               sync = "push")
 
   # set active layer
   l_ggplot(mtcars, aes(mpg, wt, shape = factor(cyl))) +
