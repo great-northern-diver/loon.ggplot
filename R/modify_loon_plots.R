@@ -10,7 +10,7 @@ modify_loon_plots <- function(plotInfo = list()) {
 
   # set linkingGroup
   lapply(plots,
-         function(plot){
+         function(plot) {
            loon::l_configure(plot, linkingGroup = args$linkingGroup,
                              sync = plotInfo$sync)
          }
