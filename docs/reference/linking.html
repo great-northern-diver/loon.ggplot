@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the linking component — linking • loon.ggplot</title>
+<title>Modify the <code>linking</code> component — linking • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Modify the linking component — linking" />
+<meta property="og:title" content="Modify the <code>linking</code> component — linking" />
 <meta property="og:description" content="In interactive graphics, linking is often used to discover the patterns of interest in several plots." />
 <meta property="og:image" content="/logo.png" />
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -146,13 +146,13 @@
     <p>In interactive graphics, <code>linking</code> is often used to discover the patterns of interest in several plots.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>linking</span><span class='op'>(</span>
-  linkingGroup <span class='op'>=</span> <span class='cn'>NULL</span>,
-  linkingKey <span class='op'>=</span> <span class='cn'>NULL</span>,
-  linkedStates <span class='op'>=</span> <span class='cn'>NULL</span>,
-  sync <span class='op'>=</span> <span class='cn'>NULL</span>,
-  activeGeomLayers <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>linking</span>(
+  <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>linkingKey</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>linkedStates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>sync</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,22 +195,21 @@ but only one <code>geom_histogram()</code> can be set as an active geom layer)</
     <div class='dont-index'><p><code><a href='selecting.html'>selecting</a></code>, <code><a href='itemLabel.html'>itemLabel</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>l_hist</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>hp</span>, linkingGroup <span class='op'>=</span> <span class='st'>"mtcars"</span><span class='op'>)</span>
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
+    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>l_hist</span>(<span class='no'>mtcars</span>$<span class='no'>hp</span>, <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mtcars"</span>)
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
+    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
     <span class='co'># push the states of scatter plot to the histogram</span>
-    <span class='fu'>linking</span><span class='op'>(</span>linkingGroup <span class='op'>=</span> <span class='st'>"mtcars"</span>, sync <span class='op'>=</span> <span class='st'>"push"</span><span class='op'>)</span>
+    <span class='fu'>linking</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mtcars"</span>, <span class='kw'>sync</span> <span class='kw'>=</span> <span class='st'>"push"</span>)
 
   <span class='co'># set active layer</span>
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"black"</span>, size <span class='op'>=</span> <span class='fl'>4.5</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"pink"</span>, size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
+    <span class='fu'>geom_point</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4.5</span>) +
+    <span class='fu'>geom_point</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
+    <span class='fu'>geom_point</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
     <span class='co'># only the second layer is interactive</span>
-    <span class='fu'>linking</span><span class='op'>(</span>activeGeomLayers <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <span class='fu'>linking</span>(<span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -226,7 +225,7 @@ but only one <code>geom_histogram()</code> can be set as an active geom layer)</
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

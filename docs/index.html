@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -78,7 +78,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,7 +128,7 @@ install.packages("loon")</a></code></pre>
 </li>
 </ul>
 <p>Consider the <code>mtcars</code> data set. Suppose we draw a scatterplot of the mileage <code>mpg</code> (miles per US gallon) versus the weight of the car <code>wt</code> in thousands of pounds and colour represents different cylinder numbers. In <code>ggplot2</code> this would be constructed as</p>
-<pre><code><a href="http://ggplot2.tidyverse.org">library(ggplot2)
+<pre><code><a href="https://ggplot2.tidyverse.org/reference">library(ggplot2)
 p &lt;- ggplot(mtcars, aes(wt, mpg, colour = as.factor(cyl))) + geom_point()
 p</a></code></pre>
 <p><img src="reference/figures/mtcarsScatterPlot.png"></p>
@@ -141,7 +141,7 @@ h</code></pre>
 </li>
 </ul>
 <p>the <code>"ggplot"</code> data structures <code>p</code> and <code>h</code> can be <strong>turned into interactive loon plot</strong>s using the <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code> function:</p>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(loon.ggplot)
+<pre><code><a href="https://rdrr.io/pkg/loon.ggplot/man">library(loon.ggplot)
 pl &lt;- ggplot2loon(p)
 hl &lt;- ggplot2loon(h)</a></code></pre>
 <p><img src="reference/figures/scatterAndHist.gif"></p>
@@ -254,7 +254,7 @@ l &lt;- loon.ggplot(g)</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
