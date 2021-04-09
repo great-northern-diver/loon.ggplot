@@ -89,10 +89,19 @@ plot_range <- function(x = "x.range", panelParams, flip = FALSE) {
 }
 
 
-set_tkLabel <- function(labelBackground = "gray80", labelForeground = "black", labelBorderwidth = 2, labelRelief = "groove",
-                        xlabelBackground = "white", xlabelForeground = "black", xlabelBorderwidth = 2, xlabelRelief = "solid",
-                        ylabelBackground = "white", ylabelForeground = "black", ylabelBorderwidth = 2, ylabelRelief = "solid",
-                        titleBackground = "white", titleForeground = "black", titleBorderwidth = 2, titleRelief = "solid") {
+set_tkLabel <- function(labelBackground = tryCatch(loon::l_getOption("facetLabelBackground"),
+                                                   error = function(e) "gray80"),
+                        labelForeground = loon::l_getOption("foreground"),
+                        labelBorderwidth = 2, labelRelief = "ridge",
+                        xlabelBackground = loon::l_getOption("canvas_bg_guides"),
+                        xlabelForeground = loon::l_getOption("foreground"),
+                        xlabelBorderwidth = 2, xlabelRelief = "flat",
+                        ylabelBackground = loon::l_getOption("canvas_bg_guides"),
+                        ylabelForeground = loon::l_getOption("foreground"),
+                        ylabelBorderwidth = 2, ylabelRelief = "flat",
+                        titleBackground = loon::l_getOption("canvas_bg_guides"),
+                        titleForeground = loon::l_getOption("foreground"),
+                        titleBorderwidth = 2, titleRelief = "flat") {
   list(
     labelBackground = labelBackground,
     labelForeground = labelForeground,

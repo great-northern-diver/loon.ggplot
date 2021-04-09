@@ -91,7 +91,7 @@ l_loonPlot <- function(ggObj, panelIndex, args,
     sync <- plotInfo$sync
     linkingGroup <- args$linkingGroup
 
-    if(is.null(linkingGroup)) return(h)
+    if(is.null(linkingGroup) || linkingGroup == "none") return(h)
     # sync can only be pull or push
     if(sync == "push") return(h)
 

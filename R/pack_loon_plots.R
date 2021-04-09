@@ -27,9 +27,9 @@ pack_loon_plots <- function(plotInfo = list(),
               scales_free_y = ggObj$facet$params$free$y %||% FALSE)
 
   # pack xlabel and ylabel
-  if(!is.null(xlabel) & tkLabels){
+  if(!is.null(xlabel) && tkLabels){
     xlab <- as.character(tcltk::tcl('label',
-                                    as.character(loon::l_subwin(parent,'label')),
+                                    as.character(loon::l_subwin(parent,'xlabel')),
                                     text= xlabel,
                                     bg = set_tkLabel()$xlabelBackground,
                                     fg = set_tkLabel()$xlabelForeground,
@@ -40,9 +40,9 @@ pack_loon_plots <- function(plotInfo = list(),
                   rowspan = 1, columnspan = column.span,
                   sticky="nesw")
   }
-  if(!is.null(ylabel) & tkLabels){
+  if(!is.null(ylabel) && tkLabels){
     ylab <- as.character(tcltk::tcl('label',
-                                    as.character(loon::l_subwin(parent,'label')),
+                                    as.character(loon::l_subwin(parent,'ylabel')),
                                     text= paste(paste0(" ", strsplit(ylabel, "")[[1]], " "),
                                                 collapse = "\n"),
                                     bg = set_tkLabel()$ylabelBackground,
@@ -56,11 +56,11 @@ pack_loon_plots <- function(plotInfo = list(),
   }
 
   # FacetGrid; subtitle by row?
-  if(!is.null(display_info$rowSubtitles) &  plotInfo$FacetGrid & tkLabels) {
+  if(!is.null(display_info$rowSubtitles) && plotInfo$FacetGrid && tkLabels) {
     uniqueRowSubtitles <- unique(display_info$rowSubtitles)
-    for(i in 1:length(uniqueRowSubtitles)){
+    for(i in seq(length(uniqueRowSubtitles))) {
       rowSub <- as.character(tcltk::tcl('label',
-                                        as.character(loon::l_subwin(parent,'label')),
+                                        as.character(loon::l_subwin(parent,'rowlabel')),
                                         text= paste(paste0(" ", strsplit(uniqueRowSubtitles[i], "")[[1]], " "),
                                                     collapse = "\n"),
                                         bg = set_tkLabel()$labelBackground,
@@ -75,10 +75,11 @@ pack_loon_plots <- function(plotInfo = list(),
     }
   }
   # FacetGrid; subtitle by col?
-  if(!is.null(display_info$colSubtitles) &  plotInfo$FacetGrid & tkLabels) {
+  if(!is.null(display_info$colSubtitles) &&  plotInfo$FacetGrid && tkLabels) {
     uniqueColSubtitles <- unique(display_info$colSubtitles)
-    for(i in 1:length(uniqueColSubtitles)){
-      colSub <- as.character(tcltk::tcl('label', as.character(loon::l_subwin(parent,'label')),
+    for(i in seq(length(uniqueColSubtitles))) {
+      colSub <- as.character(tcltk::tcl('label',
+                                        as.character(loon::l_subwin(parent,'columnlabel')),
                                         text= uniqueColSubtitles[i],
                                         bg = set_tkLabel()$labelBackground,
                                         fg = set_tkLabel()$labelForeground,
@@ -92,13 +93,13 @@ pack_loon_plots <- function(plotInfo = list(),
     }
   }
 
-  if(!is.null(plotInfo$title) & tkLabels) {
+  if(!is.null(plotInfo$title) && tkLabels) {
     titleFont <- if(display_info$start.subtitlepos == start.ypos)
       tcltk::tkfont.create(size = 16)
     else
       tcltk::tkfont.create(size = 16, weight="bold")
     tit <- as.character(tcltk::tcl('label',
-                                   as.character(loon::l_subwin(parent,'label')),
+                                   as.character(loon::l_subwin(parent,'title')),
                                    text= plotInfo$title,
                                    bg = set_tkLabel()$titleBackground,
                                    fg = set_tkLabel()$titleForeground,
