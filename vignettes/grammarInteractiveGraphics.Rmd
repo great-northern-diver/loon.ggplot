@@ -1,0 +1,271 @@
+---
+title: "A grammar of interactive graphics"
+author: "Wayne Oldford and Zehao Xu"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+geometry: margin=.75in
+urlcolor: blue
+graphics: yes
+vignette: >
+  %\VignetteIndexEntry{Pipes}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  
+header-includes:
+- \usepackage{graphicx}
+- \usepackage{epic}
+- \usepackage{color}
+- \usepackage{hyperref}
+- \usepackage{multimedia}
+- \PassOptionsToPackage{pdfmark}{hyperref}\RequirePackage{hyperref}
+- \newcommand{\subspace}[1]{\mathcal{#1}}    
+- \newcommand{\field}[1]{\mathbb{#1}}
+- \newcommand{\Reals}{\field{R}}
+- \newcommand{\Integers}{\field{Z}} 
+- \newcommand{\Naturals}{\field{N}}
+- \newcommand{\Complex}{\field{C}}
+- \newcommand{\Rationals}{\field{Q}}
+- \newcommand{\widebar}[1]{\overline{#1}}
+- \newcommand{\wig}[1]{\tilde{#1}}
+- \newcommand{\bigwig}[1]{\widetilde{#1}}
+- \newcommand{\pop}[1]{\mathcal{#1}}
+- \newcommand{\samp}[1]{\mathcal{#1}}
+- \newcommand{\given}{~\vline~}
+- \newcommand{\indep}{\bot\hspace{-.6em}\bot}
+- \newcommand{\notindep}{\bot\hspace{-.6em}\bot\hspace{-0.75em}/\hspace{.4em}}
+- \newcommand{\depend}{\Join}
+- \newcommand{\notdepend}{\Join\hspace{-0.9 em}/\hspace{.4em}}
+- \newcommand{\imply}{\Longrightarrow}
+- \newcommand{\notimply}{\Longrightarrow \hspace{-1.5em}/ \hspace{0.8em}}
+- \newcommand{\suchthat}{~:~}
+- \newcommand{\st}{~:~} 
+- \newcommand{\follows}{~\neg~}
+- \newcommand{\abs}[1]{\left\lvert{#1}\right\rvert}
+- \newcommand{\code}[1]{\texttt{#1}}
+- \newcommand{\Slang}{\textsf{S}}
+- \newcommand{\R}{\textsf{R}}
+- \newcommand{\RStudio}{\textsf{RStudio}}
+- \newcommand{\RMarkdown}{\textsf{RMarkdown}}
+- \newcommand{\loondata}{\textsf{loon.data}}
+- \newcommand{\Loondata}{\textsf{Loon.data}}
+- \newcommand{\loonggplot}{\textsf{loon.ggplot}}
+- \newcommand{\Loonggplot}{\textsf{Loon.ggplot}}
+- \newcommand{\ggplot2}{\textsf{ggplot2}}
+- \newcommand{\GGplot2}{\textsf{GGplot2}}
+- \newcommand{\loon}{\textsf{loon}}
+- \newcommand{\Loon}{\textsf{Loon}}
+- \newcommand{\bgraphics}{\textsf{graphics}}
+- \newcommand{\bGraphics}{\textsf{Graphics}}
+- \newcommand{\pgrid}{\textsf{grid}}
+- \newcommand{\pGrid}{\textsf{Grid}}
+- \newcommand{\Python}{\textsf{Python}}
+- \newcommand{\Tcl}{\textsf{Tcl}}
+- \newcommand{\pkg}[1]{\textsf{#1}}
+- \newcommand{\ve}[1]{\mathbf{#1}}         
+- \newcommand{\sv}[1]{\boldsymbol{#1}}   
+- \newcommand{\m}[1]{\mathbf{#1}}      
+- \newcommand{\sm}[1]{\boldsymbol{#1}}  
+- \newcommand{\tr}[1]{{#1}^{\mkern-1.5mu\mathsf{T}}}
+- \newcommand{\norm}[1]{||{#1}||}
+- \newcommand{\inverse}[1]{{#1}^{-1}}
+- \newcommand{\mvec}{\operatorname{vec}}
+- \newcommand{\trace}{\operatorname{trace}}
+- \newcommand{\rank}{\operatorname{rank}}
+- \newcommand{\diag}{\operatorname{diag}}
+- \newcommand{\vspan}{\operatorname{span}}
+- \newcommand{\rowsp}{\operatorname{rowsp}}
+- \newcommand{\colsp}{\operatorname{colsp}}
+- \newcommand{\svd}{\operatorname{svd}}
+- \newcommand{\degrees}{$^{\circ}$}
+- \newcommand{\union}{\cup}
+- \newcommand{\intersect}{\cap}
+- \newcommand{\nullset}{\varnothing}
+
+---
+
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 5,
+                      out.width = "60%", 
+                      collapse = TRUE,
+                      comment = "#>",
+                      tidy.opts = list(width.cutoff = 65),
+                      tidy = FALSE)
+library(knitr)
+set.seed(12314159)
+imageDirectory <- "./l_ggplot"
+dataDirectory <- "./l_ggplot"
+
+library(ggplot2, quietly = TRUE)
+library(dplyr, quietly = TRUE)
+library(magrittr, quietly = TRUE)
+library(loon, quietly = TRUE)
+```
+
+The \ggplot2{} package provides a layered implementation of a *grammar of graphics*.  The package \loonggplot{} extends this to a *grammar of* **interactive** *graphics*.
+
+
+The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
+```{r pipes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(dplyr)  # load this to also have dplyr functionality
+library(magrittr)
+library(loon.ggplot)
+p1_piped <- mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  l_ggplot(aes(x = weight, y = lp100km)) +
+  geom_point() +
+  ylab("Litres per 100 kilometres") +
+  ggtitle("Gas usage")
+p1_piped
+```
+
+Here the "pipe"  `%>%` takes the output of its left hand side and pushes it into the first argument of its right hand side.  Arbitrary many pipes may be gathered together.  
+This connects nicely with `ggplot2`'s addition `+` operator (`+` itself is sometimes a pipe, sometimes a layer in `ggplot` construction) to create the `ggplot` from the data and assign it to `p1_piped`.
+
+Two things to note here are.
+First, the result of the data manipulation is assigned at the beginning using the `<-` assignment function which seems to run counter to the data flow indicated by the pipes.  A more consistent flow would be to have instead written
+```{r consistent_pipe_flow}
+mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  ggplot(aes(x = weight, y = lp100km)) +
+  geom_point() +
+  ylab("Litres per 100 kilometres") +
+  ggtitle("Gas usage")  ->   # Note assignment occurs here
+  p1_piped
+```
+
+Now the assignment operator `->` is used at the end, matching the data flow of the pipes.
+
+Second, in either case the `ggplot` is **not** itself displayed (or rendered) until it is printed.
+
+```{r p1_piped, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
+p1_piped
+```
+
+Once built, as happens when the plot has been displayed as above,  an interactive loon plot can be had as always, simply by calling `ggplot2loon()` on the built `ggplot`:
+```{r loon_p1_piped, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(loon.ggplot)
+ggplot2loon(p1_piped, linkingGroup = "Motor Trend 1974")
+```
+Again, the additional specification here of the `linkingGroup` will cause display attributes to be pulled from the plots in that linking group.
+
+### Using `gg_pipe(data, ggplotObj)`
+
+Note that before a `ggplot` can be displayed, a number of steps are performed so as to prepare the plot object for rendering (e.g. see `ggplot2::ggplot_build`).
+Unfortunately, this delay in completing the preparation of the `ggplot` can make it difficult to attach further operations in the `%>%` pipeline after the `ggplot` itself -- apart of course from further `ggplot2` additions via the `+` operator.
+For example, one cannot simply add `%>% ggplot2loon()` at the end of the pipeline used to construct the `ggplot`.  That is,
+```{r fail_pipeline, eval = FALSE}
+mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  ggplot(aes(x = weight, y = lp100km)) +
+  geom_point() +
+  ylab("Litres per 100 kilometres") +
+  ggtitle("Gas usage") %>% 
+  ggplot2loon()
+```
+would produce neither a `ggplot` or an interactive `loon` plot.
+
+To get around this problem, in `loon.ggplot` the function `gg_pipe()` is provided to encapsulate the `ggplot` construction in any pipeline and force the `ggplot` to be built (though not rendered in a display).  The output of this function can then be passed on to `ggplot2loon()`. 
+
+For example,
+```{r gg_pipe, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  # encapsulate the ggplot construction with gg_pipe()
+  gg_pipe(ggplot(aes(x = weight, y = lp100km)) +
+            geom_point() +
+            ylab("Litres per 100 kilometres") +
+            ggtitle("Gas usage")
+          )  %>% 
+  # and pass the built plot on
+  ggplot2loon(linkingGroup = "Motor Trend 1974")
+```
+constructs the interactive plot which could have been assigned to a variable as was done with the original `ggplot` construction.
+
+From here, the pipeline can be grown as before, recognizing of course that the output of `ggplot2loon()` is a `loon` plot of some sort.
+This means that functions that operate on `loon` plots (as their first argument can be used.  As with any piping operation, attention must be given to the first argument of the functions in the pipeline as well as to what the input and outputs are of any function.
+
+For example, 
+
+```{r magrittr_pipe, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  # encapsulate the ggplot construction with gg_pipe()
+  gg_pipe(ggplot(aes(x = weight, y = lp100km)) +
+            geom_point() +
+            ylab("Litres per 100 kilometres") +
+            ggtitle("Gas usage") )  %>% 
+  # and pass the built plot on
+  ggplot2loon(linkingGroup = "Motor Trend 1974") %>%  # pipe the loon plot on
+  l_cget('color')  # Gets and returns the vector of point colours
+```
+
+In the `magrittr` package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful -- not just `%>%`.
+
+### Using `l_ggplot()`
+
+Additionally, using function `l_ggplot`, can also create a `loon` plot with `ggplot` pipe model.
+
+The display of `ggplot` object relies on the default `print()` function in `R`. Function `l_ggplot`, inserts a new class `lggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.lggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
+```{r lggplot_pipe, message = FALSE, eval = FALSE}
+obj <- mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  # replace `ggplot` to `lggplot`
+  l_ggplot(aes(x = weight, y = lp100km)) +
+  geom_point() +
+  ylab("Litres per 100 kilometres") +
+  ggtitle("Gas usage")
+obj
+```
+
+However, this design has an obvious drawback: confusion of the output data structure. Since the transformation is accomplished at the printing time, object `obj` is still a `ggplot` data structure. To create a `loon` "handle", we have to use `l_getFromPath()`
+```{r, l_getFromPath, message = FALSE, eval = FALSE}
+if(utils::packageVersion("loon") >= "1.2.4") {
+  # **THIS IS IMPORTANT**
+  # The path name can be obtained at the top left tk window
+  # Suppose the label is "loon.ggplot --path: .l13.ggplot"
+  # The path would be the char right after "path: " which is ".l13.ggplot"
+  loonWidget <- l_getFromPath(".l13.ggplot")
+  class(loonWidget)
+  # [1] "l_plot" "loon"
+}
+```
+
+### Just use loon for built-in interactive plots
+
+Of course, for plots already existing in `loon`,  `ggplot()` and hence `gg_pipe()` could be avoided entirely:
+```{r loon_only_pipe, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+mtcars %>%
+  rename(transmission = am, weight = wt) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
+  select(weight, lp100km) %>%
+  # and pass the built plot on
+  l_plot(title = "Gas Usage", 
+         showGuides = TRUE, showScales = TRUE,
+         ylabel = "Litres per 100 kilometres", 
+         linkingGroup = "Motor Trend 1974") %>%
+  plot()   # get a static version via grid
+```
+
+```{r loon_only_pipe_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+#include_graphics(file.path(imageDirectory, "gas_usage.png"))
+```
