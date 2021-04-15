@@ -150,6 +150,12 @@ lp["zoomY"] <- 1.2
 # Change the origin
 lp["panX"] <- 7
 lp["panY"] <- 0
+
+# All of the above could be done more simply through direct 
+# interaction on the plot and/or with the inspector
+```
+
+
 ```
 
 Now, the interactive plot `lp` has changed state 
@@ -176,9 +182,20 @@ for (layerID in l_layer_ids(lp)){
   if(l_layer_getLabel(lp, layerID) == "se polygon") {
     l_layer_show(lp, layerID)}
 }
+
+```{r, eval = FALSE}
+# And some fancy layer manipulation
+l_layer_raise(lp, "model")
+for (layerID in l_layer_ids(lp)){ 
+  if(l_layer_getLabel(lp, layerID) == "se polygon") {
+    l_layer_show(lp, layerID)}
+}
 # All of the above could be done more simply 
 # through direct interaction on the plot and 
 # on the inspector
+```
+
+
 ```
 
 
