@@ -1,6 +1,6 @@
 ---
 title: "A grammar of interactive graphics"
-author: "Wayne Oldford and Zehao Xu"
+author: "R. W. Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette:
@@ -13,76 +13,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   
-header-includes:
-- \usepackage{graphicx}
-- \usepackage{epic}
-- \usepackage{color}
-- \usepackage{hyperref}
-- \usepackage{multimedia}
-- \PassOptionsToPackage{pdfmark}{hyperref}\RequirePackage{hyperref}
-- \newcommand{\subspace}[1]{\mathcal{#1}}    
-- \newcommand{\field}[1]{\mathbb{#1}}
-- \newcommand{\Reals}{\field{R}}
-- \newcommand{\Integers}{\field{Z}} 
-- \newcommand{\Naturals}{\field{N}}
-- \newcommand{\Complex}{\field{C}}
-- \newcommand{\Rationals}{\field{Q}}
-- \newcommand{\widebar}[1]{\overline{#1}}
-- \newcommand{\wig}[1]{\tilde{#1}}
-- \newcommand{\bigwig}[1]{\widetilde{#1}}
-- \newcommand{\pop}[1]{\mathcal{#1}}
-- \newcommand{\samp}[1]{\mathcal{#1}}
-- \newcommand{\given}{~\vline~}
-- \newcommand{\indep}{\bot\hspace{-.6em}\bot}
-- \newcommand{\notindep}{\bot\hspace{-.6em}\bot\hspace{-0.75em}/\hspace{.4em}}
-- \newcommand{\depend}{\Join}
-- \newcommand{\notdepend}{\Join\hspace{-0.9 em}/\hspace{.4em}}
-- \newcommand{\imply}{\Longrightarrow}
-- \newcommand{\notimply}{\Longrightarrow \hspace{-1.5em}/ \hspace{0.8em}}
-- \newcommand{\suchthat}{~:~}
-- \newcommand{\st}{~:~} 
-- \newcommand{\follows}{~\neg~}
-- \newcommand{\abs}[1]{\left\lvert{#1}\right\rvert}
-- \newcommand{\code}[1]{\texttt{#1}}
-- \newcommand{\Slang}{\textsf{S}}
-- \newcommand{\R}{\textsf{R}}
-- \newcommand{\RStudio}{\textsf{RStudio}}
-- \newcommand{\RMarkdown}{\textsf{RMarkdown}}
-- \newcommand{\loondata}{\textsf{loon.data}}
-- \newcommand{\Loondata}{\textsf{Loon.data}}
-- \newcommand{\loonggplot}{\textsf{loon.ggplot}}
-- \newcommand{\Loonggplot}{\textsf{Loon.ggplot}}
-- \newcommand{\ggplot2}{\textsf{ggplot2}}
-- \newcommand{\GGplot2}{\textsf{GGplot2}}
-- \newcommand{\loon}{\textsf{loon}}
-- \newcommand{\Loon}{\textsf{Loon}}
-- \newcommand{\bgraphics}{\textsf{graphics}}
-- \newcommand{\bGraphics}{\textsf{Graphics}}
-- \newcommand{\pgrid}{\textsf{grid}}
-- \newcommand{\pGrid}{\textsf{Grid}}
-- \newcommand{\Python}{\textsf{Python}}
-- \newcommand{\Tcl}{\textsf{Tcl}}
-- \newcommand{\pkg}[1]{\textsf{#1}}
-- \newcommand{\ve}[1]{\mathbf{#1}}         
-- \newcommand{\sv}[1]{\boldsymbol{#1}}   
-- \newcommand{\m}[1]{\mathbf{#1}}      
-- \newcommand{\sm}[1]{\boldsymbol{#1}}  
-- \newcommand{\tr}[1]{{#1}^{\mkern-1.5mu\mathsf{T}}}
-- \newcommand{\norm}[1]{||{#1}||}
-- \newcommand{\inverse}[1]{{#1}^{-1}}
-- \newcommand{\mvec}{\operatorname{vec}}
-- \newcommand{\trace}{\operatorname{trace}}
-- \newcommand{\rank}{\operatorname{rank}}
-- \newcommand{\diag}{\operatorname{diag}}
-- \newcommand{\vspan}{\operatorname{span}}
-- \newcommand{\rowsp}{\operatorname{rowsp}}
-- \newcommand{\colsp}{\operatorname{colsp}}
-- \newcommand{\svd}{\operatorname{svd}}
-- \newcommand{\degrees}{$^{\circ}$}
-- \newcommand{\union}{\cup}
-- \newcommand{\intersect}{\cap}
-- \newcommand{\nullset}{\varnothing}
-
 ---
 
 
@@ -103,13 +33,168 @@ set.seed(12314159)
 imageDirectory <- "./l_ggplot"
 dataDirectory <- "./l_ggplot"
 
+library(gridExtra, quietly = TRUE)
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
 library(magrittr, quietly = TRUE)
 library(loon, quietly = TRUE)
+library(loon.ggplot, quietly = TRUE)
 ```
 
-The \ggplot2{} package provides a layered implementation of a *grammar of graphics*.  The package \loonggplot{} extends this to a *grammar of* **interactive** *graphics*.
+Just as `ggplot2` provides a layered implementation of a *grammar of graphics*, `loon.ggplot` provides a layered implementation of a **grammar of interactive graphics**.
+
+With `loon.ggplot`, data analysts can easily switch between the elegant and beautiful static graphics of `ggplot2` and the powerful direct manipulation interactive graphics of `loon`, **using each where it is most natural**.
+
+## `airquality` as a working example
+
+Consider the `airquality` dataset:
+```{r}
+data("airquality")
+summary(airquality)
+```
+It has missing data (in `Ozone` and `Solar.R`) and the variable `Month` can be tidied up and turned into a factor as
+```{r}
+airquality$Month <- factor(month.abb[airquality$Month], levels = month.abb)
+```
+
+With its mix of continuous and categorical variables (and some with missing data) this transformed data will be used to illustrate the interactive grammar of `loon.ggplot`.
+
+## `l_ggplot()`
+
+An interactive grammar of graphics begins by simply replacing `ggplot()`, wherever it appears in the layered grammar, by `l_ggplot()`.  Use the same arguments (e.g., `data`, `mapping`, etc.)  and the same grammar to construct an interactive plot.
+
+Following the `ggplot2` grammar, but with `l_ggplot()` in place of `ggplot()`,  a scatterplot of `Ozone` versus `Wind` is simply constructed:
+```{r, eval = FALSE}
+l_ggplot(airquality, 
+         mapping = aes(x = Wind, y = Ozone)) +
+  ggtitle("Air quality in New York (1973)") +
+  geom_point() +
+  geom_smooth()
+```
+The resulting interactive `loon` plot appears in a new window and a separate window containing the `loon` inspector also appears.  Together, these two windows allow changes to be made to the plot via direct mouse interaction.
+
+Had `ggplot()` been used in place of `l_ggplot()` the corresponding `ggplot` would have been rendered on the "current device" when printed.  The two plots are shown side by side below (the `loon` plot at left is a static version rendered via `grid` graphics so will differ slightly from how it appears on screen; especially in terms of font and point sizes):
+```{r, echo = FALSE, fig.width = 10, out.width = "80%"}
+lgp <- l_ggplot(airquality, 
+                mapping = aes(x = Wind, y = Ozone)) +
+  ggtitle("Air quality in New York (1973)") +
+  geom_point() +
+  geom_smooth()
+lp <- loon.ggplot(lgp)
+grid.arrange(plot(lp, draw = FALSE), lgp, nrow = 1)
+```
+The two plots present the same information in slightly different form with different choices on title placement, white space padding and so on.
+
+The most important difference with respect to the data is that the error bars for the smooth appear as curves in the `loon` plot and as a transparent grey region in the `ggplot`.  The main reason for this default choice is that `tcl` (on which `loon` is based) does not (yet) support alpha transparency. Note, however, that a similar grey region exists as a **hidden layer**  the `loon` plot; this can be **revealed interactively** via the `loon` inspector.
+
+The `loon` plot is designed for direct interaction; the `ggplot` is designed for elegant print layout.  Both can be constructed via the grammar.
+
+### loon-ggplot duality
+
+The grammar of interactive graphics is effected with `l_ggplot()` by recognizing the complementary strengths of the static `ggplot` and of the interactive `loon` plot.  
+Each operates in a separate domain:
+
+- with `ggplot2`, a plot is "changed" by adding to the `+` pipeline and rendering the result into a *new* plot
+- with `loon`, a plot can be changed through direct mouse interaction **or** programmatically via the rich set of functions provided by `loon`
+
+The two are combined in `l_ggplot()` allowing for either approach to be used at any time.
+
+To see this, suppose we again construct a scatterplot using `l_ggplot()` but now without a smooth and assigning the result to a variable `lgp`:
+```{r}
+lgp <- l_ggplot(airquality, mapping = aes(x = Wind, y = Ozone)) +
+  ggtitle("Air quality in New York (1973)") +
+  geom_point() 
+```
+No plot of any kind will yet appear; `lgp` is a data structure of class:
+```{r}
+class(lgp)
+```
+It is **simultaneously** a `ggplot`  and a `loon` plot (`l_ggplot`).  As such it contains the information needed to construct either plot.  
+
+To render the static `ggplot`, the `plot()` function is called on `lgp`:
+```{r}
+plot(lgp)
+```
+This is because when constructed with `l_ggplot()` the  interactive `loon` plot is realized by *printing* `lgp`:
+```{r}
+lgp
+```
+
+Note the printed result is a character vector with class attribute values `"l_plot"` and `"loon"` -- these indicate that a `loon` plot was produced.
+
+In general, the string value will be `".lX.ggplot"`  where `X` is the numerical index (beginning at `0`)  of this `l_ggplot` of all interactive produced so far.  The number `X` appearing in the vignette depends on the number of such interactive plots were produced to this point in constructing the vignette.
+Whatever value `X` takes, it will be printed anew each time the `l_ggplot` is "printed"   **and will appear in the title bar of the interactive window**.
+
+This string can be used to assign the `loon` plot in the interactive window to a variable in `R`, say `lp`, as
+```{r, eval = FALSE}
+lp <- l_getFromPath(".lX.ggplot")   # <<<--- replace X by the appropriate number
+```
+Alternatively, rather than "print" `lgp` to get an interactive plot, it could have been
+created and assigned to an `R` variable `lp` using `loon.ggplot()`
+```{r, eval = TRUE}
+lp <- loon.ggplot(lgp)
+```
+which works even if `lgp` had been created with `ggplot()` instead of `l_ggplot()`.
+
+Once captured on a variable, the `loon` plot `lp` can be queried/changed programmatically (as well as interactively).  For example,
+```{r}
+# Changing glyph aesthetics
+lp["color"] <- "firebrick"
+lp["glyph"] <- "ctriangle"
+lp["size"] <- 10
+
+# Changing the scaling
+lp["zoomX"] <- 1.2
+lp["zoomY"] <- 1.2
+
+# Change the origin
+lp["panX"] <- 7
+lp["panY"] <- 0
+```
+
+Now, the interactive plot `lp` has changed state 
+```{r}
+plot(lp)
+```
+but `lgp` (the original structure produced by `l_ggplot()`) has not.
+```{r}
+plot(lgp)
+```
+
+**This is an important distinction**.  The structure `lgp`, like any `ggplot`, contains the information necessary **to construct** a plot.  
+
+- When it is **printed**, with `print()` or in the console, the instructions produce an **interactive** `loon` plot, and
+- when it is **plotted**, with `plot()`,  the instructions produce a **static** `ggplot`.
+
+
+
+
+```{r, eval = FALSE}
+# And some fancy layer manipulation
+l_layer_raise(lp, "model")
+for (layerID in l_layer_ids(lp)){ 
+  if(l_layer_getLabel(lp, layerID) == "se polygon") {
+    l_layer_show(lp, layerID)}
+}
+# All of the above could be done more simply 
+# through direct interaction on the plot and 
+# on the inspector
+```
+
+
+```{r}
+colors <- lp["color"]
+selected <-  colors == tail(colors, 1)
+lp["glyph"][selected] <- "ctriangle"
+lp["color"][selected] <- "cornsilk"
+lp["size"][selected] <- 10
+lp["selected"] <- selected
+l_scaleto_selected(lp)
+lp["selected"] <- FALSE
+plot(lp)
+loon.ggplot(lp)
+```
+The `lggplot` also appears **only when printed**, but now
 
 
 The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
