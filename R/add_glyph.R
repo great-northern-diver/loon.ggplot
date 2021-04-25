@@ -40,7 +40,7 @@ l_add_glyph.GeomText <- function(widget, ggBuild, activeGeomLayer) {
             "If you do not want the text to be interactive, ",
             "set `activeGeomLayers = 0L`")
     # remove space \r, \n, \t, ...
-    label <- gsub("[\r\n\t\a' ']", "_", label)
+    label <- gsub("[\r\n\t\a' ']", ".", label)
   }
 
   g <- loon::l_glyph_add_text(widget, text = label)
