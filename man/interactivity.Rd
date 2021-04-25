@@ -9,10 +9,13 @@ interactivity(
   linkingKey = NULL,
   linkedStates = NULL,
   sync = NULL,
+  active = NULL,
   activeGeomLayers = NULL,
   selected = NULL,
   selectBy = NULL,
   selectionLogic = NULL,
+  scaleTo = NULL,
+  scaleToFun = NULL,
   itemLabel = NULL,
   showItemLabels = NULL,
   ...
@@ -32,6 +35,12 @@ If the \code{sync} is "pull", the linked states (aesthetics attributes, e.g. "co
 of the new plot will be pulled from the linked plots;
 if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.}
 
+\item{active}{a logical determining whether points appear or
+not (default is \code{TRUE} for all points). If a logical vector is
+given of length equal to the number of points,
+then it identifies which points appear (\code{TRUE}) and
+which do not (\code{FALSE}).}
+
 \item{activeGeomLayers}{determine which geom layer is interactive. Only \code{geom_point()}
 and \code{geom_histogram()} can be set as active geom layer(s) so far.
 (Notice, more than one \code{geom_point()} layers can be set as active layers,
@@ -44,6 +53,10 @@ as the graphics are constructed. Default is \code{FALSE}}
 
 \item{selectionLogic}{Selection logic. One of "select" (default), "deselect" and "invert". See details.}
 
+\item{scaleTo}{numerical; which layer to scale to}
+
+\item{scaleToFun}{scale to function. See \code{\link{scaleTo}}.}
+
 \item{itemLabel}{The customized querying information.}
 
 \item{showItemLabels}{A logical value. Show item labels or not. Default is \code{FALSE}}
@@ -54,15 +67,17 @@ as the graphics are constructed. Default is \code{FALSE}}
 a \code{ggproto} object
 }
 \description{
-Set interactive components (e.g. \code{linking}, \code{selecting}, \code{itemLabel}, etc)
+Set interactive components (e.g. \code{linking}, \code{selection}, etc)
 }
 \details{
-In interactive graphics, there are several fundamental infrastructures, such as querying, linking and selecting.
+In interactive graphics, there are several fundamental infrastructures, such as querying, linking and selection.
 Component \code{interactivity} is used to set these features.
 \tabular{lll}{ \strong{Interactivity} \tab \strong{Description} \tab \strong{Subfunction}\cr
   Linking \tab Linking several plots to discover the pattern of interest \tab \code{\link{linking}}\cr
-  Selecting \tab Highlight the subset of interest \tab \code{\link{selecting}}\cr
-  ItemLabel \tab Querying in interactive graphics \tab \code{\link{itemLabel}}\cr}
+  Selection \tab Highlight the subset of interest \tab \code{\link{selection}}\cr
+  Active \tab Determine which points appear \tab \code{\link{active}}\cr
+  Hover \tab Query in interactive graphics \tab \code{\link{hover}}\cr
+  scaleTo \tab Region Modification \tab \code{\link{scaleTo}}\cr}
 }
 \examples{
 if(interactive()) {

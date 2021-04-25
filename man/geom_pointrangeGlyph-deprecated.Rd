@@ -3,7 +3,7 @@
 \name{geom_pointrangeGlyph-deprecated}
 \alias{geom_pointrangeGlyph-deprecated}
 \alias{geom_pointrangeGlyph}
-\title{pointrange glyph (deprecated)}
+\title{geom_pointrangeGlyph (deprecated)}
 \usage{
 geom_pointrangeGlyph(
   mapping = NULL,
@@ -75,11 +75,6 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-pointrange glyph (deprecated)
+use \code{\link{geom_pointrange}}, rather than \code{geom_pointrangeGlyph}.
 }
-\section{\code{geom_pointrangeGlyph}}{
-
-For \code{geom_pointrangeGlyph}, use \code{\link{geom_pointrange}}.
-}
-
 \keyword{internal}

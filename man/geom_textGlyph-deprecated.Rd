@@ -3,7 +3,7 @@
 \name{geom_textGlyph-deprecated}
 \alias{geom_textGlyph-deprecated}
 \alias{geom_textGlyph}
-\title{text glyph (deprecated)}
+\title{geom_textGlyph (deprecated)}
 \usage{
 geom_textGlyph(
   mapping = NULL,
@@ -67,11 +67,6 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-text glyph (deprecated)
+use \code{\link{geom_text}}, rather than \code{geom_textGlyph}.
 }
-\section{\code{geom_textGlyph}}{
-
-For \code{geom_textGlyph}, use \code{\link{geom_text}}.
-}
-
 \keyword{internal}

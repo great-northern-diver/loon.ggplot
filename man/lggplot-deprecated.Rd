@@ -3,7 +3,7 @@
 \name{lggplot-deprecated}
 \alias{lggplot-deprecated}
 \alias{lggplot}
-\title{Automatically create a loon widget (deprecated)}
+\title{lggplot (deprecated)}
 \usage{
 lggplot(data = NULL, mapping = aes(), ..., environment = parent.frame())
 }
@@ -19,11 +19,6 @@ If not specified, must be supplied in each layer added to the plot.}
 \item{environment}{DEPRECATED. Used prior to tidy evaluation.}
 }
 \description{
-Automatically create a loon widget (deprecated)
+use \code{\link{l_ggplot}}, rather than \code{lggplot}.
 }
-\section{\code{lggplot}}{
-
-For \code{lggplot}, use \code{\link{l_ggplot}}.
-}
-
 \keyword{internal}
