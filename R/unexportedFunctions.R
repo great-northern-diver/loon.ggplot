@@ -11,13 +11,11 @@ get_model_display_order <- utils::getFromNamespace("get_model_display_order", "l
 char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
 cartesian_model_widget_states <- utils::getFromNamespace("cartesian_model_widget_states", "loon")
 tcl_img_2_r_raster <- utils::getFromNamespace("tcl_img_2_r_raster", "loon")
-l_toplevel <- utils::getFromNamespace("l_toplevel", "loon")
-l_nDimStateNames <- utils::getFromNamespace("l_nDimStateNames", "loon")
 
-l_allNDimStateNames <- function(plots) {
+l_allNDimStateNames <- function(plots = c("l_plot", "l_plot3D", "l_serialaxes", "l_hist")) {
   states <- lapply(plots,
                    function(plot) {
-                     l_nDimStateNames(plot)
+                     loon::l_nDimStateNames(plot)
                    })
   unique(unlist(states))
 }
