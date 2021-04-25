@@ -7,6 +7,7 @@ l_serialaxesplot <- function(ggBuild,
                              parent,
                              showGuides,
                              linkingKey,
+                             nDimStates,
                              showLabels,
                              loonTitle) {
 
@@ -27,28 +28,37 @@ l_serialaxesplot <- function(ggBuild,
   showArea <- if(inherits(layer$geom, "GeomRibbon")) TRUE else FALSE
 
   activeLayerData <- ggBuild$data[[activeGeomLayers]]
-  aesData <- activeLayerData[activeLayerData$PANEL == panelIndex, ]
+  id <- activeLayerData$PANEL == panelIndex
+  aesData <- activeLayerData[id, ]
 
   color <- aesData$colour[which(!duplicated(aesData$group))]
   size <- aesData$size[which(!duplicated(aesData$group))]
 
-  args <- list(
-    data = dataFrame[index, ],
-    sequence = axes.sequence,
-    scaling = scaling,
-    axesLayout = axesLayout ,
-    showArea = showArea,
-    showGuides = showGuides,
-    linkingKey = linkingKey[index],
-    showLabels = showLabels,
-    linewidth = size,
-    color = color,
-    parent  = parent,
-    title = loonTitle
-  )
+
+  dat <- modify_n_dim_data(nDimStates,
+                           data.frame(
+                             linkingKey = linkingKey[index],
+                             linewidth = size,
+                             color = color
+                           ), id[which(!duplicated(aesData$group))])
+
+  args <- remove_null(
+    c(
+      list(
+        data = dataFrame[index, ],
+        sequence = axes.sequence,
+        scaling = scaling,
+        axesLayout = axesLayout ,
+        showArea = showArea,
+        showGuides = showGuides,
+        showLabels = showLabels,
+        parent  = parent,
+        title = loonTitle
+      ),
+      dat
+    ), as_list = FALSE)
 
   args$andrews <- is.andrews(ggObj, activeGeomLayers)
-
 
   do.call(loon::l_serialaxes, args)
 }
