@@ -81,7 +81,7 @@ the compound loon plot." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -148,20 +148,26 @@ the compound loon plot." />
 the compound <code>loon</code> plot.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
+<span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_pairs</span>
-<span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span></pre>
+<span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>target</th>
-      <td><p>the (compound) loon  plot to be laid out.</p></td>
+      <td><p>the (compound) loon plot</p></td>
+    </tr>
+    <tr>
+      <th>asAes</th>
+      <td><p>logical; set aesthetics attributes, i.e. `color`, `fill` as
+variables (default <code>TRUE</code>) or general visual properties (<code>FALSE</code>).
+See details</p></td>
     </tr>
     </table>
 

@@ -1,30 +1,27 @@
 #'@export
-names.l_ggplot <- function(x) {attr(x, "names")}
+names.l_facet_ggplot <- function(x) {attr(x, "names")}
 
 #' @export
-l_cget.l_ggplot <- function(target, state) {
+l_cget.l_facet_ggplot <- function(target, state) {
 
-  widgets <- target$plots
-  plotNames <- names(widgets)
+  plotNames <- names(target)
   plots <- lapply(plotNames,
                   function(plotName) {
-                    widgets[[plotName]]
+                    target[[plotName]]
                   })
-  setNames(lapply(plots, loon::l_cget, state),
-           plotNames)
+  setNames(lapply(plots, loon::l_cget, state), plotNames)
 }
 
 
 #' @export
-l_configure.l_ggplot <- function(target, ...) {
+l_configure.l_facet_ggplot <- function(target, ...) {
 
   args <- list(...)
 
   if(is.null(args$sync)) {
-
     states <- names(args)
     sync <- "pull"
-    message("default sync is 'pull'")
+    # message("default sync is 'pull'")
   } else {
     # check sync
     sync <- args$sync
@@ -33,12 +30,13 @@ l_configure.l_ggplot <- function(target, ...) {
     states <- states[-which(states == "sync")]
   }
 
-  plots <- target$plots
+  plots <- unclass(target)
 
   if (is.null(states) || any("" %in% states))
-    stop("configuration needs key value pairs", call. = FALSE)
+    stop("configuration needs key value pairs",
+         call. = FALSE)
 
-  for (state in states) {
+  for(state in states) {
 
     arg <- args[[state]]
 
@@ -57,21 +55,14 @@ l_configure.l_ggplot <- function(target, ...) {
              } else {
 
                if(is.list(arg)) {
-
-                 if(length(arg) == length(plots)) {
-
+                 if(length(arg) == length(plots))
                    plot[state] <- arg[[i]]
-
-                 } else
+                 else
                    stop("the length of argument ",
                         state,
                         " should be equal to the length of facets.",
                         call. = FALSE)
-               } else {
-
-                 plot[state] <- arg
-
-               }
+               } else plot[state] <- arg
              }
            }
     )
@@ -82,20 +73,20 @@ l_configure.l_ggplot <- function(target, ...) {
 
 # aliased in l_cget
 #' @export
-`[.l_ggplot` <- function(target, state) {
+`[.l_facet_ggplot` <- function(target, state) {
   loon::l_cget(target, state)
 }
 
 # aliased in l_configure
 #' @export
-`[<-.l_ggplot` <- function(target, state, value) {
+`[<-.l_facet_ggplot` <- function(target, state, value) {
   args <- list(target, value)
   names(args) <- c("target", state)
   do.call("l_configure", args)
 }
 
 #' @export
-`[.lggplot` <- function(target, state) {
+`[.l_ggplot` <- function(target, state) {
   message_wrap(
     deparse(substitute(target)),
     " is a not a 'loon' widget. The loon object can be created from its path name,
@@ -105,7 +96,7 @@ l_configure.l_ggplot <- function(target, ...) {
 }
 
 #' @export
-`[<-.lggplot` <- function(target, state, value) {
+`[<-.l_ggplot` <- function(target, state, value) {
   message_wrap(
     deparse(substitute(target)),
     " is a not a 'loon' widget. The loon object can be created from its path name,

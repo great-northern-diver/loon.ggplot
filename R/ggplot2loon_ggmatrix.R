@@ -1,7 +1,8 @@
 #' @export
-ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
-                                 ..., parent = NULL, pack = TRUE,
-                                 tkLabels = NULL, exteriorLabelProportion = 1/5,
+ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
+                                 scaleTo = NULL, scaleToFun = NULL,
+                                 ggGuides = FALSE, parent = NULL, pack = TRUE,
+                                 exteriorLabelProportion = 1/5,
                                  canvasHeight = 700, canvasWidth = 850) {
   # default args
   args <- c(
@@ -9,7 +10,6 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
          parent = parent,
          ggGuides = ggGuides,
          pack = pack,
-         tkLabels = tkLabels,
          exteriorLabelProportion = exteriorLabelProportion,
          canvasHeight = canvasHeight,
          canvasWidth = canvasWidth),
@@ -65,14 +65,12 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
                      function(plot){
                        build <- ggplot_build(plot)
                        build$layout
-                     }
-  )
-
+                     })
   # span
   span <- round(1/exteriorLabelProportion)
   rowspan <- span
   columnspan <- span
-  lapply(1:nplots,
+  lapply(seq(nplots),
          function(i){
            plot <- ggplots[[i]]
            layout <- ggLayout[[i]]$layout
@@ -99,9 +97,10 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
       } else {
         # one facet
         args$parent <- parent
-        args$tkLabels <- FALSE
         args$showLabels <- FALSE
         args$pack <- FALSE
+        args$scaleTo <- scaleTo
+        args$scaleToFun <- scaleToFun
 
         lp <- do.call(
           ggplot2loon.ggplot,
@@ -122,7 +121,7 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
                         column= col.start,
                         rowspan = rowspan,
                         columnspan = columnspan,
-                        sticky="nesw")
+                        sticky = "nesw")
           # tk column row configure
           for (ii in col.start:(col.start + columnspan - 1)) {
             tcltk::tkgrid.columnconfigure(parent, ii, weight=1)
@@ -158,7 +157,9 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
             facet_grid_tkpack
           } else if(FacetWrap) {
             facet_wrap_tkpack
-          } else stop("only facet_wrap() and facet_grid() are allowed to separate facets", call. = FALSE)
+          } else
+            stop("Not implenmented yet. So far, only `facet_wrap()` and `facet_grid()` are allowed to split panels",
+                 call. = FALSE)
 
           do.call(
             fun,
@@ -207,11 +208,8 @@ ggplot2loon.ggmatrix <- function(ggObj, activeGeomLayers = integer(0), ggGuides 
 
   names(loonplots) <- names
   structure(
-    list(
-      plots = loonplots,
-      ggObj = ggObj
-    ),
-    class = c("l_ggmatrix", "l_ggplot", "l_compound", "loon")
+    loonplots,
+    class = c("l_ggmatrix", "l_compound", "loon")
   )
 }
 
@@ -235,7 +233,7 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
   if(!is.null(title)) {
     tit <- as.character(
       tcltk::tcl('label',
-                 as.character(loon::l_subwin(parent,'label')),
+                 as.character(loon::l_subwin(parent,'title')),
                  text= title,
                  bg = set_tkLabel()$titleBackground,
                  fg = set_tkLabel()$titleForeground,
@@ -254,7 +252,8 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
     for(i in 1:length(xAxisLabels)){
       xAxisLabel <- as.character(
         tcltk::tcl('label',
-                   as.character(loon::l_subwin(parent,'label')),
+                   as.character(loon::l_subwin(parent,
+                                               paste0('xAxisLabel-', i))),
                    text= xAxisLabels[i],
                    bg = set_tkLabel()$xlabelBackground,
                    fg = set_tkLabel()$xlabelForeground,
@@ -275,8 +274,10 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
     for(i in 1:length(yAxisLabels)){
       yAxisLabel <- as.character(
         tcltk::tcl('label',
-                   as.character(loon::l_subwin(parent, 'label')),
-                   text= paste(paste0(" ", strsplit(yAxisLabels[i], "")[[1]], " "), collapse = "\n"),
+                   as.character(loon::l_subwin(parent,
+                                               paste0('yAxisLabel-', i))),
+                   text= paste(paste0(" ", strsplit(yAxisLabels[i], "")[[1L]], " "),
+                               collapse = "\n"),
                    bg = set_tkLabel()$ylabelBackground,
                    fg = set_tkLabel()$ylabelForeground,
                    borderwidth = set_tkLabel()$ylabelBorderwidth,
@@ -295,7 +296,7 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
   if(!is.null(xlab)){
     xlabel <- as.character(
       tcltk::tcl('label',
-                 as.character(loon::l_subwin(parent,'label')),
+                 as.character(loon::l_subwin(parent,'xlabel')),
                  text= xlab,
                  bg = set_tkLabel()$xlabelBackground,
                  fg = set_tkLabel()$xlabelForeground,
@@ -313,7 +314,7 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
   if(!is.null(ylab)){
     ylabel <- as.character(
       tcltk::tcl('label',
-                 as.character(loon::l_subwin(parent,'label')),
+                 as.character(loon::l_subwin(parent,'ylabel')),
                  text= paste(paste0(" ", strsplit(ylab, "")[[1]], " "), collapse = "\n"),
                  bg = set_tkLabel()$ylabelBackground,
                  fg = set_tkLabel()$ylabelForeground,

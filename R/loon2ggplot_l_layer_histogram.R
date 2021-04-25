@@ -1,42 +1,117 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_layer_histogram <- function(target, ...) {
+loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
 
-  data <- transform_hist_x(widget)
+  if(asAes) {
 
-  xmin <- data$x
-  ymin <- data$y
-  xmax <- data$x + data$width
-  ymax <- data$y + data$height
-  fill <- data$fill
+    data <- histogramAsAesTRUE(widget)
 
-  uni_fill <- unique(fill)
+    fill <- data$fill
+    colour <- data$colour
+    x <- data$x
+    values <- data$values
 
-  ggObj <- ggObj +
-    ggplot2::geom_rect(
-      data = data.frame(xmin = xmin,
-                        ymin = ymin,
-                        xmax = xmax,
-                        ymax = ymax,
-                        fill = fill),
-      mapping = ggplot2::aes(xmin = xmin,
-                             ymin = ymin,
-                             xmax = xmax,
-                             ymax = ymax,
-                             fill = fill),
-      colour = data$colour,
-      inherit.aes = FALSE
-    ) +
-    ggplot2::scale_fill_manual(values = stats::setNames(uni_fill, nm = uni_fill),
-                               labels = stats::setNames(selection_color_labels(uni_fill), nm = uni_fill))
+    ggObj <- ggObj +
+      ggplot2::geom_histogram(
+        data = data.frame(x = x, fill = fill),
+        mapping = if(widget['yshows'] == "frequency") {
+          ggplot2::aes(x = x, fill = fill)
+        } else {
+          ggplot2::aes(x = x, fill = fill,
+                       y = ..density..) # the layout would be different from the loon one
+        },
+        colour = colour,
+        boundary = widget['origin'],
+        binwidth = widget['binwidth'],
+        inherit.aes = FALSE
+      ) + ggplot2::scale_fill_manual(
+        values = values,
+        breaks = values,
+        labels = selection_color_labels(values))
+  } else {
+
+    data <- histogramAsAesFALSE(widget)
+
+    xmin <- data$x
+    ymin <- data$y
+    xmax <- data$x + data$width
+    ymax <- data$y + data$height
+    fill <- data$fill
+    colour <- data$colour
+
+    ggObj <- ggObj +
+      ggplot2::geom_rect(
+        data = data.frame(xmin = xmin,
+                          ymin = ymin,
+                          xmax = xmax,
+                          ymax = ymax),
+        mapping = ggplot2::aes(xmin = xmin,
+                               ymin = ymin,
+                               xmax = xmax,
+                               ymax = ymax),
+        fill = fill,
+        colour = colour,
+        inherit.aes = FALSE
+      )
+  }
   return(ggObj)
 }
 
+histogramAsAesTRUE <- function(widget) {
 
-transform_hist_x <- function(widget) {
+  colorOutline <- if(widget['showOutlines']) as_hex6color(widget["colorOutline"]) else NA
+
+  active <- widget['active']
+
+  activeSelected <- widget['selected'][active]
+  activeColor <- if(widget['showStackedColors']) {
+    as_hex6color(widget['color'])[active]
+  } else {rep(as_hex6color(widget['colorFill']), widget['n'])[active]}
+
+  selectcolor <- loon::l_getOption("select-color")
+  activeColor[activeSelected] <- selectcolor
+  activeX <- widget['x'][active]
+
+  uniqueCol <- rev(levels(factor(activeColor)))
+  colorStackingOrder <- widget['colorStackingOrder']
+
+  if(any(activeSelected)) {
+
+    if(length(colorStackingOrder) == 1 && colorStackingOrder == "selected") {
+      # selected color should be stacked at the bottom
+      uniqueCol <- uniqueCol[uniqueCol != selectcolor]
+      values <- c(uniqueCol, selectcolor)
+    } else {
+      colorStackingOrder[colorStackingOrder == "selected"] <- selectcolor
+      values <- rev(as_hex6color(colorStackingOrder))
+    }
+
+  } else {
+
+    if(length(colorStackingOrder) == 1 && colorStackingOrder == "selected") {
+      values <- uniqueCol
+    } else {
+      colorStackingOrder <- colorStackingOrder[colorStackingOrder != "selected"]
+      values <- rev(as_hex6color(colorStackingOrder))
+    }
+  }
+
+  activeColor <- factor(activeColor, levels = values)
+
+  return(
+    list(
+      x = activeX,
+      fill = activeColor,
+      colour = colorOutline,
+      values = values
+    )
+  )
+}
+
+histogramAsAesFALSE <- function(widget) {
 
   yshows <- widget['yshows']
   bins <- l_getBinData(widget)

@@ -3,7 +3,8 @@
 \name{geom_imageGlyph-deprecated}
 \alias{geom_imageGlyph-deprecated}
 \alias{geom_imageGlyph}
-\title{image glyph (deprecated)}
+\alias{geom_polygonGlyph}
+\title{geom_imageGlyph (deprecated)}
 \usage{
 geom_imageGlyph(
   mapping = NULL,
@@ -14,6 +15,21 @@ geom_imageGlyph(
   images,
   width = 4,
   height = 3,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE
+)
+
+geom_polygonGlyph(
+  mapping = NULL,
+  data = NULL,
+  stat = "identity",
+  position = "identity",
+  ...,
+  polygon_x,
+  polygon_y,
+  showArea = TRUE,
+  linewidth = 1,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE
@@ -70,13 +86,20 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+
+\item{polygon_x}{nested list of x-coordinates of polygons, one list element for each scatterplot point.
+If not provided, \code{geom_point()} will be executed.}
+
+\item{polygon_y}{nested list of y-coordinates of polygons, one list element for each scatterplot point.
+If not provided, \code{geom_point()} will be executed.}
+
+\item{showArea}{show area; deprecated now, please set `fill` or `colour` to control the shown area.}
+
+\item{linewidth}{line width of the "glyph" object}
 }
 \description{
-image glyph (deprecated)
-}
-\section{\code{geom_imageGlyph}}{
+use \code{\link{geom_image_glyph}}, rather than \code{geom_imageGlyph}.
 
-For \code{geom_imageGlyph}, use \code{\link{geom_image_glyph}}.
+use \code{\link{geom_polygon_glyph}}, rather than \code{geom_polygonGlyph}.
 }
-
 \keyword{internal}

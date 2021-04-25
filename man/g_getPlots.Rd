@@ -6,14 +6,18 @@
 \alias{g_getPlots.l_pairs}
 \title{get \code{ggplot}s}
 \usage{
-g_getPlots(target)
+g_getPlots(target, asAes = TRUE)
 
-\method{g_getPlots}{default}(target)
+\method{g_getPlots}{default}(target, asAes = TRUE)
 
-\method{g_getPlots}{l_pairs}(target)
+\method{g_getPlots}{l_pairs}(target, asAes = TRUE)
 }
 \arguments{
-\item{target}{the (compound) loon  plot to be laid out.}
+\item{target}{the (compound) loon plot}
+
+\item{asAes}{logical; set aesthetics attributes, i.e. `color`, `fill` as
+variables (default \code{TRUE}) or general visual properties (\code{FALSE}).
+See details}
 }
 \value{
 a list of \code{ggplot}s.

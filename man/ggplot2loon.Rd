@@ -6,38 +6,39 @@
 \usage{
 ggplot2loon(
   ggObj,
-  activeGeomLayers = integer(0),
-  ggGuides = FALSE,
   ...,
+  activeGeomLayers = integer(0),
+  scaleTo = NULL,
+  scaleToFun = NULL,
+  ggGuides = FALSE,
   parent = NULL,
   pack = TRUE,
-  tkLabels = NULL,
   exteriorLabelProportion = 1/5,
   canvasHeight = 700,
-  canvasWidth = 850
+  canvasWidth = 850,
+  tkLabels = NULL
 )
 }
 \arguments{
 \item{ggObj}{a \code{ggplot} or \code{ggmatrix} object}
+
+\item{...}{named arguments to modify loon plot states}
 
 \item{activeGeomLayers}{to determine which geom layer is active. Only \code{geom_point()}
  and \code{geom_histogram()} can be set as active geom layer(s) so far.
 (Notice, more than one \code{geom_point()} layers can be set as active layers,
  but only one \code{geom_histogram()} can be set as an active geom layer)}
 
-\item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
+\item{scaleTo}{numerical; which layer to scale to}
 
-\item{...}{named arguments to modify loon plot states}
+\item{scaleToFun}{scale to function. See \code{\link{scaleTo}}.}
+
+\item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
 
 \item{parent}{parent widget path (Tk toplevel)}
 
 \item{pack}{logical (default \code{TRUE}) to pack widgets.
 If \code{FALSE}, widgets will be produced but won't be packed and so will not appear in the display.}
-
-\item{tkLabels}{logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped with
-exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}.
-If \code{NULL} (default), then exterior labels appear only for multiple facets.
-If \code{TRUE} exterior labels appear regardless; if \code{FALSE} no exterior labels appear.}
 
 \item{exteriorLabelProportion}{space assigned to the vertical height/horizontal width of each exterior label
 expressed as a proportion of a single plot's height/width.  Default is 0.2.
@@ -47,6 +48,9 @@ This is translated to a row/column span = 1 / exteriorLabelProportion for the pl
 \item{canvasHeight}{the height of canvas}
 
 \item{canvasWidth}{the width of canvas}
+
+\item{tkLabels}{Deprecated: logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped by
+exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}}
 }
 \value{
 a \code{loon} single or compound widget
@@ -60,11 +64,9 @@ if(interactive()) {
   p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
   g <- ggplot2loon(p)
 
-  # tkLabels
   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
      colour = factor(gear))) + facet_wrap(~am)
   g1 <- ggplot2loon(p)
-  g2 <- ggplot2loon(p, tkLabels = FALSE)
 }
 
 \donttest{

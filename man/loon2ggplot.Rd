@@ -16,37 +16,41 @@
 \alias{loon2ggplot.l_pairs}
 \alias{loon2ggplot.l_serialaxes}
 \alias{loon2ggplot.l_ts}
-\title{\code{loon} to \code{ggplot}}
+\title{Turn a \code{loon} widget to a \code{ggplot} object}
 \usage{
-loon2ggplot(target, ...)
+loon2ggplot(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{default}(target, ...)
+\method{loon2ggplot}{default}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_plot}(target, ...)
+\method{loon2ggplot}{l_plot}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_hist}(target, ...)
+\method{loon2ggplot}{l_hist}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_plot3D}(target, ...)
+\method{loon2ggplot}{l_plot3D}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_compound}(target, ...)
+\method{loon2ggplot}{l_compound}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_layer_graph}(target, ...)
+\method{loon2ggplot}{l_layer_graph}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_layer_histogram}(target, ...)
+\method{loon2ggplot}{l_layer_histogram}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_layer_scatterplot}(target, ...)
+\method{loon2ggplot}{l_layer_scatterplot}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_pairs}(target, ...)
+\method{loon2ggplot}{l_pairs}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_serialaxes}(target, ...)
+\method{loon2ggplot}{l_serialaxes}(target, asAes = TRUE, ...)
 
-\method{loon2ggplot}{l_ts}(target, ...)
+\method{loon2ggplot}{l_ts}(target, asAes = TRUE, ...)
 }
 \arguments{
-\item{target}{a\code{loon} or a vector that specifies the
+\item{target}{a \code{loon} or a vector that specifies the
 widget, layer, glyph, navigator or context completely.
 The widget is specified by the widget path name (e.g. '.l0.plot'),
 the remaining objects by their ids.}
+
+\item{asAes}{logical; set aesthetics attributes, i.e. `color`, `fill` as
+variables (default \code{TRUE}) or general visual properties (\code{FALSE}).
+See details}
 
 \item{...}{arguments used inside \code{loon2ggplot()}, not used by this method}
 }
@@ -56,14 +60,49 @@ a \code{ggplot} object
 \description{
 Create a \code{ggplot} object from a \code{loon} widget
 }
+\details{
+in \code{ggplot}, generally speaking, there are two ways to set the
+aesthetics attributes, either take it as variables
+(set in function \code{aes()}) or visual properties. The main benefits to
+consider it as variables are that 1. legend could be shown; 2. convenient for
+further analysis. See examples.
+}
 \examples{
 if(interactive()) {
-  l <- l_plot(iris, color = iris$Species)
-  p <- loon2ggplot(l)
-  p # a ggplot object
-  str(p)
-  # add themes
-  p + geom_smooth() + theme_linedraw()
+lp <- l_plot(iris,
+             color = iris$Species,
+             glyph = "circle")
+gp <- loon2ggplot(lp)
+gp # a ggplot object
+
+# add smooth layer, grouped by color
+gp +
+  geom_smooth(aes(color = color)) +
+  # give meaningful legend label names
+  scale_color_manual(
+    # make sure the order is correct
+    values = unique(hex12tohex6(lp['color'])),
+    labels = c("setosa", "versicolor", "virginica")
+  )
+
+# histogram
+lh <- l_hist(mtcars$mpg,
+             color = factor(mtcars$gear))
+
+gh0 <- loon2ggplot(lh)
+# facet by `fill`
+gh0 + facet_wrap(~fill)
+
+# set `asAes = FALSE`
+gh1 <- loon2ggplot(lh, asAes = FALSE)
+# Expect the legend, they both are identical
+gh1
+
+\dontrun{
+# ERROR
+# The bins are constructed by `ggplot2::geom_rect()`
+# Very limited "fancy" operations can be made
+gh1 + facet_wrap(~fill)}
 }
 
 }

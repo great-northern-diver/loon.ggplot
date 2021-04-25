@@ -2,6 +2,8 @@ context("test interactive components")
 library(dplyr)
 library(magrittr)
 
+pdf(NULL)
+
 test_that("test linking", {
   p0 <- l_plot(mtcars, linkingGroup = "mtcars")
   p1 <- l_ggplot(mtcars, aes(wt, mpg, shape = factor(am))) +
@@ -33,7 +35,7 @@ test_that("test linking", {
   # multiple facets
   p4 <- p3 + facet_wrap(~cyl)
   q4 <- loon.ggplot(p4)
-  expect_equal(q4$plots$x1y1['linkingKey'],
+  expect_equal(q4$x1y1['linkingKey'],
                q3['linkingKey'][mtcars$cyl == 4])
 
   # expect warning
@@ -47,7 +49,7 @@ test_that("test linking", {
                as.character(rev(seq(nrow(mtcars)))))
 })
 
-test_that("test selecting", {
+test_that("test selection", {
 
   fourGear <- rep(FALSE, nrow(mtcars))
   fourGear[mtcars$gear == 4] <- TRUE
@@ -56,23 +58,23 @@ test_that("test selecting", {
     geom_point(color = "red") +
     scale_shape_manual(values = c("0" = 19, "1" = 2)) +
     coord_polar() +
-    selecting(selected = fourGear, selectionLogic = "invert") +
+    selection(selected = fourGear, selectionLogic = "invert") +
     ggtitle("mtcars") +
     theme ( plot.title = element_text ( hjust = 0.5)) +
     facet_wrap(~cyl)
 
 
   q1 <- loon.ggplot(p1)
-  expect_equal(q1$plots[[1]]['selected'],
+  expect_equal(q1[[1]]['selected'],
                fourGear[mtcars$cyl == 4])
 
-  expect_equal(q1$plots[[1]]['selectionLogic'],
+  expect_equal(q1[[1]]['selectionLogic'],
                "invert")
 
   expect_message(p2 <- l_ggplot() +
                    geom_point(data = mtcars,
                               mapping = aes(x = cyl, y = hp)) +
-                   selecting(selected = TRUE) +
+                   selection(selected = TRUE) +
                    interactivity(selected = FALSE, selectionLogic = "deselect"))
   q2 <- loon.ggplot(p2)
   expect_equal(all(q2['selected']),
@@ -95,3 +97,40 @@ test_that("test itemLabel", {
   expect_true(q1["showItemLabels"])
 })
 
+test_that("test active", {
+
+  p1 <- l_ggplot(data = data.frame(x = 1:26,
+                                   y = 1:26),
+                 aes(x, y)) +
+    geom_point() +
+    active(active = c(rep(T, 13), rep(F, 13)))
+  q1 <- loon.ggplot(p1)
+  expect_equal(q1["active"],
+               c(rep(T, 13), rep(F, 13)))
+})
+
+test_that("test scaleTo", {
+
+  p <- l_ggplot() +
+    geom_point(data = data.frame(x = 10:26,
+                                 y = 10:26),
+               mapping = aes(x, y)) +
+    geom_rect(data = data.frame(xmin = 1,
+                                xmax = 5,
+                                ymin = 1,
+                                ymax = 5),
+              mapping = aes(xmin = xmin,
+                            xmax = xmax,
+                            ymin = ymin,
+                            ymax = ymax),
+              fill = "red")
+  p1 <- p + scaleTo(scaleTo = 2)
+  q1 <- loon.ggplot(p1)
+  expect_true(q1["panX"] + q1["deltaX"]/q1["zoomX"] <= 6)
+  expect_true(q1["panX"] + q1["deltaX"]/q1["zoomX"] >= 5)
+
+  p2 <- p + scaleTo(scaleTo = 1)
+  q2 <- loon.ggplot(p2)
+  expect_true(q2["panX"] > 7)
+  expect_true(q2["panX"] + q2["deltaX"]/q2["zoomX"] > 26)
+})

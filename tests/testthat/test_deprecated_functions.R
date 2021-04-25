@@ -1,6 +1,7 @@
 context("test deprecated functions")
 library(ggmulti)
 library(testthat)
+pdf(NULL)
 
 test_that("deprecated functions", {
   expect_warning(

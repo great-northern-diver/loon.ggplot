@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>loon to ggplot — loon2ggplot • loon.ggplot</title>
+<title>Turn a loon widget to a ggplot object — loon2ggplot • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="loon to ggplot — loon2ggplot" />
+<meta property="og:title" content="Turn a loon widget to a ggplot object — loon2ggplot" />
 <meta property="og:description" content="Create a ggplot object from a loon widget" />
 <meta property="og:image" content="/logo.png" />
 
@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>loon</code> to <code>ggplot</code></h1>
+    <h1>Turn a <code>loon</code> widget to a <code>ggplot</code> object</h1>
     <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot.R'><code>R/loon2ggplot.R</code></a>, <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot_l_compound.R'><code>R/loon2ggplot_l_compound.R</code></a>, <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon2ggplot_l_layer_graph.R'><code>R/loon2ggplot_l_layer_graph.R</code></a>, and 5 more</small>
     <div class="hidden name"><code>loon2ggplot.Rd</code></div>
     </div>
@@ -146,50 +146,56 @@
     <p>Create a <code>ggplot</code> object from a <code>loon</code> widget</p>
     </div>
 
-    <pre class="usage"><span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_plot</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_hist</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_plot3D</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_compound</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_layer_graph</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_layer_histogram</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_layer_scatterplot</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_pairs</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_serialaxes</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_ts</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>target</th>
-      <td><p>a<code>loon</code> or a vector that specifies the
+      <td><p>a <code>loon</code> or a vector that specifies the
 widget, layer, glyph, navigator or context completely.
 The widget is specified by the widget path name (e.g. '.l0.plot'),
 the remaining objects by their ids.</p></td>
+    </tr>
+    <tr>
+      <th>asAes</th>
+      <td><p>logical; set aesthetics attributes, i.e. `color`, `fill` as
+variables (default <code>TRUE</code>) or general visual properties (<code>FALSE</code>).
+See details</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -200,15 +206,50 @@ the remaining objects by their ids.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <code>ggplot</code> object</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>in <code>ggplot</code>, generally speaking, there are two ways to set the
+aesthetics attributes, either take it as variables
+(set in function <code>aes()</code>) or visual properties. The main benefits to
+consider it as variables are that 1. legend could be shown; 2. convenient for
+further analysis. See examples.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'>l_plot</span><span class='op'>(</span><span class='va'>iris</span>, color <span class='op'>=</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
-  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>l</span><span class='op'>)</span>
-  <span class='va'>p</span> <span class='co'># a ggplot object</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
-  <span class='co'># add themes</span>
-  <span class='va'>p</span> <span class='op'>+</span> <span class='fu'>geom_smooth</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>theme_linedraw</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>lp</span> <span class='op'>&lt;-</span> <span class='fu'>l_plot</span><span class='op'>(</span><span class='va'>iris</span>,
+             color <span class='op'>=</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span>,
+             glyph <span class='op'>=</span> <span class='st'>"circle"</span><span class='op'>)</span>
+<span class='va'>gp</span> <span class='op'>&lt;-</span> <span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>lp</span><span class='op'>)</span>
+<span class='va'>gp</span> <span class='co'># a ggplot object</span>
+
+<span class='co'># add smooth layer, grouped by color</span>
+<span class='va'>gp</span> <span class='op'>+</span>
+  <span class='fu'>geom_smooth</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>color <span class='op'>=</span> <span class='va'>color</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='co'># give meaningful legend label names</span>
+  <span class='fu'>scale_color_manual</span><span class='op'>(</span>
+    <span class='co'># make sure the order is correct</span>
+    values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='fu'>hex12tohex6</span><span class='op'>(</span><span class='va'>lp</span><span class='op'>[</span><span class='st'>'color'</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>,
+    labels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"setosa"</span>, <span class='st'>"versicolor"</span>, <span class='st'>"virginica"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+
+<span class='co'># histogram</span>
+<span class='va'>lh</span> <span class='op'>&lt;-</span> <span class='fu'>l_hist</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>mpg</span>,
+             color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>gh0</span> <span class='op'>&lt;-</span> <span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>lh</span><span class='op'>)</span>
+<span class='co'># facet by `fill`</span>
+<span class='va'>gh0</span> <span class='op'>+</span> <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='op'>~</span><span class='va'>fill</span><span class='op'>)</span>
+
+<span class='co'># set `asAes = FALSE`</span>
+<span class='va'>gh1</span> <span class='op'>&lt;-</span> <span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>lh</span>, asAes <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='co'># Expect the legend, they both are identical</span>
+<span class='va'>gh1</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># ERROR</span>
+<span class='co'># The bins are constructed by `ggplot2::geom_rect()`</span>
+<span class='co'># Very limited "fancy" operations can be made</span>
+<span class='va'>gh1</span> <span class='op'>+</span> <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='op'>~</span><span class='va'>fill</span><span class='op'>)</span><span class='op'>}</span>
 <span class='op'>}</span>
 
 </div></pre>

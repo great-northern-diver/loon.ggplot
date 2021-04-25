@@ -44,7 +44,8 @@ Cartesianxy2Polarxy.default <- function(layerGeom = NULL, coordinates, data, ggp
     x <- cos(angle) * (x - r.range[1]) / (r.range[2] - r.range[1])
   } else {
     x <- NA
-    y <- NA}
+    y <- NA
+  }
   list(x = x, y= y)
 }
 

@@ -81,7 +81,7 @@ via a pipe-operator &quot;%&amp;gt;%&quot;." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -184,13 +184,13 @@ via a pipe-operator "%&gt;%".</p>
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
  <span class='co'># Error</span>
  <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span> <span class='op'>%&gt;%</span>
-    <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, colour <span class='op'>=</span> <span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, colour <span class='op'>=</span> <span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
     <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
  <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span> <span class='op'>%&gt;%</span>
    <span class='fu'>gg_pipe</span><span class='op'>(</span>
-     <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, colour <span class='op'>=</span> <span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span>
+     <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, colour <span class='op'>=</span> <span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span>
    <span class='op'>)</span> <span class='op'>%&gt;%</span>
    <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>

@@ -1,6 +1,7 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_layer_graph <- function(target, ...) {
+#'
+loon2ggplot.l_layer_graph <- function(target, asAes = TRUE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
@@ -12,6 +13,9 @@ loon2ggplot.l_layer_graph <- function(target, ...) {
   if(!any(active)) return(ggObj)
 
   nav_ids <- loon::l_navigator_ids(widget)
+
+  if(asAes)
+    message("In graph transformation, `asAes` is not available yet.")
 
   # with pipe '%>%' may make the code more readable
   ggObj <- if(length(nav_ids) == 0) {

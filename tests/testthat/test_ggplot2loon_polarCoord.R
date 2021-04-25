@@ -4,6 +4,8 @@ library(magrittr)
 library(GGally)
 library(png)
 
+pdf(NULL)
+
 test_that("Polar coordinate system (ggplot to loon)", {
   p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
   pp <- p + geom_abline(intercept = 37, slope = -5) + coord_polar(theta = "x")
