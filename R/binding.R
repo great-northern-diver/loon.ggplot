@@ -2,7 +2,7 @@ bindingX <- function(loonplot, synchronizeBindingsX) {
   UseMethod("bindingX", loonplot)
 }
 
-bindingX.l_ggplot <- function(loonplot, synchronizeBindingsX) {
+bindingX.l_facet_ggplot <- function(loonplot, synchronizeBindingsX) {
   lps <- l_getPlots(loonplot)
   lapply(lps,
          function(lp) {
@@ -29,7 +29,7 @@ bindingY <- function(loonplot, synchronizeBindingsY) {
   UseMethod("bindingY", loonplot)
 }
 
-bindingY.l_ggplot <- function(loonplot, synchronizeBindingsY) {
+bindingY.l_facet_ggplot <- function(loonplot, synchronizeBindingsY) {
   lps <- l_getPlots(loonplot)
   lapply(lps,
          function(lp) {
