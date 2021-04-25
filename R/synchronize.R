@@ -103,7 +103,7 @@ synchronize.default <- function(target, ...) {
 synchronize.l_ggmatrix <- function(target, ...) {
 
   busy <- FALSE
-  plots <- target$plots
+  plots <- l_getPlots(target)
   # scales fixed
   synchronizeBindingsX <- function(W) {
     if (!busy) {
