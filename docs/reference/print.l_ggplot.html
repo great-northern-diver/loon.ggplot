@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get locations for ggmatrix — g_getLocations • loon.ggplot</title>
+<title>Explicitly draw plot — print.l_ggplot • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="get locations for ggmatrix — g_getLocations" />
-<meta property="og:description" content="For the target compound loon plot, determines location in ggmatrix" />
+<meta property="og:title" content="Explicitly draw plot — print.l_ggplot" />
+<meta property="og:description" content="Explicitly draw plot" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,41 +137,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>get locations for <code>ggmatrix</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/g_getLocations.R'><code>R/g_getLocations.R</code></a></small>
-    <div class="hidden name"><code>g_getLocations.Rd</code></div>
+    <h1>Explicitly draw plot</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/l_ggplot.R'><code>R/l_ggplot.R</code></a></small>
+    <div class="hidden name"><code>print.l_ggplot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For the target compound <code>loon</code> plot, determines location in <code>ggmatrix</code></p>
+    <p>Explicitly draw plot</p>
     </div>
 
-    <pre class="usage"><span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_pairs</span>
-<span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='co'># S3 method for l_ggplot</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>target</th>
-      <td><p>the (compound) loon plot whose locations are needed to lay out.</p></td>
+      <th>x</th>
+      <td><p>plot to display</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>other arguments used to modify function <code>ggplot2loon</code></p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of an appropriate subset of the named location arguments
-`c("ncol", "nrow", "layout_matrix", "heights", "widths")`. <code>layout_matrix</code>
-is an <code>nrow</code> by <code>ncol</code> matrix whose entries identify the location
-of each plot in <code><a href='g_getPlots.html'>g_getPlots()</a></code> by their index.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code>l_getLocations</code>, <code><a href='g_getPlots.html'>g_getPlots</a></code></p></div>
+    <p>Invisibly returns a <code>loon</code> widget</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

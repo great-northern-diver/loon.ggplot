@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get locations for ggmatrix — g_getLocations • loon.ggplot</title>
+<title>Modify the selected component — selection • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="get locations for ggmatrix — g_getLocations" />
-<meta property="og:description" content="For the target compound loon plot, determines location in ggmatrix" />
+<meta property="og:title" content="Modify the selected component — selection" />
+<meta property="og:description" content="In interactive graphics, selection is one of the most fundamental tool
+and used to highlight the subset of interest" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,42 +138,64 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>get locations for <code>ggmatrix</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/g_getLocations.R'><code>R/g_getLocations.R</code></a></small>
-    <div class="hidden name"><code>g_getLocations.Rd</code></div>
+    <h1>Modify the <code>selected</code> component</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
+    <div class="hidden name"><code>selection.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For the target compound <code>loon</code> plot, determines location in <code>ggmatrix</code></p>
+    <p>In interactive graphics, <code>selection</code> is one of the most fundamental tool
+and used to highlight the subset of interest</p>
     </div>
 
-    <pre class="usage"><span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_pairs</span>
-<span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>selection</span><span class='op'>(</span>selected <span class='op'>=</span> <span class='cn'>NULL</span>, selectBy <span class='op'>=</span> <span class='cn'>NULL</span>, selectionLogic <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>target</th>
-      <td><p>the (compound) loon plot whose locations are needed to lay out.</p></td>
+      <th>selected</th>
+      <td><p>A logical vector. If it is set as <code>TRUE</code>, the elements are highlighted
+as the graphics are constructed. Default is <code>FALSE</code></p></td>
+    </tr>
+    <tr>
+      <th>selectBy</th>
+      <td><p>Select by "sweeping" (default) or "brushing".</p></td>
+    </tr>
+    <tr>
+      <th>selectionLogic</th>
+      <td><p>Selection logic. One of "select" (default), "deselect" and "invert". See details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of an appropriate subset of the named location arguments
-`c("ncol", "nrow", "layout_matrix", "heights", "widths")`. <code>layout_matrix</code>
-is an <code>nrow</code> by <code>ncol</code> matrix whose entries identify the location
-of each plot in <code><a href='g_getPlots.html'>g_getPlots()</a></code> by their index.</p>
+    <p>a <code>ggproto</code> object</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>There are two ways to directly select elements on the scatterplot using the mouse:
+either by "sweep" or by "brushing". "Sweeping" allows us to sweep out a contiguous area of the plot,
+while, in "brushing", the area is always fixed during the selection.</p>
+<p>The selection logic give users more flexibility that users cannot only highlight the elements,
+but also can delight or invert (the highlighted to delighted, vice verse) the elements.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>l_getLocations</code>, <code><a href='g_getPlots.html'>g_getPlots</a></code></p></div>
+    <div class='dont-index'><p><code><a href='active.html'>active</a></code>, <code><a href='linking.html'>linking</a></code>, <code><a href='scaleTo.html'>scaleTo</a></code>,
+<code><a href='hover.html'>hover</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+
+  <span class='co'># highlight the four gear cars</span>
+  <span class='va'>fourGear</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='cn'>FALSE</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>fourGear</span><span class='op'>[</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span> <span class='op'>==</span> <span class='fl'>4</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
+
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='co'># push the states of scatter plot to the histogram</span>
+    <span class='fu'>selection</span><span class='op'>(</span>selected <span class='op'>=</span> <span class='va'>fourGear</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

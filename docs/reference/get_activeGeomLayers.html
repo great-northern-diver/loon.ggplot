@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -178,8 +178,8 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
     y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/approxfun.html'>approx</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>x</span>, <span class='va'>df</span><span class='op'>$</span><span class='va'>y</span>, xout <span class='op'>=</span> <span class='va'>xgrid</span><span class='op'>)</span><span class='op'>$</span><span class='va'>y</span>,
     colour <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/approxfun.html'>approx</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>x</span>, <span class='va'>df</span><span class='op'>$</span><span class='va'>colour</span>, xout <span class='op'>=</span> <span class='va'>xgrid</span><span class='op'>)</span><span class='op'>$</span><span class='va'>y</span>
   <span class='op'>)</span>
-  <span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, colour <span class='op'>=</span> <span class='va'>colour</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_line</span><span class='op'>(</span><span class='va'>interp</span>, mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, colour <span class='op'>=</span> <span class='va'>colour</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='va'>p1</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, colour <span class='op'>=</span> <span class='va'>colour</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_line</span><span class='op'>(</span><span class='va'>interp</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>y</span>, colour <span class='op'>=</span> <span class='va'>colour</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
   <span class='va'>agL</span> <span class='op'>&lt;-</span> <span class='fu'>get_activeGeomLayers</span><span class='op'>(</span><span class='va'>p1</span><span class='op'>)</span>
   <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span><span class='op'>(</span><span class='va'>p1</span>, activeGeomLayers <span class='op'>=</span> <span class='va'>agL</span><span class='op'>)</span>
@@ -188,15 +188,15 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
 #&gt; [1] "l_plot" "loon"  </div><div class='input'>
   <span class='va'>p2</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>economics</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_rect</span><span class='op'>(</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='va'>start</span>, xmax <span class='op'>=</span> <span class='va'>end</span>, fill <span class='op'>=</span> <span class='va'>party</span><span class='op'>)</span>,
+      <span class='fu'>aes</span><span class='op'>(</span>xmin <span class='op'>=</span> <span class='va'>start</span>, xmax <span class='op'>=</span> <span class='va'>end</span>, fill <span class='op'>=</span> <span class='va'>party</span><span class='op'>)</span>,
       ymin <span class='op'>=</span> <span class='op'>-</span><span class='cn'>Inf</span>, ymax <span class='op'>=</span> <span class='cn'>Inf</span>, alpha <span class='op'>=</span> <span class='fl'>0.2</span>,
       data <span class='op'>=</span> <span class='va'>presidential</span>
     <span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_text</span><span class='op'>(</span>
-      <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>start</span>, y <span class='op'>=</span> <span class='fl'>2500</span>, label <span class='op'>=</span> <span class='va'>name</span><span class='op'>)</span>,data <span class='op'>=</span> <span class='va'>presidential</span>,
+      <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>start</span>, y <span class='op'>=</span> <span class='fl'>2500</span>, label <span class='op'>=</span> <span class='va'>name</span><span class='op'>)</span>,data <span class='op'>=</span> <span class='va'>presidential</span>,
       size <span class='op'>=</span> <span class='fl'>3</span>, vjust <span class='op'>=</span> <span class='fl'>0</span>, hjust <span class='op'>=</span> <span class='fl'>0</span>, nudge_x <span class='op'>=</span> <span class='fl'>50</span>
     <span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_line</span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>date</span>, <span class='va'>unemploy</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_line</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>date</span>, <span class='va'>unemploy</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>scale_fill_manual</span><span class='op'>(</span>values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"blue"</span>, <span class='st'>"red"</span><span class='op'>)</span><span class='op'>)</span>
   <span class='co'># none can be interactive</span>
   <span class='va'>agL</span> <span class='op'>&lt;-</span> <span class='fu'>get_activeGeomLayers</span><span class='op'>(</span><span class='va'>p2</span><span class='op'>)</span>

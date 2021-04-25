@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get locations for ggmatrix — g_getLocations • loon.ggplot</title>
+<title>Modify the active component — active • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="get locations for ggmatrix — g_getLocations" />
-<meta property="og:description" content="For the target compound loon plot, determines location in ggmatrix" />
+<meta property="og:title" content="Modify the active component — active" />
+<meta property="og:description" content="Set active or activeGeomLayers" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,42 +137,62 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>get locations for <code>ggmatrix</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/g_getLocations.R'><code>R/g_getLocations.R</code></a></small>
-    <div class="hidden name"><code>g_getLocations.Rd</code></div>
+    <h1>Modify the <code>active</code> component</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
+    <div class="hidden name"><code>active.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For the target compound <code>loon</code> plot, determines location in <code>ggmatrix</code></p>
+    <p>Set <code>active</code> or <code>activeGeomLayers</code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_pairs</span>
-<span class='fu'>g_getLocations</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>active</span><span class='op'>(</span>active <span class='op'>=</span> <span class='cn'>NULL</span>, activeGeomLayers <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>target</th>
-      <td><p>the (compound) loon plot whose locations are needed to lay out.</p></td>
+      <th>active</th>
+      <td><p>a logical determining whether points appear or
+not (default is <code>TRUE</code> for all points). If a logical vector is
+given of length equal to the number of points,
+then it identifies which points appear (<code>TRUE</code>) and
+which do not (<code>FALSE</code>).</p></td>
+    </tr>
+    <tr>
+      <th>activeGeomLayers</th>
+      <td><p>determine which geom layer is interactive. Only <code>geom_point()</code>
+and <code>geom_histogram()</code> can be set as active geom layer(s) so far.
+(Notice, more than one <code>geom_point()</code> layers can be set as active layers,
+but only one <code>geom_histogram()</code> can be set as an active geom layer)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of an appropriate subset of the named location arguments
-`c("ncol", "nrow", "layout_matrix", "heights", "widths")`. <code>layout_matrix</code>
-is an <code>nrow</code> by <code>ncol</code> matrix whose entries identify the location
-of each plot in <code><a href='g_getPlots.html'>g_getPlots()</a></code> by their index.</p>
+    <p>a <code>ggproto</code> object</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>l_getLocations</code>, <code><a href='g_getPlots.html'>g_getPlots</a></code></p></div>
+    <div class='dont-index'><p><code><a href='linking.html'>linking</a></code>, <code><a href='selection.html'>selection</a></code>, <code><a href='scaleTo.html'>scaleTo</a></code>,
+<code><a href='hover.html'>hover</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+
+  <span class='co'># set active layer</span>
+  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"black"</span>, size <span class='op'>=</span> <span class='fl'>4.5</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"pink"</span>, size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='co'># only show manual transmission cars</span>
+    <span class='co'># in the second interactive layer</span>
+    <span class='fu'>active</span><span class='op'>(</span>active <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>==</span> <span class='fl'>1</span>,
+           activeGeomLayers <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+
+  <span class='co'># Then, click the `reactivate` button on loon inspector</span>
+  <span class='co'># to display all interactive points</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -48,8 +48,8 @@
 
 <meta property="og:title" content="loon.ggplot — loon.ggplot" />
 <meta property="og:description" content="A bridge between loon widgets and gg objects. It can take either a loon widget,
-a gg object (ggplot or GGally::ggmatrix) or
-a lggplot object, then create a corresponding gg (or loon) graphics." />
+a gg object (ggplot, GGally::ggmatrix) or
+a l_ggplot object, then create a corresponding gg (or loon) graphics." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -82,7 +82,7 @@ a lggplot object, then create a corresponding gg (or loon) graphics." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -146,8 +146,8 @@ a lggplot object, then create a corresponding gg (or loon) graphics." />
 
     <div class="ref-description">
     <p>A bridge between <code>loon</code> widgets and <code>gg</code> objects. It can take either a <code>loon</code> widget,
-a <code>gg</code> object (<code>ggplot</code> or <code><a href='https://ggobi.github.io/ggally/reference/ggmatrix.html'>GGally::ggmatrix</a></code>) or
-a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p>
+a <code>gg</code> object (<code>ggplot</code>, <code><a href='https://ggobi.github.io/ggally/reference/ggmatrix.html'>GGally::ggmatrix</a></code>) or
+a <code>l_ggplot</code> object, then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p>
     </div>
 
     <pre class="usage"><span class='fu'>loon.ggplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -158,7 +158,7 @@ a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <
 <span class='co'># S3 method for loon</span>
 <span class='fu'>loon.ggplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
 
-<span class='co'># S3 method for lggplot</span>
+<span class='co'># S3 method for l_ggplot</span>
 <span class='fu'>loon.ggplot</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -166,7 +166,7 @@ a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A <code>loon</code> widget, a <code>ggplot</code> object or a <code>lggplot</code> object.</p></td>
+      <td><p>A <code>loon</code> widget, a <code>ggplot</code> object or a <code>l_ggplot</code> object.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -177,7 +177,7 @@ a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>If the input is a <code>ggplot</code> object, the output would be a <code>loon</code> widget; conversely, if the
-input is a <code>loon</code> widget, then it returns a <code>ggplot</code> object. If it is a <code>lggplot</code> object,
+input is a <code>loon</code> widget, then it returns a <code>ggplot</code> object. If it is a <code>l_ggplot</code> object,
 <code>loon.ggplot</code> helps to return a <code>loon</code> widget.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -198,17 +198,17 @@ input is a <code>loon</code> widget, then it returns a <code>ggplot</code> objec
 <span class='co'>######### gg --&gt; loon #########</span>
 
   <span class='co'># ggplot histogram</span>
-  <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>iris</span>, mapping <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>Sepal.Length</span>, fill <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>iris</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span><span class='va'>Sepal.Length</span>, fill <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_histogram</span><span class='op'>(</span><span class='op'>)</span>
   <span class='co'># equivalent to `ggplot2loon(g)`</span>
   <span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'>loon.ggplot</span><span class='op'>(</span><span class='va'>g</span><span class='op'>)</span>
   <span class='va'>l</span> <span class='co'># a loon widget</span>
 
-<span class='co'>######### lggplot #########</span>
-  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>displ</span>, fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+<span class='co'>######### l_ggplot #########</span>
+  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mpg</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>displ</span>, fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
        <span class='fu'>geom_histogram</span><span class='op'>(</span><span class='op'>)</span>
   <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
-  <span class='co'># Function `print.lggplot` is called automatically</span>
+  <span class='co'># Function `print.l_ggplot` is called automatically</span>
   <span class='va'>p</span>
   <span class='co'># Function `loon.ggplot` helps to return a loon widget</span>
   <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'>loon.ggplot</span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
