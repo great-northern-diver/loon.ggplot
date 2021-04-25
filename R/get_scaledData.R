@@ -8,7 +8,7 @@
 #' @param keep If \code{TRUE}, return the variables not shown in \code{sequence} as well;
 #' else only return the variables defined in \code{sequence}.
 #' @param as.data.frame Return a matrix or a data.frame
-#' @importFrom utils getFromNamespace
+#' @import utils
 #' @export
 get_scaledData <- function(data,
                            sequence = NULL,
