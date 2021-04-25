@@ -4,6 +4,8 @@ library(magrittr)
 library(GGally)
 library(ggmulti)
 
+pdf(NULL)
+
 test_that("test serialaxes ggplot 2 loon",
           {
             l_ggplot(iris, mapping = aes(colour = factor(Species))) +
