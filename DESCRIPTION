@@ -1,7 +1,7 @@
 Package: loon.ggplot
 Type: Package
 Title: Making 'ggplot2' Plots Interactive with 'loon' and Vice Versa
-Version: 1.1.1
+Version: 1.2.0
 Authors@R: c(
   person('Zehao', 'Xu', email = 'z267xu@uwaterloo.ca', role = c("aut", "cre")),
   person('R. Wayne', 'Oldford', email = 'rwoldford@uwaterloo.ca', role = c("aut"))
