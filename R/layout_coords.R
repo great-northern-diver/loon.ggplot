@@ -22,8 +22,10 @@ layout_coords.l_hist <- function(target) {
 }
 
 #' @export
-layout_coords.l_ggplot <- function(target) {
-  plots <- target$plots
+layout_coords.l_facet_ggplot <- function(target) {
+
+  plots <- unclass(target)
+
   ggLayout <- as.data.frame(
     t(sapply(strsplit(names(plots), split = ""),
              function(i){
