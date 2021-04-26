@@ -1,5 +1,6 @@
 ---
 title: "A grammar of interactive graphics"
+subtitle: "Introduction"
 author: "R. W. Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
 output:
@@ -52,18 +53,23 @@ Consider the `airquality` dataset:
 data("airquality")
 summary(airquality)
 ```
-It has missing data (in `Ozone` and `Solar.R`) and the variable `Month` can be tidied up and turned into a factor as
+It has missing data (in `Ozone` and `Solar.R`) and the variable `Month` can be tidied up and turned into a factor (to preserve calendar order) as
 ```{r}
-airquality$Month <- factor(month.abb[airquality$Month], levels = month.abb)
+airquality$Month <- factor(month.abb[airquality$Month], 
+                           levels = month.abb[unique(airquality$Month)])
 ```
 
-With its mix of continuous and categorical variables (and some with missing data) this transformed data will be used to illustrate the interactive grammar of `loon.ggplot`.
+```{r, eval = FALSE, echo = FALSE}
+airquality$Month <- factor(month.abb[airquality$Month], 
+                           levels = month.abb)
+```
+With its mix of continuous and categorical variables (some with missing data) this transformed data will be used to illustrate `loon.ggplot`'s  grammar of interactive graphics.
 
 ## `l_ggplot()`
 
-An interactive grammar of graphics begins by simply replacing `ggplot()`, wherever it appears in the layered grammar, by `l_ggplot()`.  Use the same arguments (e.g., `data`, `mapping`, etc.)  and the same grammar to construct an interactive plot.
+The interactive grammar begins by simply replacing `ggplot()` by `l_ggplot()`, wherever it appears in the layered grammar.  The same arguments (e.g., `data`, `mapping`, etc.)  and the same grammar are used, but now to create an interactive plot.
 
-Following the `ggplot2` grammar, but with `l_ggplot()` in place of `ggplot()`,  a scatterplot of `Ozone` versus `Wind` is simply constructed:
+An interactive scatterplot of `Ozone` versus `Wind` is simply constructed:
 ```{r, eval = FALSE}
 l_ggplot(airquality, 
          mapping = aes(x = Wind, y = Ozone)) +
@@ -71,9 +77,11 @@ l_ggplot(airquality,
   geom_point() +
   geom_smooth()
 ```
-The resulting interactive `loon` plot appears in a new window and a separate window containing the `loon` inspector also appears.  Together, these two windows allow changes to be made to the plot via direct mouse interaction.
+The resulting `loon` plot appears in a new window together with the `loon` inspector in a separate window.  Changes are made interactively to the plot via mouse interaction in these two windows.  
 
-Had `ggplot()` been used in place of `l_ggplot()` the corresponding `ggplot` would have been rendered on the "current device" when printed.  The two plots are shown side by side below (the `loon` plot at left is a static version rendered via `grid` graphics so will differ slightly from how it appears on screen; especially in terms of font and point sizes):
+In contrast, had `ggplot()` been used, a static plot would have been rendered on the "current device".  
+
+The two are shown side by side below (the `loon` plot at left is a static version rendered via `grid` graphics so differs slightly from its display on screen, mainly in terms of font and point sizes):
 ```{r, echo = FALSE, fig.width = 10, out.width = "80%"}
 lgp <- l_ggplot(airquality, 
                 mapping = aes(x = Wind, y = Ozone)) +
@@ -83,15 +91,16 @@ lgp <- l_ggplot(airquality,
 lp <- loon.ggplot(lgp)
 grid.arrange(plot(lp, draw = FALSE), lgp, nrow = 1)
 ```
-The two plots present the same information in slightly different form with different choices on title placement, white space padding and so on.
+Each plot presents the same information in slightly different form, with different choices on title placement, white space padding and so on.
 
-The most important difference with respect to the data is that the error bars for the smooth appear as curves in the `loon` plot and as a transparent grey region in the `ggplot`.  The main reason for this default choice is that `tcl` (on which `loon` is based) does not (yet) support alpha transparency. Note, however, that a similar grey region exists as a **hidden layer**  the `loon` plot; this can be **revealed interactively** via the `loon` inspector.
+The most important difference with respect to the data is that the error bounds for the smooth appear as curves in the `loon` plot and as a transparent grey region in the `ggplot`.  The main reason for this default choice is that `tcl` (on which `loon` is based) does not (yet) support alpha transparency. Note, however, that a similar grey region exists as a **hidden layer**  the `loon` plot; this can be **revealed interactively** via the `loon` inspector's `Layers` tab.
 
-The `loon` plot is designed for direct interaction; the `ggplot` is designed for elegant print layout.  Both can be constructed via the grammar.
+The `loon` plot is designed for direct interaction effecting dynamic change; the `ggplot` is designed for elegant print layout.  
+Either can be constructed via the grammar.
 
 ### loon-ggplot duality
 
-The grammar of interactive graphics is effected with `l_ggplot()` by recognizing the complementary strengths of the static `ggplot` and of the interactive `loon` plot.  
+With `l_ggplot()` the grammar takes advantages of the complementary strengths of the static `ggplot` and of the interactive `loon` plot.  
 Each operates in a separate domain:
 
 - with `ggplot2`, a plot is "changed" by adding to the `+` pipeline and rendering the result into a *new* plot
@@ -115,33 +124,36 @@ To render the static `ggplot`, the `plot()` function is called on `lgp`:
 ```{r}
 plot(lgp)
 ```
-This is because when constructed with `l_ggplot()` the  interactive `loon` plot is realized by *printing* `lgp`:
+
+To render the interactive `loon` plot, the `print()` function is called on `lgp`.  That is, simply evaluate `lgp` in the console:
 ```{r}
 lgp
 ```
+This creates an interactive `loon` plot as before and shows the printed representation of that plot.
 
-Note the printed result is a character vector with class attribute values `"l_plot"` and `"loon"` -- these indicate that a `loon` plot was produced.
+The `loon` plot in `R` is represented as a character vector with class attribute identifying it as a `loon` plot.
 
-In general, the string value will be `".lX.ggplot"`  where `X` is the numerical index (beginning at `0`)  of this `l_ggplot` of all interactive produced so far.  The number `X` appearing in the vignette depends on the number of such interactive plots were produced to this point in constructing the vignette.
-Whatever value `X` takes, it will be printed anew each time the `l_ggplot` is "printed"   **and will appear in the title bar of the interactive window**.
+The string value here is of the `".lX.ggplot"`  where `X` is the numerical index  uniquely identifying this `l_ggplot` in the order it was produced (indexing starting at `0`).  The value of `X` appearing above depends on the number of interactive plots `l_ggplot`s the vignette produced to this point (n.b., some could be produced in the background).
 
-This string can be used to assign the `loon` plot in the interactive window to a variable in `R`, say `lp`, as
+Whatever value `X` takes, it will be incremented and printed anew every time the `l_ggplot` is "printed".  It will also **appear in the title bar** of the  window displaying that plot, so as long as the plot is displayed the string "path" associated with the plot is accessible. 
+
+This string "path" is used to access the `loon` plot and assign it to a variable in `R`, say `lp`, as
 ```{r, eval = FALSE}
 lp <- l_getFromPath(".lX.ggplot")   # <<<--- replace X by the appropriate number
 ```
-Alternatively, rather than "print" `lgp` to get an interactive plot, it could have been
-created and assigned to an `R` variable `lp` using `loon.ggplot()`
+Alternatively, it could have been assigned to an `R` variable `lp` using `loon.ggplot()`
 ```{r, eval = TRUE}
 lp <- loon.ggplot(lgp)
 ```
-which works even if `lgp` had been created with `ggplot()` instead of `l_ggplot()`.
+Just like printing `lgp`, this will create an interactive plot.
+(**Note** that had `lgp` been created with `ggplot()` instead of `l_ggplot()`, the above call **would still work by converting the `ggplot` to a `loon` plot**.)
 
 Once captured on a variable, the `loon` plot `lp` can be queried/changed programmatically (as well as interactively).  For example,
 ```{r}
-# Changing glyph aesthetics
-lp["color"] <- "firebrick"
-lp["glyph"] <- "ctriangle"
-lp["size"] <- 10
+# Changing glyph aesthetics of ALL points
+lp["color"] <- "cornsilk"
+lp["glyph"] <- "ctriangle"  # closed triangle
+lp["size"] <- 10            # proportional to area in loon
 
 # Changing the scaling
 lp["zoomX"] <- 1.2
@@ -156,13 +168,12 @@ lp["panY"] <- 0
 ```
 
 
-```
 
 Now, the interactive plot `lp` has changed state 
 ```{r}
 plot(lp)
 ```
-but `lgp` (the original structure produced by `l_ggplot()`) has not.
+**but** the original `lgp` (produced by `l_ggplot()`) has not.
 ```{r}
 plot(lgp)
 ```
@@ -172,7 +183,89 @@ plot(lgp)
 - When it is **printed**, with `print()` or in the console, the instructions produce an **interactive** `loon` plot, and
 - when it is **plotted**, with `plot()`,  the instructions produce a **static** `ggplot`.
 
+The interactive plot `lp` was rendered above using the `grid` graphics package.
+Just as `loon.ggplot()` can transform a static `ggplot` into an interactive `loon` plot, it can perform the inverse as well:  transform an interactive `loon` plot into an elegant `ggplot` for printing:
+```{r}
+gp <- loon.ggplot(lp)
+gp + geom_smooth()
+```
+As can be seen, `gp` is a `ggplot` version meant to mirror the interactive plot `lp` from which it was formed.
 
+In contrast, adding the smooth to the original `l_ggplot` would **not reflect the changes made to the interactive plot** `lp`:
+```{r}
+plot(lgp + geom_smooth())
+```
+Note also that
+```{r, eval = FALSE}
+lgp + geom_smooth()
+```
+would produce a **new** interactive `loon` plot with a smooth layer added.
+
+## `+ linking()`
+
+One of the more useful features of an interactive plot is to link it with another plot. 
+This is done by assigning the plot to a **linking group**.
+
+In the grammar, this is done by adding the `linking()` clause in the grammar pipeline.
+```{r}
+lgp <- l_ggplot(airquality, mapping = aes(x = Wind, y = Ozone)) +
+  ggtitle("Air quality in New York (1973)") +  
+  geom_point(col = "black", fill = "cornsilk", pch = 24, cex = sqrt(10)) +  
+  geom_smooth() +
+  linking(linkingGroup = "Air Quality")
+```
+
+The linking group is any string, and can be changed at any time interactively via the `loon` inspector.  All plots in the same linking group will be **linked**.
+
+The interactive plot is had as before by printing `lgp`.  
+```{r, eval = FALSE}
+# Simply printing produces the interactive plot 
+# (which could be later assigned to a variable with l_getFromPath() if need be)
+lgp
+# Or make the assignment now at creation with
+lp <- loon.ggplot(lgp)
+# And the same function to revert back to a ggplot
+# to show a snapshot of the initial state
+loon.ggplot(lp)
+```
+
+
+
+
+```{r, echo = FALSE}
+lp <- loon.ggplot(lgp)
+# And show a snapshot of the initial state
+loon.ggplot(lp)
+```
+
+```{r}
+lp["linkingGroup"]
+```
+
+```{r}
+lgb <- l_ggplot(airquality, mapping = aes(x = Month)) +
+  ggtitle("Air quality in New York (1973)") +  
+  geom_bar(col = "black", fill = "skyblue") +
+  linking(linkingGroup = "Air Quality")
+lb <- loon.ggplot(lgb)
+# A snapshot of the initial state
+loon.ggplot(lb)
+```
+
+```{r}
+lgh <- l_ggplot(airquality, mapping = aes(x = Temp)) +
+  ggtitle("Air quality in New York (1973)") +  
+  geom_histogram(col = "black") +
+  linking(linkingGroup = "Air Quality")
+lh <- loon.ggplot(lgh)
+# A snapshot of the initial state
+loon.ggplot(lh)
+```
+
+
+```{r}
+head(lp["linkingKey"])
+```
 
 
 ```{r, eval = FALSE}
@@ -195,179 +288,6 @@ for (layerID in l_layer_ids(lp)){
 # on the inspector
 ```
 
-
-```
-
-
-```{r}
-colors <- lp["color"]
-selected <-  colors == tail(colors, 1)
-lp["glyph"][selected] <- "ctriangle"
-lp["color"][selected] <- "cornsilk"
-lp["size"][selected] <- 10
-lp["selected"] <- selected
-l_scaleto_selected(lp)
-lp["selected"] <- FALSE
-plot(lp)
-loon.ggplot(lp)
-```
-The `lggplot` also appears **only when printed**, but now
-
-
-The `magrittr` package provides several different types of pipes which can be a handy way to organize computation, especially when the computation involves processing data for input to another procedure, in this case `ggplot()`:
-```{r pipes, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-library(dplyr)  # load this to also have dplyr functionality
-library(magrittr)
-library(loon.ggplot)
-p1_piped <- mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  l_ggplot(aes(x = weight, y = lp100km)) +
-  geom_point() +
-  ylab("Litres per 100 kilometres") +
-  ggtitle("Gas usage")
-p1_piped
-```
-
-Here the "pipe"  `%>%` takes the output of its left hand side and pushes it into the first argument of its right hand side.  Arbitrary many pipes may be gathered together.  
-This connects nicely with `ggplot2`'s addition `+` operator (`+` itself is sometimes a pipe, sometimes a layer in `ggplot` construction) to create the `ggplot` from the data and assign it to `p1_piped`.
-
-Two things to note here are.
-First, the result of the data manipulation is assigned at the beginning using the `<-` assignment function which seems to run counter to the data flow indicated by the pipes.  A more consistent flow would be to have instead written
-```{r consistent_pipe_flow}
-mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  ggplot(aes(x = weight, y = lp100km)) +
-  geom_point() +
-  ylab("Litres per 100 kilometres") +
-  ggtitle("Gas usage")  ->   # Note assignment occurs here
-  p1_piped
-```
-
-Now the assignment operator `->` is used at the end, matching the data flow of the pipes.
-
-Second, in either case the `ggplot` is **not** itself displayed (or rendered) until it is printed.
-
-```{r p1_piped, message = FALSE, warning = FALSE, fig.width = 4, fig.height = 4, fig.align = "center", out.width = "50%"}
-p1_piped
-```
-
-Once built, as happens when the plot has been displayed as above,  an interactive loon plot can be had as always, simply by calling `ggplot2loon()` on the built `ggplot`:
-```{r loon_p1_piped, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-library(loon.ggplot)
-ggplot2loon(p1_piped, linkingGroup = "Motor Trend 1974")
-```
-Again, the additional specification here of the `linkingGroup` will cause display attributes to be pulled from the plots in that linking group.
-
-### Using `gg_pipe(data, ggplotObj)`
-
-Note that before a `ggplot` can be displayed, a number of steps are performed so as to prepare the plot object for rendering (e.g. see `ggplot2::ggplot_build`).
-Unfortunately, this delay in completing the preparation of the `ggplot` can make it difficult to attach further operations in the `%>%` pipeline after the `ggplot` itself -- apart of course from further `ggplot2` additions via the `+` operator.
-For example, one cannot simply add `%>% ggplot2loon()` at the end of the pipeline used to construct the `ggplot`.  That is,
-```{r fail_pipeline, eval = FALSE}
-mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  ggplot(aes(x = weight, y = lp100km)) +
-  geom_point() +
-  ylab("Litres per 100 kilometres") +
-  ggtitle("Gas usage") %>% 
-  ggplot2loon()
-```
-would produce neither a `ggplot` or an interactive `loon` plot.
-
-To get around this problem, in `loon.ggplot` the function `gg_pipe()` is provided to encapsulate the `ggplot` construction in any pipeline and force the `ggplot` to be built (though not rendered in a display).  The output of this function can then be passed on to `ggplot2loon()`. 
-
-For example,
-```{r gg_pipe, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  # encapsulate the ggplot construction with gg_pipe()
-  gg_pipe(ggplot(aes(x = weight, y = lp100km)) +
-            geom_point() +
-            ylab("Litres per 100 kilometres") +
-            ggtitle("Gas usage")
-          )  %>% 
-  # and pass the built plot on
-  ggplot2loon(linkingGroup = "Motor Trend 1974")
-```
-constructs the interactive plot which could have been assigned to a variable as was done with the original `ggplot` construction.
-
-From here, the pipeline can be grown as before, recognizing of course that the output of `ggplot2loon()` is a `loon` plot of some sort.
-This means that functions that operate on `loon` plots (as their first argument can be used.  As with any piping operation, attention must be given to the first argument of the functions in the pipeline as well as to what the input and outputs are of any function.
-
-For example, 
-
-```{r magrittr_pipe, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  # encapsulate the ggplot construction with gg_pipe()
-  gg_pipe(ggplot(aes(x = weight, y = lp100km)) +
-            geom_point() +
-            ylab("Litres per 100 kilometres") +
-            ggtitle("Gas usage") )  %>% 
-  # and pass the built plot on
-  ggplot2loon(linkingGroup = "Motor Trend 1974") %>%  # pipe the loon plot on
-  l_cget('color')  # Gets and returns the vector of point colours
-```
-
-In the `magrittr` package (the source of the pipeline operation) there are a variety of pipeline operators which might also be useful -- not just `%>%`.
-
-### Using `l_ggplot()`
-
-Additionally, using function `l_ggplot`, can also create a `loon` plot with `ggplot` pipe model.
-
-The display of `ggplot` object relies on the default `print()` function in `R`. Function `l_ggplot`, inserts a new class `lggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.lggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
-```{r lggplot_pipe, message = FALSE, eval = FALSE}
-obj <- mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  # replace `ggplot` to `lggplot`
-  l_ggplot(aes(x = weight, y = lp100km)) +
-  geom_point() +
-  ylab("Litres per 100 kilometres") +
-  ggtitle("Gas usage")
-obj
-```
-
-However, this design has an obvious drawback: confusion of the output data structure. Since the transformation is accomplished at the printing time, object `obj` is still a `ggplot` data structure. To create a `loon` "handle", we have to use `l_getFromPath()`
-```{r, l_getFromPath, message = FALSE, eval = FALSE}
-if(utils::packageVersion("loon") >= "1.2.4") {
-  # **THIS IS IMPORTANT**
-  # The path name can be obtained at the top left tk window
-  # Suppose the label is "loon.ggplot --path: .l13.ggplot"
-  # The path would be the char right after "path: " which is ".l13.ggplot"
-  loonWidget <- l_getFromPath(".l13.ggplot")
-  class(loonWidget)
-  # [1] "l_plot" "loon"
-}
-```
-
-### Just use loon for built-in interactive plots
-
-Of course, for plots already existing in `loon`,  `ggplot()` and hence `gg_pipe()` could be avoided entirely:
-```{r loon_only_pipe, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-mtcars %>%
-  rename(transmission = am, weight = wt) %>%
-  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg)) %>%
-  select(weight, lp100km) %>%
-  # and pass the built plot on
-  l_plot(title = "Gas Usage", 
-         showGuides = TRUE, showScales = TRUE,
-         ylabel = "Litres per 100 kilometres", 
-         linkingGroup = "Motor Trend 1974") %>%
-  plot()   # get a static version via grid
-```
-
-```{r loon_only_pipe_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-#include_graphics(file.path(imageDirectory, "gas_usage.png"))
-```
++ selecting()
++ itemLabel()
++ interactivity()
