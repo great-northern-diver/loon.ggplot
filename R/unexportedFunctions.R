@@ -11,6 +11,7 @@ get_model_display_order <- utils::getFromNamespace("get_model_display_order", "l
 char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
 cartesian_model_widget_states <- utils::getFromNamespace("cartesian_model_widget_states", "loon")
 tcl_img_2_r_raster <- utils::getFromNamespace("tcl_img_2_r_raster", "loon")
+color.id <- utils::getFromNamespace("color.id", "loon")
 
 l_allNDimStateNames <- function(plots = c("l_plot", "l_plot3D", "l_serialaxes", "l_hist")) {
   states <- lapply(plots,

@@ -327,10 +327,14 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
 
     ggObj <- ggObj +
       ggplot2::scale_color_manual(values = uni_color,
-                                  labels = selection_color_labels(uni_color),
+                                  labels = selection_color_labels(
+                                    uni_color
+                                  ),
                                   breaks = uni_color) +
       ggplot2::scale_fill_manual(values = uni_color,
-                                 labels = selection_color_labels(uni_color),
+                                 labels = selection_color_labels(
+                                   uni_color
+                                 ),
                                  breaks = uni_color)
   }
 
