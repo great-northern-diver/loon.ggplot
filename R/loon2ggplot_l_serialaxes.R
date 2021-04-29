@@ -28,9 +28,11 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
 
   if(asAes) {
 
-    color <- get_display_color(
-      as_hex6color(widget['color'][active_displayOrder]),
-      widget['selected'][active_displayOrder]
+    color <- hex2colorName(
+      get_display_color(
+        as_hex6color(widget['color'][active_displayOrder]),
+        widget['selected'][active_displayOrder]
+      )
     )
     size <- as_r_line_size(widget['linewidth'][active_displayOrder])
 
@@ -54,7 +56,9 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
 
       ggObj <- ggObj +
         ggplot2::scale_color_manual(values = uni_color,
-                                    labels = selection_color_labels(uni_color),
+                                    labels = selection_color_labels(
+                                      uni_color
+                                    ),
                                     breaks = uni_color)
     }
 

@@ -64,11 +64,11 @@ loon2ggplot <- function(target, asAes = TRUE, ...) {
   if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
     error_info <- deparse(substitute(target))
     stop(
-    "Target should be a loon object. Maybe you want to call `ggplot2loon(",
-    error_info,
-    ")`? Or, just call `loon.ggplot(",
-    error_info,
-    ")` for simplification.", call. = FALSE
+      "Target should be a loon object. Maybe you want to call `ggplot2loon(",
+      error_info,
+      ")`? Or, just call `loon.ggplot(",
+      error_info,
+      ")` for simplification.", call. = FALSE
     )
   }
   UseMethod('loon2ggplot', target)
@@ -102,9 +102,9 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, ...) {
   if(target['yshows'] == "density" && length(unique(target['color'])) > 1) {
     setLimits <- FALSE
     message("In ggplot histogram, if `y` shows density, ",
-    "the area of each category (grouped by color) is 1; ",
-    "however, for an `l_hist` widget, ",
-    "the whole area is one and the area of each category is proportional to its counts.")
+            "the area of each category (grouped by color) is 1; ",
+            "however, for an `l_hist` widget, ",
+            "the whole area is one and the area of each category is proportional to its counts.")
   } else
     setLimits <- TRUE
 
@@ -278,52 +278,53 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
   ggObj <- ggplot2::ggplot()
 
   children <- l_layer_getUngroupedChildren(widget = widget, target = widget)
-  l_children_layers <- lapply(rev(children),
-                              function(layerid) {
+  l_children_layers <- lapply(
+    rev(children),
+    function(layerid) {
 
-                                layer <- loon::l_create_handle(c(widget, layerid))
+      layer <- loon::l_create_handle(c(widget, layerid))
 
-                                if(layerid == 'model') {
+      if(layerid == 'model') {
 
-                                  states <- get_layer_states(widget, native_unit = FALSE)
+        states <- get_layer_states(widget, native_unit = FALSE)
 
-                                  if(length(states$x) > 0) {
+        if(length(states$x) > 0) {
 
-                                    if(inherits(widget, "l_hist")) {
-                                      # histogram
-                                      ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
-                                                                                  color = states$color,
-                                                                                  selected = states$selected,
-                                                                                  active = states$active),
-                                                                mapping = ggplot2::aes(x = x))
+          if(inherits(widget, "l_hist")) {
+            # histogram
+            ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
+                                                        color = hex2colorName(states$color),
+                                                        selected = states$selected,
+                                                        active = states$active),
+                                      mapping = ggplot2::aes(x = x))
 
-                                    } else {
+          } else {
 
-                                      # scatter plot
-                                      swapAxes <- widget["swapAxes"]
-                                      if(swapAxes) {
-                                        y <- states$x
-                                        x <- states$y
-                                      } else {
-                                        x <- states$x
-                                        y <- states$y
-                                      }
+            # scatter plot
+            swapAxes <- widget["swapAxes"]
+            if(swapAxes) {
+              y <- states$x
+              x <- states$y
+            } else {
+              x <- states$x
+              y <- states$y
+            }
 
-                                      ggObj <<- ggplot2::ggplot(data = data.frame(x = x,
-                                                                                  y = y,
-                                                                                  glyph = states$glyph,
-                                                                                  size = states$size,
-                                                                                  color = states$color,
-                                                                                  selected = states$selected,
-                                                                                  active = states$active),
-                                                                mapping = ggplot2::aes(x = x,
-                                                                                       y = y))
-                                    }
-                                  } else NULL
-                                }
+            ggObj <<- ggplot2::ggplot(data = data.frame(x = x,
+                                                        y = y,
+                                                        glyph = states$glyph,
+                                                        size = states$size,
+                                                        color = hex2colorName(states$color),
+                                                        selected = states$selected,
+                                                        active = states$active),
+                                      mapping = ggplot2::aes(x = x,
+                                                             y = y))
+          }
+        } else NULL
+      }
 
-                                layer
-                              })
+      layer
+    })
 
   l_visible_children_layer <- Filter(
     function(layerid) {
