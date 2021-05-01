@@ -212,13 +212,15 @@ wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
   } else 0
 }
 
-as_ggplot_size <- function(size, power = NULL) {
+as_ggplot_size <- function(size, power = NULL,
+                           margin = ggplot2::GeomPoint$default_aes$size) {
 
-  power <- power %||% 1/4
+  power <- power %||% 1/2
 
   if (is.numeric(size)) {
     # arbitrary power
-    size <- (size/as.numeric(loon::l_getOption("size")))^(power)
+    size <- (size/as.numeric(loon::l_getOption("size")))^(power) *
+      margin
   } else {
     warning(
       "size is ",
@@ -228,14 +230,6 @@ as_ggplot_size <- function(size, power = NULL) {
     size <- 1
   }
   size
-}
-
-as_r_text_size <- function(size, digits = 2) {
-  round(size/1.76, digits)
-}
-
-as_r_point_size <- function(size, digits = 2) {
-  round(2*log(size), digits)
 }
 
 utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
@@ -249,7 +243,6 @@ as_r_line_size <- function(size, digits = 2) {
 adjust_image_size <- function(x) {
   x/50
 }
-
 
 pixels_2_lines <- function(x, digits = 2) {
   round(x / 100, digits)

@@ -21,7 +21,6 @@ l_allNDimStateNames <- function(plots = c("l_plot", "l_plot3D", "l_serialaxes", 
   unique(unlist(states))
 }
 
-
 ## Unexported functions in ggplot2
 compute_just <- utils::getFromNamespace("compute_just", "ggplot2")
 message_wrap <- utils::getFromNamespace("message_wrap", "ggplot2")

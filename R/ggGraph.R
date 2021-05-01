@@ -106,7 +106,7 @@ ggNodes <- function(ggObj, states) {
       shape = pch,
       colour = colour,
       fill = fill,
-      size = as_r_point_size(states$size[active]),
+      size = as_ggplot_size(states$size[active]),
       inherit.aes = FALSE
     )
 
