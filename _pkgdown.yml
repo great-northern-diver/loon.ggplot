@@ -23,8 +23,10 @@ reference:
     - interactivity
     - itemLabel
     - linking
-    - selecting
-    - print.lggplot
+    - selection
+    - active
+    - scaleTo
+    - print.l_ggplot
 
   - title: Accessories
     desc: Some useful functions for the transformation
