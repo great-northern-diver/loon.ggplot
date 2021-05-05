@@ -7,15 +7,12 @@
 #'             and \code{geom_histogram()} can be set as active geom layer(s) so far.
 #'            (Notice, more than one \code{geom_point()} layers can be set as active layers,
 #'             but only one \code{geom_histogram()} can be set as an active geom layer)
+#' @inheritParams interactivity
 #' @param ggGuides logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.
 #' @param ... named arguments to modify loon plot states
 #' @param parent parent widget path (Tk toplevel)
 #' @param pack logical (default \code{TRUE}) to pack widgets.
 #'             If \code{FALSE}, widgets will be produced but won't be packed and so will not appear in the display.
-#' @param tkLabels logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped with
-#'         exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}.
-#'         If \code{NULL} (default), then exterior labels appear only for multiple facets.
-#'         If \code{TRUE} exterior labels appear regardless; if \code{FALSE} no exterior labels appear.
 #' @param exteriorLabelProportion space assigned to the vertical height/horizontal width of each exterior label
 #'          expressed as a proportion of a single plot's height/width.  Default is 0.2.
 #'          This is translated to a row/column span = 1 / exteriorLabelProportion for the plot size in
@@ -23,12 +20,14 @@
 #' @param canvasHeight the height of canvas
 #' @param canvasWidth the width of canvas
 #'
+#' @param tkLabels Deprecated: logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped by
+#'         exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}
+#'
 #' @return a \code{loon} single or compound widget
 #'
 #'
 #' @import ggplot2 tcltk loon methods grid rlang
 #' @importFrom stats quantile approxfun integrate setNames na.omit
-#' @importFrom utils packageVersion menu data
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @importFrom GGally ggmatrix
@@ -40,11 +39,9 @@
 #'   p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 #'   g <- ggplot2loon(p)
 #'
-#'   # tkLabels
 #'   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
 #'      colour = factor(gear))) + facet_wrap(~am)
 #'   g1 <- ggplot2loon(p)
-#'   g2 <- ggplot2loon(p, tkLabels = FALSE)
 #' }
 #'
 #' \donttest{
@@ -86,10 +83,11 @@
 #' }
 #'
 #'
-ggplot2loon <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
-                        ..., parent = NULL, pack = TRUE,
-                        tkLabels = NULL, exteriorLabelProportion = 1/5,
-                        canvasHeight = 700, canvasWidth = 850) {
+ggplot2loon <- function(ggObj, ..., activeGeomLayers = integer(0),
+                        scaleTo = NULL, scaleToFun = NULL,
+                        ggGuides = FALSE, parent = NULL, pack = TRUE,
+                        exteriorLabelProportion = 1/5,
+                        canvasHeight = 700, canvasWidth = 850, tkLabels = NULL) {
   UseMethod("ggplot2loon", ggObj)
 }
 
@@ -99,39 +97,69 @@ ggplot2loon.default <- function(ggObj, ...) {
 }
 
 #' @export
-ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = FALSE,
-                               ..., parent = NULL, pack = TRUE,
-                               tkLabels = NULL, exteriorLabelProportion = 1/5,
-                               canvasHeight = 700, canvasWidth = 850) {
+ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
+                               scaleTo = NULL, scaleToFun = NULL,
+                               ggGuides = FALSE, parent = NULL, pack = TRUE,
+                               exteriorLabelProportion = 1/5,
+                               canvasHeight = 700, canvasWidth = 850, tkLabels = NULL) {
 
   if(inherits(ggObj, "loon")) {
     error_info <- deparse(substitute(ggObj))
     stop(
-        "'ggObj' should be a ggplot object. Maybe you want to call `loon2ggplot(",
-        error_info,
-        ")`? Or, just call `loon.ggplot(",
-        error_info,
-        ")` for simplification.",
-        call. = FALSE
+      "'ggObj' should be a ggplot object. Maybe you want to call `loon2ggplot(",
+      error_info,
+      ")`? Or, just call `loon.ggplot(",
+      error_info,
+      ")` for simplification.",
+      call. = FALSE
     )
   }
+
+  scaleTo <- scaleTo %||% 0L
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
     stop(deparse(substitute(ggObj)), " is not a ggplot object.", call. = FALSE)
   }
-  if(!is.numeric(activeGeomLayers) | !is.vector(activeGeomLayers)) {
+  if(!is.numeric(activeGeomLayers) || !is.vector(activeGeomLayers)) {
     stop("activeGeomLayers is a numeric argument", call. = FALSE)
   }
+  if(length(activeGeomLayers) > 1) {
+    warning("The length of `activeGeomLayers` is ", length(activeGeomLayers),
+            " greater than ", 1,
+            " that is not suggested.",
+            call. = FALSE)
+  }
+
+  if(!is.numeric(scaleTo)) {
+    stop("`scaleTo` is a numeric argument", call. = FALSE)
+  } else {
+    if(length(scaleTo) == 0) scaleTo <- 0L
+    else if(length(scaleTo) > 1) {
+      warning("`scaleTo` can only change plot region to display all elements of **one** particular layer",
+              call. = FALSE)
+      scaleTo <- scaleTo[1L]
+    } else {
+      if(scaleTo > length(ggObj$layers)) {
+        scaleTo <- 0L
+        warning("The ggplot object has ", length(ggObj$layers), " layers, ",
+                "however, the `scaleTo` is set as ", scaleTo,
+                " which is greater than ", length(ggObj$layers),
+                call. = FALSE)
+      }
+    }
+  }
+
+  if(!is.null(scaleToFun)) {
+    if(!is.function(scaleToFun))
+      stop("`scaleToFun` must be a function", call. = FALSE)
+  }
+
   if(!is.logical(ggGuides)) {
     stop("ggGuides is a logical argument", call. = FALSE)
   }
   if(!is.logical(pack)) {
     stop("pack is a logical argument", call. = FALSE)
-  }
-  if(!is.null(tkLabels)) {
-    if(!is.logical(tkLabels))
-      stop("tkLabels is a logical argument", call. = FALSE)
   }
   if(!is.numeric(exteriorLabelProportion)) {
     stop("exteriorLabelProportion is a numerical argument", call. = FALSE)
@@ -150,9 +178,16 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   plotInfo <- list()
 
   args <- list(...)
+  plotInfo$scaleTo <- scaleTo
+  plotInfo$scaleToFun <- scaleToFun
   plotInfo$dataFrame <- ggObj$data
   plotInfo$linkingKey <- loonLinkingKey(plotInfo$dataFrame, args)
   plotInfo$itemLabel <- loonItemLabel(plotInfo$dataFrame, args)
+  nDimStates <- setdiff(l_allNDimStateNames(), c("itemLabel", "linkingKey"))
+  argNames <- names(args)
+  nDimArgs <- argNames[argNames %in% nDimStates]
+  plotInfo$nDimStates <- args[nDimArgs]
+  args[nDimArgs] <- NULL
 
   # ggplot_build
   plotInfo$buildggObj <-  ggBuild2Loon(ggObj, plotInfo$linkingKey, plotInfo$itemLabel)
@@ -169,48 +204,34 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   # serialaxes
   plotInfo$isCoordSerialaxes <- is.CoordSerialaxes(ggObj$coordinates)
 
-  tkLabels <- tkLabels %||% plotInfo$panelNum != 1
-
-  if (tkLabels) {
-    # two ways to separate facets, facet_wrap or facet_grid
-    plotInfo$FacetWrap <- plotInfo$buildggObj$FacetWrap
-    plotInfo$FacetGrid <- plotInfo$buildggObj$FacetGrid
-    if(plotInfo$FacetWrap) {
-      plotInfo$byCOLS <- TRUE
-      plotInfo$byROWS <- FALSE
-    } else if(plotInfo$FacetGrid) {
-      # layout multiple facets by rows or by cols
-      plotInfo$layoutByROWS <- names(plotInfo$ggBuild$layout$facet_params$rows)
-      plotInfo$layoutByCOLS <- names(plotInfo$ggBuild$layout$facet_params$cols)
-      # by columns or by rows?
-      plotInfo$byCOLS <- ifelse(length(plotInfo$layoutByCOLS) > 0, TRUE, FALSE)
-      plotInfo$byROWS <- ifelse(length(plotInfo$layoutByROWS) > 0, TRUE, FALSE)
-    } else {
-      plotInfo$byCOLS <- FALSE
-      plotInfo$byROWS <- FALSE
-    }
-
-    plotInfo$start.xpos <- ifelse(!is.null(plotInfo$ylabel), 1, 0)
-    plotInfo$start.ypos <- plotInfo$start.subtitlepos <- if(!is.null(plotInfo$title)) {
-      ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 2, 1)
-    } else {
-      ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 1, 0)
-    }
-    plotInfo$showLabels <- FALSE
+  # two ways to separate facets, facet_wrap or facet_grid
+  plotInfo$FacetWrap <- plotInfo$buildggObj$FacetWrap
+  plotInfo$FacetGrid <- plotInfo$buildggObj$FacetGrid
+  if(plotInfo$FacetWrap) {
+    plotInfo$byCOLS <- TRUE
+    plotInfo$byROWS <- FALSE
+  } else if(plotInfo$FacetGrid) {
+    # layout multiple facets by rows or by cols
+    plotInfo$layoutByROWS <- names(plotInfo$ggBuild$layout$facet_params$rows)
+    plotInfo$layoutByCOLS <- names(plotInfo$ggBuild$layout$facet_params$cols)
+    # by columns or by rows?
+    plotInfo$byCOLS <- ifelse(length(plotInfo$layoutByCOLS) > 0, TRUE, FALSE)
+    plotInfo$byROWS <- ifelse(length(plotInfo$layoutByROWS) > 0, TRUE, FALSE)
   } else {
-    plotInfo$FacetWrap <- FALSE
-    plotInfo$FacetGrid <- FALSE
     plotInfo$byCOLS <- FALSE
     plotInfo$byROWS <- FALSE
-
-    plotInfo$start.xpos <- 0
-    plotInfo$start.ypos <- 0
-    plotInfo$start.subtitlepos <- 0
-    plotInfo$showLabels <- TRUE
   }
 
+  plotInfo$start.xpos <- ifelse(!is.null(plotInfo$ylabel), 1, 0)
+  plotInfo$start.ypos <- plotInfo$start.subtitlepos <- if(!is.null(plotInfo$title)) {
+    ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 2, 1)
+  } else {
+    ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 1, 0)
+  }
+  plotInfo$showLabels <- plotInfo$panelNum == 1
+
   if(is.null(parent)) {
-    parent <- l_toplevel()
+    parent <- loon::l_toplevel()
     subwin <- loon::l_subwin(parent, 'ggplot')
     tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
     parent <- as.character(tcltk::tcl('frame', subwin))
@@ -230,13 +251,13 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
     args[['linkingGroup']] <- "none"
   }
   # set margins
-  if (is.null(args[['scalesMargins']]) & tkLabels) {
+  if (is.null(args[['scalesMargins']])) {
     args[['scalesMargins']] <- c(30, 50, 0, 0)
   }
-  if (is.null(args[['labelMargins']]) & tkLabels) {
+  if (is.null(args[['labelMargins']])) {
     args[['labelMargins']] <- c(30, 60, 60, 0)
   }
-  if (is.null(args[['minimumMargins']]) & tkLabels) {
+  if (is.null(args[['minimumMargins']])) {
     args[['minimumMargins']] <- c(20, 20, 10, 10)
   }
   plotInfo$args <- args
@@ -245,23 +266,24 @@ ggplot2loon.ggplot <- function(ggObj, activeGeomLayers = integer(0), ggGuides = 
   ## args will be called from environment
   plotInfo <- c(
     plotInfo,
-    get_loon_plotInfo(plotInfo = plotInfo,
-                      ggObj = ggObj,
-                      parent = parent,
-                      activeGeomLayers = activeGeomLayers,
-                      ggGuides = ggGuides,
-                      pack = pack,
-                      tkLabels = tkLabels,
-                      canvasHeight = canvasHeight,
-                      canvasWidth = canvasWidth)
+    get_plotInfo(plotInfo = plotInfo,
+                 ggObj = ggObj,
+                 parent = parent,
+                 activeGeomLayers = activeGeomLayers,
+                 ggGuides = ggGuides,
+                 pack = pack,
+                 canvasHeight = canvasHeight,
+                 canvasWidth = canvasWidth)
   )
+
+  # modify plots
+  plots <- modify_loon_plots(plotInfo = plotInfo)
+  plotInfo$plots <- plots
+
   # pack labels
   if(pack) pack_loon_plots(plotInfo = plotInfo,
                            ggObj = ggObj,
-                           parent = parent,
-                           tkLabels = tkLabels)
-  # modify plots
-  plots <- modify_loon_plots(plotInfo = plotInfo)
+                           parent = parent)
 
   plots
 }

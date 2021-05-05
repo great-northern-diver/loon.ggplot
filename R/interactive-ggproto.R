@@ -1,18 +1,23 @@
 #' @title Modify the \code{interactivity} component
-#' @description Set interactive components (e.g. \code{linking}, \code{selecting}, \code{itemLabel}, etc)
+#' @description Set interactive components (e.g. \code{linking}, \code{selection}, etc)
 #' @inheritParams linking
-#' @inheritParams selecting
-#' @inheritParams itemLabel
+#' @inheritParams active
+#' @inheritParams selection
+#' @param scaleTo numerical; which layer to scale to
+#' @param scaleToFun scale to function. See \code{\link{scaleTo}}.
+#' @inheritParams hover
 #' @param ... named arguments to modify \code{loon} plot states. See \code{\link{l_info_states}}
 #'
 #' @return a \code{ggproto} object
 #' @details
-#' In interactive graphics, there are several fundamental infrastructures, such as querying, linking and selecting.
+#' In interactive graphics, there are several fundamental infrastructures, such as querying, linking and selection.
 #' Component \code{interactivity} is used to set these features.
 #' \tabular{lll}{ \strong{Interactivity} \tab \strong{Description} \tab \strong{Subfunction}\cr
 #'   Linking \tab Linking several plots to discover the pattern of interest \tab \code{\link{linking}}\cr
-#'   Selecting \tab Highlight the subset of interest \tab \code{\link{selecting}}\cr
-#'   ItemLabel \tab Querying in interactive graphics \tab \code{\link{itemLabel}}\cr}
+#'   Selection \tab Highlight the subset of interest \tab \code{\link{selection}}\cr
+#'   Active \tab Determine which points appear \tab \code{\link{active}}\cr
+#'   Hover \tab Query in interactive graphics \tab \code{\link{hover}}\cr
+#'   scaleTo \tab Region Modification \tab \code{\link{scaleTo}}\cr}
 #' @examples
 #' if(interactive()) {
 #'   # Modify the 'linkingGroup' and 'origin' of a hist object
@@ -30,10 +35,13 @@ interactivity <- function(linkingGroup = NULL,
                           linkingKey = NULL,
                           linkedStates = NULL,
                           sync = NULL,
+                          active = NULL,
                           activeGeomLayers = NULL,
                           selected = NULL,
                           selectBy = NULL,
                           selectionLogic = NULL,
+                          scaleTo = NULL,
+                          scaleToFun = NULL,
                           itemLabel = NULL,
                           showItemLabels = NULL,
                           ...) {
@@ -44,10 +52,13 @@ interactivity <- function(linkingGroup = NULL,
                      linkingKey = linkingKey,
                      linkedStates = linkedStates,
                      sync = sync,
+                     active = active,
                      activeGeomLayers = activeGeomLayers,
                      selected = selected,
                      selectBy = selectBy,
                      selectionLogic = selectionLogic,
+                     scaleTo = scaleTo,
+                     scaleToFun = scaleToFun,
                      itemLabel = itemLabel,
                      showItemLabels = showItemLabels,
                      ...
@@ -123,6 +134,21 @@ interactivity <- function(linkingGroup = NULL,
 
                      self$params <- params
                    },
+                   check_active = function(self, data, params) {
+
+                     params <- self$evalObj(data, params, "active")
+                     active <- params$active
+                     if(is.null(active)) return(NULL)
+
+                     if(!is.logical(active)) {
+                       stop("`active` must be logical", call. = FALSE)
+                     }
+
+                     self$warn_nDim_states(data = data,
+                                           x = active)
+
+                     self$params <- params
+                   },
                    check_linkingKey = function(self, data, params) {
 
                      params <- self$evalObj(data, params, "linkingKey")
@@ -151,13 +177,10 @@ interactivity <- function(linkingGroup = NULL,
 #' If the \code{sync} is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
 #' of the new plot will be pulled from the linked plots;
 #' if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.
-#' @param activeGeomLayers determine which geom layer is interactive. Only \code{geom_point()}
-#' and \code{geom_histogram()} can be set as active geom layer(s) so far.
-#' (Notice, more than one \code{geom_point()} layers can be set as active layers,
-#' but only one \code{geom_histogram()} can be set as an active geom layer)
 #' @return a \code{ggproto} object
 #'
-#' @seealso \code{\link{selecting}}, \code{\link{itemLabel}}, \code{\link{interactivity}}
+#' @seealso \code{\link{active}}, \code{\link{selection}}, \code{\link{scaleTo}},
+#' \code{\link{hover}}, \code{\link{interactivity}}
 #'
 #' @examples
 #' if(interactive() && requireNamespace("dplyr")) {
@@ -173,31 +196,61 @@ interactivity <- function(linkingGroup = NULL,
 #'        linking(linkingGroup = "mtcars",
 #'                linkingKey = ~carName,
 #'                sync = "push")
+#' }
+#' @export
+linking <- function(linkingGroup = NULL,
+                    linkingKey = NULL,
+                    linkedStates = NULL,
+                    sync = NULL) {
+
+  interactivity(linkingGroup = linkingGroup,
+                linkingKey = linkingKey,
+                linkedStates = linkedStates,
+                sync = sync)
+}
+
+#' @title Modify the \code{active} component
+#' @description Set \code{active} or \code{activeGeomLayers}
+#' @param active a logical determining whether points appear or
+#' not (default is \code{TRUE} for all points). If a logical vector is
+#' given of length equal to the number of points,
+#' then it identifies which points appear (\code{TRUE}) and
+#' which do not (\code{FALSE}).
+#' @param activeGeomLayers determine which geom layer is interactive. Only \code{geom_point()}
+#' and \code{geom_histogram()} can be set as active geom layer(s) so far.
+#' (Notice, more than one \code{geom_point()} layers can be set as active layers,
+#' but only one \code{geom_histogram()} can be set as an active geom layer)
+#' @return a \code{ggproto} object
+#'
+#' @seealso \code{\link{linking}}, \code{\link{selection}}, \code{\link{scaleTo}},
+#' \code{\link{hover}}, \code{\link{interactivity}}
+#'
+#' @examples
+#' if(interactive()) {
 #'
 #'   # set active layer
 #'   l_ggplot(mtcars, aes(mpg, wt, shape = factor(cyl))) +
 #'     geom_point(colour = "black", size = 4.5) +
 #'     geom_point(colour = "pink", size = 4) +
 #'     geom_point(aes(shape = factor(cyl))) +
-#'     # only the second layer is interactive
-#'     linking(activeGeomLayers = 2)
+#'     # only show manual transmission cars
+#'     # in the second interactive layer
+#'     active(active = mtcars$am == 1,
+#'            activeGeomLayers = 2)
+#'
+#'   # Then, click the `reactivate` button on loon inspector
+#'   # to display all interactive points
 #' }
 #' @export
-linking <- function(linkingGroup = NULL,
-                    linkingKey = NULL,
-                    linkedStates = NULL,
-                    sync = NULL,
-                    activeGeomLayers = NULL) {
+active <- function(active = NULL,
+                   activeGeomLayers = NULL) {
 
-  interactivity(linkingGroup = linkingGroup,
-                linkingKey = linkingKey,
-                linkedStates = linkedStates,
-                sync = sync,
+  interactivity(active = active,
                 activeGeomLayers = activeGeomLayers)
 }
 
-#' @title Modify the \code{selecting} component
-#' @description In interactive graphics, \code{selecting} is one of the most fundamental tool
+#' @title Modify the \code{selected} component
+#' @description In interactive graphics, \code{selection} is one of the most fundamental tool
 #' and used to highlight the subset of interest
 #' @param selected A logical vector. If it is set as \code{TRUE}, the elements are highlighted
 #' as the graphics are constructed. Default is \code{FALSE}
@@ -211,7 +264,8 @@ linking <- function(linkingGroup = NULL,
 #' but also can delight or invert (the highlighted to delighted, vice verse) the elements.
 #'
 #' @return a \code{ggproto} object
-#' @seealso \code{\link{linking}}, \code{\link{itemLabel}}, \code{\link{interactivity}}
+#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{scaleTo}},
+#' \code{\link{hover}}, \code{\link{interactivity}}
 #' @examples
 #' if(interactive()) {
 #'
@@ -222,10 +276,10 @@ linking <- function(linkingGroup = NULL,
 #'   l_ggplot(mtcars, mapping = aes(x = wt, y = hp, color = factor(cyl))) +
 #'     geom_point(size = 4) +
 #'     # push the states of scatter plot to the histogram
-#'     selecting(selected = fourGear)
+#'     selection(selected = fourGear)
 #' }
 #' @export
-selecting <- function(selected = NULL,
+selection <- function(selected = NULL,
                       selectBy = NULL,
                       selectionLogic = NULL) {
 
@@ -234,13 +288,70 @@ selecting <- function(selected = NULL,
                 selectionLogic = selectionLogic)
 }
 
-#' @title Modify the \code{itemLabel} component
-#' @description Querying in interactive graphics
+#' @title Change Plot Region
+#' @description Modify the \code{zoomX}, \code{zoomY}, \code{panX}, \code{panY},
+#' etc to change the plot region
+#' @param scaleTo numerical; which layer to scale to
+#' @param scaleToFun scale to function. See details.
+#'
+#' @details Argument \code{scaleTo} is used for additional plot region settings.
+#' If the \code{scaleTo} is \code{NULL} (default), the region of the \code{loon}
+#' is determined by the \code{ggplot} object
+#' (i.e. \code{coord_cartesian}, \code{xlim}, etc);
+#' else one can use \code{scaleToFun} to modify the region of the layer.
+#'
+#' The \code{scaleToFun} is a function to scale the region.
+#' If it is \code{NULL} (default), based on different layers, different scale functions
+#' will be applied; else, users can select one that precisely tailor their own
+#' problems. The table shows the available \code{scaleToFun} functions
+#' \tabular{ll}{ \strong{scale to} \tab \strong{Subfunction}\cr
+#'   plot \tab  \code{\link{l_scaleto_plot}}\cr
+#'   world \tab \code{\link{l_scaleto_world}}\cr
+#'   active \tab \code{\link{l_scaleto_active}}\cr
+#'   selected \tab \code{\link{l_scaleto_selected}}\cr
+#'   layer \tab \code{\link{l_scaleto_layer}}\cr}
+#'
+#' Expect these, users can customize their own function. Note that, the arguments should match
+#' the ones of functions shown in the table.
+#'
+#' @return a \code{ggproto} object
+#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{selection}},
+#' \code{\link{hover}}, \code{\link{interactivity}}
+#' @examples
+#' if(interactive()) {
+#' p <- l_ggplot(mtcars,
+#'               mapping = aes(x = hp, y = mpg)) +
+#'        geom_point(mapping = aes(color = factor(gear))) +
+#'        geom_smooth(data = mtcars[mtcars$gear == 4, ],
+#'                    method = "lm")
+#' # a scatter plot with a fitted line on 4 gear cars
+#' p
+#' # scale to the second layer (smooth line)
+#' p + scaleTo(scaleTo = 2)
+#' # highlight the 3 gear cars
+#' # scale to the selected points
+#' p +
+#'   selection(mtcars$gear == 3) +
+#'   scaleTo(scaleTo = 1,
+#'           scaleToFun = loon::l_scaleto_selected)
+#' }
+#' @export
+scaleTo <- function(scaleTo = NULL,
+                    scaleToFun= NULL) {
+
+  interactivity(scaleTo = scaleTo,
+                scaleToFun = scaleToFun)
+}
+
+#' @title Modify the \code{hover}/\code{itemLabel} component
+#' @description Query in interactive graphics
+#' @name hover
 #' @param itemLabel The customized querying information.
 #' @param showItemLabels A logical value. Show item labels or not. Default is \code{FALSE}
 #'
 #' @return a \code{ggproto} object
-#' @seealso \code{\link{linking}}, \code{\link{selecting}}, \code{\link{interactivity}}
+#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{scaleTo}},
+#' \code{\link{selection}}, \code{\link{interactivity}}
 #' @examples
 #' if(interactive()) {
 #'
@@ -255,12 +366,21 @@ selecting <- function(selected = NULL,
 #'               ),
 #'               showItemLabels = TRUE
 #'     )
-#'     # hover the mouse on top of any point to check the information we set
+#'     # hover the mouse on top of any point to query
 #' }
 #' @export
 itemLabel <- function(itemLabel = NULL,
                       showItemLabels = NULL) {
-  interactivity(itemLabel = itemLabel, showItemLabels = showItemLabels)
+  interactivity(itemLabel = itemLabel,
+                showItemLabels = showItemLabels)
+}
+
+#' @export
+#' @rdname hover
+hover <- function(itemLabel = NULL,
+                  showItemLabels = NULL) {
+  interactivity(itemLabel = itemLabel,
+                showItemLabels = showItemLabels)
 }
 
 #' @export
@@ -328,4 +448,5 @@ params_check <- function(interactivity, data) {
   interactivity$check_selected(data, interactivity$params)
   interactivity$check_itemLabel(data, interactivity$params)
   interactivity$check_linkingKey(data, interactivity$params)
+  interactivity$check_active(data, interactivity$params)
 }

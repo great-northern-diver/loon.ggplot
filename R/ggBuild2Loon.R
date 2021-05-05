@@ -107,8 +107,7 @@ ggBuild2Loon <- function(ggObj, linkingKey = NULL, itemLabel = NULL){
         multiFacets <- FALSE
         wrap.num <- wrap_num(ggLayout = ggLayout,
                              FacetWrap = FacetWrap,
-                             FacetGrid = FacetGrid,
-                             tkLabels = FALSE)
+                             FacetGrid = FacetGrid)
         # is multiple facets?
         if(wrap.num > 0) {
           multiFacets <- TRUE

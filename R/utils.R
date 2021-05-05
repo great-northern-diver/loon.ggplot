@@ -192,8 +192,8 @@ set_lineSize <- function(data, mapping, size) {
   return(size)
 }
 
-wrap_num <- function(ggLayout, FacetWrap, FacetGrid, tkLabels){
-  if(FacetWrap | !tkLabels) {
+wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
+  if(FacetWrap) {
     length(names(ggLayout$facet_params$facets))
   } else if(FacetGrid) {
     length(names(ggLayout$facet_params$rows)) + length(names(ggLayout$facet_params$cols))
@@ -228,7 +228,7 @@ as_r_point_size <- function(size, digits = 2) {
 
 utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
                          "height", "positive", "setup_mapping", "x", "y",
-                         "ymax", "ymin"))
+                         "ymax", "ymin", "fill", "..density.."))
 
 as_r_line_size <- function(size, digits = 2) {
   round(size/.pt, digits)

@@ -1,20 +1,15 @@
-get_loon_plotInfo <- function(plotInfo = list(),
-                              ggObj,
-                              parent = NULL,
-                              activeGeomLayers = integer(0),
-                              ggGuides = FALSE,
-                              pack = FALSE,
-                              tkLabels = NULL,
-                              canvasHeight = 700,
-                              canvasWidth = 850) {
+get_plotInfo <- function(plotInfo = list(),
+                         ggObj,
+                         parent = NULL,
+                         activeGeomLayers = integer(0),
+                         ggGuides = FALSE,
+                         pack = FALSE,
+                         canvasHeight = 700,
+                         canvasWidth = 850) {
 
   buildggObj <- plotInfo$buildggObj
   args <- plotInfo$args
 
-  # ggplot object
-  dataFrame <- ggObj$data
-  linkingKey <- plotInfo$linkingKey
-  itemLabel <- plotInfo$itemLabel
   # is serialaxes coord?
   isCoordSerialaxes <- plotInfo$isCoordSerialaxes
 
@@ -62,8 +57,7 @@ get_loon_plotInfo <- function(plotInfo = list(),
   # if wrap number is larger than 0, multiple facets are displayed
   numOfSubtitles <- wrap_num(buildggObj$ggLayout,
                              plotInfo$FacetWrap,
-                             plotInfo$FacetGrid,
-                             tkLabels)
+                             plotInfo$FacetGrid)
 
   for(i in seq_len(panelNum)) {
 
@@ -76,22 +70,32 @@ get_loon_plotInfo <- function(plotInfo = list(),
                              byCOLS = plotInfo$byCOLS,
                              panelNum = i,
                              FacetWrap = plotInfo$FacetWrap,
-                             FacetGrid = plotInfo$FacetGrid,
-                             tkLabels = tkLabels)
+                             FacetGrid = plotInfo$FacetGrid)
     colSubtitle <- subtitle$colSubtitle
     rowSubtitle <- subtitle$rowSubtitle
+
+    # update colSubtitles
     colSubtitles <- c(colSubtitles, colSubtitle)
+    # update rowSubtitles
     rowSubtitles <- c(rowSubtitles, rowSubtitle)
 
-    if(!is.null(colSubtitle) & !plotInfo$FacetGrid & tkLabels & pack) {
-      sub <- as.character(tcltk::tcl('label',
-                                     as.character(loon::l_subwin(parent,'label')),
-                                     text= colSubtitle,
-                                     bg = set_tkLabel()$labelBackground,
-                                     fg = set_tkLabel()$labelForeground,
-                                     borderwidth = set_tkLabel()$labelBorderwidth,
-                                     relief = set_tkLabel()$labelRelief))
-      tcltk::tkgrid(sub,
+    if(plotInfo$FacetWrap && !plotInfo$FacetGrid && pack) {
+      columnlabel <- as.character(
+        tcltk::tcl('label',
+                   as.character(loon::l_subwin(parent,
+                                               paste0('columnlabel-',
+                                                      'facet:wrap-',
+                                                      'byCOLS:', plotInfo$byCOLS, '-',
+                                                      'byROWS:', plotInfo$byROWS, '-',
+                                                      'x', layout[i,]$ROW,
+                                                      'y', layout[i,]$COL))),
+                   text = colSubtitle,
+                   bg = set_tkLabel()$labelBackground,
+                   fg = set_tkLabel()$labelForeground,
+                   borderwidth = set_tkLabel()$labelBorderwidth,
+                   relief = set_tkLabel()$labelRelief)
+      )
+      tcltk::tkgrid(columnlabel,
                     row = (layout[i,]$ROW - 1) * span + start.ypos,
                     column = (layout[i,]$COL - 1) * span + start.xpos,
                     rowspan = numOfSubtitles,
@@ -99,7 +103,9 @@ get_loon_plotInfo <- function(plotInfo = list(),
                     sticky="nesw")
       start.subtitlepos <- start.ypos + numOfSubtitles
       newspan <- span - numOfSubtitles
-      if(newspan <= 0) stop("pick a larger span, at least larger than ", numOfSubtitles, call. = FALSE)
+      if(newspan <= 0)
+        stop("pick a larger span, at least larger than ",
+             numOfSubtitles, call. = FALSE)
     }
 
     if(isCoordPolar) {
@@ -135,7 +141,7 @@ get_loon_plotInfo <- function(plotInfo = list(),
                          colSubtitle,
                          rowSubtitle), collapse = "\n")
 
-    if (lenLayers > 0 && all(activeGeomLayers > 0)) {
+    if(lenLayers > 0 && all(activeGeomLayers > 0)) {
 
       modelLayers <- get_modelLayers(lenLayers, ggObj, isCoordPolar, isCoordSerialaxes)
 
@@ -151,11 +157,15 @@ get_loon_plotInfo <- function(plotInfo = list(),
       indices[[i]] <- index
 
       loonPlot <- l_loonPlot(ggObj = ggObj,
-                             panelIndex = i, args = args, plotInfo = plotInfo,
-                             numOfSubtitles = numOfSubtitles, activeInfo = activeInfo,
+                             panelIndex = i, args = args,
+                             plotInfo = plotInfo,
+                             numOfSubtitles = numOfSubtitles,
+                             activeInfo = activeInfo,
                              modelLayers = modelLayers, index = index,
-                             parent = parent, showGuides = showGuides, showScales = showScales,
-                             swapAxes = swapAxes, xlabel = xlabel, ylabel = ylabel,
+                             parent = parent, showGuides = showGuides,
+                             showScales = showScales,
+                             swapAxes = swapAxes, xlabel = xlabel,
+                             ylabel = ylabel,
                              loonTitle = loonTitle)
 
     } else {
@@ -176,8 +186,10 @@ get_loon_plotInfo <- function(plotInfo = list(),
                                title = loonTitle)
     }
 
-    pack_layers(loonPlot = loonPlot, ggObj = ggObj, buildggObj = buildggObj,
-                panelIndex = i, activeInfo = activeInfo, modelLayers = modelLayers)
+    loonLayers <- pack_layers(loonPlot = loonPlot, ggObj = ggObj,
+                              buildggObj = buildggObj,
+                              panelIndex = i, activeInfo = activeInfo,
+                              modelLayers = modelLayers)
 
     # resize loon plot
     if(pack) {
@@ -236,6 +248,10 @@ get_loon_plotInfo <- function(plotInfo = list(),
       # loonPlot_configure does not produce anything but just configure the loon plot
       loonPlot_configure(isCoordPolar = isCoordPolar,
                          loonPlot = loonPlot,
+                         loonLayers = loonLayers,
+                         scaleTo = plotInfo$scaleTo,
+                         scaleToFun = plotInfo$scaleToFun,
+                         activeGeomLayers = activeInfo$activeGeomLayers,
                          ggGuides = ggGuides,
                          panelIndex = i,
                          ggplotPanelParams = ggplotPanelParams,

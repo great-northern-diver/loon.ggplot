@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>image glyph (deprecated) — geom_imageGlyph-deprecated • loon.ggplot</title>
+<title>geom_imageGlyph (deprecated) — geom_imageGlyph-deprecated • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="image glyph (deprecated) — geom_imageGlyph-deprecated" />
-<meta property="og:description" content="image glyph (deprecated)" />
+<meta property="og:title" content="geom_imageGlyph (deprecated) — geom_imageGlyph-deprecated" />
+<meta property="og:description" content="use geom_image_glyph, rather than geom_imageGlyph.
+use geom_polygon_glyph, rather than geom_polygonGlyph." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -80,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -137,15 +138,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>image glyph (deprecated)</h1>
+    <h1>geom_imageGlyph (deprecated)</h1>
     <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/deprecated_functions.R'><code>R/deprecated_functions.R</code></a></small>
     <div class="hidden name"><code>geom_imageGlyph-deprecated.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>image glyph (deprecated)</p>
+    <p>use <code>geom_image_glyph</code>, rather than <code>geom_imageGlyph</code>.</p>
+<p>use <code>geom_polygon_glyph</code>, rather than <code>geom_polygonGlyph</code>.</p>
     </div>
 
+<<<<<<< HEAD
     <pre class="usage"><span class='fu'>geom_imageGlyph</span>(
   <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -159,6 +162,36 @@
   <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 )</pre>
+=======
+    <pre class="usage"><span class='fu'>geom_imageGlyph</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"identity"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  <span class='va'>images</span>,
+  width <span class='op'>=</span> <span class='fl'>4</span>,
+  height <span class='op'>=</span> <span class='fl'>3</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+
+<span class='fu'>geom_polygonGlyph</span><span class='op'>(</span>
+  mapping <span class='op'>=</span> <span class='cn'>NULL</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  stat <span class='op'>=</span> <span class='st'>"identity"</span>,
+  position <span class='op'>=</span> <span class='st'>"identity"</span>,
+  <span class='va'>...</span>,
+  <span class='va'>polygon_x</span>,
+  <span class='va'>polygon_y</span>,
+  showArea <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  linewidth <span class='op'>=</span> <span class='fl'>1</span>,
+  na.rm <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
+  inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
+>>>>>>> upstream/master
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -233,13 +266,26 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.org/reference/borders.html'>borders()</a></code>.</p></td>
     </tr>
+    <tr>
+      <th>polygon_x</th>
+      <td><p>nested list of x-coordinates of polygons, one list element for each scatterplot point.
+If not provided, <code>geom_point()</code> will be executed.</p></td>
+    </tr>
+    <tr>
+      <th>polygon_y</th>
+      <td><p>nested list of y-coordinates of polygons, one list element for each scatterplot point.
+If not provided, <code>geom_point()</code> will be executed.</p></td>
+    </tr>
+    <tr>
+      <th>showArea</th>
+      <td><p>show area; deprecated now, please set `fill` or `colour` to control the shown area.</p></td>
+    </tr>
+    <tr>
+      <th>linewidth</th>
+      <td><p>line width of the "glyph" object</p></td>
+    </tr>
     </table>
 
-    <h2 class="hasAnchor" id="geom-imageglyph"><a class="anchor" href="#geom-imageglyph"></a><code>geom_imageGlyph</code></h2>
-
-    
-
-<p>For <code>geom_imageGlyph</code>, use <code>geom_image_glyph</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

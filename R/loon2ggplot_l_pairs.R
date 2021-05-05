@@ -1,11 +1,11 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_pairs <- function(target, ...) {
+loon2ggplot.l_pairs <- function(target, asAes = TRUE, ...) {
 
   locations <- g_getLocations(target)
 
   gm <- GGally::ggmatrix(
-    plots = g_getPlots(target),
+    plots = g_getPlots(target, asAes = asAes),
     nrow = locations$nrow,
     ncol = locations$ncol,
     byrow = FALSE,

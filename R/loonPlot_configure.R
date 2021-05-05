@@ -1,4 +1,6 @@
-loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggplotPanelParams,
+loonPlot_configure <- function(isCoordPolar, loonPlot, loonLayers,
+                               scaleTo, scaleToFun, activeGeomLayers,
+                               ggGuides, panelIndex, ggplotPanelParams,
                                swapAxes, theme, panX, panY, deltaX, deltaY, zoomX, zoomY) {
   # draw ggGuides?
   if (isCoordPolar) {
@@ -20,6 +22,9 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
           message("Is it hard to understand the graphics? Try \"ggGuides = TRUE\"!")
       }
 
+      if(scaleTo > 0) {
+        warning("`scaleTo` only works on Cartesian Coordinate", call. = FALSE)
+      }
       loon::l_scaleto_world(loonPlot)
     }
   } else {
@@ -32,19 +37,58 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
              function(l){
                loon::l_layer_lower(loonPlot, CartesianGuides)
              })
-      loon::l_scaleto_world(loonPlot)
+
+      if(scaleTo == 0)
+        loon::l_scaleto_world(loonPlot)
     }
   }
 
   # in polar coord, scales are fixed; ggGuides do not need to set scales
-  if (!isCoordPolar & !ggGuides) {
-    loon::l_configure(loonPlot,
-                      panX=panX,
-                      panY=panY,
-                      deltaX= deltaX,
-                      deltaY=deltaY,
-                      zoomX = zoomX,
-                      zoomY = zoomY)
+  if(scaleTo == 0) {
+    if (!isCoordPolar && !ggGuides) {
+      loon::l_configure(loonPlot,
+                        panX=panX,
+                        panY=panY,
+                        deltaX= deltaX,
+                        deltaY=deltaY,
+                        zoomX = zoomX,
+                        zoomY = zoomY)
+    }
+  } else {
+
+    if(length(loonLayers) > 0) {
+
+      for(j in seq(length(loonLayers))) {
+
+
+        if(scaleTo != j) next
+
+        layer <- loonLayers[[j]]
+
+        if(j %in% activeGeomLayers) {
+          # scale to interactive layer
+          scaleToFun <- scaleToFun %||% loon::l_scaleto_plot
+          tryCatch(
+            scaleToFun(loonPlot),
+            error = function(e) {
+              warning("Not valid `scaleToFun`",
+                      call. = FALSE)
+            }
+          )
+        } else {
+          scaleToFun <- scaleToFun %||% loon::l_scaleto_layer
+          # layer could be NULL, if the input geom layer data is 0 dimension
+          if(!is.null(layer))
+            tryCatch(
+              scaleToFun(loonPlot, layer),
+              error = function(e) {
+                warning("This `scaleToFun` cannot be applied on a layer geometric visual",
+                        call. = FALSE)
+              }
+            )
+        }
+      }
+    }
   }
 
   ######################################## set theme ########################################
@@ -85,10 +129,14 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, ggGuides, panelIndex, ggp
     }
   }
 
-  if(is.na(background.color)) background.color <- loonPlot['background']
-  if(is.na(text.color)) text.color <- loonPlot['foreground']
-  if(is.na(panel.background_fill)) panel.background_fill <- loonPlot['guidesBackground']
-  if(is.na(panel.guideline_color)) panel.guideline_color <- loonPlot['guidelines']
+  if(is.na(background.color))
+    background.color <- loonPlot['background']
+  if(is.na(text.color))
+    text.color <- loonPlot['foreground']
+  if(is.na(panel.background_fill))
+    panel.background_fill <- loonPlot['background']
+  if(is.na(panel.guideline_color))
+    panel.guideline_color <- loonPlot['guidelines']
 
   loon::l_configure(loonPlot,
                     background = background.color,

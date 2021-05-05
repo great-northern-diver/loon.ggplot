@@ -1,14 +1,14 @@
 #' @title loon.ggplot
 #'
 #' @description A bridge between \code{loon} widgets and \code{gg} objects. It can take either a \code{loon} widget,
-#' a \code{gg} object (\code{ggplot} or \code{GGally::ggmatrix}) or
-#' a \code{lggplot} object, then create a corresponding \code{gg} (or \code{loon}) graphics.
+#' a \code{gg} object (\code{ggplot}, \code{GGally::ggmatrix}) or
+#' a \code{l_ggplot} object, then create a corresponding \code{gg} (or \code{loon}) graphics.
 #'
-#' @param x A \code{loon} widget, a \code{ggplot} object or a \code{lggplot} object.
+#' @param x A \code{loon} widget, a \code{ggplot} object or a \code{l_ggplot} object.
 #' @param ... arguments used in either \code{loon2ggplot()} or \code{ggplot2loon()}
 #'
 #' @return If the input is a \code{ggplot} object, the output would be a \code{loon} widget; conversely, if the
-#' input is a \code{loon} widget, then it returns a \code{ggplot} object. If it is a \code{lggplot} object,
+#' input is a \code{loon} widget, then it returns a \code{ggplot} object. If it is a \code{l_ggplot} object,
 #' \code{loon.ggplot} helps to return a \code{loon} widget.
 #'
 #' @seealso \code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}, \code{\link{l_ggplot}}
@@ -35,11 +35,11 @@
 #'   l <- loon.ggplot(g)
 #'   l # a loon widget
 #'
-#' ######### lggplot #########
+#' ######### l_ggplot #########
 #'   p <- l_ggplot(mpg, aes(displ, fill = factor(cyl))) +
 #'        geom_histogram()
 #'   class(p)
-#'   # Function `print.lggplot` is called automatically
+#'   # Function `print.l_ggplot` is called automatically
 #'   p
 #'   # Function `loon.ggplot` helps to return a loon widget
 #'   q <- loon.ggplot(p)
@@ -64,19 +64,18 @@ loon.ggplot.loon <- function(x, ...) {
 
 #' @export
 #' @rdname loon.ggplot
-# object `lggplot` and `l_ggplot` are two different animals.
-################## `lggplot` ##################
-# A `lggplot` object is a kinda `ggplot` object.
-# Users can use `+` to build a loon plot. The magic comes from the class `lggplot`.
-# When we start with function `l_ggplot` (which is confusing) instead of the `ggplot` function,
-# the returned object has a new class `lggplot`.
-# Then, function `print.lggplot` automatically draws the `loon` plot.
-
 ################## `l_ggplot` ##################
-# when we transform a `ggplot` object (with multiple facets) to a `loon` plot. We will return a list with several plots.
-# the returned list is a `l_compound` object, called `l_ggplot`.
+# An `l_ggplot` object is a "look-like" `ggplot` object.
+# Users can use `+` to build a loon plot. The magic comes from the class `l_ggplot`.
+# When we start with function `l_ggplot()` instead of the `ggplot` function,
+# the returned object has a new class `l_ggplot`.
+# Then, function `print.l_ggplot()` automatically draws the `loon` plot.
 
-loon.ggplot.lggplot <- function(x, ...) {
+################## `l_facet_ggplot` ##################
+# when we transform a `ggplot` object (with multiple facets) to a `loon` plot.
+# the returned object is a `l_compound` object, called `l_facet_ggplot`.
+
+loon.ggplot.l_ggplot <- function(x, ...) {
 
   params <- list()
   if(!is.null(x$interactivity)) {

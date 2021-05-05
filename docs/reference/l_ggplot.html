@@ -47,10 +47,7 @@
 
 
 <meta property="og:title" content="Automatically create a loon widget — l_ggplot" />
-<meta property="og:description" content="l_ggplot() wraps function ggplot with assigning a new class &quot;lggplot&quot; to the output
-ggplot object and returns a lggplot object. When a ggplot object is processed,
-S3 method print.ggplot is rendered, however, if a lggplot object is processed,
-S3 method print.lggplot will be rendered which will return a loon widget" />
+<meta property="og:description" content="Create a loon widget with ggplot syntax" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -83,7 +80,7 @@ S3 method print.lggplot will be rendered which will return a loon widget" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -146,13 +143,14 @@ S3 method print.lggplot will be rendered which will return a loon widget" />
     </div>
 
     <div class="ref-description">
-    <p><code>l_ggplot()</code> wraps function <code>ggplot</code> with assigning a new class "lggplot" to the output
-<code>ggplot</code> object and returns a <code>lggplot</code> object. When a <code>ggplot</code> object is processed,
-S3 method <code>print.ggplot</code> is rendered, however, if a <code>lggplot</code> object is processed,
-S3 method <code>print.lggplot</code> will be rendered which will return a <code>loon</code> widget</p>
+    <p>Create a <code>loon</code> widget with <code>ggplot</code> syntax</p>
     </div>
 
+<<<<<<< HEAD
     <pre class="usage"><span class='fu'>l_ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(), <span class='no'>...</span>, <span class='kw'>environment</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span>())</pre>
+=======
+    <pre class="usage"><span class='fu'>l_ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='cn'>NULL</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span>, environment <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sys.parent.html'>parent.frame</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span></pre>
+>>>>>>> upstream/master
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,14 +177,23 @@ If not specified, must be supplied in each layer added to the plot.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>It will return a <code>lggplot</code> object with class <code><a href='https://rdrr.io/r/base/c.html'>c("lggplot", "gg", "ggplot")</a></code>.
+    <p>It will return an <code>l_ggplot</code> object with class <code><a href='https://rdrr.io/r/base/c.html'>c("l_ggplot", "gg", "ggplot")</a></code>.
 Then print a <code>loon</code> plot automatically.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>function <code>l_ggplot()</code> wraps function <code>ggplot()</code> with assigning an additional class "l_ggplot"
+to the output. The returned object is called an <code>l_ggplot</code> object.
+To draw a <code>ggplot</code> object, S3 method <code>print.ggplot</code> will be rendered
+so that a static graphic is displayed. While, for an <code>l_ggplot()</code> object,
+S3 method <code>print.l_ggplot</code> will be rendered
+which will return an interactive <code>loon</code> widget.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code>ggplot</code>, <code><a href='ggplot2loon.html'>ggplot2loon</a></code>, <code><a href='print.lggplot.html'>print.lggplot</a></code></p>
+    <div class='dont-index'><p><code>ggplot</code>, <code><a href='ggplot2loon.html'>ggplot2loon</a></code>, <code><a href='print.l_ggplot.html'>print.l_ggplot</a></code></p>
 <p><code><a href='loon.ggplot.html'>loon.ggplot</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+<<<<<<< HEAD
     <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>l_ggplot</span>(<span class='no'>mpg</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>displ</span>, <span class='no'>cty</span>)) +
     <span class='fu'>geom_point</span>(
@@ -196,6 +203,17 @@ Then print a <code>loon</code> plot automatically.</p>
 <span class='co'># p is a `lggplot` object, `print.lggplot(p)` will be called automatically.</span>
 <span class='co'># Then, a `lggplot` object will be transformed to a `loon` widget</span>
 <span class='no'>p</span>
+=======
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>l_ggplot</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>displ</span>, <span class='va'>cty</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span>
+      size <span class='op'>=</span> <span class='fl'>4</span>,
+      mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='op'>)</span>
+<span class='co'># p is an `l_ggplot` object, `print.l_ggplot(p)` will be called automatically.</span>
+<span class='co'># Then, at printing time, an `l_ggplot` object will be transformed to a `loon` widget</span>
+<span class='va'>p</span>
+>>>>>>> upstream/master
 
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='co'># Assign a widget from current path</span>
@@ -205,7 +223,7 @@ Then print a <code>loon</code> plot automatically.</p>
 <span class='no'>q</span>
 }
 
-<span class='co'># An alternative way to return a real loon widget from `p` (a `lggplot` object)</span>
+<span class='co'># An alternative way to return a real loon widget from `p` (a `l_ggplot` object)</span>
 <span class='co'># is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`</span>
 <span class='co'># this way can provide richer information (note that it will create a new widget).</span>
 <span class='no'>q</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='loon.ggplot.html'>loon.ggplot</a></span>(<span class='no'>p</span>)
@@ -221,10 +239,18 @@ Then print a <code>loon</code> plot automatically.</p>
 
 <span class='co'># a 3D object</span>
 <span class='co'># press the button key `R` to rotate the plot</span>
+<<<<<<< HEAD
 <span class='fu'>l_ggplot</span>(<span class='no'>mtcars</span>,
          <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>, <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>drat</span>)) +
    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>)
 }</div></pre>
+=======
+<span class='fu'>l_ggplot</span><span class='op'>(</span><span class='va'>mtcars</span>,
+         mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, z <span class='op'>=</span> <span class='va'>drat</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+   <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
+>>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

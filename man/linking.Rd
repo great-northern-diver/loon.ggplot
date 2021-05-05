@@ -8,8 +8,7 @@ linking(
   linkingGroup = NULL,
   linkingKey = NULL,
   linkedStates = NULL,
-  sync = NULL,
-  activeGeomLayers = NULL
+  sync = NULL
 )
 }
 \arguments{
@@ -25,11 +24,6 @@ Elements in different plots are linked if they share the same linking keys.}
 If the \code{sync} is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
 of the new plot will be pulled from the linked plots;
 if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.}
-
-\item{activeGeomLayers}{determine which geom layer is interactive. Only \code{geom_point()}
-and \code{geom_histogram()} can be set as active geom layer(s) so far.
-(Notice, more than one \code{geom_point()} layers can be set as active layers,
-but only one \code{geom_histogram()} can be set as an active geom layer)}
 }
 \value{
 a \code{ggproto} object
@@ -51,16 +45,9 @@ if(interactive() && requireNamespace("dplyr")) {
        linking(linkingGroup = "mtcars",
                linkingKey = ~carName,
                sync = "push")
-
-  # set active layer
-  l_ggplot(mtcars, aes(mpg, wt, shape = factor(cyl))) +
-    geom_point(colour = "black", size = 4.5) +
-    geom_point(colour = "pink", size = 4) +
-    geom_point(aes(shape = factor(cyl))) +
-    # only the second layer is interactive
-    linking(activeGeomLayers = 2)
 }
 }
 \seealso{
-\code{\link{selecting}}, \code{\link{itemLabel}}, \code{\link{interactivity}}
+\code{\link{active}}, \code{\link{selection}}, \code{\link{scaleTo}},
+\code{\link{hover}}, \code{\link{interactivity}}
 }

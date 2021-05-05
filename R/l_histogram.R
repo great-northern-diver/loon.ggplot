@@ -1,25 +1,24 @@
 l_histogram <- function(ggBuild, ggLayout, layout, ggplotPanelParams, ggObj,
                         activeGeomLayers, panelIndex, dataFrame, mapping, numOfSubtitles,
-                        parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                        xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
+                        parent, showGuides, showScales, swapAxes, linkingKey, nDimStates,
+                        showLabels, xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
   x <- ggObj$layers[[activeGeomLayers]]$stat
   UseMethod("l_histogram", x)
 }
 
-
-
 l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanelParams, ggObj,
                                 activeGeomLayers, panelIndex, dataFrame,
                                 mapping, numOfSubtitles,
-                                parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                                xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
+                                parent, showGuides, showScales, swapAxes, linkingKey, nDimStates,
+                                showLabels, xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
 
   # set binwidth
   ## panel i hist values
   hist_data <- ggBuild$data[[activeGeomLayers]]
-  hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
-
+  id <- hist_data$PANEL == panelIndex
+  hist_data <- hist_data[id, ]
   flipped_aes <- any(hist_data$flipped_aes) %||% FALSE
+
   if(flipped_aes) {
     binwidth_vec <- hist_data$ymax - hist_data$ymin
     binwidth <- binwidth_vec[!is.na(binwidth_vec)][1]
@@ -60,7 +59,7 @@ l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanelParams, gg
     colorOutline <- Filter(function(k) k != "", unique(hex6to12(hist_data$colour)))[1]
   } else {
     showOutlines <- FALSE
-    colorOutline <- ("black")
+    colorOutline <- "black"
   }
 
   if(swapAxes) {
@@ -71,37 +70,51 @@ l_histogram.StatBin <- function(ggBuild, ggLayout, layout, ggplotPanelParams, gg
     else swapAxes <- FALSE
   }
 
+  dat <- modify_n_dim_data(nDimStates,
+                           data.frame(
+                             x = hist_values,
+                             color = hex6to12(fill),
+                             linkingKey = linkingKey[facet_id][in_limits]
+                           ),  id)
+
+  histList <- remove_null(
+    c(
+      list(
+        parent = parent,
+        binwidth = binwidth, # need more thoughts
+        showLabels = showLabels,
+        showGuides = showGuides,
+        showScales = showScales,
+        showOutlines = showOutlines,
+        colorOutline = colorOutline,
+        swapAxes = swapAxes,
+        colorStackingOrder = colorStackingOrder,
+        yshows = get_yshows(mapping,
+                            layMapping  = ggObj$layers[[activeGeomLayers]]$mapping,
+                            flipped_aes),
+        showStackedColors = TRUE,
+        xlabel = if(is.null(xlabel)) "" else xlabel,
+        ylabel = if(is.null(ylabel)) "" else ylabel,
+        title = loonTitle
+      ),
+      dat
+    ), as_list = FALSE)
+
   # loon histogram
-  loon::l_hist(parent = parent,
-               x = hist_values,
-               color = hex6to12(fill),
-               binwidth = binwidth + 1e-6, # need more thoughts
-               showLabels = showLabels,
-               showGuides = showGuides,
-               showScales = showScales,
-               showOutlines = showOutlines,
-               colorOutline = colorOutline,
-               swapAxes = swapAxes,
-               colorStackingOrder = colorStackingOrder,
-               yshows = get_yshows(mapping,
-                                   layMapping  = ggObj$layers[[activeGeomLayers]]$mapping),
-               linkingKey = linkingKey[facet_id][in_limits],
-               showStackedColors = TRUE,
-               xlabel = if(is.null(xlabel)) "" else xlabel,
-               ylabel = if(is.null(ylabel)) "" else ylabel,
-               title = loonTitle)
+  do.call(loon::l_hist, histList)
 }
 
 l_histogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanelParams, ggObj,
                                   activeGeomLayers, panelIndex, dataFrame,
                                   mapping, numOfSubtitles,
-                                  parent, showGuides, showScales, swapAxes, linkingKey, showLabels,
-                                  xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
+                                  parent, showGuides, showScales, swapAxes, linkingKey, nDimStates,
+                                  showLabels, xlabel, ylabel, loonTitle, FacetWrap, FacetGrid) {
 
   hist_data <- ggBuild$data[[activeGeomLayers]]
-  hist_data <- hist_data[hist_data$PANEL == panelIndex, ]
-
+  id <- hist_data$PANEL == panelIndex
+  hist_data <- hist_data[id, ]
   flipped_aes <- any(hist_data$flipped_aes) %||% FALSE
+
   if(flipped_aes) {
     hist_x <- rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame)
     # label swap
@@ -154,25 +167,38 @@ l_histogram.StatCount <- function(ggBuild, ggLayout, layout, ggplotPanelParams, 
     else swapAxes <- FALSE
   }
 
+  dat <- modify_n_dim_data(nDimStates,
+                           data.frame(
+                             x = hist_values,
+                             color = hex6to12(fill),
+                             linkingKey = linkingKey[facet_id][in_limits]
+                           ),  id)
+
+  histList <- remove_null(
+    c(
+      list(
+        parent = parent,
+        showLabels = showLabels,
+        showGuides = showGuides,
+        showScales = showScales,
+        showOutlines = showOutlines,
+        colorOutline = colorOutline,
+        colorStackingOrder = colorStackingOrder,
+        swapAxes = swapAxes,
+        origin = 0.5,
+        yshows = get_yshows(mapping,
+                            layMapping  = ggObj$layers[[activeGeomLayers]]$mapping,
+                            flipped_aes),
+        showStackedColors = TRUE,
+        xlabel = if(is.null(xlabel)) "" else xlabel,
+        ylabel = if(is.null(ylabel)) "" else ylabel,
+        title = loonTitle
+      ),
+      dat
+    ), as_list = FALSE)
+
   # loon histogram
-  loon::l_hist(parent = parent,
-               x = hist_values,
-               color = hex6to12(fill),
-               showLabels = showLabels,
-               showGuides = showGuides,
-               showScales = showScales,
-               showOutlines = showOutlines,
-               colorOutline = colorOutline,
-               colorStackingOrder = colorStackingOrder,
-               swapAxes = swapAxes,
-               origin = 0.5,
-               yshows = get_yshows(mapping,
-                                   layMapping  = ggObj$layers[[activeGeomLayers]]$mapping),
-               linkingKey = linkingKey[facet_id][in_limits],
-               showStackedColors = TRUE,
-               xlabel = if(is.null(xlabel)) "" else xlabel,
-               ylabel = if(is.null(ylabel)) "" else ylabel,
-               title = loonTitle)
+  do.call(loon::l_hist, histList)
 }
 
 # catch_bin_info is mainly used to catch the order of the stacked bins
@@ -555,9 +581,10 @@ position_operation.PositionDodge <- function(position, hist_values, activeGeomLa
       #   hist_values <- paste(hist_values, fill_var, sep = sep)
       # }
       hist_values <- paste(hist_values, fill_var, sep = sep)
-      message("Viewport is changed. Set `l_scaleto_world` to get the world view")
+      message("Viewport has been changed. Set `l_scaleto_world` to get the world view plot")
     } else
-      rlang::abort("The length of `hist_values` and `fill_var` does not match.")
+      stop("The length of `hist_values` and `fill_var` does not match.",
+           call. = FALSE)
 
   } else {
     fill_var <- hist_values
@@ -633,13 +660,26 @@ match_fill <- function(hist_values, fill_var, hist_data,
 }
 
 # density or frequency?
-get_yshows <- function(mapping, layMapping) {
+get_yshows <- function(mapping, layMapping, flipped_aes = FALSE) {
 
-  if (!is.null(mapping$y)) {
-    if(grepl("density", rlang::expr_text(mapping$y))) return("density")
-  }
-  if (!is.null(layMapping$y)) {
-    if(grepl("density", rlang::expr_text(layMapping$y))) return("density")
+  if(flipped_aes) {
+
+    if (!is.null(mapping$x)) {
+      if(grepl("density", rlang::expr_text(mapping$x))) return("density")
+    }
+    if (!is.null(layMapping$x)) {
+      if(grepl("density", rlang::expr_text(layMapping$x))) return("density")
+    }
+
+  } else {
+
+    if (!is.null(mapping$y)) {
+      if(grepl("density", rlang::expr_text(mapping$y))) return("density")
+    }
+    if (!is.null(layMapping$y)) {
+      if(grepl("density", rlang::expr_text(layMapping$y))) return("density")
+    }
+
   }
   return("frequency")
 }

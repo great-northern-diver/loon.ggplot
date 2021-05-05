@@ -80,7 +80,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -187,6 +187,7 @@ we rotate the plot, most points will stay inside the current view.</p>
 <span class='co'># Issues:</span>
 <span class='co'>#   1: the points are off the window</span>
 <span class='co'>#   2: Always in a line shape</span>
+<<<<<<< HEAD
 <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>dsamp</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>carat</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>price</span>,
                     <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>depth</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>color</span>)) +
   <span class='fu'>geom_point</span>()}
@@ -209,6 +210,31 @@ we rotate the plot, most points will stay inside the current view.</p>
   <span class='fu'>geom_point</span>() +
   <span class='fu'>scale_multi</span>(<span class='kw'>trans</span> <span class='kw'>=</span> <span class='no'>logp1_base10_trans</span>)
 }</div></pre>
+=======
+<span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>dsamp</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>carat</span>, y <span class='op'>=</span> <span class='va'>price</span>,
+                    z <span class='op'>=</span> <span class='va'>depth</span>, colour <span class='op'>=</span> <span class='va'>color</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span><span class='op'>}</span>
+
+<span class='co'># set scales</span>
+<span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>dsamp</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>carat</span>, y  <span class='op'>=</span><span class='va'>price</span>,
+                    z <span class='op'>=</span> <span class='va'>depth</span>, colour <span class='op'>=</span> <span class='va'>color</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_multi</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># customized `trans`</span>
+<span class='va'>logp1_base10_trans</span> <span class='op'>&lt;-</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/trans_new.html'>trans_new</a></span><span class='op'>(</span>
+  name <span class='op'>=</span> <span class='st'>"logp"</span>,
+  trans <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>x</span> <span class='op'>+</span> <span class='fl'>1</span>, base <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>,
+  inverse <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fl'>10</span><span class='op'>**</span><span class='va'>x</span> <span class='op'>-</span> <span class='fl'>1</span>,
+  breaks <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='fu'><a href='https://scales.r-lib.org/reference/breaks_log.html'>log_breaks</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>dsamp</span>, <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>carat</span>, y <span class='op'>=</span> <span class='va'>price</span>,
+                    z <span class='op'>=</span> <span class='va'>depth</span>, colour <span class='op'>=</span> <span class='va'>color</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_multi</span><span class='op'>(</span>trans <span class='op'>=</span> <span class='va'>logp1_base10_trans</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
+>>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

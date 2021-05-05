@@ -1,27 +1,65 @@
-#' @title \code{loon} to \code{ggplot}
+#' @title Turn a \code{loon} widget to a \code{ggplot} object
 #'
 #' @description Create a \code{ggplot} object from a \code{loon} widget
 #'
-#' @param target a\code{loon} or a vector that specifies the
+#' @param target a \code{loon} or a vector that specifies the
 #' widget, layer, glyph, navigator or context completely.
 #' The widget is specified by the widget path name (e.g. '.l0.plot'),
 #' the remaining objects by their ids.
+#' @param asAes logical; set aesthetics attributes, i.e. `color`, `fill` as
+#' variables (default \code{TRUE}) or general visual properties (\code{FALSE}).
+#' See details
 #' @param ... arguments used inside \code{loon2ggplot()}, not used by this method
 #'
 #' @return a \code{ggplot} object
 #'
+#' @details
+#' in \code{ggplot}, generally speaking, there are two ways to set the
+#' aesthetics attributes, either take it as variables
+#' (set in function \code{aes()}) or visual properties. The main benefits to
+#' consider it as variables are that 1. legend could be shown; 2. convenient for
+#' further analysis. See examples.
+#'
 #' @export
 #' @examples
 #' if(interactive()) {
-#'   l <- l_plot(iris, color = iris$Species)
-#'   p <- loon2ggplot(l)
-#'   p # a ggplot object
-#'   str(p)
-#'   # add themes
-#'   p + geom_smooth() + theme_linedraw()
+#' lp <- l_plot(iris,
+#'              color = iris$Species,
+#'              glyph = "circle")
+#' gp <- loon2ggplot(lp)
+#' gp # a ggplot object
+#'
+#' # add smooth layer, grouped by color
+#' gp +
+#'   geom_smooth(aes(color = color)) +
+#'   # give meaningful legend label names
+#'   scale_color_manual(
+#'     # make sure the order is correct
+#'     values = unique(hex12tohex6(lp['color'])),
+#'     labels = c("setosa", "versicolor", "virginica")
+#'   )
+#'
+#' # histogram
+#' lh <- l_hist(mtcars$mpg,
+#'              color = factor(mtcars$gear))
+#'
+#' gh0 <- loon2ggplot(lh)
+#' # facet by `fill`
+#' gh0 + facet_wrap(~fill)
+#'
+#' # set `asAes = FALSE`
+#' gh1 <- loon2ggplot(lh, asAes = FALSE)
+#' # Expect the legend, they both are identical
+#' gh1
+#'
+#' \dontrun{
+#' # ERROR
+#' # The bins are constructed by `ggplot2::geom_rect()`
+#' # Very limited "fancy" operations can be made
+#' gh1 + facet_wrap(~fill)}
 #' }
 #'
-loon2ggplot <- function(target, ...) {
+loon2ggplot <- function(target, asAes = TRUE, ...) {
 
   if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
     error_info <- deparse(substitute(target))
@@ -38,7 +76,7 @@ loon2ggplot <- function(target, ...) {
 
 #' @export
 #' @rdname loon2ggplot
-loon2ggplot.default <- function(target, ...) {
+loon2ggplot.default <- function(target, asAes = TRUE, ...) {
   # TODO
   ggObj <- list(...)$ggObj
   ggObj
@@ -46,36 +84,47 @@ loon2ggplot.default <- function(target, ...) {
 
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_plot <- function(target, ...) {
+loon2ggplot.l_plot <- function(target, asAes = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl))
+               ggObj = loon2ggplot(rl, asAes = asAes))
 }
 
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_hist <- function(target, ...) {
+loon2ggplot.l_hist <- function(target, asAes = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
+
+  if(target['yshows'] == "density" && length(unique(target['color'])) > 1) {
+    setLimits <- FALSE
+    message("In ggplot histogram, if `y` shows density, ",
+    "the area of each category (grouped by color) is 1; ",
+    "however, for an `l_hist` widget, ",
+    "the whole area is one and the area of each category is proportional to its counts.")
+  } else
+    setLimits <- TRUE
+
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl))
+               ggObj = loon2ggplot(rl, asAes = asAes),
+               setLimits = setLimits)
 }
 
 #' @export
-loon2ggplot.l_graph <- function(target, ...) {
+loon2ggplot.l_graph <- function(target, asAes = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl))
+               ggObj = loon2ggplot(rl, asAes = asAes))
 }
 
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_plot3D <- function(target, ...) {
+loon2ggplot.l_plot3D <- function(target,  asAes = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
@@ -101,7 +150,7 @@ loon2ggplot.l_plot3D <- function(target, ...) {
   y <- c(0.5, 0.5 + 0.08*axes_coords[[2]][1])
 
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl)) +
+               ggObj = loon2ggplot(rl, asAes = asAes)) +
     ggplot2::geom_line(
       data = data.frame(
         x = x,
@@ -134,7 +183,7 @@ loon2ggplot.l_plot3D <- function(target, ...) {
     )
 }
 
-cartesian_gg <- function(target, ggObj) {
+cartesian_gg <- function(target, ggObj, setLimits = TRUE) {
 
   # keep name consistency
   widget <- target
@@ -183,7 +232,6 @@ cartesian_gg <- function(target, ggObj) {
   guidesBackGround <- if(showGuides) as_hex6color(widget['guidesBackground']) else as_hex6color(widget['background'])
 
   ggObj <- ggObj +
-    ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
     ggplot2::xlab(xlabel) +
     ggplot2::ylab(ylabel) +
     ggplot2::ggtitle(label = if(title == "") NULL else title) +
@@ -209,12 +257,22 @@ cartesian_gg <- function(target, ggObj) {
                               size = 1) else ggplot2::element_blank(),
       plot.margin = grid::unit(margins, "lines")
     )
-  if(swapAxes) ggObj <- ggObj + coord_flip(xlim = xlim, ylim = ylim)
+
+  if(setLimits) {
+    ggObj <- ggObj +
+      ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
+
+    if(swapAxes) ggObj <- ggObj + coord_flip(xlim = xlim, ylim = ylim)
+
+  } else {
+    if(swapAxes) ggObj <- ggObj + coord_flip()
+  }
+
   return(ggObj)
 }
 
 #' @export
-loon2ggplot.l_layer_group <- function(target, ...) {
+loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   ggObj <- ggplot2::ggplot()
@@ -229,22 +287,38 @@ loon2ggplot.l_layer_group <- function(target, ...) {
 
                                   states <- get_layer_states(widget, native_unit = FALSE)
 
-                                  if (length(states$x) == length(states$y)) {
-                                    # scatter plot
-                                    swapAxes <- widget["swapAxes"]
-                                    if(swapAxes) {
-                                      y <- states$x
-                                      x <- states$y
+                                  if(length(states$x) > 0) {
+
+                                    if(inherits(widget, "l_hist")) {
+                                      # histogram
+                                      ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
+                                                                                  color = states$color,
+                                                                                  selected = states$selected,
+                                                                                  active = states$active),
+                                                                mapping = ggplot2::aes(x = x))
+
                                     } else {
-                                      x <- states$x
-                                      y <- states$y
+
+                                      # scatter plot
+                                      swapAxes <- widget["swapAxes"]
+                                      if(swapAxes) {
+                                        y <- states$x
+                                        x <- states$y
+                                      } else {
+                                        x <- states$x
+                                        y <- states$y
+                                      }
+
+                                      ggObj <<- ggplot2::ggplot(data = data.frame(x = x,
+                                                                                  y = y,
+                                                                                  glyph = states$glyph,
+                                                                                  size = states$size,
+                                                                                  color = states$color,
+                                                                                  selected = states$selected,
+                                                                                  active = states$active),
+                                                                mapping = ggplot2::aes(x = x,
+                                                                                       y = y))
                                     }
-                                    ggObj <<- ggplot2::ggplot(data = data.frame(x = x, y = y),
-                                                              mapping = ggplot2::aes(x = x, y = y))
-                                  } else if(length(states$y) == 1 && is.na(states$y)) {
-                                    # histogram
-                                    ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x),
-                                                              mapping = ggplot2::aes(x = x))
                                   } else NULL
                                 }
 
@@ -259,7 +333,7 @@ loon2ggplot.l_layer_group <- function(target, ...) {
   lapply(l_visible_children_layer,
          function(layer) {
 
-           ggObj <<- loon2ggplot(layer, ggObj = ggObj)
+           ggObj <<- loon2ggplot(layer, asAes = asAes, ggObj = ggObj)
          })
 
   ggObj
@@ -267,7 +341,7 @@ loon2ggplot.l_layer_group <- function(target, ...) {
 
 # primitive ggplot layers
 #' @export
-loon2ggplot.l_layer_polygon <- function(target, ...) {
+loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -297,7 +371,7 @@ loon2ggplot.l_layer_polygon <- function(target, ...) {
 }
 
 #' @export
-loon2ggplot.l_layer_line <- function(target, ...) {
+loon2ggplot.l_layer_line <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -327,7 +401,7 @@ loon2ggplot.l_layer_line <- function(target, ...) {
 }
 
 #' @export
-loon2ggplot.l_layer_rectangle <- function(target, ...) {
+loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -358,7 +432,7 @@ loon2ggplot.l_layer_rectangle <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_oval <- function(target, ...) {
+loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -399,7 +473,7 @@ loon2ggplot.l_layer_oval <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_text <- function(target, ...) {
+loon2ggplot.l_layer_text <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -433,7 +507,7 @@ loon2ggplot.l_layer_text <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_texts <- function(target, ...) {
+loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -487,7 +561,7 @@ loon2ggplot.l_layer_texts <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_points <- function(target, ...) {
+loon2ggplot.l_layer_points <- function(target, asAes = TRUE, ...) {
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
@@ -516,7 +590,7 @@ loon2ggplot.l_layer_points <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_polygons <- function(target, ...) {
+loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -557,7 +631,7 @@ loon2ggplot.l_layer_polygons <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_rectangles <- function(target, ...) {
+loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -597,7 +671,7 @@ loon2ggplot.l_layer_rectangles <- function(target, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_lines <- function(target, ...) {
+loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]

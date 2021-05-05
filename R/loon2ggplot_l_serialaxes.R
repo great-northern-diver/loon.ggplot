@@ -1,6 +1,6 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_serialaxes <- function(target, ...) {
+loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
 
   widget <- target
   remove(target)
@@ -13,7 +13,7 @@ loon2ggplot.l_serialaxes <- function(target, ...) {
   active_displayOrder <- displayOrder[active]
 
   if(widget['showArea']) {
-    warning("Not implemented yet; `showArea` will be set as FALSE", call. = FALSE)
+    message("`showArea` is not implemented yet.")
   }
 
   stat <- "serialaxes"
@@ -26,26 +26,73 @@ loon2ggplot.l_serialaxes <- function(target, ...) {
     axes.sequence <- c(axes.sequence, axes.sequence[1L])
   }
 
-  p <- ggplot2::ggplot(data[active_displayOrder, ]) +
-    ggplot2::geom_path(
-      color = get_display_color(
-        as_hex6color(widget['color'][active_displayOrder]),
-        widget['selected'][active_displayOrder]
-      ),
-      size = as_r_line_size(widget['linewidth'][active_displayOrder]),
-      stat = stat
-    ) +
-    ggmulti::coord_serialaxes(direction = -1, # anticlock
-                              start = 11, # at 11
-                              axes.layout = axes.layout,
-                              scaling = widget['scaling'],
-                              axes.sequence = axes.sequence) +
-    ggplot2::ggtitle(widget['title'])
+  if(asAes) {
+
+    color <- get_display_color(
+      as_hex6color(widget['color'][active_displayOrder]),
+      widget['selected'][active_displayOrder]
+    )
+    size <- as_r_line_size(widget['linewidth'][active_displayOrder])
+
+    ggObj <- ggplot2::ggplot(data[active_displayOrder, ]) +
+      ggplot2::geom_path(
+        mapping = ggplot2::aes(
+          color = color,
+          size = size
+        ),
+        stat = stat
+      ) +
+      ggmulti::coord_serialaxes(direction = -1, # anticlock
+                                start = 11, # at 11
+                                axes.layout = axes.layout,
+                                scaling = widget['scaling'],
+                                axes.sequence = axes.sequence) +
+      ggplot2::ggtitle(widget['title'])
+
+    uni_color <- unique(color)
+    if(length(uni_color) > 0) {
+
+      ggObj <- ggObj +
+        ggplot2::scale_color_manual(values = uni_color,
+                                    labels = selection_color_labels(uni_color),
+                                    breaks = uni_color)
+    }
+
+    if(length(uni_color) <= 1) {
+      ggObj <- ggObj + ggplot2::guides(color = FALSE)
+    }
+
+    uni_size <- unique(size)
+    if(length(uni_size) > 0) {
+      ggObj <- ggObj +
+        ggplot2::scale_size(range = range(size[!is.na(size)]))
+    }
+
+    if(length(uni_size) <= 1)
+      ggObj <- ggObj + ggplot2::guides(size = FALSE)
+
+  } else {
+    ggObj <- ggplot2::ggplot(data[active_displayOrder, ]) +
+      ggplot2::geom_path(
+        color = get_display_color(
+          as_hex6color(widget['color'][active_displayOrder]),
+          widget['selected'][active_displayOrder]
+        ),
+        size = as_r_line_size(widget['linewidth'][active_displayOrder]),
+        stat = stat
+      ) +
+      ggmulti::coord_serialaxes(direction = -1, # anticlock
+                                start = 11, # at 11
+                                axes.layout = axes.layout,
+                                scaling = widget['scaling'],
+                                axes.sequence = axes.sequence) +
+      ggplot2::ggtitle(widget['title'])
+  }
 
   # set themes
   suppressMessages(
     set_serialaxes_themes(
-      ggObj = p,
+      ggObj = ggObj,
       sequence = widget['sequence'],
       showLabels =  widget['showLabels'],
       showAxesLabels = widget['showAxesLabels'],

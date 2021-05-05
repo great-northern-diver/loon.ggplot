@@ -5,6 +5,8 @@ library(GGally)
 library(ggmulti)
 library(hexbin)
 
+pdf(NULL)
+
 test_that("geometric layers (ggplot to loon)", {
 
   # point
@@ -90,7 +92,7 @@ test_that("geometric layers (ggplot to loon)", {
     facet_wrap(~am, nrow = 1)
 
   g <- ggplot2loon(p)
-  expect_equal(length(g$plots), 2)
+  expect_equal(length(g), 2)
 
   df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
   xgrid <- with(df, seq(min(x), max(x), length = 50))
@@ -238,7 +240,7 @@ test_that("geometric layers (ggplot to loon)", {
     byrow = TRUE
   )
   g <- ggplot2loon(pm)
-  expect_equal(class(g), c("l_ggmatrix", "l_ggplot", "l_compound", "loon"))
+  expect_equal(class(g), c("l_ggmatrix", "l_compound", "loon"))
 })
 
 test_that("geometric (histogram, bar) layers (ggplot to loon)", {
@@ -251,13 +253,13 @@ test_that("geometric (histogram, bar) layers (ggplot to loon)", {
   pp <- ggplot(mtcars, aes(hp, fill = as.character(am))) +
     geom_histogram() + geom_freqpoly()+ facet_wrap(~cyl)
   g <- ggplot2loon(pp)
-  expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  expect_equal(class(g), c("l_facet_ggplot", "l_facet", "l_compound", "loon"))
 
   # mtlong <- reshape2::melt(mtcars)
   # pp <- ggplot(mtlong, aes(value)) + facet_wrap(~variable, scales = 'free_x') +
   #   geom_histogram(binwidth = function(x) 2 * IQR(x) / (length(x)^(1/3)))
   # g <- ggplot2loon(pp)
-  # expect_equal(class(g), c("l_ggplot", "l_compound", "loon"))
+  # expect_equal(class(g), c("l_facet_ggplot", "l_facet", "l_compound", "loon"))
 
   g <- ggplot(mpg, aes(class))
   pp <- g +

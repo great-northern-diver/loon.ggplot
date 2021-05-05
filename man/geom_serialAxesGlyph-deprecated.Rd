@@ -3,7 +3,7 @@
 \name{geom_serialAxesGlyph-deprecated}
 \alias{geom_serialAxesGlyph-deprecated}
 \alias{geom_serialAxesGlyph}
-\title{serialaxes glyph (deprecated)}
+\title{geom_serialAxesGlyph (deprecated)}
 \usage{
 geom_serialAxesGlyph(
   mapping = NULL,
@@ -93,11 +93,6 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-serialaxes glyph (deprecated)
+use \code{\link{geom_serialaxes_glyph}}, rather than \code{geom_serialAxesGlyph}.
 }
-\section{\code{geom_serialAxesGlyph}}{
-
-For \code{geom_serialAxesGlyph}, use \code{\link{geom_serialaxes_glyph}}.
-}
-
 \keyword{internal}

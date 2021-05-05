@@ -1,5 +1,5 @@
-pack_layers <- function(loonPlot, ggObj, buildggObj, panelIndex,
-                        activeInfo, modelLayers) {
+pack_layers <- function(loonPlot, ggObj, buildggObj,
+                        panelIndex, activeInfo, modelLayers) {
 
   lenLayers <- length(ggObj$layers)
   if(lenLayers == 0) return(NULL)
@@ -14,18 +14,19 @@ pack_layers <- function(loonPlot, ggObj, buildggObj, panelIndex,
   activeModel <- activeInfo$activeModel
 
   # adding layers
-  loon_layers <- lapply(seq_len(lenLayers),
-                        function(j){
-                          if(j %in% activeGeomLayers) return(NULL)
-                          loonLayer(widget = loonPlot,
-                                    layerGeom = ggObj$layers[[j]],
-                                    data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == panelIndex, ],
-                                    ggplotPanelParams = ggplotPanelParams[[panelIndex]],
-                                    ggObj = ggObj,
-                                    curveAdditionalArgs = list(curve = list(which_curve = j,
-                                                                            curveLayers = curveLayers))
-                          )
-                        })
+  loonLayers <- lapply(seq_len(lenLayers),
+                       function(j){
+                         if(j %in% activeGeomLayers)
+                           return(NULL)
+                         loonLayer(widget = loonPlot,
+                                   layerGeom = ggObj$layers[[j]],
+                                   data =  ggBuild$data[[j]][ggBuild$data[[j]]$PANEL == panelIndex, ],
+                                   ggplotPanelParams = ggplotPanelParams[[panelIndex]],
+                                   ggObj = ggObj,
+                                   curveAdditionalArgs = list(curve = list(which_curve = j,
+                                                                           curveLayers = curveLayers))
+                         )
+                       })
 
   # reset the points or histogram layer to the original position
   if(length(activeGeomLayers) != lenLayers && length(activeGeomLayers) > 0 && all(activeGeomLayers != 0L)) {
@@ -52,4 +53,6 @@ pack_layers <- function(loonPlot, ggObj, buildggObj, panelIndex,
                              loon::l_layer_raise(loonPlot, "model")
                            })
   }
+
+  loonLayers
 }

@@ -2,19 +2,21 @@
 #' @description For the target compound loon plot, determines all the \code{ggplot}s based on
 #' the compound \code{loon} plot.
 #'
-#' @param target the (compound) loon  plot to be laid out.
+#' @param target the (compound) loon plot
+#' @inheritParams loon2ggplot
+#'
 #' @return a list of \code{ggplot}s.
 #'
 #' @seealso \code{\link{l_getPlots}}, \code{\link{g_getLocations}}
 #'
 #' @export
-g_getPlots <- function(target) {
+g_getPlots <- function(target, asAes = TRUE) {
   UseMethod('g_getPlots', target)
 }
 
 #' @export
 #' @rdname g_getPlots
-g_getPlots.default <- function(target) {
+g_getPlots.default <- function(target, asAes = TRUE) {
 
   # locations
   locations <- g_getLocations(target)
@@ -26,7 +28,7 @@ g_getPlots.default <- function(target) {
   ggplots <- suppressMessages(
     lapply(seq(length(target)),
            function(i) {
-             loon2ggplot(target[[i]])
+             loon2ggplot(target[[i]], asAes = asAes)
            })
   )
 
@@ -48,7 +50,7 @@ g_getPlots.default <- function(target) {
 
 #' @export
 #' @rdname g_getPlots
-g_getPlots.l_pairs <- function(target) {
+g_getPlots.l_pairs <- function(target, asAes = TRUE) {
 
   # locations
   locations <- g_getLocations(target)
@@ -60,7 +62,7 @@ g_getPlots.l_pairs <- function(target) {
   ggplots <- suppressMessages(
     lapply(1:length(target),
            function(i) {
-             loon2ggplot(target[[i]])
+             loon2ggplot(target[[i]], asAes = asAes)
            })
   )
 

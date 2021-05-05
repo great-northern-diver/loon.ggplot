@@ -147,8 +147,8 @@ get_activeInfo <- function(modelLayers, activeGeomLayers, len_layers){
 }
 
 get_subtitle <- function(layoutByROWS, layoutByCOLS, layout, ggLayout, numOfSubtitles,
-                         byROWS, byCOLS ,panelNum, FacetWrap, FacetGrid, tkLabels){
-  if(FacetWrap | !tkLabels) {
+                         byROWS, byCOLS ,panelNum, FacetWrap, FacetGrid){
+  if(FacetWrap) {
     colSubtitle <- if (numOfSubtitles > 0) {
       paste(
         sapply(

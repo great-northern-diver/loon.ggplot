@@ -18,14 +18,19 @@ If not specified, must be supplied in each layer added to the plot.}
 \item{environment}{DEPRECATED. Used prior to tidy evaluation.}
 }
 \value{
-It will return a \code{lggplot} object with class \code{c("lggplot", "gg", "ggplot")}.
+It will return an \code{l_ggplot} object with class \code{c("l_ggplot", "gg", "ggplot")}.
 Then print a \code{loon} plot automatically.
 }
 \description{
-\code{l_ggplot()} wraps function \code{ggplot} with assigning a new class "lggplot" to the output
-\code{ggplot} object and returns a \code{lggplot} object. When a \code{ggplot} object is processed,
-S3 method \code{print.ggplot} is rendered, however, if a \code{lggplot} object is processed,
-S3 method \code{print.lggplot} will be rendered which will return a \code{loon} widget
+Create a \code{loon} widget with \code{ggplot} syntax
+}
+\details{
+function \code{l_ggplot()} wraps function \code{ggplot()} with assigning an additional class "l_ggplot"
+to the output. The returned object is called an \code{l_ggplot} object.
+To draw a \code{ggplot} object, S3 method \code{print.ggplot} will be rendered
+so that a static graphic is displayed. While, for an \code{l_ggplot()} object,
+S3 method \code{print.l_ggplot} will be rendered
+which will return an interactive \code{loon} widget.
 }
 \examples{
 if(interactive()) {
@@ -34,8 +39,8 @@ p <- l_ggplot(mpg, aes(displ, cty)) +
       size = 4,
       mapping = aes(color = factor(cyl))
     )
-# p is a `lggplot` object, `print.lggplot(p)` will be called automatically.
-# Then, a `lggplot` object will be transformed to a `loon` widget
+# p is an `l_ggplot` object, `print.l_ggplot(p)` will be called automatically.
+# Then, at printing time, an `l_ggplot` object will be transformed to a `loon` widget
 p
 
 \dontrun{
@@ -46,7 +51,7 @@ q <- l_getFromPath('.l0.ggplot')
 q
 }
 
-# An alternative way to return a real loon widget from `p` (a `lggplot` object)
+# An alternative way to return a real loon widget from `p` (a `l_ggplot` object)
 # is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`
 # this way can provide richer information (note that it will create a new widget).
 q <- loon.ggplot(p)
@@ -68,7 +73,7 @@ l_ggplot(mtcars,
 }
 }
 \seealso{
-\code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.lggplot}}
+\code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.l_ggplot}}
 
 \code{\link{loon.ggplot}}
 }

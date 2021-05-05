@@ -81,7 +81,7 @@ via a pipe-operator &quot;%&amp;gt;%&quot;." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
       </span>
     </div>
 
@@ -183,6 +183,7 @@ via a pipe-operator "%&gt;%".</p>
     <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>magrittr</span>) <span class='kw'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
  <span class='co'># Error</span>
+<<<<<<< HEAD
  <span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span>
     <span class='fu'>ggplot</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>cyl</span>)) +
     <span class='fu'>geom_point</span>() <span class='kw'>%&gt;%</span>
@@ -194,6 +195,20 @@ via a pipe-operator "%&gt;%".</p>
    ) <span class='kw'>%&gt;%</span>
    <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span>()
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: magrittr</span></div></pre>
+=======
+ <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, colour <span class='op'>=</span> <span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+    <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+ <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span> <span class='op'>%&gt;%</span>
+   <span class='fu'>gg_pipe</span><span class='op'>(</span>
+     <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, colour <span class='op'>=</span> <span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span>
+   <span class='op'>)</span> <span class='op'>%&gt;%</span>
+   <span class='fu'><a href='ggplot2loon.html'>ggplot2loon</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: magrittr</span></div></pre>
+>>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
