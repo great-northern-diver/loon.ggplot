@@ -83,14 +83,14 @@ test_that("test selection", {
                'deselect')
 })
 
-test_that("test itemLabel", {
+test_that("test hover", {
 
   p1 <- l_ggplot(data = data.frame(x = 1:26,
                                    y = 1:26),
                  aes(x, y)) +
     geom_point() +
-    itemLabel(itemLabel = letters,
-              showItemLabels = TRUE)
+    hover(itemLabel = letters,
+          showItemLabels = TRUE)
   expect_message(p1["itemLabel"])
   q1 <- loon.ggplot(p1)
   expect_equal(q1["itemLabel"][2], "b")
@@ -109,7 +109,7 @@ test_that("test active", {
                c(rep(T, 13), rep(F, 13)))
 })
 
-test_that("test scaleTo", {
+test_that("test zoom", {
 
   p <- l_ggplot() +
     geom_point(data = data.frame(x = 10:26,
@@ -124,12 +124,12 @@ test_that("test scaleTo", {
                             ymin = ymin,
                             ymax = ymax),
               fill = "red")
-  p1 <- p + scaleTo(scaleTo = 2)
+  p1 <- p + zoom(layerId = 2)
   q1 <- loon.ggplot(p1)
   expect_true(q1["panX"] + q1["deltaX"]/q1["zoomX"] <= 6)
   expect_true(q1["panX"] + q1["deltaX"]/q1["zoomX"] >= 5)
 
-  p2 <- p + scaleTo(scaleTo = 1)
+  p2 <- p + zoom(layerId = 1)
   q2 <- loon.ggplot(p2)
   expect_true(q2["panX"] > 7)
   expect_true(q2["panX"] + q2["deltaX"]/q2["zoomX"] > 26)
