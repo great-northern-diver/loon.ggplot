@@ -84,7 +84,7 @@
 #'
 #'
 ggplot2loon <- function(ggObj, ..., activeGeomLayers = integer(0),
-                        scaleTo = NULL, scaleToFun = NULL,
+                        layerId = NULL, scaleToFun = NULL,
                         ggGuides = FALSE, parent = NULL, pack = TRUE,
                         exteriorLabelProportion = 1/5,
                         canvasHeight = 700, canvasWidth = 850, tkLabels = NULL) {
@@ -98,7 +98,7 @@ ggplot2loon.default <- function(ggObj, ...) {
 
 #' @export
 ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
-                               scaleTo = NULL, scaleToFun = NULL,
+                               layerId = NULL, scaleToFun = NULL,
                                ggGuides = FALSE, parent = NULL, pack = TRUE,
                                exteriorLabelProportion = 1/5,
                                canvasHeight = 700, canvasWidth = 850, tkLabels = NULL) {
@@ -115,7 +115,7 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
     )
   }
 
-  scaleTo <- scaleTo %||% 0L
+  layerId <- layerId %||% 0L
 
   # check arguments
   if(!ggplot2::is.ggplot(ggObj)) {
@@ -131,19 +131,19 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
             call. = FALSE)
   }
 
-  if(!is.numeric(scaleTo)) {
-    stop("`scaleTo` is a numeric argument", call. = FALSE)
+  if(!is.numeric(layerId)) {
+    stop("`layerId` is a numeric argument", call. = FALSE)
   } else {
-    if(length(scaleTo) == 0) scaleTo <- 0L
-    else if(length(scaleTo) > 1) {
-      warning("`scaleTo` can only change plot region to display all elements of **one** particular layer",
+    if(length(layerId) == 0) layerId <- 0L
+    else if(length(layerId) > 1) {
+      warning("`layerId` can only change plot region to display all elements of **one** particular layer",
               call. = FALSE)
-      scaleTo <- scaleTo[1L]
+      layerId <- layerId[1L]
     } else {
-      if(scaleTo > length(ggObj$layers)) {
-        scaleTo <- 0L
+      if(layerId > length(ggObj$layers)) {
+        layerId <- 0L
         warning("The ggplot object has ", length(ggObj$layers), " layers, ",
-                "however, the `scaleTo` is set as ", scaleTo,
+                "however, the `layerId` is set as ", layerId,
                 " which is greater than ", length(ggObj$layers),
                 call. = FALSE)
       }
@@ -178,7 +178,7 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
   plotInfo <- list()
 
   args <- list(...)
-  plotInfo$scaleTo <- scaleTo
+  plotInfo$layerId <- layerId
   plotInfo$scaleToFun <- scaleToFun
   plotInfo$dataFrame <- ggObj$data
   plotInfo$linkingKey <- loonLinkingKey(plotInfo$dataFrame, args)

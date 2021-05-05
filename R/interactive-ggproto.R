@@ -3,8 +3,8 @@
 #' @inheritParams linking
 #' @inheritParams active
 #' @inheritParams selection
-#' @param scaleTo numerical; which layer to scale to
-#' @param scaleToFun scale to function. See \code{\link{scaleTo}}.
+#' @param layerId numerical; which layer to scale to
+#' @param scaleToFun scale to function. See \code{\link{zoom}}.
 #' @inheritParams hover
 #' @param ... named arguments to modify \code{loon} plot states. See \code{\link{l_info_states}}
 #'
@@ -17,18 +17,27 @@
 #'   Selection \tab Highlight the subset of interest \tab \code{\link{selection}}\cr
 #'   Active \tab Determine which points appear \tab \code{\link{active}}\cr
 #'   Hover \tab Query in interactive graphics \tab \code{\link{hover}}\cr
-#'   scaleTo \tab Region Modification \tab \code{\link{scaleTo}}\cr}
+#'   Zoom \tab Region Modification \tab \code{\link{zoom}}\cr}
 #' @examples
 #' if(interactive()) {
 #'   # Modify the 'linkingGroup' and 'origin' of a hist object
 #'   l_ggplot(mtcars, mapping = aes(x = wt)) +
 #'     geom_histogram() +
 #'     interactivity(linkingGroup = "mt", origin = 2)
+#'
 #'   # linking with the histogram
 #'   l_ggplot(mtcars, mapping = aes(x = wt, y = hp)) +
 #'     geom_point(size = 4) +
 #'     interactivity(linkingGroup = "mt") +
 #'     facet_wrap(~cyl)
+#'
+#'   p <- ggplot(economics_long, aes(value)) +
+#'          facet_wrap(~variable, scales = 'free_x') +
+#'          geom_histogram()
+#'   # `p` is a ggplot object
+#'   p
+#'   # turn static `ggplot` to interactive `loon`
+#'   p + interactivity()
 #' }
 #' @export
 interactivity <- function(linkingGroup = NULL,
@@ -40,7 +49,7 @@ interactivity <- function(linkingGroup = NULL,
                           selected = NULL,
                           selectBy = NULL,
                           selectionLogic = NULL,
-                          scaleTo = NULL,
+                          layerId = NULL,
                           scaleToFun = NULL,
                           itemLabel = NULL,
                           showItemLabels = NULL,
@@ -57,7 +66,7 @@ interactivity <- function(linkingGroup = NULL,
                      selected = selected,
                      selectBy = selectBy,
                      selectionLogic = selectionLogic,
-                     scaleTo = scaleTo,
+                     layerId = layerId,
                      scaleToFun = scaleToFun,
                      itemLabel = itemLabel,
                      showItemLabels = showItemLabels,
@@ -78,7 +87,8 @@ interactivity <- function(linkingGroup = NULL,
                          "The length of ", deparse(substitute(x)),
                          " is ", length(x),
                          " that does not match the number of observations(" ,
-                         n, ")."
+                         n, ").",
+                         call. = FALSE
                        )
                      }
                    },
@@ -179,7 +189,7 @@ interactivity <- function(linkingGroup = NULL,
 #' if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.
 #' @return a \code{ggproto} object
 #'
-#' @seealso \code{\link{active}}, \code{\link{selection}}, \code{\link{scaleTo}},
+#' @seealso \code{\link{active}}, \code{\link{selection}}, \code{\link{zoom}},
 #' \code{\link{hover}}, \code{\link{interactivity}}
 #'
 #' @examples
@@ -222,7 +232,7 @@ linking <- function(linkingGroup = NULL,
 #' but only one \code{geom_histogram()} can be set as an active geom layer)
 #' @return a \code{ggproto} object
 #'
-#' @seealso \code{\link{linking}}, \code{\link{selection}}, \code{\link{scaleTo}},
+#' @seealso \code{\link{linking}}, \code{\link{selection}}, \code{\link{zoom}},
 #' \code{\link{hover}}, \code{\link{interactivity}}
 #'
 #' @examples
@@ -264,7 +274,7 @@ active <- function(active = NULL,
 #' but also can delight or invert (the highlighted to delighted, vice verse) the elements.
 #'
 #' @return a \code{ggproto} object
-#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{scaleTo}},
+#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
 #' \code{\link{hover}}, \code{\link{interactivity}}
 #' @examples
 #' if(interactive()) {
@@ -288,31 +298,35 @@ selection <- function(selected = NULL,
                 selectionLogic = selectionLogic)
 }
 
-#' @title Change Plot Region
+#' @title Zoom Plot Region
 #' @description Modify the \code{zoomX}, \code{zoomY}, \code{panX}, \code{panY},
 #' etc to change the plot region
-#' @param scaleTo numerical; which layer to scale to
+#' @param layerId numerical; which layer to scale to
 #' @param scaleToFun scale to function. See details.
 #'
-#' @details Argument \code{scaleTo} is used for additional plot region settings.
-#' If the \code{scaleTo} is \code{NULL} (default), the region of the \code{loon}
-#' is determined by the \code{ggplot} object
+#' @details Argument \code{layerId} is used for additional plot region settings.
+#' If the \code{layerId} is set as \code{NULL} (default), the region of the
+#' interactive graphics \code{loon} will be determined by the \code{ggplot} object
 #' (i.e. \code{coord_cartesian}, \code{xlim}, etc);
 #' else one can use \code{scaleToFun} to modify the region of the layer.
 #'
 #' The \code{scaleToFun} is a function to scale the region.
 #' If it is \code{NULL} (default), based on different layers, different scale functions
-#' will be applied; else, users can select one that precisely tailor their own
+#' will be applied. For example, if the layer is the main graphic model, i.e. \code{l_plot}
+#' \code{l_hist}, then the default \code{scaleToFun} is \code{\link{l_scaleto_plot}}; else
+#'  if the layer is a general \code{l_layer} widget, the default \code{scaleToFun} would be
+#'  \code{\link{l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
+#'
+#' If it is not \code{NULL}, users can select one that precisely tailor their own
 #' problems. The table shows the available \code{scaleToFun} functions
-#' \tabular{ll}{ \strong{scale to} \tab \strong{Subfunction}\cr
+#' \tabular{ll}{\strong{scale to} \tab \strong{Subfunction}\cr
 #'   plot \tab  \code{\link{l_scaleto_plot}}\cr
 #'   world \tab \code{\link{l_scaleto_world}}\cr
 #'   active \tab \code{\link{l_scaleto_active}}\cr
 #'   selected \tab \code{\link{l_scaleto_selected}}\cr
 #'   layer \tab \code{\link{l_scaleto_layer}}\cr}
-#'
-#' Expect these, users can customize their own function. Note that, the arguments should match
-#' the ones of functions shown in the table.
+#' Expect all these, users can customize their own function. Note that,
+#' the arguments should match the ones of functions shown in the table.
 #'
 #' @return a \code{ggproto} object
 #' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{selection}},
@@ -327,30 +341,29 @@ selection <- function(selected = NULL,
 #' # a scatter plot with a fitted line on 4 gear cars
 #' p
 #' # scale to the second layer (smooth line)
-#' p + scaleTo(scaleTo = 2)
+#' p + zoom(layerId = 2)
 #' # highlight the 3 gear cars
 #' # scale to the selected points
 #' p +
 #'   selection(mtcars$gear == 3) +
-#'   scaleTo(scaleTo = 1,
-#'           scaleToFun = loon::l_scaleto_selected)
+#'   zoom(layerId = 1,
+#'        scaleToFun = loon::l_scaleto_selected)
 #' }
 #' @export
-scaleTo <- function(scaleTo = NULL,
-                    scaleToFun= NULL) {
+zoom <- function(layerId = NULL,
+                 scaleToFun= NULL) {
 
-  interactivity(scaleTo = scaleTo,
+  interactivity(layerId = layerId,
                 scaleToFun = scaleToFun)
 }
 
-#' @title Modify the \code{hover}/\code{itemLabel} component
+#' @title Modify the \code{hover} component
 #' @description Query in interactive graphics
-#' @name hover
 #' @param itemLabel The customized querying information.
 #' @param showItemLabels A logical value. Show item labels or not. Default is \code{FALSE}
 #'
 #' @return a \code{ggproto} object
-#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{scaleTo}},
+#' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
 #' \code{\link{selection}}, \code{\link{interactivity}}
 #' @examples
 #' if(interactive()) {
@@ -358,25 +371,18 @@ scaleTo <- function(scaleTo = NULL,
 #'   l_ggplot(mpg, mapping = aes(x = displ, y = cty)) +
 #'     geom_point(size = 4) +
 #'     # push the states of scatter plot to the histogram
-#'     itemLabel(itemLabel = with(mpg,
-#'                  paste0("model: ", manufacturer, " ", model, "\n",
-#'                  "year: ", year, "\n",
-#'                  "drive way: ", drv, "\n",
-#'                  "fuel type: ", fl)
-#'               ),
-#'               showItemLabels = TRUE
+#'     hover(itemLabel =
+#'        with(mpg,
+#'             paste0("model: ", manufacturer, " ", model, "\n",
+#'                    "year: ", year, "\n",
+#'                    "drive way: ", drv, "\n",
+#'                    "fuel type: ", fl)
+#'        ),
+#'        showItemLabels = TRUE
 #'     )
 #'     # hover the mouse on top of any point to query
 #' }
 #' @export
-itemLabel <- function(itemLabel = NULL,
-                      showItemLabels = NULL) {
-  interactivity(itemLabel = itemLabel,
-                showItemLabels = showItemLabels)
-}
-
-#' @export
-#' @rdname hover
 hover <- function(itemLabel = NULL,
                   showItemLabels = NULL) {
   interactivity(itemLabel = itemLabel,
@@ -385,11 +391,13 @@ hover <- function(itemLabel = NULL,
 
 #' @export
 ggplot_add.Interactivity <- function(object, plot, object_name) {
-
-  undate_interactivity(plot, object)
+  if(!is.l_ggplot(plot)) {
+    class(plot) <- c("l_ggplot", class(plot))
+  }
+  update_interactivity(plot, object)
 }
 
-undate_interactivity <- function(p, interactivity) {
+update_interactivity <- function(p, interactivity) {
   p$interactivity <- merge_interactivity(interactivity, p$interactivity)
   p
 }
