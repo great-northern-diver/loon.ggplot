@@ -130,6 +130,7 @@ loonLayer.GeomViolin <- function(widget,
                                  label = paste(c("density", method)))
 
            if(show_quantiles)
+
              loonLayer.GeomSegment(widget,
                                    layerGeom,
                                    linesData,
@@ -137,7 +138,6 @@ loonLayer.GeomViolin <- function(widget,
                                    ggObj,
                                    parent = violinGroup,
                                    label = "quantile")
-
          })
 
   return(parent)
@@ -620,95 +620,6 @@ loonLayer.GeomErrorbarh <- function(widget,
   return(parent)
 }
 
-
-#' @export
-# colorful line (line built with points)
-loonLayer.GeomPath <- function(widget,
-                               layerGeom,
-                               data,
-                               ggplotPanelParams,
-                               ggObj,
-                               parent = "root",
-                               label = NULL,
-                               ...) {
-  if(dim(data)[1] == 0) return(NULL)
-
-  isCoordPolar <- is.CoordPolar(ggObj$coordinates)
-  # path group
-  if (parent == "root") {
-    parent <- loon::l_layer_group(widget,
-                                  label = label %||% "paths")
-  }
-
-  coordinates <- ggObj$coordinates
-  uniGroup <- unique(data$group)
-
-  m <- length(uniGroup)
-
-  lapply(1:m,
-         function(i){
-           groupData <- data[data$group == uniGroup[i], ]
-           linesColor <- groupData$colour
-           len_uni_col <- length(unique(groupData$colour))
-
-           linesWidth <- as_loon_size(groupData$size, "lines")
-           linesDash <- as_loon_dash(groupData$linetype)
-           # a single line with a single color
-           if(len_uni_col == 1) {
-             if(isCoordPolar){
-               coordPolarxy <- Cartesianxy2Polarxy.GeomPath(NULL, coordinates, groupData, ggplotPanelParams)
-               x <- coordPolarxy$x
-               y <- coordPolarxy$y
-             } else {
-               x <- groupData$x
-               y <- groupData$y
-             }
-
-             method <- get_stat_param(layerGeom, "type", "level", "line.p", ...)
-
-             mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = method %||% "path",
-                                              label = label,
-                                              i = if(m == 1) NULL else i)
-
-             loon::l_layer_line(
-               widget,
-               x = x, y = y,
-               linewidth = linesWidth[1],
-               color = hex6to12(linesColor[1]),
-               dash = linesDash[[1]],
-               parent = parent,
-               label = mappingLabel
-             )
-           } else {  # a line with different colors(gradual colors)
-             n <- dim(groupData)[1]
-             len <- ceiling( 1000/(n-1) )
-             for( j in 1: (n - 1) ){
-               new <- groupData[rep(j,len), ]
-               new$x <- seq( groupData[j,]$x, groupData[j+1,]$x, length.out = len)
-               new$y <- seq( groupData[j,]$y, groupData[j+1,]$y, length.out = len)
-               if(j == 1) newdata <- new else newdata <- rbind(newdata, new)
-             }
-
-             method <- get_stat_param(layerGeom, ...)
-
-             mappingLabel <- get_mappingLabel(layerGeom,
-                                              name = method %||% "path",
-                                              label = label,
-                                              i = if(m == 1) NULL else i)
-
-             loonLayer.GeomPoint(widget,
-                                 layerGeom,
-                                 newdata,
-                                 ggplotPanelParams,
-                                 ggObj,
-                                 parent = parent,
-                                 label = mappingLabel)
-           }
-         })
-  return(parent)
-}
-
 #' @export
 loonLayer.GeomContour <- function(widget,
                                   layerGeom,
@@ -1121,129 +1032,6 @@ loonLayer.GeomStep <- function(widget,
          })
   return(parent)
 }
-
-
-#' @export
-loonLayer.GeomRaster <- function(widget,
-                                 layerGeom,
-                                 data,
-                                 ggplotPanelParams,
-                                 ggObj,
-                                 parent = "root",
-                                 label = NULL,
-                                 ...) {
-
-  if(dim(data)[1] == 0) return(NULL)
-
-  isCoordPolar <- is.CoordPolar(ggObj$coordinates)
-  n <- dim(data)[1]
-  fillColor <- data$fill
-  linesColor <- data$colour
-  linesWidth <- as_loon_size(data$size, "lines")
-  xrange <- ggplotPanelParams$x.range
-  yrange <- ggplotPanelParams$y.range
-
-  coordinates <- ggObj$coordinates
-
-  method <- get_stat_param(layerGeom, ...)
-
-  mappingLabel <- get_mappingLabel(layerGeom,
-                                   name = method %||% "raster",
-                                   label = label,
-                                   i = NULL)
-
-  if(n == 1) {
-    if(isCoordPolar){
-
-      coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, coordinates, data, ggplotPanelParams)
-      x <- coordPolarxy$x
-      y <- coordPolarxy$y
-      l <- loon::l_layer_polygon(
-        widget, x = x, y = y,
-        color = hex6to12(fillColor),
-        linecolor = hex6to12(linesColor),
-        linewidth = linesWidth,
-        parent = parent,
-        label = mappingLabel
-      )
-    } else {
-
-      x <- c(data$xmin, data$xmax)
-      y <- c(data$ymin, data$ymax)
-      l <- loon::l_layer_rectangle(
-        widget,
-        x = x, y = y,
-        color = hex6to12(fillColor),
-        linecolor = hex6to12(linesColor),
-        linewidth = linesWidth,
-        parent = parent,
-        label = mappingLabel
-      )
-    }
-  } else {
-
-    # any NA will not be drawn
-    if(isCoordPolar) {
-
-      x <- y <- list()
-      lapply(1:n,
-             function(i){
-               coordPolarxy <- Cartesianxy2Polarxy.GeomRect(NULL, coordinates, data[i, ], ggplotPanelParams)
-               x[[i]] <<- coordPolarxy$x
-               y[[i]] <<- coordPolarxy$y
-             }
-      )
-
-      l <- loon::l_layer_polygons(
-        widget,
-        x = x,
-        y = y,
-        color = fillColor,
-        linecolor = linesColor,
-        linewidth = linesWidth,
-        parent = parent,
-        label = mappingLabel
-      )
-    } else {
-
-      x <- y <- list()
-      lapply(1:n,
-             function(i){
-               y <- if(is.na(data[i,]$ymin) & is.na(data[i,]$ymax)) rep(data[i,]$y, 2)
-               else if(is.na(data[i,]$ymin) & !is.na(data[i,]$ymax)) c(2 * data[i,]$y - data[i,]$ymax  , data[i,]$ymax)
-               else if(!is.na(data[i,]$ymin) & is.na(data[i,]$ymax)) c(data[i,]$ymin  , 2 * data[i,]$y - data[i,]$ymin)
-               else{
-                 c(if(is.infinite(data[i,]$ymin)) yrange[1] else data[i,]$ymin,
-                   if(is.infinite(data[i,]$ymax)) yrange[2] else data[i,]$ymax)
-               }
-               x <- if(is.na(data[i,]$xmin) & is.na(data[i,]$xmax)) rep(data[i,]$x, 2)
-               else if(is.na(data[i,]$xmin) & !is.na(data[i,]$xmax)) c(2 * data[i,]$x - data[i,]$xmax  , data[i,]$xmax)
-               else if(!is.na(data[i,]$xmin) & is.na(data[i,]$xmax)) c(data[i,]$xmin  , 2 * data[i,]$x - data[i,]$xmin)
-               else{
-                 c(if(is.infinite(data[i,]$xmin)) xrange[1] else data[i,]$xmin,
-                   if(is.infinite(data[i,]$xmax)) xrange[2] else data[i,]$xmax)
-               }
-
-               x[[i]] <<- x
-               y[[i]] <<- y
-             }
-      )
-
-      l <- loon::l_layer_rectangles(
-        widget,
-        x = x, y = y,
-        color = fillColor,
-        linecolor = linesColor,
-        linewidth = linesWidth,
-        parent = parent,
-        label = mappingLabel
-      )
-    }
-  }
-
-  return(l)
-}
-
 
 get_mappingLabel <- function(layerGeom, name, label = NULL, i = NULL) {
 
