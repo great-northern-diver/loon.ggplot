@@ -2,11 +2,8 @@
 % Please edit documentation in R/interactive-ggproto.R
 \name{hover}
 \alias{hover}
-\alias{itemLabel}
-\title{Modify the \code{hover}/\code{itemLabel} component}
+\title{Modify the \code{hover} component}
 \usage{
-itemLabel(itemLabel = NULL, showItemLabels = NULL)
-
 hover(itemLabel = NULL, showItemLabels = NULL)
 }
 \arguments{
@@ -26,18 +23,19 @@ if(interactive()) {
   l_ggplot(mpg, mapping = aes(x = displ, y = cty)) +
     geom_point(size = 4) +
     # push the states of scatter plot to the histogram
-    itemLabel(itemLabel = with(mpg,
-                 paste0("model: ", manufacturer, " ", model, "\n",
-                 "year: ", year, "\n",
-                 "drive way: ", drv, "\n",
-                 "fuel type: ", fl)
-              ),
-              showItemLabels = TRUE
+    hover(itemLabel =
+       with(mpg,
+            paste0("model: ", manufacturer, " ", model, "\n",
+                   "year: ", year, "\n",
+                   "drive way: ", drv, "\n",
+                   "fuel type: ", fl)
+       ),
+       showItemLabels = TRUE
     )
     # hover the mouse on top of any point to query
 }
 }
 \seealso{
-\code{\link{active}}, \code{\link{linking}}, \code{\link{scaleTo}},
+\code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
 \code{\link{selection}}, \code{\link{interactivity}}
 }
