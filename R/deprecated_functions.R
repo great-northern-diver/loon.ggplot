@@ -29,6 +29,20 @@ selecting <- function(selected = NULL,
             selectionLogic = selectionLogic)
 }
 
+#' itemLabel (deprecated)
+#' @description use \code{\link{hover}}, rather than \code{itemLabel}.
+#' @export
+#' @inheritParams hover
+#' @keywords internal
+#' @name itemLabel-deprecated
+#'
+itemLabel <- function(itemLabel = NULL,
+                      showItemLabels = NULL) {
+  .Deprecated("hover", package= "loon.ggplot")
+  interactivity(itemLabel = itemLabel,
+                showItemLabels = showItemLabels)
+}
+
 #' geom_imageGlyph (deprecated)
 #' @description use \code{\link{geom_image_glyph}}, rather than \code{geom_imageGlyph}.
 #' @export
