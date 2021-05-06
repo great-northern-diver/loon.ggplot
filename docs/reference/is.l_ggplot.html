@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the hover component — hover • loon.ggplot</title>
+<title>Reports whether x is a l_ggplot object — is.l_ggplot • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Modify the hover component — hover" />
-<meta property="og:description" content="Query in interactive graphics" />
+<meta property="og:title" content="Reports whether x is a l_ggplot object — is.l_ggplot" />
+<meta property="og:description" content="Reports whether x is a l_ggplot object" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,56 +137,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Modify the <code>hover</code> component</h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
-    <div class="hidden name"><code>hover.Rd</code></div>
+    <h1>Reports whether x is a <code>l_ggplot</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/l_ggplot.R'><code>R/l_ggplot.R</code></a></small>
+    <div class="hidden name"><code>is.l_ggplot.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Query in interactive graphics</p>
+    <p>Reports whether x is a <code>l_ggplot</code> object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>hover</span><span class='op'>(</span>itemLabel <span class='op'>=</span> <span class='cn'>NULL</span>, showItemLabels <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>is.l_ggplot</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>itemLabel</th>
-      <td><p>The customized querying information.</p></td>
-    </tr>
-    <tr>
-      <th>showItemLabels</th>
-      <td><p>A logical value. Show item labels or not. Default is <code>FALSE</code></p></td>
+      <th>x</th>
+      <td><p>An object to test</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>ggproto</code> object</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='active.html'>active</a></code>, <code><a href='linking.html'>linking</a></code>, <code><a href='zoom.html'>zoom</a></code>,
-<code><a href='selection.html'>selection</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mpg</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>displ</span>, y <span class='op'>=</span> <span class='va'>cty</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='co'># push the states of scatter plot to the histogram</span>
-    <span class='fu'>hover</span><span class='op'>(</span>itemLabel <span class='op'>=</span>
-       <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span><span class='op'>(</span><span class='va'>mpg</span>,
-            <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"model: "</span>, <span class='va'>manufacturer</span>, <span class='st'>" "</span>, <span class='va'>model</span>, <span class='st'>"\n"</span>,
-                   <span class='st'>"year: "</span>, <span class='va'>year</span>, <span class='st'>"\n"</span>,
-                   <span class='st'>"drive way: "</span>, <span class='va'>drv</span>, <span class='st'>"\n"</span>,
-                   <span class='st'>"fuel type: "</span>, <span class='va'>fl</span><span class='op'>)</span>
-       <span class='op'>)</span>,
-       showItemLabels <span class='op'>=</span> <span class='cn'>TRUE</span>
-    <span class='op'>)</span>
-    <span class='co'># hover the mouse on top of any point to query</span>
-<span class='op'>}</span>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

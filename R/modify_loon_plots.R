@@ -12,7 +12,7 @@ modify_loon_plots <- function(plotInfo = list()) {
          function(plot) {
            loon::l_configure(plot, linkingGroup = args$linkingGroup,
                              sync = plotInfo$sync)
-           configure_l_hist(plot, scaleTo = plotInfo$scaleTo)
+           configure_l_hist(plot, layerId = plotInfo$layerId)
          }
   )
 
@@ -75,7 +75,7 @@ modify_loon_plots <- function(plotInfo = list()) {
 ##    is proportional to the counts. Thus, when the transformation occurs,
 ##    the y limits are identical but the display is very different. To fix it,
 ##    the y limits are released and a message is given to users to explain what happens.
-configure_l_hist <- function(widget, scaleTo = 0L) {
+configure_l_hist <- function(widget, layerId = 0L) {
 
   if(!inherits(widget, "l_hist")) return(NULL)
 
@@ -88,7 +88,7 @@ configure_l_hist <- function(widget, scaleTo = 0L) {
   # job 2: if the state `yshows` of this histogram is density, rescale the plot and leave message
   if(widget['yshows'] == "frequency" || length(uniColor) == 1) return(NULL)
 
-  if(scaleTo == 0) {
+  if(layerId == 0) {
     loon::l_scaleto_world(widget)
     message("In `ggplot`, if the `y` of a histogram is density, ",
             "the area of each category (grouped by color) is 1; ",

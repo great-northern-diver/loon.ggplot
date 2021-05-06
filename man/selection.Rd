@@ -43,6 +43,6 @@ if(interactive()) {
 }
 }
 \seealso{
-\code{\link{active}}, \code{\link{linking}}, \code{\link{scaleTo}},
+\code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
 \code{\link{hover}}, \code{\link{interactivity}}
 }
