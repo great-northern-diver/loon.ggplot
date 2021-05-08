@@ -41,7 +41,6 @@ Suggests:
     hexbin,
     nycflights13,
     ggplot2movies
-LazyData: true
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 VignetteBuilder: knitr
