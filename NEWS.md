@@ -1,3 +1,9 @@
+# loon.ggplot 1.2.1
+
+* Fix a bug: in previous version, `showItemLabels` and `itemLabels` cannot be passed into the `l_serialaxes` widget. 
+
+* Fix some typos and edit some documentations
+
 # loon.ggplot 1.2.0
 
 * Class name modification
