@@ -164,7 +164,8 @@ get_plotInfo <- function(plotInfo = list(),
                              modelLayers = modelLayers, index = index,
                              parent = parent, showGuides = showGuides,
                              showScales = showScales,
-                             swapAxes = swapAxes, xlabel = xlabel,
+                             swapAxes = swapAxes,
+                             xlabel = xlabel,
                              ylabel = ylabel,
                              loonTitle = loonTitle)
 
