@@ -1,6 +1,6 @@
 l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping, dataFrame,
                           activeGeomLayers, isCoordPolar, parent, showGuides, showScales, swapAxes, showLabels,
-                          linkingKey, itemLabel, nDimStates, xlabel, ylabel, loonTitle, args) {
+                          showItemLabels, linkingKey, itemLabel, nDimStates, xlabel, ylabel, loonTitle, args) {
 
   if(length(activeGeomLayers) > 0) {
     # combine points data
@@ -179,7 +179,7 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping
           showGuides = showGuides,
           showScales = showScales,
           showLabels = showLabels,
-          showItemLabels = TRUE,
+          showItemLabels = showItemLabels,
           swapAxes = swapAxes,
           xlabel = if(is.null(xlabel)) "" else xlabel,
           ylabel = if(is.null(ylabel)) "" else ylabel,
@@ -217,7 +217,7 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping
                  showGuides = showGuides,
                  showScales = showScales,
                  showLabels = showLabels,
-                 showItemLabels = TRUE,
+                 showItemLabels = showItemLabels,
                  swapAxes = swapAxes,
                  xlabel = if(is.null(xlabel)) "" else xlabel,
                  ylabel = if(is.null(ylabel)) "" else ylabel,
