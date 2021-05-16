@@ -7,8 +7,10 @@ l_serialaxesplot <- function(ggBuild,
                              parent,
                              showGuides,
                              linkingKey,
+                             itemLabel,
                              nDimStates,
                              showLabels,
+                             showItemLabels,
                              loonTitle) {
 
 
@@ -38,6 +40,7 @@ l_serialaxesplot <- function(ggBuild,
   dat <- modify_n_dim_data(nDimStates,
                            data.frame(
                              linkingKey = linkingKey[index],
+                             itemLabel = itemLabel[index],
                              linewidth = size,
                              color = color
                            ), id[which(!duplicated(aesData$group))])
@@ -52,6 +55,7 @@ l_serialaxesplot <- function(ggBuild,
         showArea = showArea,
         showGuides = showGuides,
         showLabels = showLabels,
+        showItemLabels = showItemLabels,
         parent  = parent,
         title = loonTitle
       ),

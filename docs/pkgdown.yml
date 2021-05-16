@@ -1,9 +1,9 @@
-pandoc: 2.7.3
+pandoc: 2.11.4
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   ggplots2loon: ggplots2loon.html
   loon2ggplots: loon2ggplots.html
   pipes: pipes.html
-last_built: 2021-05-08T15:41Z
+last_built: 2021-05-15T16:26Z
 

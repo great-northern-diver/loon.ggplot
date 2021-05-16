@@ -158,7 +158,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
           } else if(FacetWrap) {
             facet_wrap_tkpack
           } else
-            stop("Not implenmented yet. So far, only `facet_wrap()` and `facet_grid()` are allowed to split panels",
+            stop("Not implemented yet. So far, only `facet_wrap()` and `facet_grid()` are allowed to split panels",
                  call. = FALSE)
 
           do.call(

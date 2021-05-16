@@ -204,6 +204,10 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
   # serialaxes
   plotInfo$isCoordSerialaxes <- is.CoordSerialaxes(ggObj$coordinates)
 
+  # showItemLabels; default is FALSE same as loon
+  plotInfo$showItemLabels <- args$showItemLabels %||% FALSE
+  args$showItemLabels <- NULL
+
   # two ways to separate facets, facet_wrap or facet_grid
   plotInfo$FacetWrap <- plotInfo$buildggObj$FacetWrap
   plotInfo$FacetGrid <- plotInfo$buildggObj$FacetGrid

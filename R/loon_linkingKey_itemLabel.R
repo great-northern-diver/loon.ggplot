@@ -27,7 +27,7 @@ loonItemLabel <- function(data, args) {
       # default itemLabel
       row.names(data)
     } else {
-      args[['itemLabel']]
+      as.character(args[['itemLabel']])
     }
   } else NULL
 }
