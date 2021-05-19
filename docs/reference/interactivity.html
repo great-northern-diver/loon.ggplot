@@ -85,7 +85,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
       </span>
     </div>
 
@@ -176,7 +176,7 @@
   selected <span class='op'>=</span> <span class='cn'>NULL</span>,
   selectBy <span class='op'>=</span> <span class='cn'>NULL</span>,
   selectionLogic <span class='op'>=</span> <span class='cn'>NULL</span>,
-  scaleTo <span class='op'>=</span> <span class='cn'>NULL</span>,
+  layerId <span class='op'>=</span> <span class='cn'>NULL</span>,
   scaleToFun <span class='op'>=</span> <span class='cn'>NULL</span>,
   itemLabel <span class='op'>=</span> <span class='cn'>NULL</span>,
   showItemLabels <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -237,12 +237,12 @@ as the graphics are constructed. Default is <code>FALSE</code></p></td>
       <td><p>Selection logic. One of "select" (default), "deselect" and "invert". See details.</p></td>
     </tr>
     <tr>
-      <th>scaleTo</th>
+      <th>layerId</th>
       <td><p>numerical; which layer to scale to</p></td>
     </tr>
     <tr>
       <th>scaleToFun</th>
-      <td><p>scale to function. See <code><a href='scaleTo.html'>scaleTo</a></code>.</p></td>
+      <td><p>scale to function. See <code><a href='zoom.html'>zoom</a></code>.</p></td>
     </tr>
     <tr>
       <th>itemLabel</th>
@@ -270,7 +270,7 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
 <tr><td>Selection</td><td>Highlight the subset of interest</td><td><code><a href='selection.html'>selection</a></code></td></tr>
 <tr><td>Active</td><td>Determine which points appear</td><td><code><a href='active.html'>active</a></code></td></tr>
 <tr><td>Hover</td><td>Query in interactive graphics</td><td><code><a href='hover.html'>hover</a></code></td></tr>
-<tr><td>scaleTo</td><td>Region Modification</td><td><code><a href='scaleTo.html'>scaleTo</a></code></td></tr>
+<tr><td>Zoom</td><td>Region Modification</td><td><code><a href='zoom.html'>zoom</a></code></td></tr>
 </table>
 
 
@@ -292,11 +292,20 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
   <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_histogram</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>interactivity</span><span class='op'>(</span>linkingGroup <span class='op'>=</span> <span class='st'>"mt"</span>, origin <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+
   <span class='co'># linking with the histogram</span>
   <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>interactivity</span><span class='op'>(</span>linkingGroup <span class='op'>=</span> <span class='st'>"mt"</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='op'>~</span><span class='va'>cyl</span><span class='op'>)</span>
+
+  <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>economics_long</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>value</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+         <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='op'>~</span><span class='va'>variable</span>, scales <span class='op'>=</span> <span class='st'>'free_x'</span><span class='op'>)</span> <span class='op'>+</span>
+         <span class='fu'>geom_histogram</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='co'># `p` is a ggplot object</span>
+  <span class='va'>p</span>
+  <span class='co'># turn static `ggplot` to interactive `loon`</span>
+  <span class='va'>p</span> <span class='op'>+</span> <span class='fu'>interactivity</span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
 >>>>>>> upstream/master

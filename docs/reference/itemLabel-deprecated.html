@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>geom_pointrangeGlyph (deprecated) — geom_pointrangeGlyph-deprecated • loon.ggplot</title>
+<title>itemLabel (deprecated) — itemLabel-deprecated • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="geom_pointrangeGlyph (deprecated) — geom_pointrangeGlyph-deprecated" />
-<meta property="og:description" content="use geom_pointrange, rather than geom_pointrangeGlyph." />
+<meta property="og:title" content="itemLabel (deprecated) — itemLabel-deprecated" />
+<meta property="og:description" content="use hover, rather than itemLabel." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -120,7 +120,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -137,106 +137,27 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>geom_pointrangeGlyph (deprecated)</h1>
+    <h1>itemLabel (deprecated)</h1>
     <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/deprecated_functions.R'><code>R/deprecated_functions.R</code></a></small>
-    <div class="hidden name"><code>geom_pointrangeGlyph-deprecated.Rd</code></div>
+    <div class="hidden name"><code>itemLabel-deprecated.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>use <code>geom_pointrange</code>, rather than <code>geom_pointrangeGlyph</code>.</p>
+    <p>use <code><a href='hover.html'>hover</a></code>, rather than <code>itemLabel</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>geom_pointrangeGlyph</span>(
-  <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='no'>...</span>,
-  <span class='no'>ymin</span>,
-  <span class='no'>ymax</span>,
-  <span class='kw'>showArea</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>linewidth</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>itemLabel</span><span class='op'>(</span>itemLabel <span class='op'>=</span> <span class='cn'>NULL</span>, showItemLabels <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mapping</th>
-      <td><p>Set of aesthetic mappings created by <code><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes()</a></code> or
-<code><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
-default), it is combined with the default mapping at the top level of the
-plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
+      <th>itemLabel</th>
+      <td><p>The customized querying information.</p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>The data to be displayed in this layer. There are three
-options:</p>
-<p>If <code>NULL</code>, the default, the data is inherited from the plot
-data as specified in the call to <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot()</a></code>.</p>
-<p>A <code>data.frame</code>, or other object, will override the plot
-data. All objects will be fortified to produce a data frame. See
-<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> for which variables will be created.</p>
-<p>A <code>function</code> will be called with a single argument,
-the plot data. The return value must be a <code>data.frame</code>, and
-will be used as the layer data. A <code>function</code> can be created
-from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p></td>
-    </tr>
-    <tr>
-      <th>stat</th>
-      <td><p>The statistical transformation to use on the data for this
-layer, as a string.</p></td>
-    </tr>
-    <tr>
-      <th>position</th>
-      <td><p>Position adjustment, either as a string, or the result of
-a call to a position adjustment function.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments passed on to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>layer()</a></code>. These are
-often aesthetics, used to set an aesthetic to a fixed value, like
-<code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
-to the paired geom/stat.</p></td>
-    </tr>
-    <tr>
-      <th>ymin</th>
-      <td><p>y min</p></td>
-    </tr>
-    <tr>
-      <th>ymax</th>
-      <td><p>y max</p></td>
-    </tr>
-    <tr>
-      <th>showArea</th>
-      <td><p>show area; deprecated now, please set `fill` or `colour` to control the shown area.</p></td>
-    </tr>
-    <tr>
-      <th>linewidth</th>
-      <td><p>line width</p></td>
-    </tr>
-    <tr>
-      <th>na.rm</th>
-      <td><p>If <code>FALSE</code>, the default, missing values are removed with
-a warning. If <code>TRUE</code>, missing values are silently removed.</p></td>
-    </tr>
-    <tr>
-      <th>show.legend</th>
-      <td><p>logical. Should this layer be included in the legends?
-<code>NA</code>, the default, includes if any aesthetics are mapped.
-<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
-It can also be a named logical vector to finely select the aesthetics to
-display.</p></td>
-    </tr>
-    <tr>
-      <th>inherit.aes</th>
-      <td><p>If <code>FALSE</code>, overrides the default aesthetics,
-rather than combining with them. This is most useful for helper functions
-that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.org/reference/borders.html'>borders()</a></code>.</p></td>
+      <th>showItemLabels</th>
+      <td><p>A logical value. Show item labels or not. Default is <code>FALSE</code></p></td>
     </tr>
     </table>
 
@@ -256,7 +177,7 @@ the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.or
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

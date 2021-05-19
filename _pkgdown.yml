@@ -17,15 +17,15 @@ reference:
     - get_activeGeomLayers
 
   - title: Automatically create a `loon` widget by the "ggplot rule"
-    desc: Function `l_ggplot()` returns a `lggplot` object, then "print" a `loon` plot automatically.
+    desc: Function `l_ggplot()` returns an `l_ggplot` object, then "print" a `loon` plot automatically.
     contents:
     - l_ggplot
     - interactivity
-    - itemLabel
+    - hover
     - linking
     - selection
     - active
-    - scaleTo
+    - zoom
     - print.l_ggplot
 
   - title: Accessories
@@ -39,3 +39,4 @@ reference:
     - loonLayer
     - is.CoordPolar
     - Cartesianxy2Polarxy
+    - is.l_ggplot

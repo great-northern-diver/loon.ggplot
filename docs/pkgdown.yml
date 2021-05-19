@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 pandoc: 2.7.3
 pkgdown: 1.5.1
+=======
+pandoc: 2.11.4
+pkgdown: 1.6.1
+>>>>>>> upstream/master
 pkgdown_sha: ~
 articles:
   ggplots2loon: ggplots2loon.html
   loon2ggplots: loon2ggplots.html
   pipes: pipes.html
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 last_built: 2021-04-09T15:15Z
@@ -13,5 +19,8 @@ last_built: 2021-04-25T14:53Z
 >>>>>>> upstream/master
 =======
 last_built: 2021-05-02T14:51Z
+>>>>>>> upstream/master
+=======
+last_built: 2021-05-19T02:05Z
 >>>>>>> upstream/master
 

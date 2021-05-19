@@ -1,6 +1,6 @@
 #' @export
 ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
-                                 scaleTo = NULL, scaleToFun = NULL,
+                                 layerId = NULL, scaleToFun = NULL,
                                  ggGuides = FALSE, parent = NULL, pack = TRUE,
                                  exteriorLabelProportion = 1/5,
                                  canvasHeight = 700, canvasWidth = 850) {
@@ -99,7 +99,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
         args$parent <- parent
         args$showLabels <- FALSE
         args$pack <- FALSE
-        args$scaleTo <- scaleTo
+        args$layerId <- layerId
         args$scaleToFun <- scaleToFun
 
         lp <- do.call(
@@ -158,7 +158,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
           } else if(FacetWrap) {
             facet_wrap_tkpack
           } else
-            stop("Not implenmented yet. So far, only `facet_wrap()` and `facet_grid()` are allowed to split panels",
+            stop("Not implemented yet. So far, only `facet_wrap()` and `facet_grid()` are allowed to split panels",
                  call. = FALSE)
 
           do.call(

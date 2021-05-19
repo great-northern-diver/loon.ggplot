@@ -64,7 +64,9 @@ to the paired geom/stat.}
 
 \item{linewidth}{line width of the "glyph" object}
 
-\item{scaling}{one of 'variable', 'data', 'observation' or 'none' to specify how the data is scaled.}
+\item{scaling}{one of \code{data}, \code{variable}, \code{observation} or
+\code{none} (not suggested the layout is the same with \code{data})
+to specify how the data is scaled.}
 
 \item{axesLayout}{either "radial" or "parallel"}
 

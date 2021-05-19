@@ -48,6 +48,6 @@ if(interactive() && requireNamespace("dplyr")) {
 }
 }
 \seealso{
-\code{\link{active}}, \code{\link{selection}}, \code{\link{scaleTo}},
+\code{\link{active}}, \code{\link{selection}}, \code{\link{zoom}},
 \code{\link{hover}}, \code{\link{interactivity}}
 }

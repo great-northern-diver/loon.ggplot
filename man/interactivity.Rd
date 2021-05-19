@@ -14,7 +14,7 @@ interactivity(
   selected = NULL,
   selectBy = NULL,
   selectionLogic = NULL,
-  scaleTo = NULL,
+  layerId = NULL,
   scaleToFun = NULL,
   itemLabel = NULL,
   showItemLabels = NULL,
@@ -53,9 +53,9 @@ as the graphics are constructed. Default is \code{FALSE}}
 
 \item{selectionLogic}{Selection logic. One of "select" (default), "deselect" and "invert". See details.}
 
-\item{scaleTo}{numerical; which layer to scale to}
+\item{layerId}{numerical; which layer to scale to}
 
-\item{scaleToFun}{scale to function. See \code{\link{scaleTo}}.}
+\item{scaleToFun}{scale to function. See \code{\link{zoom}}.}
 
 \item{itemLabel}{The customized querying information.}
 
@@ -77,7 +77,7 @@ Component \code{interactivity} is used to set these features.
   Selection \tab Highlight the subset of interest \tab \code{\link{selection}}\cr
   Active \tab Determine which points appear \tab \code{\link{active}}\cr
   Hover \tab Query in interactive graphics \tab \code{\link{hover}}\cr
-  scaleTo \tab Region Modification \tab \code{\link{scaleTo}}\cr}
+  Zoom \tab Region Modification \tab \code{\link{zoom}}\cr}
 }
 \examples{
 if(interactive()) {
@@ -85,10 +85,19 @@ if(interactive()) {
   l_ggplot(mtcars, mapping = aes(x = wt)) +
     geom_histogram() +
     interactivity(linkingGroup = "mt", origin = 2)
+
   # linking with the histogram
   l_ggplot(mtcars, mapping = aes(x = wt, y = hp)) +
     geom_point(size = 4) +
     interactivity(linkingGroup = "mt") +
     facet_wrap(~cyl)
+
+  p <- ggplot(economics_long, aes(value)) +
+         facet_wrap(~variable, scales = 'free_x') +
+         geom_histogram()
+  # `p` is a ggplot object
+  p
+  # turn static `ggplot` to interactive `loon`
+  p + interactivity()
 }
 }

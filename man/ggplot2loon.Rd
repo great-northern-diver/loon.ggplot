@@ -8,7 +8,7 @@ ggplot2loon(
   ggObj,
   ...,
   activeGeomLayers = integer(0),
-  scaleTo = NULL,
+  layerId = NULL,
   scaleToFun = NULL,
   ggGuides = FALSE,
   parent = NULL,
@@ -29,9 +29,9 @@ ggplot2loon(
 (Notice, more than one \code{geom_point()} layers can be set as active layers,
  but only one \code{geom_histogram()} can be set as an active geom layer)}
 
-\item{scaleTo}{numerical; which layer to scale to}
+\item{layerId}{numerical; which layer to scale to}
 
-\item{scaleToFun}{scale to function. See \code{\link{scaleTo}}.}
+\item{scaleToFun}{scale to function. See \code{\link{zoom}}.}
 
 \item{ggGuides}{logical (default \code{FALSE}) to determine whether to draw a ggplot background or not.}
 

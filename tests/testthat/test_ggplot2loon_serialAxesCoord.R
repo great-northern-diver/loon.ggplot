@@ -14,6 +14,13 @@ test_that("test serialaxes ggplot 2 loon",
             q <- loon.ggplot(p)
             expect_true("l_serialaxes" %in% class(q))
             expect_equal(q['axesLayout'], "parallel")
+            expect_false(q['showItemLabels'])
+
+            p <- p + hover(showItemLabels = TRUE,
+                    itemLabel = iris$Species)
+            q <- loon.ggplot(p)
+            expect_true(q['showItemLabels'])
+            expect_equal(q['itemLabel'], as.character(iris$Species))
 
             p$coordinates$axes.layout <- "radial"
             q <- loon.ggplot(p)

@@ -83,4 +83,8 @@ print.l_ggplot <- function(x, ...) {
   print(p)
 }
 
-
+#' @title Reports whether x is a \code{l_ggplot} object
+#' @param x An object to test
+is.l_ggplot <- function(x) {
+  inherits(x, "is.l_ggplot")
+}

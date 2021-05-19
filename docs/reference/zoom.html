@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the active component — active • loon.ggplot</title>
+<title>Zoom Plot Region — zoom • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,9 @@
 
 
 
-<meta property="og:title" content="Modify the active component — active" />
-<meta property="og:description" content="Set active or activeGeomLayers" />
+<meta property="og:title" content="Zoom Plot Region — zoom" />
+<meta property="og:description" content="Modify the zoomX, zoomY, panX, panY,
+etc to change the plot region" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -137,60 +138,80 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Modify the <code>active</code> component</h1>
+    <h1>Zoom Plot Region</h1>
     <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/interactive-ggproto.R'><code>R/interactive-ggproto.R</code></a></small>
-    <div class="hidden name"><code>active.Rd</code></div>
+    <div class="hidden name"><code>zoom.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Set <code>active</code> or <code>activeGeomLayers</code></p>
+    <p>Modify the <code>zoomX</code>, <code>zoomY</code>, <code>panX</code>, <code>panY</code>,
+etc to change the plot region</p>
     </div>
 
-    <pre class="usage"><span class='fu'>active</span><span class='op'>(</span>active <span class='op'>=</span> <span class='cn'>NULL</span>, activeGeomLayers <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>zoom</span><span class='op'>(</span>layerId <span class='op'>=</span> <span class='cn'>NULL</span>, scaleToFun <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>active</th>
-      <td><p>a logical determining whether points appear or
-not (default is <code>TRUE</code> for all points). If a logical vector is
-given of length equal to the number of points,
-then it identifies which points appear (<code>TRUE</code>) and
-which do not (<code>FALSE</code>).</p></td>
+      <th>layerId</th>
+      <td><p>numerical; which layer to scale to</p></td>
     </tr>
     <tr>
-      <th>activeGeomLayers</th>
-      <td><p>determine which geom layer is interactive. Only <code>geom_point()</code>
-and <code>geom_histogram()</code> can be set as active geom layer(s) so far.
-(Notice, more than one <code>geom_point()</code> layers can be set as active layers,
-but only one <code>geom_histogram()</code> can be set as an active geom layer)</p></td>
+      <th>scaleToFun</th>
+      <td><p>scale to function. See details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <code>ggproto</code> object</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Argument <code>layerId</code> is used for additional plot region settings.
+If the <code>layerId</code> is set as <code>NULL</code> (default), the region of the
+interactive graphics <code>loon</code> will be determined by the <code>ggplot</code> object
+(i.e. <code>coord_cartesian</code>, <code>xlim</code>, etc);
+else one can use <code>scaleToFun</code> to modify the region of the layer.</p>
+<p>The <code>scaleToFun</code> is a function to scale the region.
+If it is <code>NULL</code> (default), based on different layers, different scale functions
+will be applied. For example, if the layer is the main graphic model, i.e. <code>l_plot</code>
+<code>l_hist</code>, then the default <code>scaleToFun</code> is <code>l_scaleto_plot</code>; else
+ if the layer is a general <code>l_layer</code> widget, the default <code>scaleToFun</code> would be
+ <code>l_scaleto_layer</code> (see <code><a href='get_activeGeomLayers.html'>get_activeGeomLayers</a></code>).</p>
+<p>If it is not <code>NULL</code>, users can select one that precisely tailor their own
+problems. The table shows the available <code>scaleToFun</code> functions</p><table class='table'>
+<tr><td><strong>scale to</strong></td><td><strong>Subfunction</strong></td></tr>
+<tr><td>plot</td><td><code>l_scaleto_plot</code></td></tr>
+<tr><td>world</td><td><code>l_scaleto_world</code></td></tr>
+<tr><td>active</td><td><code>l_scaleto_active</code></td></tr>
+<tr><td>selected</td><td><code>l_scaleto_selected</code></td></tr>
+<tr><td>layer</td><td><code>l_scaleto_layer</code></td></tr>
+</table>
+<p>Expect all these, users can customize their own function. Note that,
+the arguments should match the ones of functions shown in the table.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='linking.html'>linking</a></code>, <code><a href='selection.html'>selection</a></code>, <code><a href='zoom.html'>zoom</a></code>,
+    <div class='dont-index'><p><code><a href='active.html'>active</a></code>, <code><a href='linking.html'>linking</a></code>, <code><a href='selection.html'>selection</a></code>,
 <code><a href='hover.html'>hover</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-
-  <span class='co'># set active layer</span>
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='va'>wt</span>, shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"black"</span>, size <span class='op'>=</span> <span class='fl'>4.5</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='st'>"pink"</span>, size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='fu'>geom_point</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>shape <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-    <span class='co'># only show manual transmission cars</span>
-    <span class='co'># in the second interactive layer</span>
-    <span class='fu'>active</span><span class='op'>(</span>active <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>==</span> <span class='fl'>1</span>,
-           activeGeomLayers <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
-
-  <span class='co'># Then, click the `reactivate` button on loon inspector</span>
-  <span class='co'># to display all interactive points</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>,
+              mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>hp</span>, y <span class='op'>=</span> <span class='va'>mpg</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+       <span class='fu'>geom_point</span><span class='op'>(</span>mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>color <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>gear</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+       <span class='fu'>geom_smooth</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>[</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span> <span class='op'>==</span> <span class='fl'>4</span>, <span class='op'>]</span>,
+                   method <span class='op'>=</span> <span class='st'>"lm"</span><span class='op'>)</span>
+<span class='co'># a scatter plot with a fitted line on 4 gear cars</span>
+<span class='va'>p</span>
+<span class='co'># scale to the second layer (smooth line)</span>
+<span class='va'>p</span> <span class='op'>+</span> <span class='fu'>zoom</span><span class='op'>(</span>layerId <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+<span class='co'># highlight the 3 gear cars</span>
+<span class='co'># scale to the selected points</span>
+<span class='va'>p</span> <span class='op'>+</span>
+  <span class='fu'><a href='selection.html'>selection</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>gear</span> <span class='op'>==</span> <span class='fl'>3</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>zoom</span><span class='op'>(</span>layerId <span class='op'>=</span> <span class='fl'>1</span>,
+       scaleToFun <span class='op'>=</span> <span class='fu'>loon</span><span class='fu'>::</span><span class='va'><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_selected.html'>l_scaleto_selected</a></span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>

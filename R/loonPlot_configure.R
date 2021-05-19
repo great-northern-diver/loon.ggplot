@@ -1,5 +1,5 @@
 loonPlot_configure <- function(isCoordPolar, loonPlot, loonLayers,
-                               scaleTo, scaleToFun, activeGeomLayers,
+                               layerId, scaleToFun, activeGeomLayers,
                                ggGuides, panelIndex, ggplotPanelParams,
                                swapAxes, theme, panX, panY, deltaX, deltaY, zoomX, zoomY) {
   # draw ggGuides?
@@ -22,8 +22,8 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, loonLayers,
           message("Is it hard to understand the graphics? Try \"ggGuides = TRUE\"!")
       }
 
-      if(scaleTo > 0) {
-        warning("`scaleTo` only works on Cartesian Coordinate", call. = FALSE)
+      if(layerId > 0) {
+        warning("`layerId` only works on Cartesian Coordinate", call. = FALSE)
       }
       loon::l_scaleto_world(loonPlot)
     }
@@ -38,13 +38,13 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, loonLayers,
                loon::l_layer_lower(loonPlot, CartesianGuides)
              })
 
-      if(scaleTo == 0)
+      if(layerId == 0)
         loon::l_scaleto_world(loonPlot)
     }
   }
 
   # in polar coord, scales are fixed; ggGuides do not need to set scales
-  if(scaleTo == 0) {
+  if(layerId == 0) {
     if (!isCoordPolar && !ggGuides) {
       loon::l_configure(loonPlot,
                         panX=panX,
@@ -61,7 +61,7 @@ loonPlot_configure <- function(isCoordPolar, loonPlot, loonLayers,
       for(j in seq(length(loonLayers))) {
 
 
-        if(scaleTo != j) next
+        if(layerId != j) next
 
         layer <- loonLayers[[j]]
 
