@@ -1,5 +1,5 @@
 #' @export
-#' @importFrom ggmulti geom_polygon_glyph geom_serialaxes_glyph geom_image_glyph coord_serialaxes
+#' @import ggmulti
 #' @rdname loon2ggplot
 loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, ...) {
 

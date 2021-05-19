@@ -2,7 +2,9 @@
 
 * Fix a bug: in previous version, `showItemLabels` and `itemLabels` cannot be passed into the `l_serialaxes` widget. 
 
-* Fix some typos and edit some documentations
+* Fix some typos and edit documentations
+
+* Set `ggmulti` as "Imports" rather than the "Depends" and replace `coord_serialaxes` to `geom_serialaxes` to avoid potential risks from `coord_serialaxes`.
 
 # loon.ggplot 1.2.0
 

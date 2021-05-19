@@ -37,19 +37,16 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
     size <- as_r_line_size(widget['linewidth'][active_displayOrder])
 
     ggObj <- ggplot2::ggplot(data[active_displayOrder, ]) +
-      ggplot2::geom_path(
+      ggmulti::geom_serialaxes(
         mapping = ggplot2::aes(
           color = color,
           size = size
         ),
-        stat = stat
+        stat = stat,
+        axes.sequence = axes.sequence,
+        scaling = widget['scaling']
       ) +
-      ggmulti::coord_serialaxes(direction = -1, # anticlock
-                                start = 11, # at 11
-                                axes.layout = axes.layout,
-                                scaling = widget['scaling'],
-                                axes.sequence = axes.sequence) +
-      ggplot2::ggtitle(widget['title'])
+      ggplot2::scale_x_continuous(labels = axes.sequence)
 
     uni_color <- unique(color)
     if(length(uni_color) > 0) {
@@ -76,39 +73,54 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
       ggObj <- ggObj + ggplot2::guides(size = FALSE)
 
   } else {
+
     ggObj <- ggplot2::ggplot(data[active_displayOrder, ]) +
-      ggplot2::geom_path(
+      ggmulti::geom_serialaxes(
         color = get_display_color(
           as_hex6color(widget['color'][active_displayOrder]),
           widget['selected'][active_displayOrder]
         ),
         size = as_r_line_size(widget['linewidth'][active_displayOrder]),
-        stat = stat
+        stat = stat,
+        scaling = widget['scaling'],
+        axes.sequence = axes.sequence
       ) +
-      ggmulti::coord_serialaxes(direction = -1, # anticlock
-                                start = 11, # at 11
-                                axes.layout = axes.layout,
-                                scaling = widget['scaling'],
-                                axes.sequence = axes.sequence) +
-      ggplot2::ggtitle(widget['title'])
+      ggplot2::scale_x_continuous(labels = axes.sequence)
   }
+
+  if(axes.layout == "radial") {
+
+    if(utils::packageVersion("ggmulti") >= "1.0.2") {
+      coord_radial <- ggmulti::coord_radial
+    } else {
+      coord_radial <- ggmulti::coord_radar
+    }
+
+    ggObj <- ggObj +
+      coord_radial(direction = -1, # anticlock
+                   start = 11) # at 11
+
+  }
+
+  # set labels (it is equivalent to set the title)
+  ggObj <- ggObj +
+    ggplot2::ggtitle(label = if(widget['showLabels']) widget['title'] else "")
 
   # set themes
   suppressMessages(
     set_serialaxes_themes(
       ggObj = ggObj,
       sequence = widget['sequence'],
-      showLabels =  widget['showLabels'],
-      showAxesLabels = widget['showAxesLabels'],
       showGuides = widget['showGuides'],
+      showAxesLabels = widget['showAxesLabels'],
       showAxes = widget['showAxes']
     )
   )
 }
 
 set_serialaxes_themes <- function(ggObj, sequence = NULL,
-                                  showLabels = TRUE, showAxesLabels = TRUE,
-                                  showGuides = TRUE, showAxes = TRUE) {
+                                  showGuides = TRUE, showAxesLabels = TRUE,
+                                  showAxes = TRUE) {
   if(missing(ggObj))
     stop("ggObj is missing", call. = FALSE)
 
@@ -131,10 +143,13 @@ set_serialaxes_themes <- function(ggObj, sequence = NULL,
     ggplot2::theme(
       panel.grid.minor = ggplot2::element_blank(),
       axis.ticks = ggplot2::element_blank(),
-      axis.text.x = ggplot2::element_text(color = loon::l_getOption("foreground")),
+      axis.text.x = if(showAxesLabels)
+        ggplot2::element_text(color = loon::l_getOption("foreground"))
+      else ggplot2::element_blank(),
       axis.text.y = ggplot2::element_blank(),
       axis.title.x = ggplot2::element_blank(),
       axis.title.y = ggplot2::element_blank(),
+      plot.title = element_text(hjust = 0.5),
       panel.border = ggplot2::element_blank(),
       panel.grid.major.x = if(showAxes) {
         ggplot2::element_line(color = line_color, size = boundary_lineWidth)
