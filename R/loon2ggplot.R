@@ -64,11 +64,11 @@ loon2ggplot <- function(target, asAes = TRUE, ...) {
   if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
     error_info <- deparse(substitute(target))
     stop(
-    "Target should be a loon object. Maybe you want to call `ggplot2loon(",
-    error_info,
-    ")`? Or, just call `loon.ggplot(",
-    error_info,
-    ")` for simplification.", call. = FALSE
+      "Target should be a loon object. Maybe you want to call `ggplot2loon(",
+      error_info,
+      ")`? Or, just call `loon.ggplot(",
+      error_info,
+      ")` for simplification.", call. = FALSE
     )
   }
   UseMethod('loon2ggplot', target)
@@ -102,9 +102,9 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, ...) {
   if(target['yshows'] == "density" && length(unique(target['color'])) > 1) {
     setLimits <- FALSE
     message("In ggplot histogram, if `y` shows density, ",
-    "the area of each category (grouped by color) is 1; ",
-    "however, for an `l_hist` widget, ",
-    "the whole area is one and the area of each category is proportional to its counts.")
+            "the area of each category (grouped by color) is 1; ",
+            "however, for an `l_hist` widget, ",
+            "the whole area is one and the area of each category is proportional to its counts.")
   } else
     setLimits <- TRUE
 
@@ -278,52 +278,53 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
   ggObj <- ggplot2::ggplot()
 
   children <- l_layer_getUngroupedChildren(widget = widget, target = widget)
-  l_children_layers <- lapply(rev(children),
-                              function(layerid) {
+  l_children_layers <- lapply(
+    rev(children),
+    function(layerid) {
 
-                                layer <- loon::l_create_handle(c(widget, layerid))
+      layer <- loon::l_create_handle(c(widget, layerid))
 
-                                if(layerid == 'model') {
+      if(layerid == 'model') {
 
-                                  states <- get_layer_states(widget, native_unit = FALSE)
+        states <- get_layer_states(widget, native_unit = FALSE)
 
-                                  if(length(states$x) > 0) {
+        if(length(states$x) > 0) {
 
-                                    if(inherits(widget, "l_hist")) {
-                                      # histogram
-                                      ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
-                                                                                  color = states$color,
-                                                                                  selected = states$selected,
-                                                                                  active = states$active),
-                                                                mapping = ggplot2::aes(x = x))
+          if(inherits(widget, "l_hist")) {
+            # histogram
+            ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
+                                                        color = hex2colorName(states$color),
+                                                        selected = states$selected,
+                                                        active = states$active),
+                                      mapping = ggplot2::aes(x = x))
 
-                                    } else {
+          } else {
 
-                                      # scatter plot
-                                      swapAxes <- widget["swapAxes"]
-                                      if(swapAxes) {
-                                        y <- states$x
-                                        x <- states$y
-                                      } else {
-                                        x <- states$x
-                                        y <- states$y
-                                      }
+            # scatter plot
+            swapAxes <- widget["swapAxes"]
+            if(swapAxes) {
+              y <- states$x
+              x <- states$y
+            } else {
+              x <- states$x
+              y <- states$y
+            }
 
-                                      ggObj <<- ggplot2::ggplot(data = data.frame(x = x,
-                                                                                  y = y,
-                                                                                  glyph = states$glyph,
-                                                                                  size = states$size,
-                                                                                  color = states$color,
-                                                                                  selected = states$selected,
-                                                                                  active = states$active),
-                                                                mapping = ggplot2::aes(x = x,
-                                                                                       y = y))
-                                    }
-                                  } else NULL
-                                }
+            ggObj <<- ggplot2::ggplot(data = data.frame(x = x,
+                                                        y = y,
+                                                        glyph = states$glyph,
+                                                        size = states$size,
+                                                        color = hex2colorName(states$color),
+                                                        selected = states$selected,
+                                                        active = states$active),
+                                      mapping = ggplot2::aes(x = x,
+                                                             y = y))
+          }
+        } else NULL
+      }
 
-                                layer
-                              })
+      layer
+    })
 
   l_visible_children_layer <- Filter(
     function(layerid) {
@@ -362,8 +363,7 @@ loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, ...) {
         mapping = ggplot2::aes(x = x, y = y),
         fill = states$color,
         colour = states$linecolor,
-        size =  as_r_line_size(states$linewidth),
-        inherit.aes = FALSE
+        size =  as_r_line_size(states$linewidth)
       )
   }
 
@@ -392,8 +392,7 @@ loon2ggplot.l_layer_line <- function(target, asAes = TRUE, ...) {
         ),
         mapping = ggplot2::aes(x = x, y = y),
         colour = states$color,
-        size = as_r_line_size(states$linewidth),
-        inherit.aes = FALSE
+        size = as_r_line_size(states$linewidth)
       )
   }
 
@@ -420,13 +419,12 @@ loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, ...) {
           x = x,
           y = y
         ),
-        mapping = ggplot2::aes(xmin = x[1], xmax = x[2], ymin = y[1], ymax = y[2]),
+        mapping = ggplot2::aes(xmin = x[1], xmax = x[2],
+                               ymin = y[1], ymax = y[2]),
         colour = states$linecolor,
         fill = states$color,
-        size =  as_r_line_size(states$linewidth),
-        inherit.aes = FALSE
+        size =  as_r_line_size(states$linewidth)
       )
-
   }
 
   ggObj
@@ -465,8 +463,7 @@ loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, ...) {
         mapping = ggplot2::aes(x = x, y = y),
         fill = states$color,
         colour = states$linecolor,
-        size = as_r_line_size(states$linewidth),
-        inherit.aes = FALSE
+        size = as_r_line_size(states$linewidth)
       )
   }
 
@@ -499,8 +496,7 @@ loon2ggplot.l_layer_text <- function(target, asAes = TRUE, ...) {
         angle = states$angle,
         colour = states$color,
         hjust = get_hjust(states$justify),
-        size = as_r_text_size(states$size),
-        inherit.aes = FALSE
+        size = as_ggplot_size(states$size)
       )
   }
 
@@ -522,7 +518,7 @@ loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, ...) {
   if(length(x) > 0  & length(y) > 0){
 
     label  <- states$text[active]
-    size  <- as_r_text_size(states$size[active])
+    size  <- states$size[active]
     angle  <- states$angle[active]
     anchor  <- states$anchor[active]
     justify  <- states$justify[active]
@@ -553,8 +549,7 @@ loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, ...) {
         angle = angle,
         colour = color,
         hjust = get_hjust(justify),
-        size = as_r_text_size(size),
-        inherit.aes = FALSE
+        size = as_ggplot_size(size)
       )
   }
 
@@ -573,17 +568,14 @@ loon2ggplot.l_layer_points <- function(target, asAes = TRUE, ...) {
   ggObj <- list(...)$ggObj
 
   if(length(x) > 0  && length(y)  > 0) {
-    size  <- as_r_point_size(states$size[active])
-    color <- states$color[active]
 
     ggObj <- ggObj +
       ggplot2::geom_point(
         data = data.frame(x = x, y = y),
         mapping = ggplot2::aes(x = x, y = y),
-        colour = color,
-        size = size,
-        pch = 16,
-        inherit.aes = FALSE
+        colour =  states$color[active],
+        size = as_ggplot_size(states$size[active]),
+        pch = 16
       )
   }
 
@@ -623,8 +615,7 @@ loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, ...) {
         mapping = ggplot2::aes(x = x, y = y, group = group),
         fill = rep(fill, times = len_x),
         colour = rep(linecolor, times = len_x),
-        size = rep(linewidth, times = len_x),
-        inherit.aes = FALSE
+        size = rep(linewidth, times = len_x)
       )
   }
 
@@ -660,11 +651,11 @@ loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, ...) {
     ggObj <- ggObj +
       ggplot2::geom_rect(
         data =df,
-        mapping = ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+        mapping = ggplot2::aes(xmin = xmin, xmax = xmax,
+                               ymin = ymin, ymax = ymax),
         fill = states$color[active],
         colour = states$linecolor[active],
-        size = as_r_line_size(states$linewidth[active]),
-        inherit.aes = FALSE
+        size = as_r_line_size(states$linewidth[active])
       )
   }
 
@@ -690,7 +681,8 @@ loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, ...) {
 
     len_x <- lengths(x)
 
-    group <- as.factor(rep(1:length(len_x), times = len_x))
+    group <- as.factor(rep(seq(length(len_x)),
+                           times = len_x))
 
     df <- data.frame(
       x = as.numeric(unlist(x)),
@@ -703,8 +695,7 @@ loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, ...) {
         data =df,
         mapping = ggplot2::aes(x = x, y = y, group = group),
         colour = rep(linecolor, times = len_x),
-        size = rep(linewidth, times = len_x),
-        inherit.aes = FALSE
+        size = rep(linewidth, times = len_x)
       )
   }
 

@@ -4,32 +4,33 @@
 loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
-  states <- get_layer_states(widget)
   swapAxes <- widget["swapAxes"]
 
+  # layer scatterplot shares the same data set with the ggplot model layer
   ggObj <- list(...)$ggObj
+  data <- ggObj$data
 
-  if (!any(states$active)) return(ggObj)
+  if (!any(data$active)) return(ggObj)
 
   # No active points in scatterplot
   display_order <- get_model_display_order(widget)
 
-  active <- states$active[display_order]
-  selected <- states$selected[display_order][active]
+  active <- data$active[display_order]
+  selected <- data$selected[display_order][active]
 
   s_a <- list(
-    x = if(swapAxes) states$y[display_order][active] else states$x[display_order][active],
-    y = if(swapAxes) states$x[display_order][active] else states$y[display_order][active],
-    glyph = states$glyph[display_order][active],
-    color = get_display_color(states$color[display_order][active], selected),
-    size = states$size[display_order][active],
+    x = if(swapAxes) data$y[display_order][active] else data$x[display_order][active],
+    y = if(swapAxes) data$x[display_order][active] else data$y[display_order][active],
+    glyph = data$glyph[display_order][active],
+    color = get_display_color(data$color[display_order][active], selected),
+    size = data$size[display_order][active],
     index = display_order[active]
   )
 
   x <- as.numeric(s_a$x)
   y <- as.numeric(s_a$y)
   glyph <- s_a$glyph
-  color <- fill <- s_a$color
+  color <- fill <-s_a$color
   size <- s_a$size
   index <- s_a$index
 

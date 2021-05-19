@@ -27,7 +27,8 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, ...) {
         boundary = widget['origin'],
         binwidth = widget['binwidth'],
         inherit.aes = FALSE
-      ) + ggplot2::scale_fill_manual(
+      ) +
+      ggplot2::scale_fill_manual(
         values = values,
         breaks = values,
         labels = selection_color_labels(values))
@@ -63,17 +64,17 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, ...) {
 histogramAsAesTRUE <- function(widget) {
 
   colorOutline <- if(widget['showOutlines']) as_hex6color(widget["colorOutline"]) else NA
+  states <- get_layer_states(widget, native_unit = FALSE)
 
-  active <- widget['active']
-
-  activeSelected <- widget['selected'][active]
+  active <- states$active
+  activeSelected <- states$selected[active]
   activeColor <- if(widget['showStackedColors']) {
-    as_hex6color(widget['color'])[active]
+    states$color[active]
   } else {rep(as_hex6color(widget['colorFill']), widget['n'])[active]}
 
   selectcolor <- loon::l_getOption("select-color")
   activeColor[activeSelected] <- selectcolor
-  activeX <- widget['x'][active]
+  activeX <- states$x[active]
 
   uniqueCol <- rev(levels(factor(activeColor)))
   colorStackingOrder <- widget['colorStackingOrder']
@@ -99,6 +100,9 @@ histogramAsAesTRUE <- function(widget) {
     }
   }
 
+  # preserve the order
+  values <- hex2colorName(values)
+  activeColor <- hex2colorName(activeColor)
   activeColor <- factor(activeColor, levels = values)
 
   return(

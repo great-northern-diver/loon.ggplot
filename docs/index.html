@@ -94,35 +94,35 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="loonggplot-" class="section level2">
-<h2 class="hasAnchor">
+<div id="loonggplot-" class="section level1">
+<div class="page-header"><h1 class="hasAnchor">
 <a href="#loonggplot-" class="anchor"></a>loon.ggplot <img src="reference/figures/logo.png" align="right" width="120">
-</h2>
+</h1></div>
 
 <p>An R package to turn ggplot graphic data structures into interactive loon plots</p>
 <p>Documentation: <a href="https://great-northern-diver.github.io/loon.ggplot/">https://great-northern-diver.github.io/loon.ggplot/</a></p>
-<div id="introduction" class="section level3">
-<h3 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h3>
+<div id="introduction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>The <code>ggplot2</code> graphics package (part of the <code>tidyverse</code> package collection) uses the base <code>grid</code> graphics package to produce publication quality graphics for data analysis. Based on a grammar for graphics, <code>ggplot2</code> also provides a lot of functionality (e.g. <code>facet</code>s) that can be extremely useful in data analysis.</p>
 <p>The <code>loon</code> graphics package provides <strong>interactive</strong> graphics especially valuable in any <strong>exploratory data analysis</strong>. This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, <code>loon</code> also provides publication quality static graphics in <code>grid</code> via loon’s functions <code>grid.loon()</code> and <code>loonGrob()</code>.</p>
 <p>The loon.ggplot package brings <strong>both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <strong><code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code></strong> and the latter by the simple translation function <strong><code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code></strong>.</p>
 </div>
-<div id="install" class="section level3">
-<h3 class="hasAnchor">
-<a href="#install" class="anchor"></a>Install</h3>
+<div id="install" class="section level2">
+<h2 class="hasAnchor">
+<a href="#install" class="anchor"></a>Install</h2>
 <p><code>loon.ggplot</code> can be achieved directly from github repo</p>
 <pre><code><a href="https://remotes.r-lib.org/reference/install_github.html">remotes::install_github("https://github.com/great-northern-diver/loon.ggplot")</a></code></pre>
 <p>Launch R, then install the required package dependencies</p>
 <pre><code><a href="https://rdrr.io/r/utils/install.packages.html">install.packages("ggplot2")
 install.packages("loon")</a></code></pre>
 </div>
-<div id="basic" class="section level3">
+<div id="basic" class="section level2">
+<h2 class="hasAnchor">
+<a href="#basic" class="anchor"></a>Basic</h2>
+<div id="ggplot2loon-ggplot--loon" class="section level3">
 <h3 class="hasAnchor">
-<a href="#basic" class="anchor"></a>Basic</h3>
-<div id="ggplot2loon-ggplot--loon" class="section level4">
-<h4 class="hasAnchor">
-<a href="#ggplot2loon-ggplot--loon" class="anchor"></a><code>ggplot2loon()</code>: ggplot –&gt; loon</h4>
+<a href="#ggplot2loon-ggplot--loon" class="anchor"></a><code>ggplot2loon()</code>: ggplot –&gt; loon</h3>
 <ul>
 <li>Construct <code>ggplot</code>
 </li>
@@ -161,9 +161,9 @@ l_ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) +
 <li><p><code>ggmatrix</code> object in package <code>GGally</code> can also be converted to a <code>loon</code> widget. See <code><a href="reference/ggplot2loon.html">help(ggplot2loon)</a></code> for more info.</p></li>
 </ul>
 </div>
-<div id="loon2ggplot-loon--ggplot" class="section level4">
-<h4 class="hasAnchor">
-<a href="#loon2ggplot-loon--ggplot" class="anchor"></a><code>loon2ggplot()</code>: loon –&gt; ggplot</h4>
+<div id="loon2ggplot-loon--ggplot" class="section level3">
+<h3 class="hasAnchor">
+<a href="#loon2ggplot-loon--ggplot" class="anchor"></a><code>loon2ggplot()</code>: loon –&gt; ggplot</h3>
 <p>After creating <code>loon</code> plots and adding programmatic and direct manipulation of the visualizations to effect interactive identification, function <code>loon2ggplot</code> can be applied to return a static <code>ggplot</code></p>
 <pre><code>pg &lt;- loon2ggplot(pl)
 hg &lt;- loon2ggplot(hl)</code></pre>
@@ -194,9 +194,9 @@ class(hg)
 </li>
 </ul>
 </div>
-<div id="loonggplot-loon--ggplot" class="section level4">
-<h4 class="hasAnchor">
-<a href="#loonggplot-loon--ggplot" class="anchor"></a><code>loon.ggplot()</code>: loon &lt;–&gt; ggplot</h4>
+<div id="loonggplot-loon--ggplot" class="section level3">
+<h3 class="hasAnchor">
+<a href="#loonggplot-loon--ggplot" class="anchor"></a><code>loon.ggplot()</code>: loon &lt;–&gt; ggplot</h3>
 <p><code><a href="reference/loon.ggplot.html">loon.ggplot()</a></code> gathers features of both <code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
 <pre><code>p &lt;- l_plot(iris)
 # `loon` to `gg`

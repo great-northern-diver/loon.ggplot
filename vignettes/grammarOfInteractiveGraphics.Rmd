@@ -1,6 +1,6 @@
 ---
 title: "A grammar of interactive graphics"
-subtitle: "Introduction"
+subtitle: "Extending ggplot"
 author: "R. W. Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
 output:
@@ -53,16 +53,36 @@ Consider the `airquality` dataset:
 data("airquality")
 summary(airquality)
 ```
-It has missing data (in `Ozone` and `Solar.R`) and the variable `Month` can be tidied up and turned into a factor (to preserve calendar order) as
+It has missing data (in `Ozone` and `Solar.R`) and the variable `Month` appears as numerical.
+More meaningful date information can be added using some standard `R` functions:
+```{r}
+airquality$Date <- with(airquality,
+                        as.Date(paste("1973",
+                                      Month,
+                                      Day,
+                                      sep = "-")))
+
+airquality$Weekday <- factor(weekdays(airquality$Date),
+                             levels = c("Monday",
+                                        "Tuesday",
+                                        "Wednesday",
+                                        "Thursday",
+                                        "Friday",
+                                        "Saturday",
+                                        "Sunday"))
+```
+The `Month` itself can also be tidied up, turning it into into a factor with levels having a three character month abbreviation (and ordered to preserve calendar order):
+
 ```{r}
 airquality$Month <- factor(month.abb[airquality$Month], 
                            levels = month.abb[unique(airquality$Month)])
 ```
 
-```{r, eval = FALSE, echo = FALSE}
-airquality$Month <- factor(month.abb[airquality$Month], 
-                           levels = month.abb)
+The data now look like
+```{r}
+head(airquality, n = 3)
 ```
+
 With its mix of continuous and categorical variables (some with missing data) this transformed data will be used to illustrate `loon.ggplot`'s  grammar of interactive graphics.
 
 ## `l_ggplot()`
