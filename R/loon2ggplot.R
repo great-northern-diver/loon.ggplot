@@ -260,9 +260,11 @@ cartesian_gg <- function(target, ggObj, setLimits = TRUE) {
 
   if(setLimits) {
     ggObj <- ggObj +
-      ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
+      ggplot2::coord_cartesian(xlim = xlim, ylim = ylim,
+                               expand = FALSE)
 
-    if(swapAxes) ggObj <- ggObj + coord_flip(xlim = xlim, ylim = ylim)
+    if(swapAxes) ggObj <- ggObj + coord_flip(xlim = xlim, ylim = ylim,
+                                             expand = FALSE)
 
   } else {
     if(swapAxes) ggObj <- ggObj + coord_flip()
@@ -293,7 +295,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
           if(inherits(widget, "l_hist")) {
             # histogram
             ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
-                                                        color = hex2colorName(states$color),
+                                                        color = l_colorName(states$color, error = FALSE),
                                                         selected = states$selected,
                                                         active = states$active),
                                       mapping = ggplot2::aes(x = x))
@@ -314,7 +316,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
                                                         y = y,
                                                         glyph = states$glyph,
                                                         size = states$size,
-                                                        color = hex2colorName(states$color),
+                                                        color = l_colorName(states$color, error = FALSE),
                                                         selected = states$selected,
                                                         active = states$active),
                                       mapping = ggplot2::aes(x = x,
