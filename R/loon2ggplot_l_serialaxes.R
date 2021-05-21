@@ -28,11 +28,11 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
 
   if(asAes) {
 
-    color <- hex2colorName(
+    color <- l_colorName(
       get_display_color(
         as_hex6color(widget['color'][active_displayOrder]),
         widget['selected'][active_displayOrder]
-      )
+      ), error = FALSE
     )
     size <- as_r_line_size(widget['linewidth'][active_displayOrder])
 

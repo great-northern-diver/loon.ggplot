@@ -101,8 +101,8 @@ histogramAsAesTRUE <- function(widget) {
   }
 
   # preserve the order
-  values <- hex2colorName(values)
-  activeColor <- hex2colorName(activeColor)
+  values <- l_colorName(values, error = FALSE)
+  activeColor <- l_colorName(activeColor, error = FALSE)
   activeColor <- factor(activeColor, levels = values)
 
   return(

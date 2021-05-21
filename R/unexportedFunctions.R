@@ -11,7 +11,7 @@ get_model_display_order <- utils::getFromNamespace("get_model_display_order", "l
 char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
 cartesian_model_widget_states <- utils::getFromNamespace("cartesian_model_widget_states", "loon")
 tcl_img_2_r_raster <- utils::getFromNamespace("tcl_img_2_r_raster", "loon")
-color.id <- utils::getFromNamespace("color.id", "loon")
+
 
 l_allNDimStateNames <- function(plots = c("l_plot", "l_plot3D", "l_serialaxes", "l_hist")) {
   states <- lapply(plots,
@@ -19,6 +19,33 @@ l_allNDimStateNames <- function(plots = c("l_plot", "l_plot3D", "l_serialaxes", 
                      loon::l_nDimStateNames(plot)
                    })
   unique(unlist(states))
+}
+
+# it is exported in loon >= 1.3.7 version
+# and should be removed later.
+l_colorName <- function(x, error = TRUE) {
+
+  if(utils::packageVersion("loon") > "1.3.6") {
+
+    loon::l_colorName(x, error = error)
+
+  } else {
+
+    color.id <- utils::getFromNamespace("color.id", "loon")
+
+    hex2colorName <- function(color) {
+      # the input colors are 6/12 digits hex code
+      uniColor <- unique(color)
+      colorName <- color.id(uniColor)
+      len <- length(colorName)
+
+      for(i in seq(len)) {
+        color[color == uniColor[i]] <- colorName[i]
+      }
+      color
+    }
+    hex2colorName(color)
+  }
 }
 
 ## Unexported functions in ggplot2

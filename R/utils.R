@@ -12,18 +12,6 @@ char2null <- function(x, warn = FALSE, message = "") {
   x
 }
 
-hex2colorName <- function(color) {
-  # the input colors are 6/12 digits hex code
-  uniColor <- unique(color)
-  colorName <- color.id(uniColor)
-  len <- length(colorName)
-
-  for(i in seq(len)) {
-    color[color == uniColor[i]] <- colorName[i]
-  }
-  color
-}
-
 is.waive <- function (x) inherits(x, "waiver")
 
 is.ggmatrix <- function(x) {
