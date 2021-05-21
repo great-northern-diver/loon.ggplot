@@ -196,7 +196,7 @@ loonLayer.GeomRect <- function(widget,
                                        label = label)
       x <- c()
       y <- c()
-      color_id <- 1:n
+      colorId <- 1:n
       lapply(1:n,
              function(i){
 
@@ -217,7 +217,7 @@ loonLayer.GeomRect <- function(widget,
 
                if(any(is.na(xx)) | any(is.na(yy))) {
                  NULL # no need to draw
-                 color_id <<- color_id[!color_id == i]
+                 colorId <<- colorId[!colorId == i]
                } else {
                  x <<- c(x, xx)
                  y <<- c(y, yy)
@@ -225,17 +225,17 @@ loonLayer.GeomRect <- function(widget,
              }
       )
 
-      if(length(color_id) == 0) return(NULL)
+      if(length(colorId) == 0) return(NULL)
 
       rl <- tryCatch(
         loon::l_layer_rectangles(
           widget,
           x = x,
           y = y,
-          color = hex6to12(fillColor[color_id]),
-          linecolor = hex6to12(linesColor[color_id]),
-          linewidth = linesWidth[color_id],
-          group = rep(color_id, each = 2),
+          color = hex6to12(fillColor[colorId]),
+          linecolor = hex6to12(linesColor[colorId]),
+          linewidth = linesWidth[colorId],
+          group = rep(colorId, each = 2),
           parent = parent,
           label = mappingLabel
         ),
@@ -333,7 +333,7 @@ loonLayer.GeomPolygon <- function(widget,
                                      name = "polygon",
                                      label = label)
 
-    color_id <- vapply(uniGroup,
+    colorId <- vapply(uniGroup,
                        function(x) {
                          which(data$group == x)[1]
                        }, numeric(1L))
@@ -361,9 +361,9 @@ loonLayer.GeomPolygon <- function(widget,
           widget,
           x = x,
           y = y,
-          color = hex6to12(fillColor[color_id]),
-          linecolor = hex6to12(linesColor[color_id]),
-          linewidth = linesWidth[color_id],
+          color = hex6to12(fillColor[colorId]),
+          linecolor = hex6to12(linesColor[colorId]),
+          linewidth = linesWidth[colorId],
           group = group,
           parent = parent,
           label = mappingLabel
@@ -377,9 +377,9 @@ loonLayer.GeomPolygon <- function(widget,
           widget,
           x = data$x,
           y = data$y,
-          color = hex6to12(fillColor[color_id]),
-          linecolor = hex6to12(linesColor[color_id]),
-          linewidth = linesWidth[color_id],
+          color = hex6to12(fillColor[colorId]),
+          linecolor = hex6to12(linesColor[colorId]),
+          linewidth = linesWidth[colorId],
           parent = parent,
           group = data$group,
           label = mappingLabel
