@@ -44,7 +44,7 @@ l_colorName <- function(x, error = TRUE) {
       }
       color
     }
-    hex2colorName(color)
+    hex2colorName(x)
   }
 }
 
