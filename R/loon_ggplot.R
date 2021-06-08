@@ -11,7 +11,7 @@
 #' input is a \code{loon} widget, then it returns a \code{ggplot} object. If it is a \code{l_ggplot} object,
 #' \code{loon.ggplot} helps to return a \code{loon} widget.
 #'
-#' @seealso \code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}, \code{\link{l_ggplot}}
+#' @seealso Richer examples are in \code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}, \code{\link{l_ggplot}}
 #'
 #' @export
 #' @examples
