@@ -4,10 +4,13 @@
 \alias{print.l_ggplot}
 \title{Explicitly draw plot}
 \usage{
-\method{print}{l_ggplot}(x, ...)
+\method{print}{l_ggplot}(x, message = TRUE, ...)
 }
 \arguments{
 \item{x}{plot to display}
+
+\item{message}{logical; if \code{TRUE}, the way to create handle will be
+printed out.}
 
 \item{...}{other arguments used to modify function \code{ggplot2loon}}
 }
