@@ -61,6 +61,7 @@ header-includes:
 
 
 ```{r setup, include=FALSE, warning=FALSE}
+library(knitr)
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       message = FALSE,
@@ -72,11 +73,9 @@ knitr::opts_chunk$set(echo = TRUE,
                       comment = "#>",
                       tidy.opts = list(width.cutoff = 65),
                       tidy = FALSE)
-library(knitr)
+
 set.seed(12314159)
-imageDirectory <- "./ggplots2loon"
-dataDirectory <- "./ggplots2loon"
-path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
+imageDirectory <- file.path(".", "images", "ggplots2loon")
 
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
@@ -131,7 +130,7 @@ grid.loon(l_p1)
 ```
 
 ```{r grid_version_of_l_p1_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_plot_l_p1.png"))
+include_graphics(file.path(imageDirectory, "l_plot_l_p1.png"))
 ```
 
 Alternatively, and more simply, we can use the usual `plot` function in `R` which has a method for `loon` objects (`plot` is essentially "syntactic sugar" since it simply calls `grid.loon()`)
@@ -140,7 +139,7 @@ plot(l_h1)   # equivalent to grid.loon(l_h1)
 ```
 
 ```{r grid_version_of_l_h1_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_hist_l_h1.png"))
+include_graphics(file.path(imageDirectory, "l_hist_l_h1.png"))
 ```
 
 ### Interaction - Direct Manipulation
@@ -148,7 +147,7 @@ include_graphics(path_concat(imageDirectory, "l_hist_l_h1.png"))
 Unlike `p1` and `h1`, the loon counterparts `l_p1` and `l_h1` are both **interactive**; their displays can be changed by **direct manipulation** using the mouse and/or each loon plot's  **loon inspector**. 
 
 ```{r inspector_of_l_p1, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "25%"}
-include_graphics(path_concat(imageDirectory, "inspector_l_p1.png"))
+include_graphics(file.path(imageDirectory, "inspector_l_p1.png"))
 ```
 
 For example, points in the loon scatterplot `l_p1`, can be selected with a mouse (`<SHIFT>` select for multiple selection) and their glyph changed in shape or color, for example.  Scrolling over the plot causes zooming and `<RIGHT-BUTTON>` (or `<SECONDARY-BUTTON>`, depending on your mouse setup) can be used to pan the plot (the same can be done via the "World View" of the inspector).
@@ -260,7 +259,7 @@ plot(l_p1)
 ```
 
 ```{r high_gear_manual_grid_plot_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_plot_l_p1_zoomIn.png"))
+include_graphics(file.path(imageDirectory, "l_plot_l_p1_zoomIn.png"))
 ```
 
 Again, the plot can be returned to its original scale with all points reactivated as follows:
@@ -273,7 +272,7 @@ plot(l_p1)
 ```
 
 ```{r Back_to_all_points_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_plot_l_p1_zoomOut.png"))
+include_graphics(file.path(imageDirectory, "l_plot_l_p1_zoomOut.png"))
 ```
 
 #### Linking in `loon`
@@ -300,7 +299,7 @@ plot(l_h1)
 ```
 
 ```{r stacked_colours_plot_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_hist_l_h1_stacked_colours.png"))
+include_graphics(file.path(imageDirectory, "l_hist_l_h1_stacked_colours.png"))
 ```
 
 
@@ -336,7 +335,7 @@ plot(l_p2)
 ```
 
 ```{r loon_plot_l_p2_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_plot_l_p2.png"))
+include_graphics(file.path(imageDirectory, "l_plot_l_p2.png"))
 ```
 
 Note that `l_p2` did not inherit the shapes of its points from the `l_p1`.  That is because only those states that have been defined as `linkedStates` are shared by any given plot.
@@ -380,7 +379,7 @@ plot(l_p1)
 ```
 
 ```{r changed_glyphs_l_p1_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_plot_l_p1_changed_glyphs.png"))
+include_graphics(file.path(imageDirectory, "l_plot_l_p1_changed_glyphs.png"))
 ```
 
 and propagated to `l_p2`
@@ -390,7 +389,7 @@ plot(l_p2)
 ```
 
 ```{r changed_glyphs_l_p2_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector for the scatterplot l_p`", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_plot_l_p2_changed_glyphs.png"))
+include_graphics(file.path(imageDirectory, "l_plot_l_p2_changed_glyphs.png"))
 ```
 
 ## Layers
@@ -409,7 +408,7 @@ l_p_fit <- ggplot2loon(p_fit)
 As with ggplots (and grid graphics plots), loon plots have layers.  These can be identified (and manipulated) by selecting the "Layers" tab of the inspector.
 
 ```{r inspector_of_l_p_fit, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 4, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "25%"}
-include_graphics(path_concat(imageDirectory, "inspector_l_p_fit.png"))
+include_graphics(file.path(imageDirectory, "inspector_l_p_fit.png"))
 ```
 
 As can be seen, four distinct layers appear.  There is the scatterplot (from `geom_point()`), then a group layer called the `smooth` which has been opened up here by toggling the triangle at its left to reveal it is composed of a `line` and a `polygon` layer (in that order).  
@@ -564,7 +563,7 @@ l_fwrap <- ggplot2loon(fwrap, linkingGroup = "Motor Trend 1974")
 
 which will look like
 ```{r linking_Key_fwrap, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "l_fwrap.png"))
+include_graphics(file.path(imageDirectory, "l_fwrap.png"))
 ```
 Note that because we set the `linkingGroup` at the time of creation (and because the `linkingKey` is the the default in all plots in this group), the interactive faceted plot has pulled the colours from the other plots in the same `linkingGroup`.
 

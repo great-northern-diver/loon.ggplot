@@ -1,7 +1,7 @@
 # loon.ggplot  <img src="man/figures/logo.png" align="right" width="120" />
 
-[![Build Status](https://travis-ci.com/z267xu/loon.ggplot.svg?branch=master)](https://travis-ci.com/great-northern-diver/loon.ggplot)
-[![Codecov test coverage](https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master)
+[![Build Status](https://travis-ci.com/great-northern-diver/loon.ggplot.svg?branch=master)](https://travis-ci.com/great-northern-diver/loon.ggplot)
+[![Codecov test coverage](https://codecov.io/gh/great-northern-diver/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/loon.ggplot)](https://cran.r-project.org/web/packages/loon.ggplot/index.html)
 [![](https://cranlogs.r-pkg.org/badges/loon.ggplot)](https://cran.r-project.org/package=loon.ggplot)
 
@@ -143,3 +143,69 @@ g
 # `gg` to `loon`
 l <- loon.ggplot(g)
 ```
+
+## More than `loon` or `ggplot2`
+
+More than connecting `ggplot2` and `loon` these two specific graphical systems, `loon.ggplot` is able to connect the suite behind them.
+
+![](man/figures/loonggplotConnection.png)
+### `loon` --> `ggplot2` --> `gganimate`
+
+Return an animation from a `loon` plot
+
+```
+# a loon plot
+library(gapminder)
+p <- with(gapminder, 
+          l_plot(gdpPercap, lifeExp,
+                 # scale the size into certain amounts
+                 size = scales::rescale(pop, to = c(4, 50)),
+                 color = continent,
+                 itemLabel = as.character(country),
+                 showItemLabels = TRUE
+          ))
+          
+# highlight large population countires     
+library(dplyr)
+top10in2007 <- gapminder %>% 
+  filter(year == 2007) %>%
+  top_n(10, pop)
+p['selected'][gapminder$country %in% top10in2007$country] <- TRUE
+
+# to `ggplot` then to `animation`
+library(gganimate)
+loon.ggplot(p, selectedOnTop = TRUE) + 
+  facet_wrap(gapminder$continent) + 
+  theme(legend.position = "none") + 
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') + 
+  transition_time(gapminder$year) +
+  ease_aes('linear')
+```
+
+![](man/figures/gdpVersusLife.gif)
+
+### `ggplot2` --> `loon` --> `shiny`
+
+Return a shiny web app from a `ggplot` object
+
+```
+library(dplyr)
+gp <- gapminder %>% 
+  filter(year == 2007,
+         continent != "Oceania") %>%
+  ggplot(mapping = aes(gdpPercap, lifeExp, 
+                       colour = continent)) + 
+  geom_point(mapping = aes(size = pop)) + 
+  geom_smooth(mapping = aes(weight = pop),
+              method = "lm",
+              se = FALSE)
+
+library(loon.shiny)
+gp %>% 
+  loon.ggplot() %>% 
+  loon.shiny()
+```
+
+![](man/figures/GDPshiny.gif)

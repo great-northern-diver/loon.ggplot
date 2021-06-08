@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get ggplots — g_getPlots • loon.ggplot</title>
+<title>Return the subtitles from an l_facet_ggplot object — l_getSubtitles • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="get ggplots — g_getPlots" />
-<meta property="og:description" content="For the target compound loon plot, determines all the ggplots based on
-the compound loon plot." />
+<meta property="og:title" content="Return the subtitles from an l_facet_ggplot object — l_getSubtitles" />
+<meta property="og:description" content="Return the subtitles from an l_facet_ggplot object" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -138,51 +137,42 @@ the compound loon plot." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>get <code>ggplot</code>s</h1>
-    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/g_getPlots.R'><code>R/g_getPlots.R</code></a></small>
-    <div class="hidden name"><code>g_getPlots.Rd</code></div>
+    <h1>Return the subtitles from an <code>l_facet_ggplot</code> object</h1>
+    <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loonGrob_l_ggplot.R'><code>R/loonGrob_l_ggplot.R</code></a></small>
+    <div class="hidden name"><code>l_getSubtitles.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>For the target compound loon plot, determines all the <code>ggplot</code>s based on
-the compound <code>loon</code> plot.</p>
+    <p>Return the subtitles from an <code>l_facet_ggplot</code> object</p>
     </div>
 
-    <pre class="usage"><span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_pairs</span>
-<span class='fu'>g_getPlots</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>l_getSubtitles</span><span class='op'>(</span><span class='va'>target</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>target</th>
-      <td><p>the (compound) loon plot</p></td>
-    </tr>
-    <tr>
-      <th>asAes</th>
-      <td><p>logical; set aesthetics attributes, i.e. `color`, `fill` as
-variables (default <code>TRUE</code>) or general visual properties (<code>FALSE</code>).
-See details</p></td>
-    </tr>
-    <tr>
-      <th>selectedOnTop</th>
-      <td><p>logical and default is <code>TRUE</code>; whether to display the
-selected points on top. See details.</p></td>
+      <td><p>an <code>l_facet_ggplot</code> object. If the ggplot object is
+faceted (either by <code>facet_wrap</code> or <code>facet_grid</code>),
+an <code>l_facet_ggplot</code> object will be returned once it is turned
+to a <code>loon</code> plot.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a list of <code>ggplot</code>s.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>A list of labels, i.e. subtitles, labels, title, etc</p>
 
-    <div class='dont-index'><p><code>l_getPlots</code>, <code><a href='g_getLocations.html'>g_getLocations</a></code></p></div>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>mpg</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>displ</span>, <span class='va'>hwy</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='fu'>vars</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>lp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='loon.ggplot.html'>loon.ggplot</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
+<span class='fu'>l_getSubtitles</span><span class='op'>(</span><span class='va'>lp</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

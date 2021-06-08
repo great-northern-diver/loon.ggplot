@@ -246,6 +246,21 @@ l_getLocations.l_ggmatrix <- function(target) {
   l_getLocations.l_facet_ggplot(target)
 }
 
+#' @title Return the subtitles from an \code{l_facet_ggplot} object
+#' @param target an \code{l_facet_ggplot} object. If the ggplot object is
+#' faceted (either by \code{facet_wrap} or \code{facet_grid}),
+#' an \code{l_facet_ggplot} object will be returned once it is turned
+#' to a \code{loon} plot.
+#' @return A list of labels, i.e. subtitles, labels, title, etc
+#' @export
+#' @examples
+#' if(interactive()) {
+#' p <- ggplot(mpg, aes(displ, hwy)) +
+#'   geom_point() +
+#'   facet_wrap(vars(class))
+#' lp <- loon.ggplot(p)
+#' l_getSubtitles(lp)
+#' }
 l_getSubtitles <- function(target) {
 
   # find the parent `tk` window name

@@ -40,8 +40,7 @@
 #' }
 #'
 #' # An alternative way to return a real loon widget from `p` (a `l_ggplot` object)
-#' # is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`
-#' # this way can provide richer information (note that it will create a new widget).
+#' # is to call the function `loon.ggplot()`.
 #' q <- loon.ggplot(p)
 #' q
 #'
@@ -57,7 +56,8 @@
 #' # press the button key `R` to rotate the plot
 #' l_ggplot(mtcars,
 #'          mapping = aes(x = wt, y = hp, z = drat)) +
-#'    geom_point(size = 4)
+#'    geom_point(size = 4) +
+#'    scale_multi()
 #' }
 l_ggplot <- function(data = NULL, mapping = aes(), ...,
                      environment = parent.frame()) {
@@ -74,12 +74,36 @@ l_ggplot <- function(data = NULL, mapping = aes(), ...,
 #' Explicitly draw plot
 #'
 #' @param x plot to display
+#' @param message logical; if \code{TRUE}, the way to create handle will be
+#' printed out.
 #' @param ... other arguments used to modify function \code{ggplot2loon}
 #' @return Invisibly returns a \code{loon} widget
 #' @export
-print.l_ggplot <- function(x, ...) {
+print.l_ggplot <- function(x, message = TRUE, ...) {
 
   p <- loon.ggplot(x, ...)
+
+  # this message will be executed if and only if
+  # 1. message is set as TRUE
+  # 2. `x` is executed in the global environment
+  if(message && is.GlobalEnv(x$plot_env)) {
+    tryCatch(
+      expr = {
+        if(is.l_compound(p)) {
+          p_ <- p[[1L]]
+        } else p_ <- p
+
+        path <- as.character(tcltk::tkwinfo("parent", as.character(p_)))
+
+        message_wrap("The loon plot can be accessed as ",
+                     "l_getFromPath(\"",
+                     path,
+                     "\")")
+      },
+      error = function(e) NULL
+    )
+  }
+
   print(p)
 }
 

@@ -63,5 +63,5 @@ if(interactive()) {
 }
 }
 \seealso{
-\code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}, \code{\link{l_ggplot}}
+Richer examples are in \code{\link{loon2ggplot}}, \code{\link{ggplot2loon}}, \code{\link{l_ggplot}}
 }

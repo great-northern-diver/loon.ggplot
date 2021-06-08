@@ -9,16 +9,29 @@
 #' @param asAes logical; set aesthetics attributes, i.e. `color`, `fill` as
 #' variables (default \code{TRUE}) or general visual properties (\code{FALSE}).
 #' See details
+#' @param selectedOnTop logical and default is \code{TRUE}; whether to display the
+#' selected points on top. See details.
+#'
 #' @param ... arguments used inside \code{loon2ggplot()}, not used by this method
 #'
 #' @return a \code{ggplot} object
 #'
 #' @details
 #' in \code{ggplot}, generally speaking, there are two ways to set the
-#' aesthetics attributes, either take it as variables
-#' (set in function \code{aes()}) or visual properties. The main benefits to
-#' consider it as variables are that 1. legend could be shown; 2. convenient for
-#' further analysis. See examples.
+#' aesthetics attributes, either take it as variables \code{asAes = TRUE}
+#' (set in function \code{aes()}) or visual properties \code{asAes = FALSE}.
+#' The main benefits to consider it as variables are that 1. legend could be shown;
+#' 2. convenient for further analysis.
+#'
+#' In \code{loon}, if the \code{selected} state is changed, the order of the points will be changed so that
+#' the highlighted points will be displayed on top. To turn it static, if \code{selectedOnTop = TRUE},
+#' the points will be partitioned into two
+#' groups, one group presents the un-selected (un-highlighted) points and
+#' the other group presents selected (highlighted) points.
+#' the un-selected group will be drawn first, then selected group will be displayed on top of it;
+#' if \code{selectedOnTop = FALSE}, no partition is applied so that the displayed order will be identical to
+#' the original data set order. This is very helpful when further analysis will be operated in ggplot
+#' graphical system, e.g. \code{+ facet_wrap(...)}. See examples.
 #'
 #' @export
 #' @examples
@@ -51,15 +64,31 @@
 #' gh1 <- loon2ggplot(lh, asAes = FALSE)
 #' # Expect the legend, they both are identical
 #' gh1
-#'
 #' \dontrun{
 #' # ERROR
 #' # The bins are constructed by `ggplot2::geom_rect()`
-#' # Very limited "fancy" operations can be made
-#' gh1 + facet_wrap(~fill)}
+#' # Very limited operations can be made
+#' gh1 + facet_wrap(~fill)
 #' }
 #'
-loon2ggplot <- function(target, asAes = TRUE, ...) {
+#' # Argument `selectedOnTop`
+#' p <- l_plot(iris, color = iris$Species)
+#' p['selected'][iris$Petal.Length > 5] <- TRUE
+#' g <- loon.ggplot(p)
+#' # It looks correct.
+#' g
+#' # facet by "Species"
+#' \dontrun{
+#' g + facet_wrap(iris$Species)}
+#' # Something is wrong here. There is a pink point (at least one)
+#' # in species "versicolor"! The reason is because after points are
+#' # hightligthed, the displayed order has been changed. One way to
+#' # fix it is to set the `selectedOnTop` as FALSE.
+#'
+#' loon.ggplot(p, selectedOnTop = FALSE) +
+#'   facet_wrap(iris$Species)
+#' }
+loon2ggplot <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
     error_info <- deparse(substitute(target))
@@ -76,7 +105,7 @@ loon2ggplot <- function(target, asAes = TRUE, ...) {
 
 #' @export
 #' @rdname loon2ggplot
-loon2ggplot.default <- function(target, asAes = TRUE, ...) {
+loon2ggplot.default <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
   # TODO
   ggObj <- list(...)$ggObj
   ggObj
@@ -84,17 +113,19 @@ loon2ggplot.default <- function(target, asAes = TRUE, ...) {
 
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_plot <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_plot <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl, asAes = asAes))
+               ggObj = loon2ggplot(rl,
+                                   asAes = asAes,
+                                   selectedOnTop = selectedOnTop))
 }
 
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_hist <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_hist <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
@@ -109,22 +140,22 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, ...) {
     setLimits <- TRUE
 
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl, asAes = asAes),
+               ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop),
                setLimits = setLimits)
 }
 
 #' @export
-loon2ggplot.l_graph <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_graph <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl, asAes = asAes))
+               ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop))
 }
 
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_plot3D <- function(target,  asAes = TRUE, ...) {
+loon2ggplot.l_plot3D <- function(target,  asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
@@ -150,7 +181,7 @@ loon2ggplot.l_plot3D <- function(target,  asAes = TRUE, ...) {
   y <- c(0.5, 0.5 + 0.08*axes_coords[[2]][1])
 
   cartesian_gg(target = target,
-               ggObj = loon2ggplot(rl, asAes = asAes)) +
+               ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop)) +
     ggplot2::geom_line(
       data = data.frame(
         x = x,
@@ -260,19 +291,23 @@ cartesian_gg <- function(target, ggObj, setLimits = TRUE) {
 
   if(setLimits) {
     ggObj <- ggObj +
-      ggplot2::coord_cartesian(xlim = xlim, ylim = ylim)
+      ggplot2::coord_cartesian(xlim = xlim, ylim = ylim,
+                               expand = FALSE)
 
-    if(swapAxes) ggObj <- ggObj + coord_flip(xlim = xlim, ylim = ylim)
+    if(swapAxes) ggObj <- ggObj +
+        ggplot2::coord_flip(xlim = xlim, ylim = ylim,
+                            expand = FALSE)
 
   } else {
-    if(swapAxes) ggObj <- ggObj + coord_flip()
+    if(swapAxes) ggObj <- ggObj +
+        ggplot2::coord_flip()
   }
 
   return(ggObj)
 }
 
 #' @export
-loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   ggObj <- ggplot2::ggplot()
@@ -293,7 +328,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
           if(inherits(widget, "l_hist")) {
             # histogram
             ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
-                                                        color = hex2colorName(states$color),
+                                                        color = l_colorName(states$color, error = FALSE),
                                                         selected = states$selected,
                                                         active = states$active),
                                       mapping = ggplot2::aes(x = x))
@@ -314,7 +349,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
                                                         y = y,
                                                         glyph = states$glyph,
                                                         size = states$size,
-                                                        color = hex2colorName(states$color),
+                                                        color = l_colorName(states$color, error = FALSE),
                                                         selected = states$selected,
                                                         active = states$active),
                                       mapping = ggplot2::aes(x = x,
@@ -334,7 +369,8 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
   lapply(l_visible_children_layer,
          function(layer) {
 
-           ggObj <<- loon2ggplot(layer, asAes = asAes, ggObj = ggObj)
+           ggObj <<- loon2ggplot(layer, asAes = asAes,
+                                 selectedOnTop = selectedOnTop, ggObj = ggObj)
          })
 
   ggObj
@@ -342,7 +378,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, ...) {
 
 # primitive ggplot layers
 #' @export
-loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -371,7 +407,7 @@ loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, ...) {
 }
 
 #' @export
-loon2ggplot.l_layer_line <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_line <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -400,7 +436,7 @@ loon2ggplot.l_layer_line <- function(target, asAes = TRUE, ...) {
 }
 
 #' @export
-loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -430,7 +466,7 @@ loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -470,7 +506,7 @@ loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_text <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_text <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -503,7 +539,7 @@ loon2ggplot.l_layer_text <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -556,7 +592,7 @@ loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_points <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_points <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
@@ -582,7 +618,7 @@ loon2ggplot.l_layer_points <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -622,7 +658,7 @@ loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -662,7 +698,7 @@ loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, ...) {
   ggObj
 }
 #' @export
-loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]

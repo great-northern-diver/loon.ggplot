@@ -74,9 +74,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       tidy = FALSE)
 library(knitr)
 set.seed(12314159)
-imageDirectory <- "./loon2ggplots"
-dataDirectory <- "./loon2ggplots"
-path_concat <- function(path1, path2, sep="/") {paste(path1, path2, sep = sep)}
+imageDirectory <- file.path(".", "images", "loon2ggplots")
 
 library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
@@ -127,7 +125,7 @@ g1
 ```
 
 ```{r l_plot_to_gg_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "ggScatter.png"))
+include_graphics(file.path(imageDirectory, "ggScatter.png"))
 ```
 
 The object `g1` is a `ggplot` graphic. Comparing with the original `loon` widget, the `gg` one provides a legend that is helpful to decode the mapping systems. However, since `loon` widgets do not store the original data information, the labels of each legend are the hex-codes of the color. To better convey the graphics from aesthetics to data, we can edit the legend with more reasonable labels and add titles on top to emphasize the variables.
@@ -146,7 +144,7 @@ g1 +
 ```
 
 ```{r l_plot_to_gg_modification_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "ggScatter_modification.png"))
+include_graphics(file.path(imageDirectory, "ggScatter_modification.png"))
 ```
 
 Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `loon2ggplot`) is simpler and more creative. Moreover, `ggplot` has over 100 extended packages. After transforming from `loon` to `ggplot`, users can continually take advantage of these extensions.  
@@ -172,7 +170,7 @@ g2
 
 
 ```{r p1_piped_staic_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "loon_l_pairs.png"))
+include_graphics(file.path(imageDirectory, "loon_l_pairs.png"))
 ```
 
 The object `g2` is a `ggmatrix` graphic. We can fit a smooth line on the `lp100km vs weight` scatterplot and draw a density curve on the `weight` histogram. Additionally, the theme of these plots are adjusted to `theme_light` to direct more attention towards the data.
@@ -192,7 +190,7 @@ g2
 ```
 
 ```{r p1_piped_modification_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-include_graphics(path_concat(imageDirectory, "loon_l_pairs_modification.png"))
+include_graphics(file.path(imageDirectory, "loon_l_pairs_modification.png"))
 ```
 
 <font size="1"> 

@@ -52,8 +52,7 @@ q
 }
 
 # An alternative way to return a real loon widget from `p` (a `l_ggplot` object)
-# is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`
-# this way can provide richer information (note that it will create a new widget).
+# is to call the function `loon.ggplot()`.
 q <- loon.ggplot(p)
 q
 
@@ -69,7 +68,8 @@ l_hist(mpg$class, linkingGroup = "mpg")
 # press the button key `R` to rotate the plot
 l_ggplot(mtcars,
          mapping = aes(x = wt, y = hp, z = drat)) +
-   geom_point(size = 4)
+   geom_point(size = 4) +
+   scale_multi()
 }
 }
 \seealso{

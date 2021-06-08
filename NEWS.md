@@ -6,6 +6,9 @@
 
 * Set `ggmulti` as "Imports" rather than the "Depends" and replace `coord_serialaxes` to `geom_serialaxes` to avoid potential risks from `coord_serialaxes`.
 
+* For function `print.l_ggplot`, if the `l_ggplot` object is printed on the top level (in the global environment), a message will be given to show how to
+access the loon plot.
+
 # loon.ggplot 1.2.0
 
 * Class name modification

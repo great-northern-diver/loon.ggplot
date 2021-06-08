@@ -1,4 +1,5 @@
-scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index) {
+scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
+                                 glyph, color, size, index, selectedOnTop = TRUE) {
 
   pch <- glyph_to_pch(glyph)
 
@@ -22,22 +23,43 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
     size <- as_ggplot_size(size)
 
     # No NAs and ALL points with borders
-    for(p in unique(pch)) {
+    if(!selectedOnTop) {
 
-      pid <- pch == p
-
+      # to preserve orders
+      # the shape of the points may not be satisfying
       ggObj <- ggObj +
         ggplot2::geom_point(
-          data = data.frame(x = x[pid],
-                            y = y[pid],
-                            fill = color[pid],
-                            size = size[pid]),
+          data = data.frame(x = x,
+                            y = y,
+                            fill = color,
+                            size = size),
           mapping = ggplot2::aes(x = x, y = y,
                                  fill = fill,
                                  size = size),
-          shape = p
+          shape = pch
         )
+
+    } else {
+
+      for(p in unique(pch)) {
+
+        pid <- pch == p
+
+        ggObj <- ggObj +
+          ggplot2::geom_point(
+            data = data.frame(x = x[pid],
+                              y = y[pid],
+                              fill = color[pid],
+                              size = size[pid]),
+            mapping = ggplot2::aes(x = x, y = y,
+                                   fill = fill,
+                                   size = size),
+            shape = p
+          )
+      }
+
     }
+
 
   } else {
     # possibly some NAs (means some points are text, polygons, images, etc.)
@@ -45,6 +67,14 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
     type <- sapply(glyph, function(glyph) loon::l_glyph_getType(widget, glyph))
     types <- paste(type, names(type), sep = ".")
     uniqueTypes <- unique(types)
+
+    lenUniqueTypes <- length(uniqueTypes)
+    if(lenUniqueTypes > 1 && !selectedOnTop) {
+      warning("More than one non-primitive glyphs are detected. ",
+              "The selected points will be always on top. ",
+              "The displayed order may be different from the original data set order.",
+              call. = FALSE)
+    }
 
     for(utypes in uniqueTypes) {
 
@@ -65,12 +95,23 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
              "polygon" = {
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
 
-               # `showArea` is a length n logical value
+               # `showArea` is a length `n` logical value
                showArea <- gh['showArea'][aesthetic$index]
 
                point_size <- as_ggplot_size(aesthetic$size,
                                             margin = ggplot2::GeomPolygon$default_aes$size)
                size[id] <- point_size
+
+               if(!selectedOnTop && lenUniqueTypes == 1) {
+                 if(all(showArea) || all(!showArea)) {
+                   NULL
+                 } else {
+                   warning("To preserve the elements order, `showArea` must be either TRUE or FALSE. " ,
+                           "The `showArea` is set TRUE",
+                           call. = FALSE)
+                   showArea <- rep(TRUE, length(id))
+                 }
+               }
 
                if(sum(!showArea) > 0) {
                  ggObj <- ggObj +
@@ -116,7 +157,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
                                             margin = ggplot2::GeomLine$default_aes$size)
                size[id] <- point_size
 
-               # `showArea` is a length 1 logical value
+               # `showArea` is a length `1` logical value
                showArea <- gh['showArea']
 
                if(showArea) {
@@ -193,42 +234,64 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
                point_size <- as_ggplot_size(aesthetic$size)
                size[id] <- point_size
 
-               if(sum(bounded_id, na.rm = TRUE) > 0) {
-
-                 for(p in unique(point_pch[bounded_id])) {
-
-                   pid <- point_pch[bounded_id] == p
-
-                   ggObj <- ggObj +
-                     ggplot2::geom_point(
-                       data = data.frame(x = xx[bounded_id][pid],
-                                         y = yy[bounded_id][pid],
-                                         size = point_size[bounded_id][pid],
-                                         fill = aesthetic$color[bounded_id][pid]),
-                       mapping = ggplot2::aes(x = x,
-                                              y = y,
-                                              size = size,
-                                              fill = fill),
-                       shape = p
-                     )
-                 }
-               }
-
-               if(sum(!bounded_id, na.rm = TRUE) > 0) {
+               if(!selectedOnTop && lenUniqueTypes == 1) {
 
                  ggObj <- ggObj +
                    ggplot2::geom_point(
-                     data = data.frame(x = xx[!bounded_id],
-                                       y = yy[!bounded_id],
-                                       color = aesthetic$color[!bounded_id],
-                                       size = point_size[!bounded_id]),
+                     data = data.frame(x = xx,
+                                       y = yy,
+                                       size = point_size,
+                                       color = aesthetic$color,
+                                       fill = aesthetic$color),
                      mapping = ggplot2::aes(x = x,
                                             y = y,
-                                            color = color,
-                                            size = size),
-                     shape = point_pch[!bounded_id]
+                                            colour = color,
+                                            size = size,
+                                            fill = fill),
+                     shape = point_pch
                    )
+
+               } else {
+
+                 if(sum(bounded_id, na.rm = TRUE) > 0) {
+
+                   for(p in unique(point_pch[bounded_id])) {
+
+                     pid <- point_pch[bounded_id] == p
+
+                     ggObj <- ggObj +
+                       ggplot2::geom_point(
+                         data = data.frame(x = xx[bounded_id][pid],
+                                           y = yy[bounded_id][pid],
+                                           size = point_size[bounded_id][pid],
+                                           fill = aesthetic$color[bounded_id][pid]),
+                         mapping = ggplot2::aes(x = x,
+                                                y = y,
+                                                size = size,
+                                                fill = fill),
+                         shape = p
+                       )
+                   }
+                 }
+
+                 if(sum(!bounded_id, na.rm = TRUE) > 0) {
+
+                   ggObj <- ggObj +
+                     ggplot2::geom_point(
+                       data = data.frame(x = xx[!bounded_id],
+                                         y = yy[!bounded_id],
+                                         color = aesthetic$color[!bounded_id],
+                                         size = point_size[!bounded_id]),
+                       mapping = ggplot2::aes(x = x,
+                                              y = y,
+                                              color = color,
+                                              size = size),
+                       shape = point_pch[!bounded_id]
+                     )
+                 }
+
                }
+
              },
              "pointrange" = {
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
@@ -345,7 +408,8 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y, glyph, color, size, index)
   return(ggObj)
 }
 
-scatterplotAsAesFALSE <- function(ggObj, widget, x, y, glyph, color, size, index) {
+scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
+                                  glyph, color, size, index, selectedOnTop = TRUE) {
 
   pch <- glyph_to_pch(glyph)
 
@@ -373,6 +437,7 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y, glyph, color, size, index
         color = loon::l_getOption("foreground"),
         shape = pch
       )
+
   } else {
     # possibly some NAs (means some points are text, polygons, images, etc.)
     # and/or a mix of regular and closed points.
@@ -380,6 +445,14 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y, glyph, color, size, index
     types <- paste(type, names(type), sep = ".")
     uniqueTypes <- unique(types)
     lenTypes <- length(uniqueTypes)
+
+    lenUniqueTypes <- length(uniqueTypes)
+    if(lenUniqueTypes > 1 && !selectedOnTop) {
+      warning("More than one non-primitive glyphs are detected. ",
+              "The selected points will be always on top. ",
+              "The displayed order may be different from the original data set order.",
+              call. = FALSE)
+    }
 
     for(utypes in uniqueTypes) {
 
@@ -486,29 +559,44 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y, glyph, color, size, index
                xx <- aesthetic$x
                yy <- aesthetic$y
 
-               if(sum(bounded_id, na.rm = TRUE) != 0) {
+               if(!selectedOnTop && lenUniqueTypes == 1) {
 
                  ggObj <- ggObj +
                    ggplot2::geom_point(
-                     data = data.frame(x = xx[bounded_id],
-                                       y = yy[bounded_id]),
-                     fill = aesthetic$color[bounded_id],
-                     pch = pch[bounded_id],
-                     size = as_ggplot_size(aesthetic$size[bounded_id]),
-                     colour = loon::l_getOption("foreground")
+                     data = data.frame(x = xx,
+                                       y = yy),
+                     fill = aesthetic$color,
+                     pch = pch,
+                     size = as_ggplot_size(aesthetic$size),
+                     colour = aesthetic$color
                    )
-               }
 
-               if(sum(!bounded_id, na.rm = TRUE) != 0) {
+               } else {
 
-                 ggObj <- ggObj +
-                   ggplot2::geom_point(
-                     data = data.frame(x = xx[!bounded_id],
-                                       y = yy[!bounded_id]),
-                     color = aesthetic$color[!bounded_id],
-                     pch = pch[!bounded_id],
-                     size = as_ggplot_size(aesthetic$size[!bounded_id])
-                   )
+                 if(sum(bounded_id, na.rm = TRUE) != 0) {
+
+                   ggObj <- ggObj +
+                     ggplot2::geom_point(
+                       data = data.frame(x = xx[bounded_id],
+                                         y = yy[bounded_id]),
+                       fill = aesthetic$color[bounded_id],
+                       pch = pch[bounded_id],
+                       size = as_ggplot_size(aesthetic$size[bounded_id]),
+                       colour = loon::l_getOption("foreground")
+                     )
+                 }
+
+                 if(sum(!bounded_id, na.rm = TRUE) != 0) {
+
+                   ggObj <- ggObj +
+                     ggplot2::geom_point(
+                       data = data.frame(x = xx[!bounded_id],
+                                         y = yy[!bounded_id]),
+                       color = aesthetic$color[!bounded_id],
+                       pch = pch[!bounded_id],
+                       size = as_ggplot_size(aesthetic$size[!bounded_id])
+                     )
+                 }
                }
              },
              "pointrange" = {
