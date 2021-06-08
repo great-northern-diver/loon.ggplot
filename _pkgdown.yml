@@ -40,3 +40,4 @@ reference:
     - is.CoordPolar
     - Cartesianxy2Polarxy
     - is.l_ggplot
+    - l_getSubtitles
