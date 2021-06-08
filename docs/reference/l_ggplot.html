@@ -208,8 +208,7 @@ which will return an interactive <code>loon</code> widget.</p>
 <span class='op'>}</span>
 
 <span class='co'># An alternative way to return a real loon widget from `p` (a `l_ggplot` object)</span>
-<span class='co'># is to call the function `loon.ggplot`. Compared with calling function `l_getFrompath`</span>
-<span class='co'># this way can provide richer information (note that it will create a new widget).</span>
+<span class='co'># is to call the function `loon.ggplot()`.</span>
 <span class='va'>q</span> <span class='op'>&lt;-</span> <span class='fu'><a href='loon.ggplot.html'>loon.ggplot</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
 <span class='va'>q</span>
 
@@ -225,7 +224,8 @@ which will return an interactive <code>loon</code> widget.</p>
 <span class='co'># press the button key `R` to rotate the plot</span>
 <span class='fu'>l_ggplot</span><span class='op'>(</span><span class='va'>mtcars</span>,
          mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span>, y <span class='op'>=</span> <span class='va'>hp</span>, z <span class='op'>=</span> <span class='va'>drat</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-   <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+   <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span> <span class='op'>+</span>
+   <span class='fu'><a href='scale_multi.html'>scale_multi</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
   </div>
