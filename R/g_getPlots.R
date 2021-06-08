@@ -10,13 +10,13 @@
 #' @seealso \code{\link{l_getPlots}}, \code{\link{g_getLocations}}
 #'
 #' @export
-g_getPlots <- function(target, asAes = TRUE) {
+g_getPlots <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
   UseMethod('g_getPlots', target)
 }
 
 #' @export
 #' @rdname g_getPlots
-g_getPlots.default <- function(target, asAes = TRUE) {
+g_getPlots.default <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
 
   # locations
   locations <- g_getLocations(target)
@@ -28,7 +28,8 @@ g_getPlots.default <- function(target, asAes = TRUE) {
   ggplots <- suppressMessages(
     lapply(seq(length(target)),
            function(i) {
-             loon2ggplot(target[[i]], asAes = asAes)
+             loon2ggplot(target[[i]], asAes = asAes,
+                         selectedOnTop = selectedOnTop)
            })
   )
 
@@ -50,7 +51,7 @@ g_getPlots.default <- function(target, asAes = TRUE) {
 
 #' @export
 #' @rdname g_getPlots
-g_getPlots.l_pairs <- function(target, asAes = TRUE) {
+g_getPlots.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
 
   # locations
   locations <- g_getLocations(target)
@@ -62,7 +63,8 @@ g_getPlots.l_pairs <- function(target, asAes = TRUE) {
   ggplots <- suppressMessages(
     lapply(1:length(target),
            function(i) {
-             loon2ggplot(target[[i]], asAes = asAes)
+             loon2ggplot(target[[i]], asAes = asAes,
+                         selectedOnTop = selectedOnTop)
            })
   )
 

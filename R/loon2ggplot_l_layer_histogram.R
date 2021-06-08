@@ -1,6 +1,6 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
@@ -42,6 +42,11 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, ...) {
     ymax <- data$y + data$height
     fill <- data$fill
     colour <- data$colour
+
+    if(!selectedOnTop)
+      warning("For histogram, if the `asAes` is set as FALSE, the plot will be created by adding layer `geom_rect()`. ",
+              "It is pointless to set the `selectedOnTop` as FALSE",
+              call. = FALSE)
 
     ggObj <- ggObj +
       ggplot2::geom_rect(

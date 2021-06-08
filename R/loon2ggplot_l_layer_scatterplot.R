@@ -1,7 +1,7 @@
 #' @export
 #' @import ggmulti
 #' @rdname loon2ggplot
-loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
@@ -13,18 +13,23 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, ...) {
   if (!any(data$active)) return(ggObj)
 
   # No active points in scatterplot
-  display_order <- get_model_display_order(widget)
+  displayOrder <- if(selectedOnTop) {
+    get_model_display_order(widget)
+  } else {
+    seq(widget['n'])
+  }
 
-  active <- data$active[display_order]
-  selected <- data$selected[display_order][active]
+
+  active <- data$active[displayOrder]
+  selected <- data$selected[displayOrder][active]
 
   s_a <- list(
-    x = if(swapAxes) data$y[display_order][active] else data$x[display_order][active],
-    y = if(swapAxes) data$x[display_order][active] else data$y[display_order][active],
-    glyph = data$glyph[display_order][active],
-    color = get_display_color(data$color[display_order][active], selected),
-    size = data$size[display_order][active],
-    index = display_order[active]
+    x = if(swapAxes) data$y[displayOrder][active] else data$x[displayOrder][active],
+    y = if(swapAxes) data$x[displayOrder][active] else data$y[displayOrder][active],
+    glyph = data$glyph[displayOrder][active],
+    color = get_display_color(data$color[displayOrder][active], selected),
+    size = data$size[displayOrder][active],
+    index = displayOrder[active]
   )
 
   x <- as.numeric(s_a$x)
@@ -35,9 +40,9 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, ...) {
   index <- s_a$index
 
   if(asAes) {
-    scatterplotAsAesTRUE(ggObj, widget, x, y, glyph, color, size, index)
+    scatterplotAsAesTRUE(ggObj, widget, x, y, glyph, color, size, index, selectedOnTop)
   } else {
-    scatterplotAsAesFALSE(ggObj, widget, x, y, glyph, color, size, index)
+    scatterplotAsAesFALSE(ggObj, widget, x, y, glyph, color, size, index, selectedOnTop)
   }
 }
 

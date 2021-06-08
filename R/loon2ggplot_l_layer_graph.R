@@ -1,7 +1,7 @@
 #' @rdname loon2ggplot
 #' @export
 #'
-loon2ggplot.l_layer_graph <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_layer_graph <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
