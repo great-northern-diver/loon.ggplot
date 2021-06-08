@@ -207,6 +207,70 @@ g
 l &lt;- loon.ggplot(g)</code></pre>
 </div>
 </div>
+<div id="more-than-loon-or-ggplot2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#more-than-loon-or-ggplot2" class="anchor"></a>More than <code>loon</code> or <code>ggplot2</code>
+</h2>
+<p>More than connecting <code>ggplot2</code> and <code>loon</code> these two specific graphical systems, <code>loon.ggplot</code> is able to connect the suite behind them.</p>
+<p><img src="reference/figures/loonggplotConnection.png"></p>
+<div id="loon--ggplot2--gganimate" class="section level3">
+<h3 class="hasAnchor">
+<a href="#loon--ggplot2--gganimate" class="anchor"></a><code>loon</code> –&gt; <code>ggplot2</code> –&gt; <code>gganimate</code>
+</h3>
+<p>Return an animation from a <code>loon</code> plot</p>
+<pre><code><a href="https://github.com/jennybc/gapminder"># a loon plot
+library(gapminder)
+p &lt;- with(gapminder, 
+          l_plot(gdpPercap, lifeExp,
+                 # scale the size into certain amounts
+                 size = scales::rescale(pop, to = c(4, 50)),
+                 color = continent,
+                 itemLabel = as.character(country),
+                 showItemLabels = TRUE
+          ))
+          
+# highlight large population countires     
+library(dplyr)
+top10in2007 &lt;- gapminder %&gt;% 
+  filter(year == 2007) %&gt;%
+  top_n(10, pop)
+p['selected'][gapminder$country %in% top10in2007$country] &lt;- TRUE
+
+# to `ggplot` then to `animation`
+library(gganimate)
+loon.ggplot(p, selectedOnTop = TRUE) + 
+  facet_wrap(gapminder$continent) + 
+  theme(legend.position = "none") + 
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') + 
+  transition_time(gapminder$year) +
+  ease_aes('linear')</a></code></pre>
+<p><img src="reference/figures/gdpVersusLife.gif"></p>
+</div>
+<div id="ggplot2--loon--shiny" class="section level3">
+<h3 class="hasAnchor">
+<a href="#ggplot2--loon--shiny" class="anchor"></a><code>ggplot2</code> –&gt; <code>loon</code> –&gt; <code>shiny</code>
+</h3>
+<p>Return a shiny web app from a <code>ggplot</code> object</p>
+<pre><code><a href="https://dplyr.tidyverse.org">library(dplyr)
+gp &lt;- gapminder %&gt;% 
+  filter(year == 2007,
+         continent != "Oceania") %&gt;%
+  ggplot(mapping = aes(gdpPercap, lifeExp, 
+                       colour = continent)) + 
+  geom_point(mapping = aes(size = pop)) + 
+  geom_smooth(mapping = aes(weight = pop),
+              method = "lm",
+              se = FALSE)
+
+library(loon.shiny)
+gp %&gt;% 
+  loon.ggplot() %&gt;% 
+  loon.shiny()</a></code></pre>
+<p><img src="reference/figures/GDPshiny.gif"></p>
+</div>
+</div>
 </div>
   </div>
 
