@@ -148,7 +148,7 @@ l <- loon.ggplot(g)
 
 More than connecting `ggplot2` and `loon` these two specific graphical systems, `loon.ggplot` is able to connect the suite behind them.
 
-![](man/figures/loonggplotConnection.png)
+![](man/figures/loonggplotConnection.PNG)
 ### `loon` --> `ggplot2` --> `gganimate`
 
 Return an animation from a `loon` plot
