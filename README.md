@@ -174,7 +174,7 @@ p['selected'][gapminder$country %in% top10in2007$country] <- TRUE
 
 # to `ggplot` then to `animation`
 library(gganimate)
-loon.ggplot(p, selectedOnTop = TRUE) + 
+loon.ggplot(p, selectedOnTop = FALSE) + 
   facet_wrap(gapminder$continent) + 
   theme(legend.position = "none") + 
   labs(title = 'Year: {frame_time}', 
