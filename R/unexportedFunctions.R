@@ -90,6 +90,8 @@ set_sec_axis <- function(sec.axis, scale) {
   return(scale)
 }
 
+new_aes <- getFromNamespace("new_aes", "ggplot2")
+
 # It is learned from the function `get_gridAesthetic` in package `ggmulti`
 # The difference is that for `get_gridAesthetic`, the output coordinate is
 # in unit, however, the returned coordinates of `get_aesthetic` are numerical values
