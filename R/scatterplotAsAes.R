@@ -376,33 +376,33 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
     }
   }
 
-  uni_color <- unique(color[!is.na(color)])
-  if(length(uni_color) > 0) {
+  uniColor <- unique(color[!is.na(color)])
+  if(length(uniColor) > 0) {
 
     ggObj <- ggObj +
-      ggplot2::scale_color_manual(values = uni_color,
+      ggplot2::scale_color_manual(values = uniColor,
                                   labels = selection_color_labels(
-                                    uni_color
+                                    uniColor
                                   ),
-                                  breaks = uni_color) +
-      ggplot2::scale_fill_manual(values = uni_color,
+                                  breaks = uniColor) +
+      ggplot2::scale_fill_manual(values = uniColor,
                                  labels = selection_color_labels(
-                                   uni_color
+                                   uniColor
                                  ),
-                                 breaks = uni_color)
+                                 breaks = uniColor)
   }
 
-  if(length(uni_color) <= 1) {
+  if(length(uniColor) <= 1) {
     ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)
   }
 
-  uni_size <- unique(size[!is.na(size)])
-  if(length(uni_size) > 0) {
+  uniSize <- unique(size[!is.na(size)])
+  if(length(uniSize) > 0) {
     ggObj <- ggObj +
       ggplot2::scale_size_identity(guide = "legend")
   }
 
-  if(length(uni_size) <= 1)
+  if(length(uniSize) <= 1)
     ggObj <- ggObj + ggplot2::guides(size = FALSE)
 
   return(ggObj)
