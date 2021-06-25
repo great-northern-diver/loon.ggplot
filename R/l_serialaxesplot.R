@@ -76,9 +76,16 @@ get_axes.sequence <- function(ggObj, activeGeomLayers) {
 
   layer <- ggObj$layers[[activeGeomLayers]]
 
+  mapping <- new_aes(ggObj$mapping, layer$mapping)
+
   # aesthetics will not be treated as the axes
-  axes.sequence <- setdiff(unique(c(names(ggObj$mapping), names(layer$mapping))),
-                           names(ggplot2::GeomPath$default_aes))
+  axes.sequence.names <- setdiff(names(mapping),
+                                 names(ggplot2::GeomPath$default_aes))
+
+  axes.sequence <- vapply(axes.sequence.names,
+                          function(name) {
+                            rlang::as_label(mapping[[name]])
+                          }, character(1L))
 
   if(length(axes.sequence) == 0) {
     warning("No legal axes found")

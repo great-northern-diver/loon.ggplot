@@ -10,7 +10,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
     data <- histogramAsAesTRUE(widget)
 
     fill <- data$fill
-    colour <- data$colour
+    color <- data$colour
     x <- data$x
     values <- data$values
 
@@ -23,7 +23,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
           ggplot2::aes(x = x, fill = fill,
                        y = ..density..) # the layout would be different from the loon one
         },
-        colour = colour,
+        colour = color,
         boundary = widget['origin'],
         binwidth = widget['binwidth'],
         inherit.aes = FALSE
@@ -32,6 +32,13 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
         values = values,
         breaks = values,
         labels = selection_color_labels(values))
+
+    uniFill <- unique(fill[!is.na(fill)])
+
+    if(length(uniFill) <= 1) {
+      ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)
+    }
+
   } else {
 
     data <- histogramAsAesFALSE(widget)
