@@ -12,7 +12,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
   subtitles <- l_getSubtitles(target)
   xlabel <- subtitles$xlabel
   ylabel <- subtitles$ylabel
-  title <- subtitles$title
+  title <- subtitles$title %||% ""
   FacetWrap <- subtitles$FacetWrap
   FacetGrid <- subtitles$FacetGrid
   colSubtitles <- subtitles$colSubtitles
@@ -59,14 +59,14 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
                                    nrow = 1,
                                    # ncol = ncol,
                                    ncol = length(rowi_columnIds),
-                                   name = paste(c("row", i, "arrangeGrob"), collapse = " ")
+                                   name = paste(c("row", i, "FacetWrap"), collapse = " ")
                                  )
 
                                  tG <- gridExtra::tableGrob(matrix(subtitle[rowi_columnIds],
                                                                    ncol = length(rowi_columnIds)),
                                                             theme = tt)
                                  rbind(tG, aGrob, size = "last")
-                               } else grid::nullGrob(name = "null: no grob")
+                               } else grid::nullGrob(name = "null grob: FacetWrap")
                              }
                       )
     )
@@ -95,7 +95,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
         ),
         nrow = 1,
         ncol = length(colSubtitles),
-        name = paste(c("byColumn", "arrangeGrob"), collapse = " ")
+        name = paste(c("byColumn", "FacetGrid"), collapse = " ")
       )
       tG <- gridExtra::tableGrob(matrix(colSubtitles, ncol = length(colSubtitles)),
                                  theme = tt)
@@ -119,7 +119,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
         ) ,
         nrow = length(rowSubtitles),
         ncol = 1,
-        name = paste(c("byRow", "arrangeGrob"), collapse = " ")
+        name = paste(c("byRow", "FacetGrid"), collapse = " ")
       )
       tG <- gridExtra::tableGrob(matrix(rowSubtitles, nrow = length(rowSubtitles)),
                                  theme = tt)
@@ -144,7 +144,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
         ),
         nrow = length(uniqueRowSubtitles),
         ncol = length(uniqueColSubtitles),
-        name = paste(c("byRow", "byColumn", "arrangeGrob"), collapse = " ")
+        name = paste(c("byRow", "byColumn", "FacetGrid"), collapse = " ")
       )
 
       tG_row <- gridExtra::tableGrob(matrix(uniqueRowSubtitles,
@@ -161,7 +161,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
         rbind(tG_col, lgrobs_row, size = "last")
       )
 
-    } else lgrobs <- grid::nullGrob(name = "null grob")
+    } else lgrobs <- grid::nullGrob(name = "null grob: FacetGrid")
 
     layout_matrix <- matrix(1, nrow = 1, ncol = 1)
 
@@ -198,7 +198,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
     layout_matrix = layout_matrix,
     left = ylabel,
     bottom = xlabel,
-    top = grid::textGrob(title, x = 0, hjust = 0),
+    top = if(title == "") NULL else grid::textGrob(title, x = 0, hjust = 0),
     name = "l_facet_ggplot"
   )
 }
