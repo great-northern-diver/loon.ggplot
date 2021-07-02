@@ -142,7 +142,7 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
     } else {
       if(layerId > length(ggObj$layers)) {
         layerId <- 0L
-        warning("The ggplot object has ", length(ggObj$layers), " layers, ",
+        warning("The `ggplot` object has ", length(ggObj$layers), " layers, ",
                 "however, the `layerId` is set as ", layerId,
                 " which is greater than ", length(ggObj$layers),
                 call. = FALSE)
