@@ -348,7 +348,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
         )
 
         if(selectedOnTop) {
-          displayOrder <- get_model_display_order(widget)
+          displayOrder <- suppressWarnings(get_model_display_order(widget))
           data <- data[displayOrder, ]
         }
 
