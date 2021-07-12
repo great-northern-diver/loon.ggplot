@@ -180,22 +180,6 @@ set_lineColor <- function(data, mapping, color) {
   return(color)
 }
 
-set_lineSize <- function(data, mapping, size) {
-
-  size <- size %||% {
-    if(!"size" %in% names(mapping))
-      0.5
-    else
-      rlang::eval_tidy(rlang::quo(!!mapping$size),  data)
-  }
-
-  if(!is.numeric(size))
-    stop(sub('~', '', rlang::expr_text(mapping$size)),
-         " is not a numerical variable.", call. = FALSE)
-
-  return(size)
-}
-
 wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
   if(FacetWrap) {
     length(names(ggLayout$facet_params$facets))
@@ -204,41 +188,9 @@ wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
   } else 0
 }
 
-as_ggplot_size <- function(size, power = NULL,
-                           margin = ggplot2::GeomPoint$default_aes$size) {
-
-  power <- power %||% 1/2
-
-  if (is.numeric(size)) {
-    # arbitrary power
-    size <- (size/as.numeric(loon::l_getOption("size")))^(power) *
-      margin
-  } else {
-    warning(
-      "size is ",
-      class(size),
-      " not numerical. It will be set as 1", call. = FALSE
-    )
-    size <- 1
-  }
-  size
-}
-
 utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
                          "height", "positive", "setup_mapping", "x", "y",
                          "ymax", "ymin", "fill", "..density.."))
-
-as_r_line_size <- function(size, digits = 2) {
-  round(size/.pt, digits)
-}
-
-adjust_image_size <- function(x) {
-  x/50
-}
-
-pixels_2_lines <- function(x, digits = 2) {
-  round(x / 100, digits)
-}
 
 get_textCoords <- function(angle, anchor, just) {
 

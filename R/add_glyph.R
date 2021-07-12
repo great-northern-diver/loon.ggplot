@@ -26,7 +26,8 @@ l_add_glyph.GeomPolygonGlyph <- function(widget, ggBuild, activeGeomLayer) {
                                  linewidth = glyph_data$linewidth,
                                  showArea = showArea)
   if(showArea) widget['color'] <- fill
-  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "polygon")
+  widget['size'] <- as_loon_size(glyph_data$size/size_adjust(),
+                                 type = "polygon")
   widget['glyph'] <- g
 }
 
@@ -44,7 +45,7 @@ l_add_glyph.GeomText <- function(widget, ggBuild, activeGeomLayer) {
   }
 
   g <- loon::l_glyph_add_text(widget, text = label)
-  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "text")
+  widget['size'] <- as_loon_size(glyph_data$size, type = "text")
   widget['glyph'] <- g
 }
 
@@ -65,7 +66,8 @@ l_add_glyph.GeomPointrange <- function(widget, ggBuild, activeGeomLayer) {
                                     ymin = glyph_data$ymin,
                                     ymax = glyph_data$ymax)
 
-  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "pointrange")
+  widget['size'] <- as_loon_size(glyph_data$size,
+                                 stroke = glyph_data$stroke)
   widget['glyph'] <- g
 }
 
@@ -79,10 +81,10 @@ l_add_glyph.GeomSerialAxesGlyph <- function(widget, ggBuild, activeGeomLayer) {
   fill <- glyph_data$fill
   showArea <- !any(is.na(fill))
 
-
+  serialaxes.data <- glyph_data[, grepl("serialaxes.data", colnames(glyph_data))]
 
   g <- loon::l_glyph_add_serialaxes(widget,
-                                    data = glyph_data[, grepl("serialaxes.data", colnames(glyph_data))],
+                                    data = serialaxes.data,
                                     linewidth = glyph_data$linewidth,
                                     scaling = one_dim_state(glyph_data$scaling),
                                     andrews = one_dim_state(glyph_data$andrews),
@@ -93,7 +95,9 @@ l_add_glyph.GeomSerialAxesGlyph <- function(widget, ggBuild, activeGeomLayer) {
                                     bboxColor = one_dim_state(glyph_data$bboxcolour),
                                     showArea = showArea)
   if(showArea) widget['color'] <- fill
-  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "serialaxes")
+  widget['size'] <- as_loon_size(glyph_data$size,
+                                 type = one_dim_state(glyph_data$axes.layout),
+                                 p = ncol(serialaxes.data))
   widget['glyph'] <- g
 }
 
@@ -113,6 +117,7 @@ l_add_glyph.GeomImageGlyph <- function(widget, ggBuild, activeGeomLayer) {
                                       nr <- nrow(image)
                                       image <- grDevices::col2rgb(image, alpha = FALSE)/255
                                       dim(image) <- c(3, nc, nr)
+                                      image <- aperm(image, c(3,2,1))
                                     }
                                     tryCatch(
                                       expr = {
@@ -140,7 +145,9 @@ l_add_glyph.GeomImageGlyph <- function(widget, ggBuild, activeGeomLayer) {
            }
          })
   g <- loon::l_glyph_add_image(widget, imgs)
-  widget['size'] <- as_loon_glyph_size(glyph_data$size, type = "image")
+  widget['size'] <- as_loon_size(glyph_data$imageheight * glyph_data$size/size_adjust(),
+                                 type = "images",
+                                 ratio = glyph_data$imageheight/glyph_data$imagewidth)
   widget['glyph'] <- g
 }
 
@@ -154,17 +161,4 @@ set_temporary_path <- function(i) {
   }
 
   return(paste0(tmp, "\\", temp, i, ".png"))
-}
-
-# TODO: the numbers in this function deserve more research, either practically or theoretically
-as_loon_glyph_size <- function(x, type = "image") {
-  switch(type,
-         "image" = 4 * x,
-         "text" = 3 * x,
-         "polygon" = 4 * x,
-         "serialaxes" = 4 * x,
-         "pointrange" = 8 * x,
-         {
-           x
-         })
 }

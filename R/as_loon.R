@@ -1,16 +1,3 @@
-as_loon_size <- function(s, type) {
-  if(is.null(s) ) 1 else
-    switch(type,
-           "points" = ceiling( s^2 / 1.5),
-           "lines" = 2 * s,
-           "texts" = ceiling(s^2 / 1.5),
-           {
-             # unspecified type
-             ""
-           }
-    )
-}
-
 as_loon_hvjust <- function(hjust, vjust) {
   if(length(hjust) != length(vjust) ) NULL
   else {
