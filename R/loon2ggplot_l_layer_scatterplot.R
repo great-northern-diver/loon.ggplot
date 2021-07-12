@@ -6,11 +6,10 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop 
   widget <- loon::l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
 
-  # layer scatterplot shares the same data set with the ggplot model layer
   ggObj <- list(...)$ggObj
-  data <- ggObj$data
+  states <- get_layer_states(widget, native_unit = FALSE)
 
-  if (!any(data$active)) return(ggObj)
+  if (!any(states$active)) return(ggObj)
 
   # No active points in scatterplot
   displayOrder <- if(selectedOnTop) {
@@ -19,15 +18,15 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop 
     seq(widget['n'])
   }
 
-  active <- data$active[displayOrder]
-  selected <- data$selected[displayOrder][active]
+  active <- states$active[displayOrder]
+  selected <- states$selected[displayOrder][active]
 
   s_a <- list(
-    x = if(swapAxes) data$y[displayOrder][active] else data$x[displayOrder][active],
-    y = if(swapAxes) data$x[displayOrder][active] else data$y[displayOrder][active],
-    glyph = data$glyph[displayOrder][active],
-    color = get_display_color(data$color[displayOrder][active], selected),
-    size = data$size[displayOrder][active],
+    x = if(swapAxes) states$y[displayOrder][active] else states$x[displayOrder][active],
+    y = if(swapAxes) states$x[displayOrder][active] else states$y[displayOrder][active],
+    glyph = states$glyph[displayOrder][active],
+    color = get_display_color(states$color[displayOrder][active], selected),
+    size = states$size[displayOrder][active],
     index = displayOrder[active]
   )
 

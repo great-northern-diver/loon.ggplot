@@ -347,6 +347,11 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
             ), as_list = FALSE)
         )
 
+        if(selectedOnTop) {
+          displayOrder <- get_model_display_order(widget)
+          data <- data[displayOrder, ]
+        }
+
         if(length(x) > 0) {
 
           if(inherits(widget, "l_hist")) {

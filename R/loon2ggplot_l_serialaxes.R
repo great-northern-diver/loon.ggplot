@@ -3,7 +3,6 @@
 loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- target
-  remove(target)
   serialaxes.data <- char2num.data.frame(widget['data'])
   colNames <- colnames(serialaxes.data)
 
@@ -14,8 +13,14 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
     seq(widget['n'])
   }
 
-  ndimNames <- loon::l_nDimStateNames(widget)
+  # We do not call `get_layer_states(widget, native_unit = FALSE)`
+  # Because, `loon::l_nDimStateNames` will return all n dimensional states,
+  # but the `get_layer_states` only return the n dimensional aesthetics attributes
+  # e.g, `itemLabels` will not be returned.
+  # `data` is used in `ggplot()`
+
   # N dim names
+  ndimNames <- loon::l_nDimStateNames(widget)
   data <- as.data.frame(
     remove_null(
       stats::setNames(
@@ -78,15 +83,13 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                     breaks = uni_color)
     }
 
-    if(length(uni_color) <= 1) {
+    if(length(uni_color) <= 1)
       ggObj <- ggObj + ggplot2::guides(color = FALSE)
-    }
 
     uni_size <- unique(size)
-    if(length(uni_size) > 0) {
+    if(length(uni_size) > 0)
       ggObj <- ggObj +
         ggplot2::scale_size(range = range(size[!is.na(size)]))
-    }
 
     if(length(uni_size) <= 1)
       ggObj <- ggObj + ggplot2::guides(size = FALSE)
