@@ -19,7 +19,6 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop 
     seq(widget['n'])
   }
 
-
   active <- data$active[displayOrder]
   selected <- data$selected[displayOrder][active]
 
@@ -44,14 +43,4 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop 
   } else {
     scatterplotAsAesFALSE(ggObj, widget, x, y, glyph, color, size, index, selectedOnTop)
   }
-}
-
-selection_color_labels <- function(x, name = "select") {
-
-  select_color <- loon::l_getOption("select-color")
-  if(select_color %in% x || as_hex6color(select_color) %in% x) {
-    x[x == select_color] <- name
-  }
-
-  x
 }

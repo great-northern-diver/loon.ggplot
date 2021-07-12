@@ -465,7 +465,7 @@ ggParallelSerialAxes <- function(ggObj,
       ) +
       ggplot2::scale_fill_manual(values = stats::setNames(valid_color(uni_fill),
                                                           nm = uni_fill),
-                                 labels = stats::setNames(selection_color_labels(uni_fill),
+                                 labels = stats::setNames(uni_fill,
                                                           nm = uni_fill))
 
     if(length(uni_fill) == 1)
@@ -494,7 +494,7 @@ ggParallelSerialAxes <- function(ggObj,
       ) +
       ggplot2::scale_color_manual(values = stats::setNames(valid_color(uni_color),
                                                            nm = uni_color),
-                                  labels = stats::setNames(selection_color_labels(uni_color),
+                                  labels = stats::setNames(uni_color,
                                                            nm = uni_color)) +
       ggplot2::scale_size(range = range(size))
 
@@ -708,7 +708,7 @@ ggRadialSerialAxes <- function(ggObj,
       ) +
       ggplot2::scale_fill_manual(values = stats::setNames(valid_color(uni_fill),
                                                           nm = uni_fill),
-                                 labels = stats::setNames(selection_color_labels(uni_fill),
+                                 labels = stats::setNames(uni_fill,
                                                           nm = uni_fill))
 
     if(length(uni_fill) == 1)
@@ -733,7 +733,7 @@ ggRadialSerialAxes <- function(ggObj,
       ) +
       ggplot2::scale_color_manual(values = stats::setNames(valid_color(uni_color),
                                                            nm = uni_color),
-                                  labels = stats::setNames(selection_color_labels(uni_color),
+                                  labels = stats::setNames(uni_color,
                                                            nm = uni_color)) +
       ggplot2::scale_size(range = range(size))
 
@@ -870,3 +870,26 @@ valid_color <- function(x) {
     x
 }
 
+set_lineSize <- function(data, mapping, size) {
+
+  size <- size %||% {
+    if(!"size" %in% names(mapping))
+      0.5
+    else
+      rlang::eval_tidy(rlang::quo(!!mapping$size),  data)
+  }
+
+  if(!is.numeric(size))
+    stop(sub('~', '', rlang::expr_text(mapping$size)),
+         " is not a numerical variable.", call. = FALSE)
+
+  return(size)
+}
+
+as_r_line_size <- function(size, digits = 2) {
+  round(size/.pt, digits)
+}
+
+adjust_image_size <- function(x) {
+  x/50
+}

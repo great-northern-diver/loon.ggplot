@@ -74,7 +74,8 @@ loonLayer.GeomPoint <- function(widget,
   } else data$colour
   # l_layer_points cannot change the shape of the points so far
   # pointsGlyph <- pch_to_glyph(data$shape, data$alpha)
-  pointsSize <- as_loon_size(data$size, "points" )
+  pointsSize <- as_loon_size(data$size, "points",
+                             stroke = data$stroke)
 
   # method <- get_stat_param(layerGeom, "distribution", ...)
 
@@ -1537,7 +1538,7 @@ glyph_as_layer_size <- function(x, type = "", min, max, ...) {
 
   switch(type,
          "image" = 1/10 * x * mag,
-         "polygon" = 1/10 * x * mag,
+         "polygon" = 1/30 * x * mag,
          "serialaxes" = {
            args <- list(...)
 

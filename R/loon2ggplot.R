@@ -253,7 +253,7 @@ cartesian_gg <- function(target, ggObj, setLimits = TRUE) {
     margins <- apply(cbind(margins, minimumMargins), 1, max)
   }
   # loon pixel margin to grid margin
-  margins <- pixels_2_lines(margins)
+  margins <- round(margins/100, 2)
 
   xlabelFont <- get_font_info_from_tk(loon::l_getOption("font-xlabel"))
   ylabelFont <- get_font_info_from_tk(loon::l_getOption("font-ylabel"))
@@ -282,10 +282,13 @@ cartesian_gg <- function(target, ggObj, setLimits = TRUE) {
       panel.grid.minor = ggplot2::element_line(size = 0.5,
                                                linetype = 'solid',
                                                colour = as_hex6color(widget['guidelines'])),
-      panel.border = if(sum(margins, na.rm = TRUE) > 0)
+      panel.border = if(sum(margins, na.rm = TRUE) > 0) {
         ggplot2::element_rect(colour = as_hex6color(widget['foreground']),
                               fill = NA,
-                              size = 1) else ggplot2::element_blank(),
+                              size = 0.5)
+      } else {
+        ggplot2::element_blank()
+      },
       plot.margin = grid::unit(margins, "lines")
     )
 
@@ -313,6 +316,7 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
   ggObj <- ggplot2::ggplot()
 
   children <- l_layer_getUngroupedChildren(widget = widget, target = widget)
+
   l_children_layers <- lapply(
     rev(children),
     function(layerid) {
@@ -321,37 +325,39 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
 
       if(layerid == 'model') {
 
-        states <- get_layer_states(widget, native_unit = FALSE)
+        x <- widget['x']
+        ndimNames <- loon::l_nDimStateNames(widget)
+        # N dim names
+        data <- as.data.frame(
+          remove_null(
+            stats::setNames(
+              lapply(ndimNames,
+                     function(s) {
+                       if(s == "color") {
+                         l_colorName(widget[s], error = FALSE)
+                       } else if (s == "size") {
+                         as.numeric(widget[s])
+                       } else {
+                         state <- widget[s]
+                         if(length(state) == 0) return(NULL)
+                         state
+                       }
+                     }),
+              ndimNames
+            ), as_list = FALSE)
+        )
 
-        if(length(states$x) > 0) {
+        if(length(x) > 0) {
 
           if(inherits(widget, "l_hist")) {
+
             # histogram
-            ggObj <<- ggplot2::ggplot(data = data.frame(x = states$x,
-                                                        color = l_colorName(states$color, error = FALSE),
-                                                        selected = states$selected,
-                                                        active = states$active),
+            ggObj <<- ggplot2::ggplot(data = data,
                                       mapping = ggplot2::aes(x = x))
 
           } else {
-
-            # scatter plot
-            swapAxes <- widget["swapAxes"]
-            if(swapAxes) {
-              y <- states$x
-              x <- states$y
-            } else {
-              x <- states$x
-              y <- states$y
-            }
-
-            ggObj <<- ggplot2::ggplot(data = data.frame(x = x,
-                                                        y = y,
-                                                        glyph = states$glyph,
-                                                        size = states$size,
-                                                        color = l_colorName(states$color, error = FALSE),
-                                                        selected = states$selected,
-                                                        active = states$active),
+            y <- widget['y']
+            ggObj <<- ggplot2::ggplot(data = data,
                                       mapping = ggplot2::aes(x = x,
                                                              y = y))
           }
@@ -399,7 +405,7 @@ loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, selectedOnTop = TR
         mapping = ggplot2::aes(x = x, y = y),
         fill = states$color,
         colour = states$linecolor,
-        size =  as_r_line_size(states$linewidth)
+        size =  as_ggplot_size(states$linewidth, "lines")
       )
   }
 
@@ -428,7 +434,7 @@ loon2ggplot.l_layer_line <- function(target, asAes = TRUE, selectedOnTop = TRUE,
         ),
         mapping = ggplot2::aes(x = x, y = y),
         colour = states$color,
-        size = as_r_line_size(states$linewidth)
+        size = as_ggplot_size(states$linewidth, "lines")
       )
   }
 
@@ -459,7 +465,7 @@ loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, selectedOnTop = 
                                ymin = y[1], ymax = y[2]),
         colour = states$linecolor,
         fill = states$color,
-        size =  as_r_line_size(states$linewidth)
+        size =  as_ggplot_size(states$linewidth, "lines")
       )
   }
 
@@ -499,7 +505,7 @@ loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, selectedOnTop = TRUE,
         mapping = ggplot2::aes(x = x, y = y),
         fill = states$color,
         colour = states$linecolor,
-        size = as_r_line_size(states$linewidth)
+        size = as_ggplot_size(states$linewidth, "lines")
       )
   }
 
@@ -611,7 +617,7 @@ loon2ggplot.l_layer_points <- function(target, asAes = TRUE, selectedOnTop = TRU
         mapping = ggplot2::aes(x = x, y = y),
         colour =  states$color[active],
         size = as_ggplot_size(states$size[active]),
-        pch = 16
+        pch = 19
       )
   }
 
@@ -632,7 +638,7 @@ loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, selectedOnTop = T
 
   if(length(x) > 0  & length(y) > 0){
 
-    linewidth  <- as_r_line_size(states$linewidth[active])
+    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
     linecolor <- states$linecolor[active]
     fill <- states$color[active]
 
@@ -691,7 +697,7 @@ loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, selectedOnTop =
                                ymin = ymin, ymax = ymax),
         fill = states$color[active],
         colour = states$linecolor[active],
-        size = as_r_line_size(states$linewidth[active])
+        size = as_ggplot_size(states$linewidth[active], "lines")
       )
   }
 
@@ -712,7 +718,7 @@ loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, selectedOnTop = TRUE
 
   if(length(x) > 0  & length(y) > 0){
 
-    linewidth  <- as_r_line_size(states$linewidth[active])
+    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
     linecolor <- states$color[active]
 
     len_x <- lengths(x)

@@ -31,7 +31,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
       ggplot2::scale_fill_manual(
         values = values,
         breaks = values,
-        labels = selection_color_labels(values))
+        labels = values)
 
     uniFill <- unique(fill[!is.na(fill)])
 

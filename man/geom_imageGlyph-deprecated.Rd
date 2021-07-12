@@ -67,7 +67,7 @@ often aesthetics, used to set an aesthetic to a fixed value, like
 \code{colour = "red"} or \code{size = 3}. They may also be parameters
 to the paired geom/stat.}
 
-\item{images}{a list of images (a raster object, bitmap image). If not provided, \code{geom_point()} will be executed.}
+\item{images}{a list of images (a raster object, bitmap image). If not provided, a point visual (\code{geom_point()}) will be displayed.}
 
 \item{width}{Numerical; width of image}
 
@@ -88,10 +88,10 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{polygon_x}{nested list of x-coordinates of polygons, one list element for each scatterplot point.
-If not provided, \code{geom_point()} will be executed.}
+If not provided, a point visual (\code{geom_point()}) will be displayed.}
 
 \item{polygon_y}{nested list of y-coordinates of polygons, one list element for each scatterplot point.
-If not provided, \code{geom_point()} will be executed.}
+If not provided, a point visual (\code{geom_point()}) will be displayed.}
 
 \item{showArea}{show area; deprecated now, please set `fill` or `colour` to control the shown area.}
 
