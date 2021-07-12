@@ -1,3 +1,4 @@
+# `as_loon_size` and `as_ggplot_size` are invertible functions
 as_ggplot_size <- function(size,
                            type = c("points", "texts", "images",
                                     "radial", "parallel", "polygon",
