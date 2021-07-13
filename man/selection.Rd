@@ -7,27 +7,32 @@
 selection(selected = NULL, selectBy = NULL, selectionLogic = NULL)
 }
 \arguments{
-\item{selected}{A logical vector. If it is set as \code{TRUE}, the elements are highlighted
-as the graphics are constructed. Default is \code{FALSE}}
+\item{selected}{a logical or a logical vector of length \code{n} that determines which observations
+are selected (\code{TRUE} and hence appear highlighted in the plot) and which are not.
+Default is \code{FALSE} and no points are highlit.}
 
-\item{selectBy}{Select by "sweeping" (default) or "brushing".}
+\item{selectBy}{A string determining how selection will occur in the interactive plot.
+Default is \code{"sweeping"} where a rectangular region is reshaped or "swept" out to select observations.; alternately
+ \code{"brushing"} will indicate that a fixed rectangular region is moved about the display to select observations.}
 
-\item{selectionLogic}{Selection logic. One of "select" (default), "deselect" and "invert". See details.}
+\item{selectionLogic}{One of "select" (the default), "deselect", and "invert".
+The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
+highlit observations and highlighting downlighted ones).}
 }
 \value{
 a \code{ggproto} object
 }
 \description{
-In interactive graphics, \code{selection} is one of the most fundamental tool
-and used to highlight the subset of interest
+Set which elements (i.e., observations) are "selected".  These will be shown as highlighted in the
+plot using the current "highlight" colour (see \code{\link{loon::l_userOptions}}).
 }
 \details{
-There are two ways to directly select elements on the scatterplot using the mouse:
-either by "sweep" or by "brushing". "Sweeping" allows us to sweep out a contiguous area of the plot,
-while, in "brushing", the area is always fixed during the selection.
+There are two ways to directly select elements on, for example, a scatterplot using the mouse:
+either by "sweeping" or by "brushing". "Sweeping" allows us to sweep out a contiguous rectangular area of the plot,
+while, by "brushing", a fixed rectangular area is brushes across the plot selecting all points within the rectangle.
 
-The selection logic give users more flexibility that users cannot only highlight the elements,
-but also can delight or invert (the highlighted to delighted, vice verse) the elements.
+The selection logic give users more flexibility to users to not only highlight the elements,
+but also to downlight, and even to invert selections (changing the highlighted to downlighted, and vice versa).
 }
 \examples{
 if(interactive()) {
@@ -44,5 +49,5 @@ if(interactive()) {
 }
 \seealso{
 \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
-\code{\link{hover}}, \code{\link{interactivity}}
+\code{\link{hover}}, \code{\link{interactivity}}, \code{\link{loon::l_userOptions}}
 }

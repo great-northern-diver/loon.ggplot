@@ -1,6 +1,6 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
+loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- target
   remove(target)
@@ -8,7 +8,12 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
   colNames <- colnames(data)
 
   # active or not
-  displayOrder <- get_model_display_order(widget)
+  displayOrder <- if(selectedOnTop) {
+    get_model_display_order(widget)
+  } else {
+    seq(widget['n'])
+  }
+
   active <- widget['active'][displayOrder]
   active_displayOrder <- displayOrder[active]
 
@@ -28,11 +33,11 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, ...) {
 
   if(asAes) {
 
-    color <- hex2colorName(
+    color <- l_colorName(
       get_display_color(
         as_hex6color(widget['color'][active_displayOrder]),
         widget['selected'][active_displayOrder]
-      )
+      ), error = FALSE
     )
     size <- as_r_line_size(widget['linewidth'][active_displayOrder])
 

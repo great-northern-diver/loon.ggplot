@@ -8,9 +8,11 @@
 itemLabel(itemLabel = NULL, showItemLabels = NULL)
 }
 \arguments{
-\item{itemLabel}{The customized querying information.}
+\item{itemLabel}{A character vector of length \code{n} with a string to be used to pop up when the
+mouse hovers above that element.}
 
-\item{showItemLabels}{A logical value. Show item labels or not. Default is \code{FALSE}}
+\item{showItemLabels}{A single logical value: \code{TRUE} if pop up labels are to appear on hover,
+\code{FALSE} (the default) if they are not.}
 }
 \description{
 use \code{\link{hover}}, rather than \code{itemLabel}.

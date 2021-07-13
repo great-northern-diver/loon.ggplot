@@ -8,12 +8,17 @@
 selecting(selected = NULL, selectBy = NULL, selectionLogic = NULL)
 }
 \arguments{
-\item{selected}{A logical vector. If it is set as \code{TRUE}, the elements are highlighted
-as the graphics are constructed. Default is \code{FALSE}}
+\item{selected}{a logical or a logical vector of length \code{n} that determines which observations
+are selected (\code{TRUE} and hence appear highlighted in the plot) and which are not.
+Default is \code{FALSE} and no points are highlit.}
 
-\item{selectBy}{Select by "sweeping" (default) or "brushing".}
+\item{selectBy}{A string determining how selection will occur in the interactive plot.
+Default is \code{"sweeping"} where a rectangular region is reshaped or "swept" out to select observations.; alternately
+ \code{"brushing"} will indicate that a fixed rectangular region is moved about the display to select observations.}
 
-\item{selectionLogic}{Selection logic. One of "select" (default), "deselect" and "invert". See details.}
+\item{selectionLogic}{One of "select" (the default), "deselect", and "invert".
+The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
+highlit observations and highlighting downlighted ones).}
 }
 \description{
 use \code{\link{selection}}, rather than \code{selecting}.

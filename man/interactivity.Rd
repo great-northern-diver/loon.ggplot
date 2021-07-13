@@ -22,44 +22,50 @@ interactivity(
 )
 }
 \arguments{
-\item{linkingGroup}{A character. Plots only in the same linkingGroup can be linked}
+\item{linkingGroup}{The string identifying the group of linked plots that the current plot will join.  Default is none.}
 
-\item{linkingKey}{LinkingKey is the key of linking. Each object in one plot has a unique linking key.
-Elements in different plots are linked if they share the same linking keys.}
+\item{linkingKey}{The length \code{n} character vector of unique keys.  Default will be \code{"0", "1", ..., "n-1"}
+where \code{n} is the number of elements (e.g., points) displayed.}
 
-\item{linkedStates}{The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
-"color", "selected", "active" for a `l_hist` object.}
+\item{linkedStates}{The character vector of display states to be linked.
+These can be "color", "selected", "active", "size" and "glyph" for an `l_plot` object and
+"color", "selected", "active" for an `l_hist` object.  (These roughly correspond to aesthetics in a `ggplot`.)}
 
-\item{sync}{The way to synchronize several linked plots. It can be either "pull" (default) or "push".
-If the \code{sync} is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
-of the new plot will be pulled from the linked plots;
-if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.}
+\item{sync}{Either \code{"pull"} (the default) or \code{"push"} to indicate whether the values of the linked states of the plot
+are to be pulled from those of the other plots in the linking group, or the values are to be pushed to all other plots
+in the linking group. This matters only when joining an existing group of plots and the default value is typically
+the right thing to do.}
 
-\item{active}{a logical determining whether points appear or
-not (default is \code{TRUE} for all points). If a logical vector is
-given of length equal to the number of points,
-then it identifies which points appear (\code{TRUE}) and
-which do not (\code{FALSE}).}
+\item{active}{a logical or a logical vector of length \code{n} that determines which observations
+are active (\code{TRUE} and hence appear in the plot) and which are inactive (\code{FALSE} and hence do not appear).
+Default is \code{TRUE}.}
 
-\item{activeGeomLayers}{determine which geom layer is interactive. Only \code{geom_point()}
-and \code{geom_histogram()} can be set as active geom layer(s) so far.
-(Notice, more than one \code{geom_point()} layers can be set as active layers,
-but only one \code{geom_histogram()} can be set as an active geom layer)}
+\item{activeGeomLayers}{determine which geom layer is interactive by its `geom_...` position in the grammar of the expression.
+Currently, only \code{geom_point()} and \code{geom_histogram()} can be set as the active geom layer(s) so far.
+(N.B. more than one \code{geom_point()} layer can be set as an active layer,
+but only one \code{geom_histogram()} can be set as an active geom layer and it can be the only active layer.)}
 
-\item{selected}{A logical vector. If it is set as \code{TRUE}, the elements are highlighted
-as the graphics are constructed. Default is \code{FALSE}}
+\item{selected}{a logical or a logical vector of length \code{n} that determines which observations
+are selected (\code{TRUE} and hence appear highlighted in the plot) and which are not.
+Default is \code{FALSE} and no points are highlit.}
 
-\item{selectBy}{Select by "sweeping" (default) or "brushing".}
+\item{selectBy}{A string determining how selection will occur in the interactive plot.
+Default is \code{"sweeping"} where a rectangular region is reshaped or "swept" out to select observations.; alternately
+ \code{"brushing"} will indicate that a fixed rectangular region is moved about the display to select observations.}
 
-\item{selectionLogic}{Selection logic. One of "select" (default), "deselect" and "invert". See details.}
+\item{selectionLogic}{One of "select" (the default), "deselect", and "invert".
+The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
+highlit observations and highlighting downlighted ones).}
 
 \item{layerId}{numerical; which layer to scale to}
 
 \item{scaleToFun}{scale to function. See \code{\link{zoom}}.}
 
-\item{itemLabel}{The customized querying information.}
+\item{itemLabel}{A character vector of length \code{n} with a string to be used to pop up when the
+mouse hovers above that element.}
 
-\item{showItemLabels}{A logical value. Show item labels or not. Default is \code{FALSE}}
+\item{showItemLabels}{A single logical value: \code{TRUE} if pop up labels are to appear on hover,
+\code{FALSE} (the default) if they are not.}
 
 \item{...}{named arguments to modify \code{loon} plot states. See \code{\link{l_info_states}}}
 }

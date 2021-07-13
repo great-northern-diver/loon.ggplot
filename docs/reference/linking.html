@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the <code>linking</code> component — linking • loon.ggplot</title>
+<title>Modify the linking component — linking • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,12 @@
 
 
 
-<meta property="og:title" content="Modify the <code>linking</code> component — linking" />
-<meta property="og:description" content="In interactive graphics, linking is often used to discover the patterns of interest in several plots." />
+<meta property="og:title" content="Modify the linking component — linking" />
+<meta property="og:description" content="A group-key-state linking model is used to link plots in loon.  This allows changes in one plot
+to propogate to all plots in the same linkingGroup and enables interactive features like brushing.
+Elements to be matched between plots are identified by linkingKey; within each plot, the key for each
+element (e.g., case, observation) is unique.  The linkedStates identify which display states (e.g., &quot;color&quot;)
+should change in concert with other plots in the linkingGroup." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -88,7 +92,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +107,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/extraCode.html">Untitled</a>
+    </li>
+    <li>
       <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
       <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
@@ -120,7 +133,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,49 +156,44 @@
     </div>
 
     <div class="ref-description">
-    <p>In interactive graphics, <code>linking</code> is often used to discover the patterns of interest in several plots.</p>
+    <p>A group-key-state linking model is used to link plots in <code>loon</code>.  This allows changes in one plot
+to propogate to all plots in the same <code>linkingGroup</code> and enables interactive features like brushing.
+Elements to be matched between plots are identified by <code>linkingKey</code>; within each plot, the key for each
+element (e.g., case, observation) is unique.  The <code>linkedStates</code> identify which display states (e.g., "color")
+should change in concert with other plots in the <code>linkingGroup</code>.</p>
     </div>
 
-<<<<<<< HEAD
-    <pre class="usage"><span class='fu'>linking</span>(
-  <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>linkingKey</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>linkedStates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sync</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-)</pre>
-=======
     <pre class="usage"><span class='fu'>linking</span><span class='op'>(</span>
   linkingGroup <span class='op'>=</span> <span class='cn'>NULL</span>,
   linkingKey <span class='op'>=</span> <span class='cn'>NULL</span>,
   linkedStates <span class='op'>=</span> <span class='cn'>NULL</span>,
   sync <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
->>>>>>> upstream/master
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>linkingGroup</th>
-      <td><p>A character. Plots only in the same linkingGroup can be linked</p></td>
+      <td><p>The string identifying the group of linked plots that the current plot will join.  Default is none.</p></td>
     </tr>
     <tr>
       <th>linkingKey</th>
-      <td><p>LinkingKey is the key of linking. Each object in one plot has a unique linking key.
-Elements in different plots are linked if they share the same linking keys.</p></td>
+      <td><p>The length <code>n</code> character vector of unique keys.  Default will be <code>"0", "1", ..., "n-1"</code>
+where <code>n</code> is the number of elements (e.g., points) displayed.</p></td>
     </tr>
     <tr>
       <th>linkedStates</th>
-      <td><p>The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
-"color", "selected", "active" for a `l_hist` object.</p></td>
+      <td><p>The character vector of display states to be linked.
+These can be "color", "selected", "active", "size" and "glyph" for an `l_plot` object and
+"color", "selected", "active" for an `l_hist` object.  (These roughly correspond to aesthetics in a `ggplot`.)</p></td>
     </tr>
     <tr>
       <th>sync</th>
-      <td><p>The way to synchronize several linked plots. It can be either "pull" (default) or "push".
-If the <code>sync</code> is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
-of the new plot will be pulled from the linked plots;
-if the <code>sync</code> is "push",  the linked states of the new plot will be pushed to the linked plots.</p></td>
+      <td><p>Either <code>"pull"</code> (the default) or <code>"push"</code> to indicate whether the values of the linked states of the plot
+are to be pulled from those of the other plots in the linking group, or the values are to be pushed to all other plots
+in the linking group. This matters only when joining an existing group of plots and the default value is typically
+the right thing to do.</p></td>
     </tr>
     </table>
 
@@ -195,33 +203,10 @@ if the <code>sync</code> is "push",  the linked states of the new plot will be p
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='active.html'>active</a></code>, <code><a href='selection.html'>selection</a></code>, <code><a href='zoom.html'>zoom</a></code>,
-<code><a href='hover.html'>hover</a></code>, <code><a href='interactivity.html'>interactivity</a></code></p></div>
+<code><a href='hover.html'>hover</a></code>, <code><a href='interactivity.html'>interactivity</a></code>,
+<code><a href='https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html'>loon::l_getLinkedStates</a></code>, <code><a href='https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html'>loon::l_setLinkedStates</a></code>, <code><a href='https://great-northern-diver.github.io/loon/reference/l_configure.html'>loon::l_configure</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-<<<<<<< HEAD
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>() <span class='kw'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span>(<span class='st'>"dplyr"</span>)) {
-  <span class='no'>h</span> <span class='kw'>&lt;-</span> <span class='fu'>l_hist</span>(<span class='no'>mtcars</span>$<span class='no'>hp</span>,
-              <span class='kw'>linkingKey</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>mtcars</span>),
-              <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mtcars"</span>)
-
-  <span class='no'>mtcars</span> <span class='kw'>%&gt;%</span>
-    <span class='fu'>mutate</span>(<span class='kw'>carName</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>mtcars</span>)) <span class='kw'>%&gt;%</span>
-    <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
-       <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
-       <span class='co'># push the states of scatter plot to the histogram</span>
-       <span class='fu'>linking</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mtcars"</span>,
-               <span class='kw'>linkingKey</span> <span class='kw'>=</span> ~<span class='no'>carName</span>,
-               <span class='kw'>sync</span> <span class='kw'>=</span> <span class='st'>"push"</span>)
-
-  <span class='co'># set active layer</span>
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>mpg</span>, <span class='no'>wt</span>, <span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
-    <span class='fu'>geom_point</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4.5</span>) +
-    <span class='fu'>geom_point</span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"pink"</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
-    <span class='fu'>geom_point</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>shape</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>))) +
-    <span class='co'># only the second layer is interactive</span>
-    <span class='fu'>linking</span>(<span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-}</div></pre>
-=======
     <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"dplyr"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>h</span> <span class='op'>&lt;-</span> <span class='fu'>l_hist</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>hp</span>,
               linkingKey <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>,
@@ -237,7 +222,6 @@ if the <code>sync</code> is "push",  the linked states of the new plot will be p
                sync <span class='op'>=</span> <span class='st'>"push"</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
->>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -253,7 +237,7 @@ if the <code>sync</code> is "push",  the linked states of the new plot will be p
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

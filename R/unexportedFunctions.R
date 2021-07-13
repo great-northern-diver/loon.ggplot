@@ -1,42 +1,118 @@
 ################################ Unexported functions in `loon` but used in `loon.ggplot` ################################
 # Since `Unexported objects imported by ':::' calls` will cause a NOTE in R CMD check
 
+# All these functions are exported in loon 1.3.7
 glyph_to_pch <- utils::getFromNamespace("glyph_to_pch", "loon")
 get_display_color <- utils::getFromNamespace("get_display_color", "loon")
 as_hex6color <- utils::getFromNamespace("as_hex6color", "loon")
 get_font_info_from_tk <- utils::getFromNamespace("get_font_info_from_tk", "loon")
-xy_coords_layer <- utils::getFromNamespace("xy_coords_layer", "loon")
 get_layer_states <- utils::getFromNamespace("get_layer_states", "loon")
 get_model_display_order <- utils::getFromNamespace("get_model_display_order", "loon")
-char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
-cartesian_model_widget_states <- utils::getFromNamespace("cartesian_model_widget_states", "loon")
 tcl_img_2_r_raster <- utils::getFromNamespace("tcl_img_2_r_raster", "loon")
-color.id <- utils::getFromNamespace("color.id", "loon")
+char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
 
-l_allNDimStateNames <- function(plots = c("l_plot", "l_plot3D", "l_serialaxes", "l_hist")) {
-  states <- lapply(plots,
-                   function(plot) {
-                     loon::l_nDimStateNames(plot)
-                   })
-  unique(unlist(states))
+# This function is temporary
+# after loon is updated to 1.3.7
+# this function will be switched to
+# `loon::l_colorName`
+l_colorName <- function(color, error = TRUE) {
+
+  color.id <- function(x, error = TRUE, env = environment()) {
+
+    invalid.color <- c()
+
+    colors <- vapply(x,
+                     function(color) {
+
+                       # hex code color
+                       # hex12to6 will give warnings if the hex code is not 12
+                       # as_hex6color can accommodate 6 digits and 12 digits code
+                       tryCatch(
+                         expr = {
+                           color <- as_hex6color(color)
+                           c2 <- grDevices::col2rgb(color)
+                           coltab <- grDevices::col2rgb(colors())
+                           cdist <- apply(coltab, 2, function(z) sum((z - c2)^2))
+                           colors()[which(cdist == min(cdist))][1]
+                         },
+                         error = function(e) {
+
+                           assign("invalid.color",
+                                  c(invalid.color, color),
+                                  envir = env)
+
+                           return(color)
+
+                         }
+                       )
+
+                     }, character(1))
+
+    if(error && length(invalid.color) > 0) {
+      stop("The input " ,
+           paste(invalid.color, collapse = ", "),
+           " are not valid color names", call. = FALSE)
+    }
+    colors
+  }
+
+  # the input colors are 6/12 digits hex code
+  uniColor <- unique(color)
+  colorName <- color.id(uniColor, error = error)
+  len <- length(colorName)
+
+  for(i in seq(len)) {
+    color[color == uniColor[i]] <- colorName[i]
+  }
+  color
 }
 
-## Unexported functions in ggplot2
-compute_just <- utils::getFromNamespace("compute_just", "ggplot2")
-message_wrap <- utils::getFromNamespace("message_wrap", "ggplot2")
-set_sec_axis <- utils::getFromNamespace("set_sec_axis", "ggplot2")
+## Un-exported functions in ggplot2
+# utils::getFromNamespace("message_wrap", "ggplot2")
+message_wrap <- function (...)  {
+  msg <- paste(..., collapse = "", sep = "")
+  wrapped <- strwrap(msg, width = getOption("width") -
+                       2)
+  message(paste0(wrapped, collapse = "\n"))
+}
 
-## Unexported functions in ggmulti
-pth <- utils::getFromNamespace("pth", "ggmulti")
-# It is learned from the function `get_gridAesthetic` in package ggmulti
+# set_sec_axis <- utils::getFromNamespace("set_sec_axis", "ggplot2")
+set_sec_axis <- function(sec.axis, scale) {
+
+  if(is.waive(sec.axis)) return(scale)
+
+  if (is.formula(sec.axis))
+    sec.axis <- ggplot2::sec_axis(sec.axis)
+  if (!is.sec_axis(sec.axis))
+    stop("Secondary axes must be specified using 'sec_axis()'",
+         call. = FALSE)
+  scale$secondary.axis <- sec.axis
+  return(scale)
+}
+
+# It is learned from the function `get_gridAesthetic` in package `ggmulti`
+# The difference is that for `get_gridAesthetic`, the output coordinate is
+# in unit, however, the returned coordinates of `get_aesthetic` are numerical values
 get_aesthetic <- function(axes.layout, andrews, xpos, ypos, scale.x, scale.y, xaxis, yaxis,
-                              dimension, p, show.area, show.enclosing) {
+                          dimension, p, show.area, show.enclosing) {
 
   enclosingX <- enclosingY <- enclosingId <- list()
   axesX <- axesY <- axesId <- list()
   serialCoordX <- serialCoordY <- list()
 
   N <- length(xpos)
+
+  # it is for specific use
+  pth <- function(x, p, circle = FALSE) {
+    len <- length(x)
+    if(len == p) return(x)
+    # In a circle, the first one and the last one are identical
+    if(circle) {
+      x[round(seq(1, len, length.out = p + 1))][- (p + 1)]
+    } else {
+      x[round(seq(1, len, length.out = p))]
+    }
+  }
 
   # side effect
   if(axes.layout == "parallel") {

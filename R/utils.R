@@ -12,27 +12,19 @@ char2null <- function(x, warn = FALSE, message = "") {
   x
 }
 
-hex2colorName <- function(color) {
-  # the input colors are 6/12 digits hex code
-  uniColor <- unique(color)
-  colorName <- color.id(uniColor)
-  len <- length(colorName)
+is.GlobalEnv <- function(env) {
 
-  for(i in seq(len)) {
-    color[color == uniColor[i]] <- colorName[i]
-  }
-  color
+  if(is.environment(env)) {
+    environmentName(env) == environmentName(globalenv())
+  } else FALSE
+
 }
-
 is.waive <- function (x) inherits(x, "waiver")
-
-is.ggmatrix <- function(x) {
-  inherits(x, "ggmatrix")
-}
-
-is.ggmatrix_plot_obj <- function(x) {
-  inherits(x, "ggmatrix_plot_obj")
-}
+is.formula <- function (x) inherits(x, "formula")
+is.sec_axis <- function (x) inherits(x, "AxisSecondary")
+is.l_compound <- function(x) inherits(x, "l_compound")
+is.ggmatrix <- function(x) inherits(x, "ggmatrix")
+is.ggmatrix_plot_obj <- function(x) inherits(x, "ggmatrix_plot_obj")
 
 # default aesthetics attributes in loon
 loon_default_setting <- function(x) {

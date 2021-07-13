@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/extraCode.html">Untitled</a>
+    </li>
+    <li>
       <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
       <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
@@ -120,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -146,22 +155,22 @@
     <p>For <code>ggSerialAxes</code>, use <code>coord_serialaxes</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ggSerialAxes</span>(
-  <span class='no'>ggObj</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>axesLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>showAxes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>showAxesLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>scaling</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"variable"</span>, <span class='st'>"observation"</span>, <span class='st'>"data"</span>, <span class='st'>"none"</span>),
-  <span class='kw'>layout</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"parallel"</span>, <span class='st'>"radial"</span>),
-  <span class='kw'>displayOrder</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>title</span> <span class='kw'>=</span> <span class='st'>""</span>,
-  <span class='kw'>showLabels</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>color</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>size</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>showGuides</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>showArea</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>ggSerialAxes</span><span class='op'>(</span>
+  <span class='va'>ggObj</span>,
+  data <span class='op'>=</span> <span class='cn'>NULL</span>,
+  axesLabels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  showAxes <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  showAxesLabels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  scaling <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"variable"</span>, <span class='st'>"observation"</span>, <span class='st'>"data"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
+  layout <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"parallel"</span>, <span class='st'>"radial"</span><span class='op'>)</span>,
+  displayOrder <span class='op'>=</span> <span class='cn'>NULL</span>,
+  title <span class='op'>=</span> <span class='st'>""</span>,
+  showLabels <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  color <span class='op'>=</span> <span class='cn'>NULL</span>,
+  size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  showGuides <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  showArea <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -230,27 +239,14 @@ specify how the data is scaled. See Details for more information</p></td>
     <p>a ggplot object</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># Blank plot</span>
-<<<<<<< HEAD
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>cyl</span>)))
-=======
 <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
->>>>>>> upstream/master
 <span class='co'># Add serial axes (returns a ggplot object)</span>
-<span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'>ggSerialAxes</span>(<span class='no'>p</span>)
-<span class='no'>g</span>
+<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>ggSerialAxes</span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
+<span class='va'>g</span>
 <span class='co'># An eulerian path of iris variables</span>
 <span class='co'># ordSeq &lt;- PairViz::eulerian(4)</span>
-<<<<<<< HEAD
-<span class='no'>ordSeq</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span>)
-<span class='fu'>ggSerialAxes</span>(
-       <span class='kw'>ggObj</span> <span class='kw'>=</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Species</span>)),
-       <span class='kw'>axesLabels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>iris</span>)[<span class='no'>ordSeq</span>],
-       <span class='kw'>layout</span> <span class='kw'>=</span> <span class='st'>"radial"</span>
-)
-}</div></pre>
-=======
 <span class='va'>ordSeq</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>1</span>, <span class='fl'>4</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>4</span><span class='op'>)</span>
 <span class='fu'>ggSerialAxes</span><span class='op'>(</span>
        ggObj <span class='op'>=</span> <span class='fu'>ggplot</span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>iris</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>colour <span class='op'>=</span> <span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>,
@@ -259,7 +255,6 @@ specify how the data is scaled. See Details for more information</p></td>
 <span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
->>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -275,7 +270,7 @@ specify how the data is scaled. See Details for more information</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><code>ggplot</code> to <code>loon</code> — ggplot2loon • loon.ggplot</title>
+<title>ggplot to loon — ggplot2loon • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="<code>ggplot</code> to <code>loon</code> — ggplot2loon" />
+<meta property="og:title" content="ggplot to loon — ggplot2loon" />
 <meta property="og:description" content="Create an interactive `loon` widget from a ggplot object" />
 <meta property="og:image" content="/logo.png" />
 
@@ -88,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -103,7 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/extraCode.html">Untitled</a>
+    </li>
+    <li>
       <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
       <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
@@ -120,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -146,20 +155,6 @@
     <p>Create an interactive `loon` widget from a <code>ggplot</code> object</p>
     </div>
 
-<<<<<<< HEAD
-    <pre class="usage"><span class='fu'>ggplot2loon</span>(
-  <span class='no'>ggObj</span>,
-  <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>integer</a></span>(<span class='fl'>0</span>),
-  <span class='kw'>ggGuides</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>parent</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>pack</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>tkLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>exteriorLabelProportion</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>5</span>,
-  <span class='kw'>canvasHeight</span> <span class='kw'>=</span> <span class='fl'>700</span>,
-  <span class='kw'>canvasWidth</span> <span class='kw'>=</span> <span class='fl'>850</span>
-)</pre>
-=======
     <pre class="usage"><span class='fu'>ggplot2loon</span><span class='op'>(</span>
   <span class='va'>ggObj</span>,
   <span class='va'>...</span>,
@@ -174,7 +169,6 @@
   canvasWidth <span class='op'>=</span> <span class='fl'>850</span>,
   tkLabels <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
->>>>>>> upstream/master
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -243,48 +237,6 @@ exterior labels (title, subtitle, xlabel or ylabel) using <code>tk.grid()</code>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>
-<<<<<<< HEAD
-<span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>mtcars</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>wt</span>, <span class='no'>mpg</span>)) + <span class='fu'>geom_point</span>()
-  <span class='no'>g</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>p</span>)
-
-  <span class='co'># tkLabels</span>
-  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>mtcars</span>) + <span class='fu'>geom_point</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>mpg</span>,
-     <span class='kw'>colour</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>gear</span>))) + <span class='fu'>facet_wrap</span>(~<span class='no'>am</span>)
-  <span class='no'>g1</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>p</span>)
-  <span class='no'>g2</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>p</span>, <span class='kw'>tkLabels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-}
-
-<span class='co'># \donttest{</span>
-<span class='no'>df</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
-  <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>120</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>, <span class='fl'>4</span>)),
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>120</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>1</span>)),
-  <span class='kw'>z</span> <span class='kw'>=</span> <span class='no'>letters</span>[<span class='fl'>1</span>:<span class='fl'>3</span>]
-)
-<span class='no'>df2</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span>(<span class='no'>df</span>, -<span class='no'>z</span>)
-<span class='no'>scatterplots</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>df</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='no'>x</span>, <span class='no'>y</span>)) +
-  <span class='fu'>geom_point</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>df2</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='st'>"grey70"</span>) +
-  <span class='fu'>geom_point</span>(<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>z</span>)) +
-  <span class='fu'>facet_wrap</span>(~<span class='no'>z</span>)
-
-<span class='co'># We can select the first geom_point layer to be</span>
-<span class='co'># the active layer as in</span>
-<span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(
-  <span class='no'>lp_scatterplots_active1</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>scatterplots</span>,
-                               <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-                               <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"test"</span>)
-)</div><div class='output co'>#&gt; <span class='message'>default sync is 'pull'</span></div><div class='input'><span class='co'># Here the grey points are linked (not the coloured ones)</span>
-
-<span class='co'># We can select the second geom_point layer to be</span>
-<span class='co'># the active layer as in</span>
-<span class='no'>lp_scatterplots_active2</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>scatterplots</span>, <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fl'>2</span>)</div><div class='output co'>#&gt; <span class='message'>default sync is 'pull'</span></div><div class='input'><span class='co'># Here the colour points are linked</span>
-
-<span class='co'># We can also select the both geom_point layers to be</span>
-<span class='co'># the active layer as in</span>
-<span class='fu'><a href='https://rdrr.io/r/base/warning.html'>suppressWarnings</a></span>(
- <span class='no'>lp_scatterplots_active12</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>scatterplots</span>, <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>,<span class='fl'>2</span>))
-)</div><div class='output co'>#&gt; <span class='message'>default sync is 'pull'</span></div><div class='input'><span class='co'># Here the colour points and grey points are both linked</span>
-=======
 <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='fu'>aes</span><span class='op'>(</span><span class='va'>wt</span>, <span class='va'>mpg</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span>
   <span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot2loon</span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
@@ -326,11 +278,11 @@ exterior labels (title, subtitle, xlabel or ylabel) using <code>tk.grid()</code>
  <span class='va'>lp_scatterplots_active12</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot2loon</span><span class='op'>(</span><span class='va'>scatterplots</span>, activeGeomLayers <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>,<span class='fl'>2</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>)</span>
 <span class='co'># Here the colour points and grey points are both linked</span>
->>>>>>> upstream/master
 
 <span class='co'>########### ggmatrix to loon ###########</span>
-<span class='no'>pm</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>GGally</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggobi.github.io/ggally/reference/ggpairs.html'>ggpairs</a></span>(<span class='no'>iris</span>, <span class='kw'>column</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>colour</span><span class='kw'>=</span><span class='no'>Species</span>))
-<span class='no'>lg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot2loon</span>(<span class='no'>pm</span>)</div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='input'># }
+<span class='va'>pm</span> <span class='op'>&lt;-</span> <span class='fu'>GGally</span><span class='fu'>::</span><span class='fu'><a href='https://ggobi.github.io/ggally/reference/ggpairs.html'>ggpairs</a></span><span class='op'>(</span><span class='va'>iris</span>, column <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>colour<span class='op'>=</span><span class='va'>Species</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>lg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot2loon</span><span class='op'>(</span><span class='va'>pm</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='output co'>#&gt; <span class='message'>The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span></div><div class='input'><span class='co'># }</span>
 
 
 </div></pre>
@@ -349,7 +301,7 @@ exterior labels (title, subtitle, xlabel or ylabel) using <code>tk.grid()</code>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -61,7 +61,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/extraCode.html">Untitled</a>
+    </li>
+    <li>
       <a href="articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+    </li>
+    <li>
+      <a href="articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
+    </li>
+    <li>
+      <a href="articles/linking.html">Linking</a>
     </li>
     <li>
       <a href="articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
@@ -78,7 +87,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -128,11 +137,7 @@ install.packages("loon")</a></code></pre>
 </li>
 </ul>
 <p>Consider the <code>mtcars</code> data set. Suppose we draw a scatterplot of the mileage <code>mpg</code> (miles per US gallon) versus the weight of the car <code>wt</code> in thousands of pounds and colour represents different cylinder numbers. In <code>ggplot2</code> this would be constructed as</p>
-<<<<<<< HEAD
-<pre><code><a href="https://ggplot2.tidyverse.org/reference">library(ggplot2)
-=======
 <pre><code><a href="https://ggplot2.tidyverse.org">library(ggplot2)
->>>>>>> upstream/master
 p &lt;- ggplot(mtcars, aes(wt, mpg, colour = as.factor(cyl))) + geom_point()
 p</a></code></pre>
 <p><img src="reference/figures/mtcarsScatterPlot.png"></p>
@@ -145,7 +150,7 @@ h</code></pre>
 </li>
 </ul>
 <p>the <code>"ggplot"</code> data structures <code>p</code> and <code>h</code> can be <strong>turned into interactive loon plot</strong>s using the <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code> function:</p>
-<pre><code><a href="https://rdrr.io/pkg/loon.ggplot/man">library(loon.ggplot)
+<pre><code><a href="https://rdrr.io/r/base/library.html">library(loon.ggplot)
 pl &lt;- ggplot2loon(p)
 hl &lt;- ggplot2loon(h)</a></code></pre>
 <p><img src="reference/figures/scatterAndHist.gif"></p>
@@ -211,6 +216,70 @@ g
 l &lt;- loon.ggplot(g)</code></pre>
 </div>
 </div>
+<div id="more-than-loon-or-ggplot2" class="section level2">
+<h2 class="hasAnchor">
+<a href="#more-than-loon-or-ggplot2" class="anchor"></a>More than <code>loon</code> or <code>ggplot2</code>
+</h2>
+<p>More than connecting <code>ggplot2</code> and <code>loon</code> these two specific graphical systems, <code>loon.ggplot</code> is able to connect the suite behind them.</p>
+<p><img src="reference/figures/loonggplotConnection.PNG"></p>
+<div id="loon--ggplot2--gganimate" class="section level3">
+<h3 class="hasAnchor">
+<a href="#loon--ggplot2--gganimate" class="anchor"></a><code>loon</code> –&gt; <code>ggplot2</code> –&gt; <code>gganimate</code>
+</h3>
+<p>Return an animation from a <code>loon</code> plot</p>
+<pre><code><a href="https://rdrr.io/r/base/library.html"># a loon plot
+library(gapminder)
+p &lt;- with(gapminder, 
+          l_plot(gdpPercap, lifeExp,
+                 # scale the size into certain amounts
+                 size = scales::rescale(pop, to = c(4, 50)),
+                 color = continent,
+                 itemLabel = as.character(country),
+                 showItemLabels = TRUE
+          ))
+          
+# highlight large population countires     
+library(dplyr)
+top10in2007 &lt;- gapminder %&gt;% 
+  filter(year == 2007) %&gt;%
+  top_n(10, pop)
+p['selected'][gapminder$country %in% top10in2007$country] &lt;- TRUE
+
+# to `ggplot` then to `animation`
+library(gganimate)
+loon.ggplot(p, selectedOnTop = FALSE) + 
+  facet_wrap(gapminder$continent) + 
+  theme(legend.position = "none") + 
+  labs(title = 'Year: {frame_time}', 
+       x = 'GDP per capita', 
+       y = 'life expectancy') + 
+  transition_time(gapminder$year) +
+  ease_aes('linear')</a></code></pre>
+<p><img src="reference/figures/gdpVersusLife.gif"></p>
+</div>
+<div id="ggplot2--loon--shiny" class="section level3">
+<h3 class="hasAnchor">
+<a href="#ggplot2--loon--shiny" class="anchor"></a><code>ggplot2</code> –&gt; <code>loon</code> –&gt; <code>shiny</code>
+</h3>
+<p>Return a shiny web app from a <code>ggplot</code> object</p>
+<pre><code><a href="https://dplyr.tidyverse.org">library(dplyr)
+gp &lt;- gapminder %&gt;% 
+  filter(year == 2007,
+         continent != "Oceania") %&gt;%
+  ggplot(mapping = aes(gdpPercap, lifeExp, 
+                       colour = continent)) + 
+  geom_point(mapping = aes(size = pop)) + 
+  geom_smooth(mapping = aes(weight = pop),
+              method = "lm",
+              se = FALSE)
+
+library(loon.shiny)
+gp %&gt;% 
+  loon.ggplot() %&gt;% 
+  loon.shiny()</a></code></pre>
+<p><img src="reference/figures/GDPshiny.gif"></p>
+</div>
+</div>
 </div>
   </div>
 
@@ -243,8 +312,8 @@ l &lt;- loon.ggplot(g)</code></pre>
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/great-northern-diver/loon.ggplot"><img src="https://travis-ci.com/z267xu/loon.ggplot.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master"><img src="https://codecov.io/gh/z267xu/loon.ggplot/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://travis-ci.com/great-northern-diver/loon.ggplot"><img src="https://travis-ci.com/great-northern-diver/loon.ggplot.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master"><img src="https://codecov.io/gh/great-northern-diver/loon.ggplot/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://cran.r-project.org/web/packages/loon.ggplot/index.html"><img src="https://www.r-pkg.org/badges/version/loon.ggplot" alt="CRAN status"></a></li>
 <li><a href="https://cran.r-project.org/package=loon.ggplot"><img src="https://cranlogs.r-pkg.org/badges/loon.ggplot"></a></li>
 </ul>
@@ -258,7 +327,7 @@ l &lt;- loon.ggplot(g)</code></pre>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,11 +6,11 @@
 \alias{g_getPlots.l_pairs}
 \title{get \code{ggplot}s}
 \usage{
-g_getPlots(target, asAes = TRUE)
+g_getPlots(target, asAes = TRUE, selectedOnTop = TRUE)
 
-\method{g_getPlots}{default}(target, asAes = TRUE)
+\method{g_getPlots}{default}(target, asAes = TRUE, selectedOnTop = TRUE)
 
-\method{g_getPlots}{l_pairs}(target, asAes = TRUE)
+\method{g_getPlots}{l_pairs}(target, asAes = TRUE, selectedOnTop = TRUE)
 }
 \arguments{
 \item{target}{the (compound) loon plot}
@@ -18,6 +18,9 @@ g_getPlots(target, asAes = TRUE)
 \item{asAes}{logical; set aesthetics attributes, i.e. `color`, `fill` as
 variables (default \code{TRUE}) or general visual properties (\code{FALSE}).
 See details}
+
+\item{selectedOnTop}{logical and default is \code{TRUE}; whether to display the
+selected points on top. See details.}
 }
 \value{
 a list of \code{ggplot}s.

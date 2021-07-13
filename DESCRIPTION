@@ -14,10 +14,10 @@ Depends:
     tcltk,
     methods,
     loon (>= 1.3.2),
-    ggplot2
+    ggplot2,
+    ggmulti
 Imports:
     stats,
-    ggmulti,
     utils,
     grDevices,
     grid,

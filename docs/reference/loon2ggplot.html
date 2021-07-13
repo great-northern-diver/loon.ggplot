@@ -6,11 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<<<<<<< HEAD
-<title><code>loon</code> to <code>ggplot</code> — loon2ggplot • loon.ggplot</title>
-=======
 <title>Turn a loon widget to a ggplot object — loon2ggplot • loon.ggplot</title>
->>>>>>> upstream/master
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -50,11 +46,7 @@
 
 
 
-<<<<<<< HEAD
-<meta property="og:title" content="<code>loon</code> to <code>ggplot</code> — loon2ggplot" />
-=======
 <meta property="og:title" content="Turn a loon widget to a ggplot object — loon2ggplot" />
->>>>>>> upstream/master
 <meta property="og:description" content="Create a ggplot object from a loon widget" />
 <meta property="og:image" content="/logo.png" />
 
@@ -96,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -111,7 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/extraCode.html">Untitled</a>
+    </li>
+    <li>
       <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
       <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
@@ -128,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -154,77 +155,40 @@
     <p>Create a <code>ggplot</code> object from a <code>loon</code> widget</p>
     </div>
 
-<<<<<<< HEAD
-    <pre class="usage"><span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_plot</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_hist</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_plot3D</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_compound</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_layer_graph</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_layer_histogram</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_layer_scatterplot</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_pairs</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_serialaxes</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='co'># S3 method for l_ts</span>
-<span class='fu'>loon2ggplot</span>(<span class='no'>target</span>, <span class='no'>...</span>)</pre>
-=======
-    <pre class="usage"><span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_plot</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_hist</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_plot3D</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_compound</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_layer_graph</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_layer_histogram</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_layer_scatterplot</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_pairs</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_serialaxes</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for l_ts</span>
-<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
->>>>>>> upstream/master
+<span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>target</span>, asAes <span class='op'>=</span> <span class='cn'>TRUE</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -243,6 +207,11 @@ variables (default <code>TRUE</code>) or general visual properties (<code>FALSE<
 See details</p></td>
     </tr>
     <tr>
+      <th>selectedOnTop</th>
+      <td><p>logical and default is <code>TRUE</code>; whether to display the
+selected points on top. See details.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>arguments used inside <code>loon2ggplot()</code>, not used by this method</p></td>
     </tr>
@@ -254,22 +223,21 @@ See details</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>in <code>ggplot</code>, generally speaking, there are two ways to set the
-aesthetics attributes, either take it as variables
-(set in function <code>aes()</code>) or visual properties. The main benefits to
-consider it as variables are that 1. legend could be shown; 2. convenient for
-further analysis. See examples.</p>
+aesthetics attributes, either take it as variables <code>asAes = TRUE</code>
+(set in function <code>aes()</code>) or visual properties <code>asAes = FALSE</code>.
+The main benefits to consider it as variables are that 1. legend could be shown;
+2. convenient for further analysis.</p>
+<p>In <code>loon</code>, if the <code>selected</code> state is changed, the order of the points will be changed so that
+the highlighted points will be displayed on top. To turn it static, if <code>selectedOnTop = TRUE</code>,
+the points will be partitioned into two
+groups, one group presents the un-selected (un-highlighted) points and
+the other group presents selected (highlighted) points.
+the un-selected group will be drawn first, then selected group will be displayed on top of it;
+if <code>selectedOnTop = FALSE</code>, no partition is applied so that the displayed order will be identical to
+the original data set order. This is very helpful when further analysis will be operated in ggplot
+graphical system, e.g. <code>+ facet_wrap(...)</code>. See examples.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-<<<<<<< HEAD
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
-  <span class='no'>l</span> <span class='kw'>&lt;-</span> <span class='fu'>l_plot</span>(<span class='no'>iris</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>iris</span>$<span class='no'>Species</span>)
-  <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'>loon2ggplot</span>(<span class='no'>l</span>)
-  <span class='no'>p</span> <span class='co'># a ggplot object</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span>(<span class='no'>p</span>)
-  <span class='co'># add themes</span>
-  <span class='no'>p</span> + <span class='fu'>geom_smooth</span>() + <span class='fu'>theme_linedraw</span>()
-}</div></pre>
-=======
     <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='va'>lp</span> <span class='op'>&lt;-</span> <span class='fu'>l_plot</span><span class='op'>(</span><span class='va'>iris</span>,
              color <span class='op'>=</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span>,
@@ -299,16 +267,31 @@ further analysis. See examples.</p>
 <span class='va'>gh1</span> <span class='op'>&lt;-</span> <span class='fu'>loon2ggplot</span><span class='op'>(</span><span class='va'>lh</span>, asAes <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
 <span class='co'># Expect the legend, they both are identical</span>
 <span class='va'>gh1</span>
-
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># ERROR</span>
 <span class='co'># The bins are constructed by `ggplot2::geom_rect()`</span>
-<span class='co'># Very limited "fancy" operations can be made</span>
-<span class='va'>gh1</span> <span class='op'>+</span> <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='op'>~</span><span class='va'>fill</span><span class='op'>)</span><span class='op'>}</span>
+<span class='co'># Very limited operations can be made</span>
+<span class='va'>gh1</span> <span class='op'>+</span> <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='op'>~</span><span class='va'>fill</span><span class='op'>)</span>
 <span class='op'>}</span>
 
+<span class='co'># Argument `selectedOnTop`</span>
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>l_plot</span><span class='op'>(</span><span class='va'>iris</span>, color <span class='op'>=</span> <span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
+<span class='va'>p</span><span class='op'>[</span><span class='st'>'selected'</span><span class='op'>]</span><span class='op'>[</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Petal.Length</span> <span class='op'>&gt;</span> <span class='fl'>5</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
+<span class='va'>g</span> <span class='op'>&lt;-</span> <span class='fu'><a href='loon.ggplot.html'>loon.ggplot</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
+<span class='co'># It looks correct.</span>
+<span class='va'>g</span>
+<span class='co'># facet by "Species"</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>g</span> <span class='op'>+</span> <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span><span class='op'>}</span>
+<span class='co'># Something is wrong here. There is a pink point (at least one)</span>
+<span class='co'># in species "versicolor"! The reason is because after points are</span>
+<span class='co'># hightligthed, the displayed order has been changed. One way to</span>
+<span class='co'># fix it is to set the `selectedOnTop` as FALSE.</span>
+
+<span class='fu'><a href='loon.ggplot.html'>loon.ggplot</a></span><span class='op'>(</span><span class='va'>p</span>, selectedOnTop <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>$</span><span class='va'>Species</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div></pre>
->>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -324,7 +307,7 @@ further analysis. See examples.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify the <code>interactivity</code> component — interactivity • loon.ggplot</title>
+<title>Modify the interactivity component — interactivity • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,13 +46,8 @@
 
 
 
-<<<<<<< HEAD
-<meta property="og:title" content="Modify the <code>interactivity</code> component — interactivity" />
-<meta property="og:description" content="Set interactive components (e.g. linking, selecting, itemLabel, etc)" />
-=======
 <meta property="og:title" content="Modify the interactivity component — interactivity" />
 <meta property="og:description" content="Set interactive components (e.g. linking, selection, etc)" />
->>>>>>> upstream/master
 <meta property="og:image" content="/logo.png" />
 
 
@@ -93,7 +88,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -108,7 +103,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/extraCode.html">Untitled</a>
+    </li>
+    <li>
       <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
+    </li>
+    <li>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
       <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
@@ -125,7 +129,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -151,21 +155,6 @@
     <p>Set interactive components (e.g. <code>linking</code>, <code>selection</code>, etc)</p>
     </div>
 
-<<<<<<< HEAD
-    <pre class="usage"><span class='fu'>interactivity</span>(
-  <span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>linkingKey</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>linkedStates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sync</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>activeGeomLayers</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>selected</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>selectBy</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>selectionLogic</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>itemLabel</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>showItemLabels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
-)</pre>
-=======
     <pre class="usage"><span class='fu'>interactivity</span><span class='op'>(</span>
   linkingGroup <span class='op'>=</span> <span class='cn'>NULL</span>,
   linkingKey <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -182,59 +171,62 @@
   showItemLabels <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
->>>>>>> upstream/master
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>linkingGroup</th>
-      <td><p>A character. Plots only in the same linkingGroup can be linked</p></td>
+      <td><p>The string identifying the group of linked plots that the current plot will join.  Default is none.</p></td>
     </tr>
     <tr>
       <th>linkingKey</th>
-      <td><p>LinkingKey is the key of linking. Each object in one plot has a unique linking key.
-Elements in different plots are linked if they share the same linking keys.</p></td>
+      <td><p>The length <code>n</code> character vector of unique keys.  Default will be <code>"0", "1", ..., "n-1"</code>
+where <code>n</code> is the number of elements (e.g., points) displayed.</p></td>
     </tr>
     <tr>
       <th>linkedStates</th>
-      <td><p>The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
-"color", "selected", "active" for a `l_hist` object.</p></td>
+      <td><p>The character vector of display states to be linked.
+These can be "color", "selected", "active", "size" and "glyph" for an `l_plot` object and
+"color", "selected", "active" for an `l_hist` object.  (These roughly correspond to aesthetics in a `ggplot`.)</p></td>
     </tr>
     <tr>
       <th>sync</th>
-      <td><p>The way to synchronize several linked plots. It can be either "pull" (default) or "push".
-If the <code>sync</code> is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
-of the new plot will be pulled from the linked plots;
-if the <code>sync</code> is "push",  the linked states of the new plot will be pushed to the linked plots.</p></td>
+      <td><p>Either <code>"pull"</code> (the default) or <code>"push"</code> to indicate whether the values of the linked states of the plot
+are to be pulled from those of the other plots in the linking group, or the values are to be pushed to all other plots
+in the linking group. This matters only when joining an existing group of plots and the default value is typically
+the right thing to do.</p></td>
     </tr>
     <tr>
       <th>active</th>
-      <td><p>a logical determining whether points appear or
-not (default is <code>TRUE</code> for all points). If a logical vector is
-given of length equal to the number of points,
-then it identifies which points appear (<code>TRUE</code>) and
-which do not (<code>FALSE</code>).</p></td>
+      <td><p>a logical or a logical vector of length <code>n</code> that determines which observations
+are active (<code>TRUE</code> and hence appear in the plot) and which are inactive (<code>FALSE</code> and hence do not appear).
+Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>activeGeomLayers</th>
-      <td><p>determine which geom layer is interactive. Only <code>geom_point()</code>
-and <code>geom_histogram()</code> can be set as active geom layer(s) so far.
-(Notice, more than one <code>geom_point()</code> layers can be set as active layers,
-but only one <code>geom_histogram()</code> can be set as an active geom layer)</p></td>
+      <td><p>determine which geom layer is interactive by its `geom_...` position in the grammar of the expression.
+Currently, only <code>geom_point()</code> and <code>geom_histogram()</code> can be set as the active geom layer(s) so far.
+(N.B. more than one <code>geom_point()</code> layer can be set as an active layer,
+but only one <code>geom_histogram()</code> can be set as an active geom layer and it can be the only active layer.)</p></td>
     </tr>
     <tr>
       <th>selected</th>
-      <td><p>A logical vector. If it is set as <code>TRUE</code>, the elements are highlighted
-as the graphics are constructed. Default is <code>FALSE</code></p></td>
+      <td><p>a logical or a logical vector of length <code>n</code> that determines which observations
+are selected (<code>TRUE</code> and hence appear highlighted in the plot) and which are not.
+Default is <code>FALSE</code> and no points are highlit.</p></td>
     </tr>
     <tr>
       <th>selectBy</th>
-      <td><p>Select by "sweeping" (default) or "brushing".</p></td>
+      <td><p>A string determining how selection will occur in the interactive plot.
+Default is <code>"sweeping"</code> where a rectangular region is reshaped or "swept" out to select observations.; alternately
+ <code>"brushing"</code> will indicate that a fixed rectangular region is moved about the display to select observations.</p></td>
     </tr>
     <tr>
       <th>selectionLogic</th>
-      <td><p>Selection logic. One of "select" (default), "deselect" and "invert". See details.</p></td>
+      <td><p>One of "select" (the default), "deselect", and "invert".
+The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
+highlit observations and highlighting downlighted ones).</p></td>
     </tr>
     <tr>
       <th>layerId</th>
@@ -246,11 +238,13 @@ as the graphics are constructed. Default is <code>FALSE</code></p></td>
     </tr>
     <tr>
       <th>itemLabel</th>
-      <td><p>The customized querying information.</p></td>
+      <td><p>A character vector of length <code>n</code> with a string to be used to pop up when the
+mouse hovers above that element.</p></td>
     </tr>
     <tr>
       <th>showItemLabels</th>
-      <td><p>A logical value. Show item labels or not. Default is <code>FALSE</code></p></td>
+      <td><p>A single logical value: <code>TRUE</code> if pop up labels are to appear on hover,
+<code>FALSE</code> (the default) if they are not.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -276,19 +270,8 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span>()) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/interactive.html'>interactive</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># Modify the 'linkingGroup' and 'origin' of a hist object</span>
-<<<<<<< HEAD
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>)) +
-    <span class='fu'>geom_histogram</span>() +
-    <span class='fu'>interactivity</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mt"</span>, <span class='kw'>origin</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-  <span class='co'># linking with the histogram</span>
-  <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span>(<span class='no'>mtcars</span>, <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>wt</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hp</span>)) +
-    <span class='fu'>geom_point</span>(<span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>4</span>) +
-    <span class='fu'>interactivity</span>(<span class='kw'>linkingGroup</span> <span class='kw'>=</span> <span class='st'>"mt"</span>) +
-    <span class='fu'>facet_wrap</span>(~<span class='no'>cyl</span>)
-}</div></pre>
-=======
   <span class='fu'><a href='l_ggplot.html'>l_ggplot</a></span><span class='op'>(</span><span class='va'>mtcars</span>, mapping <span class='op'>=</span> <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>wt</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>geom_histogram</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
     <span class='fu'>interactivity</span><span class='op'>(</span>linkingGroup <span class='op'>=</span> <span class='st'>"mt"</span>, origin <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
@@ -308,7 +291,6 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
   <span class='va'>p</span> <span class='op'>+</span> <span class='fu'>interactivity</span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div></pre>
->>>>>>> upstream/master
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -324,7 +306,7 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -18,29 +18,29 @@
 \alias{loon2ggplot.l_ts}
 \title{Turn a \code{loon} widget to a \code{ggplot} object}
 \usage{
-loon2ggplot(target, asAes = TRUE, ...)
+loon2ggplot(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{default}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{default}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_plot}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_plot}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_hist}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_hist}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_plot3D}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_plot3D}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_compound}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_compound}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_layer_graph}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_layer_graph}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_layer_histogram}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_layer_histogram}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_layer_scatterplot}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_layer_scatterplot}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_pairs}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_pairs}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_serialaxes}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_serialaxes}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 
-\method{loon2ggplot}{l_ts}(target, asAes = TRUE, ...)
+\method{loon2ggplot}{l_ts}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
 }
 \arguments{
 \item{target}{a \code{loon} or a vector that specifies the
@@ -52,6 +52,9 @@ the remaining objects by their ids.}
 variables (default \code{TRUE}) or general visual properties (\code{FALSE}).
 See details}
 
+\item{selectedOnTop}{logical and default is \code{TRUE}; whether to display the
+selected points on top. See details.}
+
 \item{...}{arguments used inside \code{loon2ggplot()}, not used by this method}
 }
 \value{
@@ -62,10 +65,20 @@ Create a \code{ggplot} object from a \code{loon} widget
 }
 \details{
 in \code{ggplot}, generally speaking, there are two ways to set the
-aesthetics attributes, either take it as variables
-(set in function \code{aes()}) or visual properties. The main benefits to
-consider it as variables are that 1. legend could be shown; 2. convenient for
-further analysis. See examples.
+aesthetics attributes, either take it as variables \code{asAes = TRUE}
+(set in function \code{aes()}) or visual properties \code{asAes = FALSE}.
+The main benefits to consider it as variables are that 1. legend could be shown;
+2. convenient for further analysis.
+
+In \code{loon}, if the \code{selected} state is changed, the order of the points will be changed so that
+the highlighted points will be displayed on top. To turn it static, if \code{selectedOnTop = TRUE},
+the points will be partitioned into two
+groups, one group presents the un-selected (un-highlighted) points and
+the other group presents selected (highlighted) points.
+the un-selected group will be drawn first, then selected group will be displayed on top of it;
+if \code{selectedOnTop = FALSE}, no partition is applied so that the displayed order will be identical to
+the original data set order. This is very helpful when further analysis will be operated in ggplot
+graphical system, e.g. \code{+ facet_wrap(...)}. See examples.
 }
 \examples{
 if(interactive()) {
@@ -97,12 +110,28 @@ gh0 + facet_wrap(~fill)
 gh1 <- loon2ggplot(lh, asAes = FALSE)
 # Expect the legend, they both are identical
 gh1
-
 \dontrun{
 # ERROR
 # The bins are constructed by `ggplot2::geom_rect()`
-# Very limited "fancy" operations can be made
-gh1 + facet_wrap(~fill)}
+# Very limited operations can be made
+gh1 + facet_wrap(~fill)
 }
 
+# Argument `selectedOnTop`
+p <- l_plot(iris, color = iris$Species)
+p['selected'][iris$Petal.Length > 5] <- TRUE
+g <- loon.ggplot(p)
+# It looks correct.
+g
+# facet by "Species"
+\dontrun{
+g + facet_wrap(iris$Species)}
+# Something is wrong here. There is a pink point (at least one)
+# in species "versicolor"! The reason is because after points are
+# hightligthed, the displayed order has been changed. One way to
+# fix it is to set the `selectedOnTop` as FALSE.
+
+loon.ggplot(p, selectedOnTop = FALSE) +
+  facet_wrap(iris$Species)
+}
 }
