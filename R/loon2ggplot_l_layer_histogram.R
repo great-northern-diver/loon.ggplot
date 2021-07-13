@@ -34,10 +34,8 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
         labels = values)
 
     uniFill <- unique(fill[!is.na(fill)])
-
-    if(length(uniFill) <= 1) {
+    if(length(uniFill) <= 1)
       ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)
-    }
 
   } else {
 
