@@ -81,7 +81,8 @@ wrap_paris_plots <- function(ggplots,
                              layout_matrix,
                              nrow = NULL,
                              ncol = NULL,
-                             texts = NULL) {
+                             texts = NULL,
+                             default_text_size = 3) {
 
   stopifnot(
     exprs = {
@@ -91,7 +92,7 @@ wrap_paris_plots <- function(ggplots,
     }
   )
 
-  default_text_size <- 3
+
   if(is.na(layout_matrix[1,ncol])) {
     showHistOnEdge <- TRUE
     showHistOnDiag <- FALSE

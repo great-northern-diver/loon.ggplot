@@ -347,7 +347,6 @@ test_that("test static objects", {
   p <- ggplot(data = data.frame(x = c(1, 2), y = c(1, 2)),
               mapping = aes(x = x, y = y)) +
     geom_image_glyph(images = list(image, mat),
-                     units = "cm",
                      imagewidth = 1,
                      imageheight = 1)
   lp <- loon.ggplot(p, activeGeomLayers = 0L)

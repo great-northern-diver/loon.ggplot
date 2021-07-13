@@ -57,7 +57,6 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
             shape = p
           )
       }
-
     }
 
 
@@ -73,8 +72,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
       warning("More than one non-primitive glyphs are detected. ",
               "The selected points will be always on top. ",
               "The displayed order may be different from the original data set order.",
-              call. = FALSE)
-    }
+              call. = FALSE)}
 
     for(utypes in uniqueTypes) {
 
@@ -98,9 +96,8 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                # `showArea` is a length `n` logical value
                showArea <- gh['showArea'][aesthetic$index]
 
-               point_size <- as_ggplot_size(aesthetic$size,
-                                            margin = ggplot2::GeomPolygon$default_aes$size)
-               size[id] <- point_size
+               pointSize <- as_ggplot_size(aesthetic$size, type = "polygon") * size_adjust()
+               size[id] <- pointSize
 
                if(!selectedOnTop && lenUniqueTypes == 1) {
                  if(all(showArea) || all(!showArea)) {
@@ -119,7 +116,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                      data = data.frame(x = aesthetic$x[!showArea],
                                        y = aesthetic$y[!showArea],
                                        color = aesthetic$color[!showArea],
-                                       size = point_size[!showArea]),
+                                       size = pointSize[!showArea]),
                      mapping = ggplot2::aes(x = x,
                                             y = y,
                                             color = color,
@@ -137,11 +134,12 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                      data = data.frame(x = aesthetic$x[showArea],
                                        y = aesthetic$y[showArea],
                                        fill = aesthetic$color[showArea],
-                                       size = point_size[showArea]),
+                                       size = pointSize[showArea]),
                      mapping = ggplot2::aes(x = x,
                                             y = y,
                                             fill = fill,
                                             size = size),
+                     colour = NA,
                      linewidth = gh['linewidth'][aesthetic$index][showArea],
                      polygon_x = gh['x'][aesthetic$index][showArea],
                      polygon_y = lapply(gh['y'][aesthetic$index], function(y) -y)[showArea]
@@ -153,9 +151,21 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
                # loon data will be converted into character by default
 
-               point_size <- as_ggplot_size(aesthetic$size,
-                                            margin = ggplot2::GeomLine$default_aes$size)
-               size[id] <- point_size
+               # make the scaling operation is applied on the whole data set
+               # rather the subset of it
+               serialaxes.data <- get_scaledData(char2num.data.frame(gh['data']),
+                                                 scaling = gh['scaling'],
+                                                 as.data.frame = TRUE)[aesthetic$index, ]
+
+               sequence <- gh['sequence']
+               axesLayout <- gh['axesLayout']
+               lenSeq <- length(sequence)
+               if(lenSeq == 0) lenSeq <- ncol(serialaxes.data)
+
+               pointSize <- as_ggplot_size(aesthetic$size,
+                                           type = axesLayout,
+                                           p = lenSeq)
+               size[id] <- pointSize
 
                # `showArea` is a length `1` logical value
                showArea <- gh['showArea']
@@ -164,7 +174,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                  dat <- data.frame(x = aesthetic$x,
                                    y = aesthetic$y,
                                    fill = aesthetic$color,
-                                   size = point_size)
+                                   size = pointSize)
                  mapping <- ggplot2::aes(x = x, y = y,
                                          fill = fill,
                                          size = size)
@@ -173,28 +183,22 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                  dat <- data.frame(x = aesthetic$x,
                                    y = aesthetic$y,
                                    color = aesthetic$color,
-                                   size = point_size)
+                                   size = pointSize)
 
                  mapping <- ggplot2::aes(x = x, y = y,
                                          color = color,
                                          size = size)
                }
 
-               # make the scaling operation is applied on the whole data set
-               # rather the subset of it
-               serialaxes.data <- get_scaledData(char2num.data.frame(gh['data']),
-                                                 scaling = gh['scaling'],
-                                                 as.data.frame = TRUE)[aesthetic$index, ]
-
                ggObj <- ggObj +
                  ggmulti::geom_serialaxes_glyph(
                    data = dat,
                    mapping = mapping,
                    serialaxes.data = serialaxes.data,
-                   axes.sequence = gh['sequence'],
+                   axes.sequence = sequence,
                    scaling = "none",
                    andrews = gh['andrews'],
-                   axes.layout = gh['axesLayout'],
+                   axes.layout = axesLayout,
                    show.axes = gh['showAxes'],
                    linewidth = gh['linewidth'][aesthetic$index],
                    show.enclosing = gh['showEnclosing'],
@@ -206,7 +210,8 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
                label <- gh["text"][aesthetic$index]
 
-               text_size <- as_ggplot_size(aesthetic$size)
+               text_size <- as_ggplot_size(aesthetic$size,
+                                           type = "texts")
                # update size by text adjustment
                size[id] <- text_size
 
@@ -226,13 +231,13 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
              "primitive_glyph" = {
 
                point_pch <- glyph_to_pch(aesthetic$glyph)
-               bounded_id <- point_pch %in% 21:24
+               pointsWithBoundary <- point_pch %in% 21:24
 
                xx <- aesthetic$x
                yy <- aesthetic$y
 
-               point_size <- as_ggplot_size(aesthetic$size)
-               size[id] <- point_size
+               pointSize <- as_ggplot_size(aesthetic$size)
+               size[id] <- pointSize
 
                if(!selectedOnTop && lenUniqueTypes == 1) {
 
@@ -240,7 +245,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                    ggplot2::geom_point(
                      data = data.frame(x = xx,
                                        y = yy,
-                                       size = point_size,
+                                       size = pointSize,
                                        color = aesthetic$color,
                                        fill = aesthetic$color),
                      mapping = ggplot2::aes(x = x,
@@ -253,18 +258,18 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
 
                } else {
 
-                 if(sum(bounded_id, na.rm = TRUE) > 0) {
+                 if(sum(pointsWithBoundary, na.rm = TRUE) > 0) {
 
-                   for(p in unique(point_pch[bounded_id])) {
+                   for(p in unique(point_pch[pointsWithBoundary])) {
 
-                     pid <- point_pch[bounded_id] == p
+                     pid <- point_pch[pointsWithBoundary] == p
 
                      ggObj <- ggObj +
                        ggplot2::geom_point(
-                         data = data.frame(x = xx[bounded_id][pid],
-                                           y = yy[bounded_id][pid],
-                                           size = point_size[bounded_id][pid],
-                                           fill = aesthetic$color[bounded_id][pid]),
+                         data = data.frame(x = xx[pointsWithBoundary][pid],
+                                           y = yy[pointsWithBoundary][pid],
+                                           size = pointSize[pointsWithBoundary][pid],
+                                           fill = aesthetic$color[pointsWithBoundary][pid]),
                          mapping = ggplot2::aes(x = x,
                                                 y = y,
                                                 size = size,
@@ -274,19 +279,19 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                    }
                  }
 
-                 if(sum(!bounded_id, na.rm = TRUE) > 0) {
+                 if(sum(!pointsWithBoundary, na.rm = TRUE) > 0) {
 
                    ggObj <- ggObj +
                      ggplot2::geom_point(
-                       data = data.frame(x = xx[!bounded_id],
-                                         y = yy[!bounded_id],
-                                         color = aesthetic$color[!bounded_id],
-                                         size = point_size[!bounded_id]),
+                       data = data.frame(x = xx[!pointsWithBoundary],
+                                         y = yy[!pointsWithBoundary],
+                                         color = aesthetic$color[!pointsWithBoundary],
+                                         size = pointSize[!pointsWithBoundary]),
                        mapping = ggplot2::aes(x = x,
                                               y = y,
                                               color = color,
                                               size = size),
-                       shape = point_pch[!bounded_id]
+                       shape = point_pch[!pointsWithBoundary]
                      )
                  }
 
@@ -296,11 +301,10 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
              "pointrange" = {
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
                # showArea
-               point_pch <- ifelse(gh["showArea"], 1, 16)
+               point_pch <- ifelse(gh["showArea"], 1, 19)
 
-               point_size <- as_ggplot_size(aesthetic$size,
-                                            margin = ggplot2::GeomPointrange$default_aes$size)
-               size[id] <- point_size
+               pointSize <- as_ggplot_size(aesthetic$size)
+               size[id] <- pointSize
 
                ggObj <- ggObj +
                  ggplot2::geom_pointrange(
@@ -309,7 +313,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                                      ymin = gh["ymin"][aesthetic$index],
                                      ymax = gh["ymax"][aesthetic$index],
                                      color = aesthetic$color,
-                                     size = point_size),
+                                     size = pointSize),
                    mapping = ggplot2::aes(x = x, y = y,
                                           color = color,
                                           size = size,
@@ -322,119 +326,102 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
                tcl_img <- gh['images'][aesthetic$index]
 
-               point_size <- as_ggplot_size(aesthetic$size,
-                                            ggplot2::GeomRect$default_aes$size)
-               size[id] <- point_size
-
-               width_p <- height_p <- c()
-
+               ratio <- c()
                images <- lapply(seq(length(tcl_img)),
                                 function(i) {
 
                                   height <- as.numeric(tcltk::tcl("image", "height", tcl_img[i]))
                                   width <- as.numeric(tcltk::tcl("image", "width", tcl_img[i]))
 
-                                  area <- as.numeric(tcltk::tcl("::loon::map_image_size", point_size[i]))
+                                  r <- height/width
+                                  ratio[i] <<- r
 
-                                  scale <- sqrt(area/(width*height))
-
-                                  image_w <- floor(scale*width)
-                                  image_h <- floor(scale*height)
-
-                                  width_p[i] <<- image_w
-                                  height_p[i] <<- image_h
-
-                                  scaled_img <- as.character(tcltk::tkimage.create("photo"))
+                                  img <- as.character(tcltk::tkimage.create("photo"))
                                   tcltk::tcl(tcltk::tcl("set", "::loon::Options(image_scale)"),
-                                             tcl_img[i],
-                                             image_w,
-                                             image_h,
-                                             scaled_img)
-                                  # get the scaled_image
-                                  image <- tcl_img_2_r_raster(scaled_img)
-                                  tcl("image", "delete", scaled_img)
+                                             tcl_img[i], round(width),
+                                             round(height), img)
+                                  # get the image
+                                  image <- loon::tcl_img_2_r_raster(img)
+                                  tcl("image", "delete", img)
                                   image
                                 })
+
+               height <- as_ggplot_size(aesthetic$size,
+                                        type = "image",
+                                        ratio = ratio)
+               width <- height/ratio
+               # THIS IS A HACK!
+               imageSize <- size_adjust()
+               size[id] <- imageSize
 
                ggObj <- ggObj +
                  ggmulti::geom_image_glyph(
                    data = data.frame(x = aesthetic$x,
                                      y = aesthetic$y,
-                                     size = point_size,
                                      fill = aesthetic$color),
                    mapping = ggplot2::aes(x = x,
                                           y = y,
-                                          size = size,
                                           fill = fill),
+                   size = imageSize,
                    color = aesthetic$color,
                    images = images,
-                   imagewidth = adjust_image_size(width_p),
-                   imageheight = adjust_image_size(height_p)
+                   imagewidth = width,
+                   imageheight = height
                  )
              }
       )
     }
   }
 
-  uni_color <- unique(color[!is.na(color)])
-  if(length(uni_color) > 0) {
+  uniColor <- unique(color[!is.na(color)])
+  if(length(uniColor) > 0) {
 
     ggObj <- ggObj +
-      ggplot2::scale_color_manual(values = uni_color,
-                                  labels = selection_color_labels(
-                                    uni_color
-                                  ),
-                                  breaks = uni_color) +
-      ggplot2::scale_fill_manual(values = uni_color,
-                                 labels = selection_color_labels(
-                                   uni_color
-                                 ),
-                                 breaks = uni_color)
+      ggplot2::scale_color_manual(values = uniColor,
+                                  labels = uniColor,
+                                  breaks = uniColor) +
+      ggplot2::scale_fill_manual(values = uniColor,
+                                 labels = uniColor,
+                                 breaks = uniColor)
   }
 
-  if(length(uni_color) <= 1) {
+  # Discussion: should the legend of color and fill be omitted, if
+  # the number of unique color/fill is 1?
+  if(length(uniColor) <= 1)
     ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)
-  }
 
-  uni_size <- unique(size[!is.na(size)])
-  if(length(uni_size) > 0) {
+  uniSize <- unique(size[!is.na(size)])
+  if(length(uniSize) > 0)
     ggObj <- ggObj +
       ggplot2::scale_size_identity(guide = "legend")
-  }
 
-  if(length(uni_size) <= 1)
+  if(length(uniSize) <= 1)
     ggObj <- ggObj + ggplot2::guides(size = FALSE)
 
   return(ggObj)
 }
 
 scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
-                                  glyph, color, size, index, selectedOnTop = TRUE) {
+                                  glyph, color, size, index,
+                                  selectedOnTop = TRUE) {
 
   pch <- glyph_to_pch(glyph)
 
-  if (!any(is.na(pch)) && !any(pch %in% 21:24)) {
+  if (!any(is.na(pch))) {
 
-    size <- as_ggplot_size(size)
+    # points with boundary
+    pointsWithBoundary <- pch %in% 21:24
+
+    fill <- rep(NA, length(color))
+    fill[pointsWithBoundary] <- color[pointsWithBoundary]
+    color[pointsWithBoundary] <- loon::l_getOption("foreground")
 
     # No NAs and no points with borders
     ggObj <- ggObj +
       ggplot2::geom_point(
-        color = color,
-        shape = pch,
-        size = size
-      )
-
-  } else if (!any(is.na(pch)) && all(pch %in% 21:24)) {
-
-    size <- as_ggplot_size(size)
-
-    # No NAs and ALL points with borders
-    ggObj <- ggObj +
-      ggplot2::geom_point(
-        fill = color,
-        size = size,
-        color = loon::l_getOption("foreground"),
+        fill = fill,
+        size = as_ggplot_size(size),
+        colour = color,
         shape = pch
       )
 
@@ -483,10 +470,12 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                                         y = aesthetic$y)
                            },
                            fill = ifelse(gh['showArea'][aesthetic$index],
-                                         aesthetic$color, NA),
-                           color = aesthetic$color,
-                           size = as_ggplot_size(aesthetic$size,
-                                                 margin = ggplot2::GeomPolygon$default_aes$size),
+                                         aesthetic$color,
+                                         NA),
+                           color = ifelse(gh['showArea'][aesthetic$index],
+                                          loon::l_getOption("foreground"),
+                                          aesthetic$color),
+                           size = as_ggplot_size(aesthetic$size, type = "polygon") * size_adjust(),
                            polygon_x = gh['x'][aesthetic$index],
                            polygon_y = lapply(gh['y'][aesthetic$index], function(y) -y),
                            linewidth = gh['linewidth'][aesthetic$index]
@@ -500,6 +489,11 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                serialaxes.data <- get_scaledData(char2num.data.frame(gh['data']),
                                                  scaling = gh['scaling'],
                                                  as.data.frame = TRUE)[aesthetic$index, ]
+               sequence <- gh['sequence']
+               axesLayout <- gh['axesLayout']
+               lenSeq <- length(sequence)
+               if(lenSeq == 0) lenSeq <- ncol(serialaxes.data)
+
                ggObj <- ggObj +
                  do.call(
                    ggmulti::geom_serialaxes_glyph,
@@ -514,12 +508,13 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                      fill = ifelse(gh['showArea'][aesthetic$index], aesthetic$color, NA),
                      color = aesthetic$color,
                      size = as_ggplot_size(aesthetic$size,
-                                           margin = ggplot2::GeomLine$default_aes$size),
+                                           type = axesLayout,
+                                           p = lenSeq),
                      serialaxes.data = serialaxes.data,
-                     axes.sequence = gh['sequence'],
+                     axes.sequence = sequence,
                      scaling = "none",
                      andrews = gh['andrews'],
-                     axes.layout = gh['axesLayout'],
+                     axes.layout = axesLayout,
                      show.axes = gh['showAxes'],
                      show.enclosing = gh['showEnclosing'],
                      axescolour = as_hex6color(gh['axesColor']),
@@ -546,7 +541,8 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                      },
                      mapping = ggplot2::aes(label = label),
                      color = aesthetic$color,
-                     size = as_ggplot_size(aesthetic$size)
+                     size = as_ggplot_size(aesthetic$size,
+                                           type = "texts")
                    )
                  )
 
@@ -554,50 +550,50 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
              "primitive_glyph" = {
 
                pch <- glyph_to_pch(aesthetic$glyph)
-               bounded_id <- pch %in% 21:24
+               pointsWithBoundary <- pch %in% 21:24
 
                xx <- aesthetic$x
                yy <- aesthetic$y
 
-               if(!selectedOnTop && lenUniqueTypes == 1) {
+               fill <- rep(NA, length(aesthetic$color))
+               colour <- aesthetic$color
 
-                 ggObj <- ggObj +
-                   ggplot2::geom_point(
-                     data = data.frame(x = xx,
-                                       y = yy),
-                     fill = aesthetic$color,
-                     pch = pch,
-                     size = as_ggplot_size(aesthetic$size),
-                     colour = aesthetic$color
-                   )
+               fill[pointsWithBoundary] <- colour[pointsWithBoundary]
+               colour[pointsWithBoundary] <- loon::l_getOption("foreground")
 
-               } else {
-
-                 if(sum(bounded_id, na.rm = TRUE) != 0) {
-
-                   ggObj <- ggObj +
-                     ggplot2::geom_point(
-                       data = data.frame(x = xx[bounded_id],
-                                         y = yy[bounded_id]),
-                       fill = aesthetic$color[bounded_id],
-                       pch = pch[bounded_id],
-                       size = as_ggplot_size(aesthetic$size[bounded_id]),
-                       colour = loon::l_getOption("foreground")
-                     )
-                 }
-
-                 if(sum(!bounded_id, na.rm = TRUE) != 0) {
-
-                   ggObj <- ggObj +
-                     ggplot2::geom_point(
-                       data = data.frame(x = xx[!bounded_id],
-                                         y = yy[!bounded_id]),
-                       color = aesthetic$color[!bounded_id],
-                       pch = pch[!bounded_id],
-                       size = as_ggplot_size(aesthetic$size[!bounded_id])
-                     )
-                 }
-               }
+               ggObj <- ggObj +
+                 ggplot2::geom_point(
+                   data = data.frame(x = xx,
+                                     y = yy),
+                   fill = fill,
+                   pch = pch,
+                   size = as_ggplot_size(aesthetic$size),
+                   colour = colour
+                 )
+                 # if(sum(pointsWithBoundary, na.rm = TRUE) != 0) {
+                 #
+                 #   ggObj <- ggObj +
+                 #     ggplot2::geom_point(
+                 #       data = data.frame(x = xx[pointsWithBoundary],
+                 #                         y = yy[pointsWithBoundary]),
+                 #       fill = aesthetic$color[pointsWithBoundary],
+                 #       pch = pch[pointsWithBoundary],
+                 #       size = as_ggplot_size(aesthetic$size[pointsWithBoundary]),
+                 #       colour = loon::l_getOption("foreground")
+                 #     )
+                 # }
+                 #
+                 # if(sum(!pointsWithBoundary, na.rm = TRUE) != 0) {
+                 #
+                 #   ggObj <- ggObj +
+                 #     ggplot2::geom_point(
+                 #       data = data.frame(x = xx[!pointsWithBoundary],
+                 #                         y = yy[!pointsWithBoundary]),
+                 #       color = aesthetic$color[!pointsWithBoundary],
+                 #       pch = pch[!pointsWithBoundary],
+                 #       size = as_ggplot_size(aesthetic$size[!pointsWithBoundary])
+                 #     )
+                 # }
              },
              "pointrange" = {
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
@@ -622,45 +618,41 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                      mapping = ggplot2::aes(ymin = ymin, ymax = ymax),
                      color = aesthetic$color,
                      pch = pch,
-                     size = as_ggplot_size(aesthetic$size,
-                                           margin = ggplot2::GeomPointrange$default_aes$size)
+                     size = as_ggplot_size(aesthetic$size)
                    )
                  )
              },
              "image" = {
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
                tcl_img <- gh['images'][aesthetic$index]
-               image_size <- as_ggplot_size(aesthetic$size,
-                                            ggplot2::GeomRect$default_aes$size)
-               width_p <- height_p <- c()
 
+               ratio <- c()
                images <- lapply(seq(length(tcl_img)),
                                 function(i) {
 
                                   height <- as.numeric(tcltk::tcl("image", "height", tcl_img[i]))
                                   width <- as.numeric(tcltk::tcl("image", "width", tcl_img[i]))
 
-                                  area <- as.numeric(tcltk::tcl("::loon::map_image_size", image_size[i]))
+                                  r <- height/width
+                                  ratio[i] <<- r
 
-                                  scale <- sqrt(area/(width*height))
-
-                                  image_w <- floor(scale*width)
-                                  image_h <- floor(scale*height)
-
-                                  width_p[i] <<- image_w
-                                  height_p[i] <<- image_h
-
-                                  scaled_img <- as.character(tcltk::tkimage.create("photo"))
+                                  img <- as.character(tcltk::tkimage.create("photo"))
                                   tcltk::tcl(tcltk::tcl("set", "::loon::Options(image_scale)"),
-                                             tcl_img[i],
-                                             image_w,
-                                             image_h,
-                                             scaled_img)
-                                  # get the scaled_image
-                                  image <- tcl_img_2_r_raster(scaled_img)
-                                  tcl("image", "delete", scaled_img)
+                                             tcl_img[i], round(width),
+                                             round(height), img)
+                                  # get the image
+                                  image <- loon::tcl_img_2_r_raster(img)
+                                  tcl("image", "delete", img)
                                   image
                                 })
+
+
+               height <- as_ggplot_size(aesthetic$size,
+                                        type = "image",
+                                        ratio = ratio)
+               width <- height/ratio
+               # THIS IS A HACK!
+               imageSize <- size_adjust()
 
                ggObj <- ggObj +
                  do.call(
@@ -674,10 +666,10 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                      },
                      fill = aesthetic$color,
                      color = aesthetic$color,
-                     size = image_size,
+                     size = imageSize,
                      images = images,
-                     imagewidth = adjust_image_size(width_p),
-                     imageheight = adjust_image_size(height_p)
+                     imagewidth = width,
+                     imageheight = height
                    )
                  )
              }

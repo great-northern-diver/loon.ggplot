@@ -3,9 +3,8 @@
 loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
 
   widget <- target
-  remove(target)
-  data <- char2num.data.frame(widget['data'])
-  colNames <- colnames(data)
+  serialaxes.data <- char2num.data.frame(widget['data'])
+  colNames <- colnames(serialaxes.data)
 
   # active or not
   displayOrder <- if(selectedOnTop) {
@@ -14,7 +13,28 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
     seq(widget['n'])
   }
 
-  active <- widget['active'][displayOrder]
+  # We do not call `get_layer_states(widget, native_unit = FALSE)`
+  # Because, `loon::l_nDimStateNames` will return all n dimensional states,
+  # but the `get_layer_states` only return the n dimensional aesthetics attributes
+  # e.g, `itemLabels` will not be returned.
+  # `data` is used in `ggplot()`
+
+  # N dim names
+  ndimNames <- loon::l_nDimStateNames(widget)
+  data <- as.data.frame(
+    remove_null(
+      stats::setNames(
+        lapply(ndimNames,
+               function(s) {
+                 state <- widget[s]
+                 if(length(state) == 0) return(NULL)
+                 state
+               }),
+        ndimNames
+      ), as_list = FALSE)
+  )
+
+  active <- data$active[displayOrder]
   active_displayOrder <- displayOrder[active]
 
   if(widget['showArea']) {
@@ -35,14 +55,15 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
     color <- l_colorName(
       get_display_color(
-        as_hex6color(widget['color'][active_displayOrder]),
-        widget['selected'][active_displayOrder]
+        data$color[active_displayOrder],
+        data$selected[active_displayOrder]
       ), error = FALSE
     )
-    size <- as_r_line_size(widget['linewidth'][active_displayOrder])
+    size <- as_ggplot_size(data$linewidth[active_displayOrder], "lines")
 
-    ggObj <- ggplot2::ggplot(data[active_displayOrder, ]) +
+    ggObj <- ggplot2::ggplot(data = data) +
       ggmulti::geom_serialaxes(
+        data = serialaxes.data[active_displayOrder, ],
         mapping = ggplot2::aes(
           color = color,
           size = size
@@ -58,34 +79,31 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
       ggObj <- ggObj +
         ggplot2::scale_color_manual(values = uni_color,
-                                    labels = selection_color_labels(
-                                      uni_color
-                                    ),
+                                    labels = uni_color,
                                     breaks = uni_color)
     }
 
-    if(length(uni_color) <= 1) {
+    if(length(uni_color) <= 1)
       ggObj <- ggObj + ggplot2::guides(color = FALSE)
-    }
 
     uni_size <- unique(size)
-    if(length(uni_size) > 0) {
+    if(length(uni_size) > 0)
       ggObj <- ggObj +
         ggplot2::scale_size(range = range(size[!is.na(size)]))
-    }
 
     if(length(uni_size) <= 1)
       ggObj <- ggObj + ggplot2::guides(size = FALSE)
 
   } else {
 
-    ggObj <- ggplot2::ggplot(data[active_displayOrder, ]) +
+    ggObj <- ggplot2::ggplot(data = data) +
       ggmulti::geom_serialaxes(
+        data = serialaxes.data[active_displayOrder, ],
         color = get_display_color(
-          as_hex6color(widget['color'][active_displayOrder]),
-          widget['selected'][active_displayOrder]
+          loon::as_hex6color(data$color[active_displayOrder]),
+          data$selected[active_displayOrder]
         ),
-        size = as_r_line_size(widget['linewidth'][active_displayOrder]),
+        size = as_ggplot_size(data$linewidth[active_displayOrder], "lines"),
         stat = stat,
         scaling = widget['scaling'],
         axes.sequence = axes.sequence

@@ -5,9 +5,10 @@ pch_to_glyph <- function(pch, alpha = NULL) {
 
   switchPch <- function(pch) {
 
+
     switch(
       as.character(pch),
-      "19" = "circle",
+      "19" = "circle" ,
       "1" = "ocircle",
       "21" = "ccircle",
       "15" = "square",
@@ -54,27 +55,4 @@ pch_to_glyph <- function(pch, alpha = NULL) {
              }
            }
          }, character(1))
-}
-
-glyph_to_pch <- function(glyph) {
-
-  vapply(glyph, function(x) {
-    switch(
-      x,
-      circle = 19,
-      ocircle = 1,
-      ccircle = 21,
-      square = 15,
-      osquare = 0,
-      csquare = 22,
-      triangle = 17,
-      otriangle = 2,
-      ctriangle = 24,
-      diamond = 18,
-      odiamond = 5,
-      cdiamond = 23,
-      NA_integer_ # default
-    )
-  }, numeric(1))
-
 }

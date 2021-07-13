@@ -36,7 +36,8 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping
                                                        }
                                                      })
                                      glyph <- pch_to_glyph(data$shape, data$alpha)
-                                     size <- as_loon_size(data$size , "points")
+                                     size <- as_loon_size(data$size , "points",
+                                                          stroke = data$stroke)
                                    } else {
                                      activeLayer_linkingKey <- NULL
                                      activeLayer_itemLabel <- NULL

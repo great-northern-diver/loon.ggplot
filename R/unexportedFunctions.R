@@ -2,7 +2,6 @@
 # Since `Unexported objects imported by ':::' calls` will cause a NOTE in R CMD check
 
 # All these functions are exported in loon 1.3.7
-glyph_to_pch <- utils::getFromNamespace("glyph_to_pch", "loon")
 get_display_color <- utils::getFromNamespace("get_display_color", "loon")
 as_hex6color <- utils::getFromNamespace("as_hex6color", "loon")
 get_font_info_from_tk <- utils::getFromNamespace("get_font_info_from_tk", "loon")
@@ -89,6 +88,8 @@ set_sec_axis <- function(sec.axis, scale) {
   scale$secondary.axis <- sec.axis
   return(scale)
 }
+
+new_aes <- getFromNamespace("new_aes", "ggplot2")
 
 # It is learned from the function `get_gridAesthetic` in package `ggmulti`
 # The difference is that for `get_gridAesthetic`, the output coordinate is
