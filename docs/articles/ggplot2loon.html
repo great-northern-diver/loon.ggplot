@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
       </span>
     </div>
 
@@ -61,22 +61,22 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/extraCode.html">Untitled</a>
-    </li>
-    <li>
-      <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/ggplot2loon.html">ggplots --&gt; loon plots</a>
     </li>
     <li>
       <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/linking.html">Linking</a>
+      <a href="../articles/linking.html">Linking and missing data</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/loon2ggplot.html">loon plots --&gt; ggplots</a>
     </li>
     <li>
       <a href="../articles/pipes.html">Pipes</a>
+    </li>
+    <li>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
 </li>
@@ -101,16 +101,16 @@
 
       
 
-      </header><script src="ggplots2loon_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="ggplot2loon_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ggplots –&gt; loon plots</h1>
                         <h4 class="author">Wayne Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2021-06-30</h4>
+            <h4 class="date">2021-07-13</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/ggplots2loon.Rmd"><code>vignettes/ggplots2loon.Rmd</code></a></small>
-      <div class="hidden name"><code>ggplots2loon.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/ggplot2loon.Rmd"><code>vignettes/ggplot2loon.Rmd</code></a></small>
+      <div class="hidden name"><code>ggplot2loon.Rmd</code></div>
 
     </div>
 
@@ -132,14 +132,14 @@
 <p>and displayed by printing the <code>"ggplot"</code> data structure <code>p1</code> as</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> </code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/mpg_vs_wt_ggplot_display-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ggplot2loon_files/figure-html/mpg_vs_wt_ggplot_display-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>We might also display a histogram of some other variate, say the engine’s horsepower <code>hp</code>. In <code>ggplot2</code> this would be constructed as</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></code></pre></div>
 <p>and displayed as</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">h1</span></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/hp_ggplot_display-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ggplot2loon_files/figure-html/hp_ggplot_display-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
 <div id="transformation-ggplot2loon-and-grid-loon-or-plot-loon" class="section level3">
 <h3 class="hasAnchor">
@@ -176,6 +176,7 @@
 <p>Now select the other plot <code>l_h1</code> or <code>l_p1</code>. On the loon inspector for this plot, you can again enter “mtcars” as this plot’s linking group (this can be done as before or selected from the menu accessible from the down arrow next to the linking group. As soon as the second plot is linked, the user is prompted to choose how to synchronize the linked features of the new plot to the previous plot. The choice is between <em>pushing</em> the display features from the current plot to the rest of the plots in the group and <em>pulling</em> the display features from the group to change those of the current plot. The resulting linking group entry should now show <code>mtcars [2 linked]</code>.</p>
 <p>Once the both plots are in the same linking group (i.e. “mtcars”), selections in one plot will be reflected in the other. Try this. To see colour changes in the histogram, the box <code>stacked colors</code> must be checked.</p>
 <p>Linking is one way to condition on the values in one plot and observe their effect in the others. Try this with “brushing” in either plot.</p>
+<p>See the vignette <code>Linking</code> for more.</p>
 </div>
 </div>
 <div id="interaction---programmatic" class="section level3">
@@ -276,7 +277,7 @@
 <p>which looks like</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p2</span></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/ggplot_p2-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ggplot2loon_files/figure-html/ggplot_p2-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>The corresponding loon plot can be linked immediately when it is created</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p2</span>, 
@@ -334,7 +335,7 @@ The points in the loon plot inherit their colours from the linking group “Moto
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p_fit</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">drat</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span>
 <span class="va">p_fit</span></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/mtcars_smooth-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ggplot2loon_files/figure-html/mtcars_smooth-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>The <strong>corresponding interactive</strong> loon plot is</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_p_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p_fit</span><span class="op">)</span></code></pre></div>
@@ -369,7 +370,7 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
              color <span class="op">=</span> <span class="st">"firebrick"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="co"># the ggplot</span>
 <span class="va">p_hdp</span></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/multiple_geoms-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ggplot2loon_files/figure-html/multiple_geoms-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>To render this in loon, which layer will be interactive needs to be determined. By default, this will be the first layer appearing in the construction of the ggplot – in this case the the histogram. The scatter of points will not be interactive and there are presently no interactive curves in a loon plot.</p>
 <div id="specifying-the-active-geom-layer" class="section level4">
 <h4 class="hasAnchor">
@@ -401,7 +402,7 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
   <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_point</span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>
 <span class="va">pgps</span></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/multiple_geom_points-1.png" width="50%" style="display: block; margin: auto;"></p>
+<p><img src="ggplot2loon_files/figure-html/multiple_geom_points-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>To create the interactive plot, any of the <code>geom_point</code> layers could contribute to the active scatterplot model layer.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_pgps.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span>
@@ -461,7 +462,7 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
   <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">am</span><span class="op">)</span> 
 <span class="va">fwrap</span></code></pre></div>
-<p><img src="ggplots2loon_files/figure-html/fwrap-1.png" width="70%" style="display: block; margin: auto;"> Faceted plots can also be rendered interactive in the same way as any other <code>ggplot</code> objects:</p>
+<p><img src="ggplot2loon_files/figure-html/fwrap-1.png" width="70%" style="display: block; margin: auto;"> Faceted plots can also be rendered interactive in the same way as any other <code>ggplot</code> objects:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_fwrap</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">fwrap</span>, linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span></code></pre></div>
 <p>which will look like <img src="images/ggplots2loon/l_fwrap.png" width="70%" style="display: block; margin: auto;"> Note that because we set the <code>linkingGroup</code> at the time of creation (and because the <code>linkingKey</code> is the the default in all plots in this group), the interactive faceted plot has pulled the colours from the other plots in the same <code>linkingGroup</code>.</p>
@@ -486,8 +487,10 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
 <h2 class="hasAnchor">
 <a href="#function-loon-ggplot" class="anchor"></a>Function <code>loon.ggplot()</code>
 </h2>
-<p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code> package is a <code>S3</code> method and gathers features of both <code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
-<p>Ggplot to loon: <code><a href="../reference/loon.ggplot.html">loon.ggplot(gg)</a></code> is equivalent to <code><a href="../reference/ggplot2loon.html">ggplot2loon(gg)</a></code>.</p>
+<p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code> package is an <code>S3</code> method and gathers features of both <code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or a <code>gg</code> object and transform back and forth.</p>
+<p>ggplot to loon: <code><a href="../reference/loon.ggplot.html">loon.ggplot(gg)</a></code> is equivalent to <code><a href="../reference/ggplot2loon.html">ggplot2loon(gg)</a></code>.</p>
+<hr>
+<p>See the vignette <code>A Grammar of Interactive Graphics</code> for more.</p>
 </div>
   </div>
 

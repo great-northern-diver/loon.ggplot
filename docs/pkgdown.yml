@@ -2,11 +2,11 @@ pandoc: 2.11.4
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
-  extraCode: extraCode.html
-  ggplots2loon: ggplots2loon.html
+  ggplot2loon: ggplot2loon.html
   grammarOfInteractiveGraphics: grammarOfInteractiveGraphics.html
   linking: linking.html
-  loon2ggplots: loon2ggplots.html
+  loon2ggplot: loon2ggplot.html
   pipes: pipes.html
-last_built: 2021-06-30T21:00Z
+  thereAndBackAgain: thereAndBackAgain.html
+last_built: 2021-07-13T18:42Z
 

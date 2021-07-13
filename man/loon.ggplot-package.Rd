@@ -4,11 +4,11 @@
 \name{loon.ggplot-package}
 \alias{loon.ggplot-package}
 \alias{_PACKAGE}
-\title{loon.ggplot: Making 'ggplot2' Plots Interactive with 'loon' and Vice Versa}
+\title{loon.ggplot: A Grammar of Interactive Graphics}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts who value the grammar pipeline provided by 'ggplot2' can turn these static plots into interactive 'loon' plots. Conversely, data analysts who explore data interactively with 'loon' can turn any 'loon' plot into a 'ggplot2' plot structure. The function 'loon.ggplot()' is applied to one plot structure will return the other.
+Provides a bridge between the 'loon' and  'ggplot2' packages.  Extends the grammar of ggplot to add clauses to create interactive `loon` plots. Existing ggplots can be turned into interactive 'loon' plots and 'loon' plots into static ggplots; the function 'loon.ggplot()' is the bridge from one plot structure to the other.
 }
 \seealso{
 Useful links:

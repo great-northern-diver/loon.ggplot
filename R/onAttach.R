@@ -1,7 +1,6 @@
 random_tip <- function() {
   tips <- c(
-    "Need help? Check https://great-northern-diver.github.io/loon.ggplot/ for more details",
-    "Welcome to 'great-northern-diver' community https://github.com/great-northern-diver"
+    "For more info: l_web(package = \"loon.ggplot\")"
   )
 
   sample(tips, 1)
