@@ -1,6 +1,6 @@
 ---
-title: "There and back again"
-subtitle: "Differences when transforming"
+title: "There And Back Again"
+subtitle: "Differences When Transforming"
 author: "R.W. Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
 output:
@@ -11,7 +11,7 @@ geometry: margin=.75in
 urlcolor: blue
 graphics: yes
 vignette: >
-  %\VignetteIndexEntry{There and back again}
+  %\VignetteIndexEntry{There And Back Again}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   

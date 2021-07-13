@@ -1,5 +1,5 @@
 ---
-title: "A Grammar of Interactive Graphics"
+title: "A Grammar Of Interactive Graphics"
 subtitle: "`loon.ggplot`"
 author: "R. W. Oldford and Zehao Xu"
 date: "`r Sys.Date()`"
@@ -11,7 +11,7 @@ geometry: margin=.75in
 urlcolor: blue
 graphics: yes
 vignette: >
-  %\VignetteIndexEntry{A Grammar of Interactive Graphics}
+  %\VignetteIndexEntry{A Grammar Of Interactive Graphics}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
   

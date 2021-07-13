@@ -5,7 +5,7 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/loon.ggplot)](https://cran.r-project.org/web/packages/loon.ggplot/index.html)
 [![](https://cranlogs.r-pkg.org/badges/loon.ggplot)](https://cran.r-project.org/package=loon.ggplot)
 
-An R package to turn ggplot graphic data structures into interactive loon plots
+An R package to turn ggplot graphic data structures into interactive loon plots.  Extends the grammar to add interactivity.
 
 
 Documentation: [https://great-northern-diver.github.io/loon.ggplot/](https://great-northern-diver.github.io/loon.ggplot/)
@@ -19,22 +19,53 @@ The `loon` graphics package provides **interactive** graphics especially valuabl
 
 The loon.ggplot package brings **both these packages together**. Data analysts who value the ease with which `ggplot2` can create meaningful graphics can now turn these `ggplot`s into interactive `loon` plots for more dynamic interaction with their data.  Conversely,  data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s.   The former is accomplished by the simple translation function **`ggplot2loon()`** and the latter by the simple translation function **`loon2ggplot()`**.
 
-## Install
+## An interactive grammar
 
-`loon.ggplot` can be achieved directly from github repo
+
+`loon.ggplot` extends the grammar of graphic to include interactive clauses:
+
+- `+ linking()`
+- `+ hover()`
+- `+ selection()`
+- `+ active()`
+- `+ zoom()`
+- `+ interactivity()`
+
+A `ggplot()` created with any of these clauses (in addition to the usual grammar) will `print()` as an interactive `loon` plot and `plot()` as a static ggplot.
+
+## Install from `R`
+
+Just as the `tidyverse` includes `ggplot2`, the package suite called `diveR` includes `loon.ggplot` and many more interactive visualization packages. 
+
+Installing `diveR` from CRAN will include installing `loon.ggplot`:
 
 ```
-remotes::install_github("https://github.com/great-northern-diver/loon.ggplot")
+install.packages("diveR")
 ```
 
-Launch R, then install the required package dependencies
+Alternatively, `loon.ggplot` (and its dependencies) may be installed directly
 
-```
-install.packages("ggplot2")
-install.packages("loon")
-```
+- from `CRAN`
 
-## Basic
+  ```
+  install.packages("loon.ggplot")
+  ```
+  
+  or
+  
+- from `github`
+
+  ```
+  remotes::install_github("https://github.com/great-northern-diver/loon.ggplot")
+  ```
+
+
+
+## Examples
+
+More detail is given in the vignettes, especially `"A Grammar Of Interactive Graphics"` and `"There And Back Again"`.  
+
+Below functions transforming from a ggplot to a loon plot, and from a loon plot to a ggplot, are demonstrated.
 
 ### `ggplot2loon()`: ggplot --> loon
 
