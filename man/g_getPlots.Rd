@@ -6,11 +6,26 @@
 \alias{g_getPlots.l_pairs}
 \title{get \code{ggplot}s}
 \usage{
-g_getPlots(target, asAes = TRUE, selectedOnTop = TRUE)
+g_getPlots(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE
+)
 
-\method{g_getPlots}{default}(target, asAes = TRUE, selectedOnTop = TRUE)
+\method{g_getPlots}{default}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE
+)
 
-\method{g_getPlots}{l_pairs}(target, asAes = TRUE, selectedOnTop = TRUE)
+\method{g_getPlots}{l_pairs}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE
+)
 }
 \arguments{
 \item{target}{the (compound) loon plot}
@@ -21,6 +36,12 @@ See details}
 
 \item{selectedOnTop}{logical and default is \code{TRUE}; whether to display the
 selected points on top. See details.}
+
+\item{showNearestColor}{logical and default is \code{FALSE}; if \code{TRUE},
+the legend of color and fill (hex code) would be converted to the \code{R} built-in
+color names. For some hex codes, there are no precise matching.
+Consequently, these colors will be converted to the \code{R} built-in color names
+which are the "nearest" of these hex codes.}
 }
 \value{
 a list of \code{ggplot}s.

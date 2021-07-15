@@ -1,8 +1,12 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
+loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                                     showNearestColor = FALSE, ...) {
 
   widget <- target
+  n <- widget['n']
+  if(n == 0) return(ggplot2::ggplot())
+
   serialaxes.data <- char2num.data.frame(widget['data'])
   colNames <- colnames(serialaxes.data)
 
@@ -10,7 +14,7 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   displayOrder <- if(selectedOnTop) {
     get_model_display_order(widget)
   } else {
-    seq(widget['n'])
+    seq(n)
   }
 
   # We do not call `get_layer_states(widget, native_unit = FALSE)`
@@ -57,7 +61,8 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
       get_display_color(
         data$color[active_displayOrder],
         data$selected[active_displayOrder]
-      ), error = FALSE
+      ), error = FALSE,
+      precise = !showNearestColor
     )
     size <- as_ggplot_size(data$linewidth[active_displayOrder], "lines")
 
