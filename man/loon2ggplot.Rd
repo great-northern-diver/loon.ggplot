@@ -18,29 +18,101 @@
 \alias{loon2ggplot.l_ts}
 \title{Turn a \code{loon} widget to a \code{ggplot} object}
 \usage{
-loon2ggplot(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+loon2ggplot(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{default}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{default}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_plot}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_plot}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_hist}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_hist}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_plot3D}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_plot3D}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_compound}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_compound}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_layer_graph}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_layer_graph}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_layer_histogram}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_layer_histogram}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_layer_scatterplot}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_layer_scatterplot}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_pairs}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_pairs}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_serialaxes}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_serialaxes}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 
-\method{loon2ggplot}{l_ts}(target, asAes = TRUE, selectedOnTop = TRUE, ...)
+\method{loon2ggplot}{l_ts}(
+  target,
+  asAes = TRUE,
+  selectedOnTop = TRUE,
+  showNearestColor = FALSE,
+  ...
+)
 }
 \arguments{
 \item{target}{a \code{loon} or a vector that specifies the
@@ -54,6 +126,12 @@ See details}
 
 \item{selectedOnTop}{logical and default is \code{TRUE}; whether to display the
 selected points on top. See details.}
+
+\item{showNearestColor}{logical and default is \code{FALSE}; if \code{TRUE},
+the legend of color and fill (hex code) would be converted to the \code{R} built-in
+color names. For some hex codes, there are no precise matching.
+Consequently, these colors will be converted to the \code{R} built-in color names
+which are the "nearest" of these hex codes.}
 
 \item{...}{arguments used inside \code{loon2ggplot()}, not used by this method}
 }

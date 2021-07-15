@@ -10,13 +10,15 @@
 #' @seealso \code{\link{l_getPlots}}, \code{\link{g_getLocations}}
 #'
 #' @export
-g_getPlots <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
+g_getPlots <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                       showNearestColor = FALSE) {
   UseMethod('g_getPlots', target)
 }
 
 #' @export
 #' @rdname g_getPlots
-g_getPlots.default <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
+g_getPlots.default <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                               showNearestColor = FALSE) {
 
   # locations
   locations <- g_getLocations(target)
@@ -29,7 +31,8 @@ g_getPlots.default <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
     lapply(seq(length(target)),
            function(i) {
              loon2ggplot(target[[i]], asAes = asAes,
-                         selectedOnTop = selectedOnTop)
+                         selectedOnTop = selectedOnTop,
+                         showNearestColor = showNearestColor)
            })
   )
 
@@ -51,7 +54,8 @@ g_getPlots.default <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
 
 #' @export
 #' @rdname g_getPlots
-g_getPlots.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
+g_getPlots.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                               showNearestColor = FALSE) {
 
   # locations
   locations <- g_getLocations(target)
@@ -61,10 +65,11 @@ g_getPlots.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE) {
 
   # plots
   ggplots <- suppressMessages(
-    lapply(1:length(target),
+    lapply(seq(length(target)),
            function(i) {
              loon2ggplot(target[[i]], asAes = asAes,
-                         selectedOnTop = selectedOnTop)
+                         selectedOnTop = selectedOnTop,
+                         showNearestColor = showNearestColor)
            })
   )
 

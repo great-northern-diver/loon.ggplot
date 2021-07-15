@@ -1,13 +1,17 @@
 #' @rdname loon2ggplot
 #' @export
 #'
-loon2ggplot.l_layer_graph <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
+loon2ggplot.l_layer_graph <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                                      showNearestColor = FALSE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
+  n <- widget['n']
+  if(n == 0) return(ggObj)
 
   states <- get_layer_states(widget, native_unit = FALSE)
-
+  states$color <- l_colorName(states$color, error = FALSE,
+                              precise = !showNearestColor)
   # no active nodes
   active <- states$active
   if(!any(active)) return(ggObj)

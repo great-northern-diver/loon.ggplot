@@ -1,11 +1,13 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
+loon2ggplot.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                                showNearestColor = FALSE, ...) {
 
   locations <- g_getLocations(target)
 
   gm <- GGally::ggmatrix(
-    plots = g_getPlots(target, asAes = asAes, selectedOnTop = selectedOnTop),
+    plots = g_getPlots(target, asAes = asAes, selectedOnTop = selectedOnTop,
+                       showNearestColor = showNearestColor),
     nrow = locations$nrow,
     ncol = locations$ncol,
     byrow = FALSE,

@@ -26,8 +26,9 @@ l_add_glyph.GeomPolygonGlyph <- function(widget, ggBuild, activeGeomLayer) {
                                  linewidth = glyph_data$linewidth,
                                  showArea = showArea)
   if(showArea) widget['color'] <- fill
-  widget['size'] <- as_loon_size(glyph_data$size/size_adjust(),
-                                 type = "polygon")
+  widget['size'] <- as_loon_size(glyph_data$size,
+                                 type = "polygon",
+                                 adjust = 1/0.6)
   widget['glyph'] <- g
 }
 
@@ -145,8 +146,9 @@ l_add_glyph.GeomImageGlyph <- function(widget, ggBuild, activeGeomLayer) {
            }
          })
   g <- loon::l_glyph_add_image(widget, imgs)
-  widget['size'] <- as_loon_size(glyph_data$imageheight * glyph_data$size/size_adjust(),
+  widget['size'] <- as_loon_size(glyph_data$imageheight * glyph_data$size,
                                  type = "images",
+                                 adjust = 1/0.6,
                                  ratio = glyph_data$imageheight/glyph_data$imagewidth)
   widget['glyph'] <- g
 }

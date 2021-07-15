@@ -1,13 +1,16 @@
 #' @rdname loon2ggplot
 #' @export
-loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
+loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                                          showNearestColor = FALSE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
   ggObj <- list(...)$ggObj
+  n <- widget['n']
+  if(n == 0) return(ggObj)
 
   if(asAes) {
 
-    data <- histogramAsAesTRUE(widget)
+    data <- histogramAsAesTRUE(widget, showNearestColor)
 
     fill <- data$fill
     color <- data$colour
@@ -71,7 +74,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
   return(ggObj)
 }
 
-histogramAsAesTRUE <- function(widget) {
+histogramAsAesTRUE <- function(widget, showNearestColor = FALSE) {
 
   colorOutline <- if(widget['showOutlines']) as_hex6color(widget["colorOutline"]) else NA
   states <- get_layer_states(widget, native_unit = FALSE)
@@ -111,8 +114,8 @@ histogramAsAesTRUE <- function(widget) {
   }
 
   # preserve the order
-  values <- l_colorName(values, error = FALSE)
-  activeColor <- l_colorName(activeColor, error = FALSE)
+  values <- l_colorName(values, error = FALSE, precise = !showNearestColor)
+  activeColor <- l_colorName(activeColor, error = FALSE, precise = !showNearestColor)
   activeColor <- factor(activeColor, levels = values)
 
   return(
