@@ -11,12 +11,12 @@ tcl_img_2_r_raster <- utils::getFromNamespace("tcl_img_2_r_raster", "loon")
 char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
 
 # This function is temporary
-# after loon is updated to 1.3.7
+# after loon is updated to 1.3.8
 # this function will be switched to
 # `loon::l_colorName`
-l_colorName <- function(color, error = TRUE) {
+l_colorName <- function(color, error = TRUE, precise = FALSE) {
 
-  color.id <- function(x, error = TRUE, env = environment()) {
+  color.id <- function(x, error = TRUE, precise = FALSE, env = environment()) {
 
     invalid.color <- c()
 
@@ -32,7 +32,14 @@ l_colorName <- function(color, error = TRUE) {
                            c2 <- grDevices::col2rgb(color)
                            coltab <- grDevices::col2rgb(colors())
                            cdist <- apply(coltab, 2, function(z) sum((z - c2)^2))
-                           colors()[which(cdist == min(cdist))][1]
+                           if(precise) {
+                             if(min(cdist) == 0)
+                               colors()[which(cdist == min(cdist))][1]
+                             else
+                               color
+                           } else {
+                             colors()[which(cdist == min(cdist))][1]
+                           }
                          },
                          error = function(e) {
 
@@ -57,7 +64,7 @@ l_colorName <- function(color, error = TRUE) {
 
   # the input colors are 6/12 digits hex code
   uniColor <- unique(color)
-  colorName <- color.id(uniColor, error = error)
+  colorName <- color.id(uniColor, error = error, precise = precise)
   len <- length(colorName)
 
   for(i in seq(len)) {
@@ -65,6 +72,7 @@ l_colorName <- function(color, error = TRUE) {
   }
   color
 }
+
 
 ## Un-exported functions in ggplot2
 # utils::getFromNamespace("message_wrap", "ggplot2")
