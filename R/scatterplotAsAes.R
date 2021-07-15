@@ -2,6 +2,8 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                                  glyph, color, size, index, selectedOnTop = TRUE) {
 
   pch <- glyph_to_pch(glyph)
+  # points with boundary
+  pointsWithBoundary <- pch %in% 21:24
 
   if (!any(is.na(pch)) && !any(pch %in% 21:24)) {
 
@@ -58,8 +60,6 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
           )
       }
     }
-
-
   } else {
     # possibly some NAs (means some points are text, polygons, images, etc.)
     # and/or a mix of regular and closed points.
@@ -96,7 +96,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                # `showArea` is a length `n` logical value
                showArea <- gh['showArea'][aesthetic$index]
 
-               pointSize <- as_ggplot_size(aesthetic$size, type = "polygon") * size_adjust()
+               pointSize <- as_ggplot_size(aesthetic$size, type = "polygon", adjust = 0.6)
                size[id] <- pointSize
 
                if(!selectedOnTop && lenUniqueTypes == 1) {
@@ -351,7 +351,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                                         ratio = ratio)
                width <- height/ratio
                # THIS IS A HACK!
-               imageSize <- size_adjust()
+               imageSize <- 0.6
                size[id] <- imageSize
 
                ggObj <- ggObj +
@@ -393,7 +393,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
   uniSize <- unique(size[!is.na(size)])
   if(length(uniSize) > 0)
     ggObj <- ggObj +
-      ggplot2::scale_size_identity(guide = "legend")
+    ggplot2::scale_size_identity(guide = "legend")
 
   if(length(uniSize) <= 1)
     ggObj <- ggObj + ggplot2::guides(size = FALSE)
@@ -475,7 +475,7 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                            color = ifelse(gh['showArea'][aesthetic$index],
                                           loon::l_getOption("foreground"),
                                           aesthetic$color),
-                           size = as_ggplot_size(aesthetic$size, type = "polygon") * size_adjust(),
+                           size = as_ggplot_size(aesthetic$size, type = "polygon", adjust = 0.6),
                            polygon_x = gh['x'][aesthetic$index],
                            polygon_y = lapply(gh['y'][aesthetic$index], function(y) -y),
                            linewidth = gh['linewidth'][aesthetic$index]
@@ -570,30 +570,6 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                    size = as_ggplot_size(aesthetic$size),
                    colour = colour
                  )
-                 # if(sum(pointsWithBoundary, na.rm = TRUE) != 0) {
-                 #
-                 #   ggObj <- ggObj +
-                 #     ggplot2::geom_point(
-                 #       data = data.frame(x = xx[pointsWithBoundary],
-                 #                         y = yy[pointsWithBoundary]),
-                 #       fill = aesthetic$color[pointsWithBoundary],
-                 #       pch = pch[pointsWithBoundary],
-                 #       size = as_ggplot_size(aesthetic$size[pointsWithBoundary]),
-                 #       colour = loon::l_getOption("foreground")
-                 #     )
-                 # }
-                 #
-                 # if(sum(!pointsWithBoundary, na.rm = TRUE) != 0) {
-                 #
-                 #   ggObj <- ggObj +
-                 #     ggplot2::geom_point(
-                 #       data = data.frame(x = xx[!pointsWithBoundary],
-                 #                         y = yy[!pointsWithBoundary]),
-                 #       color = aesthetic$color[!pointsWithBoundary],
-                 #       pch = pch[!pointsWithBoundary],
-                 #       size = as_ggplot_size(aesthetic$size[!pointsWithBoundary])
-                 #     )
-                 # }
              },
              "pointrange" = {
                gh <- loon::l_create_handle(c(widget, aesthetic$glyph[1L]))
@@ -652,7 +628,7 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                                         ratio = ratio)
                width <- height/ratio
                # THIS IS A HACK!
-               imageSize <- size_adjust()
+               imageSize <- 0.6
 
                ggObj <- ggObj +
                  do.call(
@@ -679,3 +655,88 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
   return(ggObj)
 }
 
+# some unused functions; potentially be dropped later
+####################### asAes = TRUE
+# if (!any(is.na(pch)) && !any(pch %in% 21:24)) {
+#
+#   size <- as_ggplot_size(size)
+#
+#   ggObj <- ggObj +
+#     ggplot2::geom_point(
+#       data = data.frame(x = x,
+#                         y = y,
+#                         color = color,
+#                         size = size),
+#       mapping = ggplot2::aes(x = x, y = y, color = color,
+#                              size = size),
+#       shape = pch
+#     )
+#
+# } else if (!any(is.na(pch)) && all(pch %in% 21:24)) {
+#
+#   size <- as_ggplot_size(size)
+#
+#   # No NAs and ALL points with borders
+#   if(!selectedOnTop) {
+#
+#     # to preserve orders
+#     # the shape of the points may not be satisfying
+#     ggObj <- ggObj +
+#       ggplot2::geom_point(
+#         data = data.frame(x = x,
+#                           y = y,
+#                           fill = color,
+#                           size = size),
+#         mapping = ggplot2::aes(x = x, y = y,
+#                                fill = fill,
+#                                size = size),
+#         shape = pch
+#       )
+#
+#   } else {
+#
+#     for(p in unique(pch)) {
+#
+#       pid <- pch == p
+#
+#       ggObj <- ggObj +
+#         ggplot2::geom_point(
+#           data = data.frame(x = x[pid],
+#                             y = y[pid],
+#                             fill = color[pid],
+#                             size = size[pid]),
+#           mapping = ggplot2::aes(x = x, y = y,
+#                                  fill = fill,
+#                                  size = size),
+#           shape = p
+#         )
+#     }
+#   }
+# } else {...}
+#
+####################### asAes = FALSE
+#
+# if(sum(pointsWithBoundary, na.rm = TRUE) != 0) {
+#
+#   ggObj <- ggObj +
+#     ggplot2::geom_point(
+#       data = data.frame(x = xx[pointsWithBoundary],
+#                         y = yy[pointsWithBoundary]),
+#       fill = aesthetic$color[pointsWithBoundary],
+#       pch = pch[pointsWithBoundary],
+#       size = as_ggplot_size(aesthetic$size[pointsWithBoundary]),
+#       colour = loon::l_getOption("foreground")
+#     )
+# }
+#
+# if(sum(!pointsWithBoundary, na.rm = TRUE) != 0) {
+#
+#   ggObj <- ggObj +
+#     ggplot2::geom_point(
+#       data = data.frame(x = xx[!pointsWithBoundary],
+#                         y = yy[!pointsWithBoundary]),
+#       color = aesthetic$color[!pointsWithBoundary],
+#       pch = pch[!pointsWithBoundary],
+#       size = as_ggplot_size(aesthetic$size[!pointsWithBoundary])
+#     )
+# }

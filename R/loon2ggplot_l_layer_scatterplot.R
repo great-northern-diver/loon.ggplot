@@ -1,21 +1,26 @@
 #' @export
 #' @import ggmulti
 #' @rdname loon2ggplot
-loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop = TRUE, ...) {
+loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                                            showNearestColor = FALSE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
+  ggObj <- list(...)$ggObj
+  n <- widget['n']
+  if(n == 0) return(ggObj)
+
   swapAxes <- widget["swapAxes"]
 
-  ggObj <- list(...)$ggObj
   states <- get_layer_states(widget, native_unit = FALSE)
-
+  states$color <- l_colorName(states$color, error = FALSE,
+                              precise = !showNearestColor)
   if (!any(states$active)) return(ggObj)
 
   # No active points in scatterplot
   displayOrder <- if(selectedOnTop) {
     get_model_display_order(widget)
   } else {
-    seq(widget['n'])
+    seq(n)
   }
 
   active <- states$active[displayOrder]
@@ -33,7 +38,7 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop 
   x <- as.numeric(s_a$x)
   y <- as.numeric(s_a$y)
   glyph <- s_a$glyph
-  color <- fill <-s_a$color
+  color <- fill <- s_a$color
   size <- s_a$size
   index <- s_a$index
 
