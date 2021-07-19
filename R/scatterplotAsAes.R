@@ -4,6 +4,8 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
   pch <- glyph_to_pch(glyph)
   # points with boundary
   pointsWithBoundary <- pch %in% 21:24
+  withBoundary <- FALSE
+  fill <- color
 
   if (!any(is.na(pch)) && !any(pch %in% 21:24)) {
 
@@ -22,48 +24,61 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
 
   } else if (!any(is.na(pch)) && all(pch %in% 21:24)) {
 
+    withBoundary <- TRUE
     size <- as_ggplot_size(size)
 
-    # No NAs and ALL points with borders
-    if(!selectedOnTop) {
+    ggObj <- ggObj +
+      ggplot2::geom_point(
+        data = data.frame(x = x,
+                          y = y,
+                          fill = fill,
+                          size = size),
+        mapping = ggplot2::aes(x = x, y = y,
+                               fill = fill,
+                               size = size),
+        shape = pch
+      )
 
-      # to preserve orders
-      # the shape of the points may not be satisfying
-      ggObj <- ggObj +
-        ggplot2::geom_point(
-          data = data.frame(x = x,
-                            y = y,
-                            fill = color,
-                            size = size),
-          mapping = ggplot2::aes(x = x, y = y,
-                                 fill = fill,
-                                 size = size),
-          shape = pch
-        )
-
-    } else {
-
-      for(p in unique(pch)) {
-
-        pid <- pch == p
-
-        ggObj <- ggObj +
-          ggplot2::geom_point(
-            data = data.frame(x = x[pid],
-                              y = y[pid],
-                              fill = color[pid],
-                              size = size[pid]),
-            mapping = ggplot2::aes(x = x, y = y,
-                                   fill = fill,
-                                   size = size),
-            shape = p
-          )
-      }
-    }
+    # # No NAs and ALL points with borders
+    # if(!selectedOnTop) {
+    #
+    #   # to preserve orders
+    #   # the shape of the points may not be satisfying
+    #   ggObj <- ggObj +
+    #     ggplot2::geom_point(
+    #       data = data.frame(x = x,
+    #                         y = y,
+    #                         fill = color,
+    #                         size = size),
+    #       mapping = ggplot2::aes(x = x, y = y,
+    #                              fill = fill,
+    #                              size = size),
+    #       shape = pch
+    #     )
+    #
+    # } else {
+    #
+    #   for(p in unique(pch)) {
+    #
+    #     pid <- pch == p
+    #
+    #     ggObj <- ggObj +
+    #       ggplot2::geom_point(
+    #         data = data.frame(x = x[pid],
+    #                           y = y[pid],
+    #                           fill = color[pid],
+    #                           size = size[pid]),
+    #         mapping = ggplot2::aes(x = x, y = y,
+    #                                fill = fill,
+    #                                size = size),
+    #         shape = p
+    #       )
+    #   }
+    # }
   } else {
     # possibly some NAs (means some points are text, polygons, images, etc.)
     # and/or a mix of regular and closed points.
-    type <- sapply(glyph, function(glyph) loon::l_glyph_getType(widget, glyph))
+    type <- sapply(glyph, function(g) loon::l_glyph_getType(widget, g))
     types <- paste(type, names(type), sep = ".")
     uniqueTypes <- unique(types)
 
@@ -373,6 +388,16 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
     }
   }
 
+  if(withBoundary) {
+    ggObj <- ggObj +
+      ggplot2::guides(
+        fill = ggplot2::guide_legend(
+          override.aes = list(fill = unique(fill),
+                              shape = 21)
+        )
+      )
+  }
+
   uniColor <- unique(color[!is.na(color)])
   if(length(uniColor) > 0) {
 
@@ -654,89 +679,3 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
   }
   return(ggObj)
 }
-
-# some unused functions; potentially be dropped later
-####################### asAes = TRUE
-# if (!any(is.na(pch)) && !any(pch %in% 21:24)) {
-#
-#   size <- as_ggplot_size(size)
-#
-#   ggObj <- ggObj +
-#     ggplot2::geom_point(
-#       data = data.frame(x = x,
-#                         y = y,
-#                         color = color,
-#                         size = size),
-#       mapping = ggplot2::aes(x = x, y = y, color = color,
-#                              size = size),
-#       shape = pch
-#     )
-#
-# } else if (!any(is.na(pch)) && all(pch %in% 21:24)) {
-#
-#   size <- as_ggplot_size(size)
-#
-#   # No NAs and ALL points with borders
-#   if(!selectedOnTop) {
-#
-#     # to preserve orders
-#     # the shape of the points may not be satisfying
-#     ggObj <- ggObj +
-#       ggplot2::geom_point(
-#         data = data.frame(x = x,
-#                           y = y,
-#                           fill = color,
-#                           size = size),
-#         mapping = ggplot2::aes(x = x, y = y,
-#                                fill = fill,
-#                                size = size),
-#         shape = pch
-#       )
-#
-#   } else {
-#
-#     for(p in unique(pch)) {
-#
-#       pid <- pch == p
-#
-#       ggObj <- ggObj +
-#         ggplot2::geom_point(
-#           data = data.frame(x = x[pid],
-#                             y = y[pid],
-#                             fill = color[pid],
-#                             size = size[pid]),
-#           mapping = ggplot2::aes(x = x, y = y,
-#                                  fill = fill,
-#                                  size = size),
-#           shape = p
-#         )
-#     }
-#   }
-# } else {...}
-#
-####################### asAes = FALSE
-#
-# if(sum(pointsWithBoundary, na.rm = TRUE) != 0) {
-#
-#   ggObj <- ggObj +
-#     ggplot2::geom_point(
-#       data = data.frame(x = xx[pointsWithBoundary],
-#                         y = yy[pointsWithBoundary]),
-#       fill = aesthetic$color[pointsWithBoundary],
-#       pch = pch[pointsWithBoundary],
-#       size = as_ggplot_size(aesthetic$size[pointsWithBoundary]),
-#       colour = loon::l_getOption("foreground")
-#     )
-# }
-#
-# if(sum(!pointsWithBoundary, na.rm = TRUE) != 0) {
-#
-#   ggObj <- ggObj +
-#     ggplot2::geom_point(
-#       data = data.frame(x = xx[!pointsWithBoundary],
-#                         y = yy[!pointsWithBoundary]),
-#       color = aesthetic$color[!pointsWithBoundary],
-#       pch = pch[!pointsWithBoundary],
-#       size = as_ggplot_size(aesthetic$size[!pointsWithBoundary])
-#     )
-# }
