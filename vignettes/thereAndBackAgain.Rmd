@@ -128,7 +128,7 @@ tohex <- function(x) {
 So, comparing the two `"grey"` colours, the `ggplot` has the `R` hex colour `tohex("grey") =` `r tohex("grey")` and the `loon` plot has `Tcl` hex colour (converted to hex 6) `hex12tohex6(lp["color"][1]) =` `r hex12tohex6(lp["color"][1])`, which are clearly different RGB values.
 
 This is because the **named** colours in `R` are slightly different from those in `Tcl` that `loon` is built on.  The `R` colours whose name **is the same** as that in `Tcl` **but whose colour is different** are **only** the following:
-```{r tkcolors, echo = FALSE,out.width="60%"}
+```{r tkcolors, echo = FALSE, out.width="60%"}
 df <- data.frame(
     R_col = tohex(colors()),
     Tcl_col = hex12tohex6(l_hexcolor(colors())),
@@ -191,7 +191,7 @@ Some care needs to be taken when dealing with linking, especially when there is 
 
 A `ggplot` from the `loon` plot will not have access to the original information.
 ```{r ggp from lp}
-ggp_lp_1 <- loon.ggplot(lp)
+ggp_lp_1 <- loon.ggplot(lp, showNearestColor = FALSE)
 ggp_lp_1
 ```
 
@@ -205,7 +205,9 @@ ggp_lp_1_states
 
 lp_ggp_lp_1 <- loon.ggplot(ggp_lp_1)
 ```
-The **shape** is now `pch = 16`, which in `R`, corresponds to a filled circle (without a boundary). 
+
+### nearest colours
+
 
 ## After interactive changes
 
