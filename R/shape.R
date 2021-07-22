@@ -1,7 +1,7 @@
 pch_to_glyph <- function(pch, alpha = NULL) {
-  len <- length(pch)
 
-  if(len == 0) return("circle")
+  len <- length(pch)
+  if(len == 0) return(loon::l_getOption("glyph"))
 
   switchPch <- function(pch) {
 
@@ -21,7 +21,7 @@ pch_to_glyph <- function(pch, alpha = NULL) {
       "5" = "odiamond",
       "23" = "cdiamond",
       {
-        "circle"
+        loon::l_getOption("glyph")
       }
     )
   }
