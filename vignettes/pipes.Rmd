@@ -167,7 +167,7 @@ mtcars %>%
 constructs the interactive plot which could have been assigned to a variable as was done with the original `ggplot` construction.
 
 From here, the pipeline can be grown as before, recognizing of course that the output of `ggplot2loon()` is a `loon` plot of some sort.
-This means that functions that operate on `loon` plots (as their first argument can be used.  As with any piping operation, attention must be given to the first argument of the functions in the pipeline as well as to what the input and outputs are of any function.
+This means that functions that operate on `loon` plots (as their first argument can be used).  As with any piping operation, attention must be given to the first argument of the functions in the pipeline as well as to what the input and outputs are of any function.
 
 For example, 
 
@@ -192,7 +192,7 @@ In the `magrittr` package (the source of the pipeline operation) there are a var
 
 Additionally, using function `l_ggplot`, can also create a `loon` plot with `ggplot` pipe model.
 
-The display of `ggplot` object relies on the default `print()` function in `R`. Function `l_ggplot`, inserts a new class `lggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.lggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
+The display of `ggplot` object relies on the default `print()` function in `R`. Function `l_ggplot`, inserts a new class `l_ggplot` into the original `ggplot` object. At the printing time, [S3 method](http://adv-r.had.co.nz/S3.html) `print.l_ggplot()` will be executed to transform a `ggplot` plot to a `loon` plot.
 ```{r lggplot_pipe, message = FALSE, eval = FALSE}
 obj <- mtcars %>%
   rename(transmission = am, weight = wt) %>%
