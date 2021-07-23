@@ -79,6 +79,8 @@ ggp_states <- ggplot_build(ggp)$data[[1]]
 ggp_states
 ```
 
+Note that some of the `x` and `y` values are `NA`, representing missing values.
+
 ## the `loon` plot and its states
 
 Now construct the `loon` plot from this `ggplot`:
@@ -87,7 +89,41 @@ lp <- loon.ggplot(ggp)
 plot(lp)
 ```
 
-### glyph or shape
+The `loon` plot looks slightly different:
+
+- title in a different position,
+- the relative sizes of the margins and drawing areas,
+- axis tic marks and labels,
+- font sizes and styles, and
+- points are a slightly darker grey in the `loon` plot.
+
+Plots in `loon` have more constrained layouts than those in `ggplot2`, since focus is primarily on interactive as opposed to publication quality graphics.  
+Some differences (e.g., colour) are also because `loon` is based on `Tcl` for drawing primitives.
+
+Plot states in `loon` are accessible using `[]` and the name of the state.
+Values are assigned in the same way.
+Names of interactively changeable states in `loon` are
+```{r loon plot states}
+names(lp)
+# and accessed with [] as in 
+lp["title"]
+```
+(See also `?l_info_states`.)
+
+Some, like `x`, `y`, and `color`, are *n-dimensional states* whose values correspond to those on individual observations. These may be changed using the `[] <-` notation as well.  
+
+Because `loon` plots exclude observations missing values in any its n-dimensional states, the `loon` plot will have fewer observations than the corresponding `ggplot`, even though the same number of points may be plotted.  The actual number of observations in the `loon` plot is
+```{r loon n}
+lp["n"]
+```
+which is less than the number of observations recorded in the `ggplot` structure (namely `nrow(ggp_states) =` `r nrow(ggp_states)`).
+
+## changing from ggplot to loon
+
+Differences between `ggplot` structure and `loon` plot structure (and how these affect the visualizations) is worth exploring in a little more detail.
+A better understanding will be helpful when transforming back and forth between the two.
+
+### shape to glyph
 
 In `R` the point symbol plotted is associated with a numerical code `pch`. In `loon` the point symbol is a glyph, identified by a string. 
 ```{r glyphs}
@@ -99,36 +135,34 @@ As with other plot "states", there is not always a `glyph` in `loon` that matche
 
 ### point size
 
-Size is another plot state that differs between `ggplot` and `loon`.  The point `size` in `loon` identifies the approximate **area** of the point symbol, so when transforming from `ggplot` to `loon`, the `size` parameter of the `ggplot` is transformed to an integer value in `loon` that tries to match the area of the point in `ggplot`.
+Size is another plot state that differs between `ggplot` and `loon`.  
 
 ```{r sizes}
 ggp_states$size
 lp["size"]
 ```
 
-### colours
+The point `size` in `loon` identifies the approximate **area** of the point symbol, so when transforming from `ggplot` to `loon`, the `size` parameter of the `ggplot` is transformed to an integer value in `loon` that tries to match the area of the point in `ggplot`.
 
-The colour values are a little different.  
-Visibly, there is a difference in the `"grey"` points seen in each plot.  The two plots have different values stored as their colour state:
+### colours
+  
+Comparing the plots, the points are slightly different `"grey"` in one plot than in the other.
+
+This is because the two plots have different values stored as their colour state:
 ```{r colours}
 ggp_states$colour
 lp["color"]
 ```
 
-The `loon` plot colours are twelve hexadecimal digits, as in `tk` (e.g., see `tkcolors()`); the `ggplot` will have named `R` colours **or** six hexadecimal digits (two for each of the red, green, and blue components).  
-
-Twelve hex digit colours are turned into six hex digits using the `loon` function `hex12to6()`.  To convert the `R` named colours to six hex digits, the following function can be used.
-```{r tohex}
+First, there is a slight difference between what `R` regards as `"grey"` and what `Tcl` (used by `loon`) regards as `"grey"`.
+Several other **named** colours in `R` also differ slightly from those in `Tcl` and hence in `loon`.  `R` colours whose name **is the same** as that in `Tcl` **but whose colour is different** are **only** the following:
+```{r tkcolors, echo = FALSE, out.width="60%"}
 tohex <- function(x) {
     sapply(x, function(xi) {
         crgb <- as.vector(col2rgb(xi))
         rgb(crgb[1], crgb[2], crgb[3], maxColorValue = 255)
     })}
-```
-So, comparing the two `"grey"` colours, the `ggplot` has the `R` hex colour `tohex("grey") =` `r tohex("grey")` and the `loon` plot has `Tcl` hex colour (converted to hex 6) `hex12tohex6(lp["color"][1]) =` `r hex12tohex6(lp["color"][1])`, which are clearly different RGB values.
 
-This is because the **named** colours in `R` are slightly different from those in `Tcl` that `loon` is built on.  The `R` colours whose name **is the same** as that in `Tcl` **but whose colour is different** are **only** the following:
-```{r tkcolors, echo = FALSE, out.width="60%"}
 df <- data.frame(
     R_col = tohex(colors()),
     Tcl_col = hex12tohex6(l_hexcolor(colors())),
@@ -162,19 +196,32 @@ if (requireNamespace("grid", quietly = TRUE)) {
   }
 }
 ```
-See `tkcolors()` in `loon` for more information.
+(See `?tkcolors` in `loon` for more information.)
 
-### missing data
+Second, `loon` plot colour values are strings of **twelve** hexadecimal digits, as in `tk` (e.g., see `?tkcolors`); in contrast, the `ggplot` are either strings corresponding to the named `R` colours (see `?grDevices::colors` in `R`) or to **six** hexadecimal digits (two for each of the red, green, and blue components).  
+
+Twelve hex digit colours are turned into six hex digits using the `loon` function `hex12to6()`.  To convert the `R` named colours to six hex digits, the following function can be used.
+```{r tohex show, eval = FALSE}
+tohex <- function(x) {
+    sapply(x, function(xi) {
+        crgb <- as.vector(col2rgb(xi))
+        rgb(crgb[1], crgb[2], crgb[3], maxColorValue = 255)
+    })}
+```
+So, comparing the two `"grey"` colours, the `ggplot` has the `R` hex colour `tohex("grey") =` `r tohex("grey")` and the `loon` plot has `Tcl` hex colour (converted to hex 6) `hex12tohex6(lp["color"][1]) =` `r hex12tohex6(lp["color"][1])`, which are clearly different RGB values.
+
+## effect of missing data
 
 The `loon` plot does not include the missing data
 ```{r missing data}
 nrow(ggp_states) == lp["n"]
+# Compare
 ggp_states$y
 lp["y"]
 ```
 Note that, absent the missing `NA`s, the **order** of the points is identical.
 
-### linking keys
+### on linking keys
 
 Default linking keys in `loon` are from `"0"` to `"n-1"` where `"n"` is the number of rows in the original data set.  
 Here `nrow(data) =` `r nrow(data)`.  Note that this `"n"`  is not the number of points actually plotted because `loon` drops the missing data, unlike `ggplot`.
@@ -185,13 +232,17 @@ lp["linkingKey"]
 ```
 which is missing `"8"` and `"10"`.  Note also that `lp["n"] =` `r lp["n"]` is the number of points plotted in the `loon` plot.
 
-Some care needs to be taken when dealing with linking, especially when there is missing data.  See the vignette `Linking` and the `loon` vignette `Logical Queries` for more information.
+Some care needs to be taken when dealing with linking, especially when there is missing data.  
+
+### for more information
+
+See the vignette `Linking` and the `loon` vignette `Logical Queries` for more information.
 
 # `loon` to `ggplot` transformation
 
 A `ggplot` from the `loon` plot will not have access to the original information.
 ```{r ggp from lp}
-ggp_lp_1 <- loon.ggplot(lp, showNearestColor = FALSE)
+ggp_lp_1 <- loon.ggplot(lp)
 ggp_lp_1
 ```
 
