@@ -139,14 +139,16 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   loon::l_isLoonWidget(target) || stop("target does not seem to exist", call. = FALSE)
   rl <- loon::l_create_handle(c(target, 'root'))
 
-  if(target['yshows'] == "density" && length(unique(target['color'])) > 1) {
-    setLimits <- FALSE
-    message("In ggplot histogram, if `y` shows density, ",
-            "the area of each category (grouped by color) is 1; ",
-            "however, for an `l_hist` widget, ",
-            "the whole area is one and the area of each category is proportional to its counts.")
-  } else
-    setLimits <- TRUE
+  setLimits <- TRUE
+  if(target['yshows'] == "density") {
+    if(length(unique(target['color'])) > 1 || length(unique(target['selected'])) > 1) {
+      setLimits <- FALSE
+      message("In `ggplot` histogram, if `y` shows density, ",
+              "the area of each category (grouped by color) is 1; ",
+              "however, for an `l_hist` widget, ",
+              "the whole area is one and the area of each category is proportional to its counts.")
+    }
+  }
 
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes,
@@ -308,13 +310,16 @@ cartesian_gg <- function(target, ggObj, setLimits = TRUE) {
     )
 
   if(setLimits) {
-    ggObj <- ggObj +
-      ggplot2::coord_cartesian(xlim = xlim, ylim = ylim,
-                               expand = FALSE)
 
-    if(swapAxes) ggObj <- ggObj +
+    if(swapAxes) {
+      ggObj <- ggObj +
         ggplot2::coord_flip(xlim = xlim, ylim = ylim,
                             expand = FALSE)
+    } else {
+      ggObj <- ggObj +
+        ggplot2::coord_cartesian(xlim = xlim, ylim = ylim,
+                                 expand = FALSE)
+    }
 
   } else {
     if(swapAxes) ggObj <- ggObj +
