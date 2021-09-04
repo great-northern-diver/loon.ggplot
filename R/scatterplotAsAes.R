@@ -318,7 +318,9 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                # showArea
                point_pch <- ifelse(gh["showArea"], 1, 19)
 
-               pointSize <- as_ggplot_size(aesthetic$size)
+               # ggplot default value
+               fatten <- 4
+               pointSize <- as_ggplot_size(aesthetic$size)/fatten
                size[id] <- pointSize
 
                ggObj <- ggObj +
