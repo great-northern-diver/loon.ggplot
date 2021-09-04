@@ -24,12 +24,14 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
           ggplot2::aes(x = x, fill = fill)
         } else {
           ggplot2::aes(x = x, fill = fill,
-                       y = ..density..) # the layout would be different from the loon one
+                       y = ..density..)
+          # the layout would be different from the loon one
         },
         colour = color,
         boundary = widget['origin'],
         binwidth = widget['binwidth'],
-        inherit.aes = FALSE
+        inherit.aes = FALSE,
+        closed = "left"
       ) +
       ggplot2::scale_fill_manual(
         values = values,
@@ -87,7 +89,7 @@ histogramAsAesTRUE <- function(widget, showNearestColor = FALSE) {
 
   selectcolor <- loon::l_getOption("select-color")
   activeColor[activeSelected] <- selectcolor
-  activeX <- states$x[active]
+  activeX <- if(widget["swapAxes"]) states$y[active] else states$x[active]
 
   uniqueCol <- rev(levels(factor(activeColor)))
   colorStackingOrder <- widget['colorStackingOrder']
