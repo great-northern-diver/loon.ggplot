@@ -16,7 +16,7 @@ language: r
 before_install:
   - export DISPLAY=':99.0'
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1  &
-  - R -q -e 'install.packages(c("loon","ggplot2","stringr","GGally","gridExtra","magrittr", "dplyr", "rlang","testthat","knitr","rmarkdown",
+  - R -q -e 'install.packages(c("loon","ggplot2","stringr", "patchwork", "gridExtra","magrittr", "dplyr", "rlang","testthat","knitr","rmarkdown",
                                 "maps", "nycflights13", "hexbin"))'
 
 cache: packages
