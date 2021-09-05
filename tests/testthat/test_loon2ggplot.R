@@ -1,7 +1,6 @@
 context("test (loon to ggplot)")
 library(dplyr)
 library(magrittr)
-library(GGally)
 
 pdf(NULL)
 
@@ -50,7 +49,7 @@ test_that("test l_plot (loon to ggplot)", {
 
 
 test_that("test l_hist (loon to ggplot)", {
-  p <- l_hist(iris$Sepal.Length, color = iris$Species)
+  p <- l_hist(iris$Sepal.Length, color = iris$Species, swapAxes = TRUE)
   g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("gg", "ggplot"))
@@ -166,14 +165,14 @@ test_that("test compound loon widgets to ggplot", {
   p <- l_plot(co2_stl, title = "Atmospheric carbon dioxide over Mauna Loa")
   g <- loon2ggplot(p)
   g
-  expect_equal(class(g), c("gg", "ggmatrix"))
+  expect_equal(class(g), c("patchwork", "gg", "ggplot"))
   g <- loon.ggplot(p)
-  expect_equal(class(g), c("gg", "ggmatrix"))
+  expect_equal(class(g), c("patchwork", "gg", "ggplot"))
 
   p <- l_pairs(iris, showHistograms = TRUE)
   g <- loon2ggplot(p)
   g
-  expect_equal(class(g), c("gg", "ggmatrix"))
+  expect_equal(class(g), c("patchwork", "gg", "ggplot"))
 
 })
 
