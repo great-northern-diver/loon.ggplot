@@ -124,7 +124,7 @@ hg +
 
 Note that:
 
-  + Compound loon widget like `l_ts` and `l_pairs` are created by [`patchwork`](https://patchwork.data-imaginist.com/index.html). Ggplot features like `theme`, `labels` can be piped through but by the `patchwork` rule.
+  + Compound loon widget like `l_ts` and `l_pairs` are created by [`patchwork`](https://patchwork.data-imaginist.com/index.html). The `ggplot` components like `theme`, `labels` can be piped through but by the `patchwork` rule.
   
   + Some functionalities are provided 
     * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonGlyph()`, `geom_imageGlyph()` and etc.
