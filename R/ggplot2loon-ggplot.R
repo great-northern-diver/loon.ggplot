@@ -30,7 +30,7 @@
 #' @importFrom stats quantile approxfun integrate setNames na.omit
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
-#' @importFrom GGally ggmatrix
+#' @import patchwork
 #'
 #' @export
 #' @examples
@@ -78,8 +78,10 @@
 #' # Here the colour points and grey points are both linked
 #'
 #' ########### ggmatrix to loon ###########
+#' if(requireNamespace("GGally")) {
 #' pm <- GGally::ggpairs(iris, column = 1:4, ggplot2::aes(colour=Species))
 #' lg <- ggplot2loon(pm)
+#' }
 #' }
 #'
 #'

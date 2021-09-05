@@ -64,6 +64,12 @@ loon.ggplot.loon <- function(x, ...) {
 
 #' @export
 #' @rdname loon.ggplot
+loon.ggplot.zenplot <- function(x, ...) {
+  loon2ggplot(x, ...)
+}
+
+#' @export
+#' @rdname loon.ggplot
 ################## `l_ggplot` ##################
 # An `l_ggplot` object is a "look-like" `ggplot` object.
 # Users can use `+` to build a loon plot. The magic comes from the class `l_ggplot`.

@@ -1,7 +1,6 @@
 context("test themes (ggplot to loon)")
 library(dplyr)
 library(magrittr)
-library(GGally)
 library(png)
 
 pdf(NULL)

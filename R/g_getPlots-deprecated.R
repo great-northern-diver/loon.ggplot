@@ -38,7 +38,7 @@ g_getPlots.default <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
   layout_matrix <- as.vector(layout_matrix)
 
-  plots <- lapply(1:(nrow * ncol),
+  plots <- lapply(seq(nrow * ncol),
                   function(i) {
                     plot_id <- layout_matrix[i]
                     if(is.na(plot_id)) {
@@ -73,7 +73,7 @@ g_getPlots.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE,
            })
   )
 
-  wrap_paris_plots(
+  wrap_pairs_plots(
     ggplots = ggplots,
     layout_matrix = layout_matrix,
     nrow = nrow,
@@ -82,7 +82,7 @@ g_getPlots.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   )
 }
 
-wrap_paris_plots <- function(ggplots,
+wrap_pairs_plots <- function(ggplots,
                              layout_matrix,
                              nrow = NULL,
                              ncol = NULL,
@@ -115,7 +115,7 @@ wrap_paris_plots <- function(ggplots,
   ncol <- ncol %||% dim(layout_matrix)[2]
   layout_matrix <- as.vector(layout_matrix)
 
-  plots <- lapply(1:(nrow * ncol),
+  plots <- lapply(seq(nrow * ncol),
                   function(i) {
                     plot_id <- layout_matrix[i]
 

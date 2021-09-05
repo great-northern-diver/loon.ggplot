@@ -86,7 +86,7 @@ Note that:
     
   + `loon.ggplot` talk: A talk "Interactive ggplots in R" has been given in [SDSS 2019](https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216). Slides can be found in [SDSS2019/loon.ggplot talk](https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html) which gives more details.
   
-  + `ggmatrix` object in package `GGally` can also be converted to a `loon` widget. See `help(ggplot2loon)` for more info.
+  + A `ggmatrix` object in package `GGally` can also be converted to a `loon` widget. See `help(ggplot2loon)` for more info.
 
 ### `loon2ggplot()`: loon --> ggplot
 
@@ -124,7 +124,7 @@ hg +
 
 Note that:
 
-  + Compound loon widget like `l_ts` and `l_pairs` are created by `ggmatrix` in `GGally`. Ggplot features like `theme`, `labels` can be piped through but by  [`ggmatrix`](https://mran.microsoft.com/snapshot/2016-01-21/web/packages/GGally/vignettes/ggmatrix.html) rule.
+  + Compound loon widget like `l_ts` and `l_pairs` are created by [`patchwork`](https://patchwork.data-imaginist.com/index.html). The `ggplot` components like `theme`, `labels` can be piped through but by the `patchwork` rule.
   
   + Some functionalities are provided 
     * Adding glyphs on scatterplot like `geom_serialAxesGlyph()`, `geom_polygonGlyph()`, `geom_imageGlyph()` and etc.
