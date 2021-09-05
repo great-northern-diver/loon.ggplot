@@ -82,6 +82,7 @@ library(nycflights13, quietly = TRUE)
 library(loon, quietly = TRUE)
 library(magrittr, quietly = TRUE)
 library(maps, quietly = TRUE)
+library(patchwork, quietly = TRUE)
 ```
 
 Package `loon` provides the truly direct manipulation and package `ggplot` provides a unified data structure so that it is easy to be extended. Data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s by the simple translation function `loon2ggplot()`.
@@ -149,7 +150,7 @@ include_graphics(file.path(imageDirectory, "ggScatter_modification.png"))
 
 Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `loon2ggplot`) is simpler and more creative. Moreover, `ggplot` has over 100 extended packages. After transforming from `loon` to `ggplot`, users can continually take advantage of these extensions.  
 
-### Turn a `l_compound` Widget to a `ggmatrix` Object
+### Turn an `l_compound` Object to a `patchwork` Object
 
 Considering the following `loon` pairs plot (an `l_compound` widget) with three variables 'lp100km' (100 km per liter), 'weight' (car weight) and transmission (automatic or manual).
 ```{r loon pairs, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
@@ -161,41 +162,36 @@ mt %>%
   l_pp
 ```
 
-It produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well). Now, turn this pair plot to a `gg` object. Note that the compound `loon` widget like `l_pairs` (the shown one), `l_ts` or `l_facet`, etc, are created by `GGally::ggmatrix`. Features like `theme`, `labels` can be piped through but by `ggmatrix` rule. 
+It produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well). Now, turn this pair plot to a `gg` object. Note that the compound `loon` widget like `l_pairs` (the shown one), `l_ts` or `l_facet`, etc, are created by [`patchwork`](https://patchwork.data-imaginist.com/index.html). Features like `theme`, `labels` can be set by the `patchwork` rule. 
 
 ```{r p1_piped_staic  ggplot, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(patchwork)
 g2 <- loon2ggplot(l_pp)
 g2
 ```
-
 
 ```{r p1_piped_staic_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 include_graphics(file.path(imageDirectory, "loon_l_pairs.png"))
 ```
 
-The object `g2` is a `ggmatrix` graphic. We can fit a smooth line on the `lp100km vs weight` scatterplot and draw a density curve on the `weight` histogram. Additionally, the theme of these plots are adjusted to `theme_light` to direct more attention towards the data.
+The object `g2` is a `patchwork` object. We can fit a smooth line on the `lp100km vs weight` scatterplot and draw a density curve on the `weight` histogram. Additionally, a title is added.
 
 ```{r p1_piped_modification  ggplot, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-# Add a smooth line on g[2,2]
-# the index of `lp100km vs weight` scatterplot is 
-# 1 * 4 + 2
-g2$plots[[6]] <- g2$plots[[6]] + geom_smooth()
-# Add a density curve on g[1,2]
-# the index of `weight` histogram is 
-# 1 * 4 + 1
-g2$plots[[5]] <- g2$plots[[5]] + geom_density()
-# Modify theme
-g2 <- g2 + theme_light()
+# Add a regression line on the `lp100km vs weight` scatterplot
+g2$patches$plots[[1]] <- g2$patches$plots[[1]] + 
+  geom_smooth(method = "lm")
+# Add a density curve on the `weight` histogram
+g2$patches$plots[[4]] <- g2$patches$plots[[4]] +
+  geom_density()
+# Add a title
+g2 <- g2 + 
+  patchwork::plot_annotation(title = "Mtcars Pairs Plot")
 g2
 ```
 
 ```{r p1_piped_modification_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
-include_graphics(file.path(imageDirectory, "loon_l_pairs_modification.png"))
+include_graphics(file.path(imageDirectory,"loon_l_pairs_modification.png"))
 ```
-
-<font size="1"> 
-Note that:  The single `ggplot` object can be extracted by `...$plots[[id]]`, where `id` is the index of such object. To `M[x, y]`, $id = (y-1) \times nrow + x$, $nrow$ is the number of rows.
-</font>
 
 ## Function `loon.ggplot()`
 
