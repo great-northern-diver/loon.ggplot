@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
       </span>
     </div>
 
@@ -106,7 +106,7 @@
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>The <code>ggplot2</code> graphics package (part of the <code>tidyverse</code> package collection) uses the base <code>grid</code> graphics package to produce publication quality graphics for data analysis. Based on a grammar for graphics, <code>ggplot2</code> also provides a lot of functionality (e.g. <code>facet</code>s) that can be extremely useful in data analysis.</p>
 <p>The <code>loon</code> graphics package provides <strong>interactive</strong> graphics especially valuable in any <strong>exploratory data analysis</strong>. This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, <code>loon</code> also provides publication quality static graphics in <code>grid</code> via loon’s functions <code>grid.loon()</code> and <code>loonGrob()</code>.</p>
-<p>The loon.ggplot package brings <strong>both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <strong><code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code></strong> and the latter by the simple translation function <strong><code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code></strong>.</p>
+<p>The loon.ggplot package brings <strong>both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <strong><code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code></strong> and the latter by the simple translation function <strong><code><a href="reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code></strong>.</p>
 </div>
 <div id="install" class="section level2">
 <h2 class="hasAnchor">
@@ -158,7 +158,7 @@ l_ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) +
 <ul>
 <li><p>Loon “Hello World”: Introduction to interactive <code>loon</code> plots can be found via <a href="https://cran.r-project.org/web/packages/loon/vignettes/introduction.html">loon</a>. It shows how to create, manipulate (selection, linking and etc) <code>loon</code> plots</p></li>
 <li><p><code>loon.ggplot</code> talk: A talk “Interactive ggplots in R” has been given in <a href="https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216">SDSS 2019</a>. Slides can be found in <a href="https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html">SDSS2019/loon.ggplot talk</a> which gives more details.</p></li>
-<li><p><code>ggmatrix</code> object in package <code>GGally</code> can also be converted to a <code>loon</code> widget. See <code><a href="reference/ggplot2loon.html">help(ggplot2loon)</a></code> for more info.</p></li>
+<li><p>A <code>ggmatrix</code> object in package <code>GGally</code> can also be converted to a <code>loon</code> widget. See <code><a href="reference/ggplot2loon.html">help(ggplot2loon)</a></code> for more info.</p></li>
 </ul>
 </div>
 <div id="loon2ggplot-loon--ggplot" class="section level3">
@@ -183,7 +183,7 @@ class(hg)
 <p><img src="reference/figures/hpAddDensity.png"></p>
 <p>Note that:</p>
 <ul>
-<li><p>Compound loon widget like <code>l_ts</code> and <code>l_pairs</code> are created by <code>ggmatrix</code> in <code>GGally</code>. Ggplot features like <code>theme</code>, <code>labels</code> can be piped through but by <a href="https://mran.microsoft.com/snapshot/2016-01-21/web/packages/GGally/vignettes/ggmatrix.html"><code>ggmatrix</code></a> rule.</p></li>
+<li><p>Compound loon widget like <code>l_ts</code> and <code>l_pairs</code> are created by <a href="https://patchwork.data-imaginist.com/index.html"><code>patchwork</code></a>. The <code>ggplot</code> components like <code>theme</code>, <code>labels</code> can be piped through but by the <code>patchwork</code> rule.</p></li>
 <li>
 <p>Some functionalities are provided</p>
 <ul>
@@ -197,7 +197,7 @@ class(hg)
 <div id="loonggplot-loon--ggplot" class="section level3">
 <h3 class="hasAnchor">
 <a href="#loonggplot-loon--ggplot" class="anchor"></a><code>loon.ggplot()</code>: loon &lt;–&gt; ggplot</h3>
-<p><code><a href="reference/loon.ggplot.html">loon.ggplot()</a></code> gathers features of both <code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
+<p><code><a href="reference/loon.ggplot.html">loon.ggplot()</a></code> gathers features of both <code><a href="reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code> and <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
 <pre><code>p &lt;- l_plot(iris)
 # `loon` to `gg`
 g &lt;- loon.ggplot(p)

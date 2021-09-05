@@ -4,6 +4,7 @@
 \alias{loon.ggplot}
 \alias{loon.ggplot.gg}
 \alias{loon.ggplot.loon}
+\alias{loon.ggplot.zenplot}
 \alias{loon.ggplot.l_ggplot}
 \title{loon.ggplot}
 \usage{
@@ -12,6 +13,8 @@ loon.ggplot(x, ...)
 \method{loon.ggplot}{gg}(x, ...)
 
 \method{loon.ggplot}{loon}(x, ...)
+
+\method{loon.ggplot}{zenplot}(x, ...)
 
 \method{loon.ggplot}{l_ggplot}(x, ...)
 }
