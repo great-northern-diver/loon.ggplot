@@ -178,6 +178,7 @@ the original data set order. This is very helpful when further analysis will be 
 graphical system, e.g. \code{+ facet_wrap(...)}. See examples.
 }
 \examples{
+\dontrun{
 if(requireNamespace("zenplots") &&
      packageVersion("zenplots") > "1.0.4" &&
      requireNamespace("patchwork")) {
@@ -185,7 +186,7 @@ zen <- zenplot(iris, plot1d = "density", pkg = "loon")
 ggzen <- loon.ggplot(zen)
 ggzen +
   patchwork::plot_annotation(title = "This is a ggplot")
-}
+}}
 if(interactive()) {
 lp <- l_plot(iris,
              color = iris$Species,
