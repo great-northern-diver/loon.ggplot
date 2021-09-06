@@ -105,7 +105,7 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
       ggmulti::geom_serialaxes(
         data = serialaxes.data[active_displayOrder, ],
         color = get_display_color(
-          loon::as_hex6color(data$color[active_displayOrder]),
+          as_hex6color(data$color[active_displayOrder]),
           data$selected[active_displayOrder]
         ),
         size = as_ggplot_size(data$linewidth[active_displayOrder], "lines"),

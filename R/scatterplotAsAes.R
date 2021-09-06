@@ -358,7 +358,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                                              tcl_img[i], round(width),
                                              round(height), img)
                                   # get the image
-                                  image <- loon::tcl_img_2_r_raster(img)
+                                  image <- tcl_img_2_r_raster(img)
                                   tcl("image", "delete", img)
                                   image
                                 })
@@ -644,7 +644,7 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                                              tcl_img[i], round(width),
                                              round(height), img)
                                   # get the image
-                                  image <- loon::tcl_img_2_r_raster(img)
+                                  image <- tcl_img_2_r_raster(img)
                                   tcl("image", "delete", img)
                                   image
                                 })

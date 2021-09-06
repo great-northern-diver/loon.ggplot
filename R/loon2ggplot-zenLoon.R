@@ -1,6 +1,7 @@
 #' @rdname loon2ggplot
 #' @export
 #' @examples
+#' \dontrun{
 #' if(requireNamespace("zenplots") &&
 #'      packageVersion("zenplots") > "1.0.4" &&
 #'      requireNamespace("patchwork")) {
@@ -8,7 +9,7 @@
 #' ggzen <- loon.ggplot(zen)
 #' ggzen +
 #'   patchwork::plot_annotation(title = "This is a ggplot")
-#' }
+#' }}
 loon2ggplot.zenLoon <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                 showNearestColor = FALSE, ...) {
   # get loon plot paths
