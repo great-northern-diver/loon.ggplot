@@ -10,10 +10,10 @@ get_model_display_order <- utils::getFromNamespace("get_model_display_order", "l
 tcl_img_2_r_raster <- utils::getFromNamespace("tcl_img_2_r_raster", "loon")
 char2num.data.frame <- utils::getFromNamespace("char2num.data.frame", "loon")
 
-# This function is temporary
+# These functions are temporary
 # after loon is updated to 1.3.8
 # this function will be switched to
-# `loon::l_colorName`
+# `loon::l_colorName` and `loon::glyph_to_pch`
 l_colorName <- function(color, error = TRUE, precise = FALSE) {
 
   color.id <- function(x, error = TRUE, precise = FALSE, env = environment()) {
@@ -71,6 +71,29 @@ l_colorName <- function(color, error = TRUE, precise = FALSE) {
     color[color == uniColor[i]] <- colorName[i]
   }
   color
+}
+
+glyph_to_pch <- function(glyph) {
+
+  vapply(glyph, function(x) {
+    switch(
+      x,
+      circle = 19,
+      ocircle = 1,
+      ccircle = 21,
+      square = 15,
+      osquare = 0,
+      csquare = 22,
+      triangle = 17,
+      otriangle = 2,
+      ctriangle = 24,
+      diamond = 18,
+      odiamond = 5,
+      cdiamond = 23,
+      NA_integer_
+    )
+  }, numeric(1))
+
 }
 
 
