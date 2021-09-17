@@ -85,16 +85,7 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
      
@@ -102,24 +93,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplot2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar Of Interactive Graphics</a>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/linking.html">Linking and missing data</a>
+      <a href="../articles/Pipes.html">Pipes</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplot.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
     </li>
     <li>
-      <a href="../articles/pipes.html">Pipes</a>
+      <a href="../articles/loon2ggplot.html">loon plots to ggplots</a>
     </li>
     <li>
-      <a href="../articles/thereAndBackAgain.html">There And Back Again</a>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -127,8 +121,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon,ggplot">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -157,6 +151,67 @@
     </colgroup>
 
     <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-an-interactive-grammar-of-graphics" class="hasAnchor"><a href="#section-an-interactive-grammar-of-graphics" class="anchor"></a>An Interactive Grammar of Graphics</h2>
+          <p class="section-desc"><p>Functions and additive clauses that extend the <code>ggplot</code> grammar of graphics to interactive visualization.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
+        </td>
+        <td><p>Automatically create a loon widget</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="linking.html">linking()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>linking</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hover.html">hover()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>hover</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="selection.html">selection()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>selected</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="active.html">active()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>active</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="zoom.html">zoom()</a></code> </p>
+        </td>
+        <td><p>Zoom Plot Region</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="interactivity.html">interactivity()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>interactivity</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gg_pipe.html">gg_pipe()</a></code> </p>
+        </td>
+        <td><p>Pipe ggplot object</p></td>
+      </tr>
+    </tbody><tbody>
       <tr>
         <th colspan="2">
           <h2 id="section-the-loon-ggplot-duality" class="hasAnchor"><a href="#section-the-loon-ggplot-duality" class="anchor"></a>The loon &lt;-&gt; ggplot duality</h2>
@@ -260,67 +315,6 @@
           <p><code><a href="get_activeGeomLayers.html">get_activeGeomLayers()</a></code> </p>
         </td>
         <td><p>active geom layers</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-an-interactive-grammar-of-graphics" class="hasAnchor"><a href="#section-an-interactive-grammar-of-graphics" class="anchor"></a>An Interactive Grammar of Graphics</h2>
-          <p class="section-desc"><p>Functions and additive clauses that extend the <code>ggplot</code> grammar of graphics to interactive visualization.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
-        </td>
-        <td><p>Automatically create a loon widget</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="linking.html">linking()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>linking</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hover.html">hover()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>hover</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="selection.html">selection()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>selected</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="active.html">active()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>active</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="zoom.html">zoom()</a></code> </p>
-        </td>
-        <td><p>Zoom Plot Region</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="interactivity.html">interactivity()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>interactivity</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="gg_pipe.html">gg_pipe()</a></code> </p>
-        </td>
-        <td><p>Pipe ggplot object</p></td>
       </tr>
     </tbody><tbody>
       <tr>
