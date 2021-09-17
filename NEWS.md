@@ -1,7 +1,14 @@
+# loon.ggplot 1.3.0
+
+* **Important change**: when we turn a `loon` compound object to a `ggplot` object, package `patchwork` is used (not `GGally`). The benefit is that the size of each plot can be different.
+
+* Fix a bug: a error is encountered when transforming a swapped `loon` histogram to a `ggplot` object.
+
+* A `loon` `zenplot` can be turned to a `ggplot` object via function `loon.ggplot()` or `loon2ggplot()`.
+
 # loon.ggplot 1.2.1
 
 * Fix a bug: in previous version, `showItemLabels` and `itemLabels` cannot be passed into the `l_serialaxes` widget. 
-
 * Fix some typos and edit documentations
 
 * Set `ggmulti` as "Imports" rather than the "Depends" and replace `coord_serialaxes` to `geom_serialaxes` to avoid potential risks from `coord_serialaxes`.

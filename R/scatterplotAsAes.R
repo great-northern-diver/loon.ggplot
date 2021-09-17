@@ -318,7 +318,9 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                # showArea
                point_pch <- ifelse(gh["showArea"], 1, 19)
 
-               pointSize <- as_ggplot_size(aesthetic$size)
+               # ggplot default value
+               fatten <- 4
+               pointSize <- as_ggplot_size(aesthetic$size)/fatten
                size[id] <- pointSize
 
                ggObj <- ggObj +
@@ -356,7 +358,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                                              tcl_img[i], round(width),
                                              round(height), img)
                                   # get the image
-                                  image <- loon::tcl_img_2_r_raster(img)
+                                  image <- tcl_img_2_r_raster(img)
                                   tcl("image", "delete", img)
                                   image
                                 })
@@ -642,7 +644,7 @@ scatterplotAsAesFALSE <- function(ggObj, widget, x, y,
                                              tcl_img[i], round(width),
                                              round(height), img)
                                   # get the image
-                                  image <- loon::tcl_img_2_r_raster(img)
+                                  image <- tcl_img_2_r_raster(img)
                                   tcl("image", "delete", img)
                                   image
                                 })

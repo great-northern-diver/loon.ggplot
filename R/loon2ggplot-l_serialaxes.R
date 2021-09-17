@@ -105,7 +105,7 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
       ggmulti::geom_serialaxes(
         data = serialaxes.data[active_displayOrder, ],
         color = get_display_color(
-          loon::as_hex6color(data$color[active_displayOrder]),
+          as_hex6color(data$color[active_displayOrder]),
           data$selected[active_displayOrder]
         ),
         size = as_ggplot_size(data$linewidth[active_displayOrder], "lines"),
@@ -128,6 +128,9 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
       coord_radial(direction = -1, # anticlock
                    start = 11) # at 11
 
+  } else {
+    ggObj <- ggObj +
+      ggplot2::coord_cartesian(expand = FALSE)
   }
 
   # set labels (it is equivalent to set the title)
@@ -184,7 +187,6 @@ set_serialaxes_themes <- function(ggObj, sequence = NULL,
       } else ggplot2::element_blank(),
       panel.grid.major.y = if(showGuides) ggplot2::element_line() else ggplot2::element_blank(),
       panel.background = ggplot2::element_rect(fill = panel_bg_fill),
-      plot.margin = grid::unit(c(5,12,5,12), "mm"),
       plot.background = ggplot2::element_rect(fill = panel_bg_fill),
       legend.background = element_rect(fill = panel_bg_fill)
     )

@@ -22,13 +22,15 @@ Imports:
     utils,
     grDevices,
     grid,
-    GGally,
     gridExtra,
     scales,
+    patchwork,
     rlang
 Suggests:
+    GGally,
     magrittr,
     tidyr,
+    zenplots,
     dplyr,
     gtable,
     png,

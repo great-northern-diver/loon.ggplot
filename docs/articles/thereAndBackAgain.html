@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.2.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
       </span>
     </div>
 
@@ -101,14 +101,14 @@
 
       
 
-      </header><script src="thereAndBackAgain_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="thereAndBackAgain_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>There And Back Again</h1>
             <h3 class="subtitle">Differences When Transforming</h3>
                         <h4 class="author">R.W. Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2021-07-13</h4>
+            <h4 class="date">2021-09-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/thereAndBackAgain.Rmd"><code>vignettes/thereAndBackAgain.Rmd</code></a></small>
       <div class="hidden name"><code>thereAndBackAgain.Rmd</code></div>
@@ -166,6 +166,7 @@
 <span class="co">#&gt; 13 40 57     1    -1    19   grey    5   NA    NA    0.5</span>
 <span class="co">#&gt; 14 34 40     1    -1    19   grey    5   NA    NA    0.5</span>
 <span class="co">#&gt; 15 26 78     1    -1    19   grey    5   NA    NA    0.5</span></code></pre></div>
+<p>Note that some of the <code>x</code> and <code>y</code> values are <code>NA</code>, representing missing values.</p>
 </div>
 <div id="the-loon-plot-and-its-states" class="section level2">
 <h2 class="hasAnchor">
@@ -175,11 +176,49 @@
 <code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">ggp</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span></code></pre></div>
 <p><img src="thereAndBackAgain_files/figure-html/loon%20plot-1.png" width="40%" style="display: block; margin: auto;"></p>
-<div id="glyph-or-shape" class="section level3">
-<h3 class="hasAnchor">
-<a href="#glyph-or-shape" class="anchor"></a>glyph or shape</h3>
-<p>In <code>R</code> the point symbol plotted is associated with a numerical code <code>pch</code>. In <code>loon</code> the point symbol is a glyph, identified by a string.</p>
+<p>The <code>loon</code> plot looks slightly different:</p>
+<ul>
+<li>title in a different position,</li>
+<li>the relative sizes of the margins and drawing areas,</li>
+<li>axis tic marks and labels,</li>
+<li>font sizes and styles, and</li>
+<li>points are a slightly darker grey in the <code>loon</code> plot.</li>
+</ul>
+<p>Plots in <code>loon</code> have more constrained layouts than those in <code>ggplot2</code>, since focus is primarily on interactive as opposed to publication quality graphics.<br>
+Some differences (e.g., colour) are also because <code>loon</code> is based on <code>Tcl</code> for drawing primitives.</p>
+<p>Plot states in <code>loon</code> are accessible using <code>[]</code> and the name of the state. Values are assigned in the same way. Names of interactively changeable states in <code>loon</code> are</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "glyph"            "itemLabel"        "showItemLabels"   "linkingGroup"    </span>
+<span class="co">#&gt;  [5] "linkingKey"       "zoomX"            "zoomY"            "panX"            </span>
+<span class="co">#&gt;  [9] "panY"             "deltaX"           "deltaY"           "xlabel"          </span>
+<span class="co">#&gt; [13] "ylabel"           "title"            "showLabels"       "showScales"      </span>
+<span class="co">#&gt; [17] "swapAxes"         "showGuides"       "background"       "foreground"      </span>
+<span class="co">#&gt; [21] "guidesBackground" "guidelines"       "minimumMargins"   "labelMargins"    </span>
+<span class="co">#&gt; [25] "scalesMargins"    "x"                "y"                "xTemp"           </span>
+<span class="co">#&gt; [29] "yTemp"            "color"            "selected"         "active"          </span>
+<span class="co">#&gt; [33] "size"             "tag"              "useLoonInspector" "selectBy"        </span>
+<span class="co">#&gt; [37] "selectionLogic"</span>
+<span class="co"># and accessed with [] as in </span>
+<span class="va">lp</span><span class="op">[</span><span class="st">"title"</span><span class="op">]</span>
+<span class="co">#&gt; [1] "Some title"</span></code></pre></div>
+<p>(See also <code><a href="https://great-northern-diver.github.io/loon/reference/l_info_states.html">?l_info_states</a></code>.)</p>
+<p>Some, like <code>x</code>, <code>y</code>, and <code>color</code>, are <em>n-dimensional states</em> whose values correspond to those on individual observations. These may be changed using the <code>[] &lt;-</code> notation as well.</p>
+<p>Because <code>loon</code> plots exclude observations missing values in any its n-dimensional states, the <code>loon</code> plot will have fewer observations than the corresponding <code>ggplot</code>, even though the same number of points may be plotted. The actual number of observations in the <code>loon</code> plot is</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">lp</span><span class="op">[</span><span class="st">"n"</span><span class="op">]</span>
+<span class="co">#&gt; [1] 13</span></code></pre></div>
+<p>which is less than the number of observations recorded in the <code>ggplot</code> structure (namely <code>nrow(ggp_states) =</code> 15).</p>
+</div>
+<div id="changing-from-ggplot-to-loon" class="section level2">
+<h2 class="hasAnchor">
+<a href="#changing-from-ggplot-to-loon" class="anchor"></a>changing from ggplot to loon</h2>
+<p>Differences between <code>ggplot</code> structure and <code>loon</code> plot structure (and how these affect the visualizations) is worth exploring in a little more detail. A better understanding will be helpful when transforming back and forth between the two.</p>
+<div id="shape-to-glyph" class="section level3">
+<h3 class="hasAnchor">
+<a href="#shape-to-glyph" class="anchor"></a>shape to glyph</h3>
+<p>In <code>R</code> the point symbol plotted is associated with a numerical code <code>pch</code>. In <code>loon</code> the point symbol is a glyph, identified by a string.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ggp_states</span><span class="op">$</span><span class="va">shape</span>
 <span class="co">#&gt;  [1] 19 19 19 19 19 19 19 19 19 19 19 19 19 19 19</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"glyph"</span><span class="op">]</span>
@@ -190,20 +229,21 @@
 <div id="point-size" class="section level3">
 <h3 class="hasAnchor">
 <a href="#point-size" class="anchor"></a>point size</h3>
-<p>Size is another plot state that differs between <code>ggplot</code> and <code>loon</code>. The point <code>size</code> in <code>loon</code> identifies the approximate <strong>area</strong> of the point symbol, so when transforming from <code>ggplot</code> to <code>loon</code>, the <code>size</code> parameter of the <code>ggplot</code> is transformed to an integer value in <code>loon</code> that tries to match the area of the point in <code>ggplot</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Size is another plot state that differs between <code>ggplot</code> and <code>loon</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ggp_states</span><span class="op">$</span><span class="va">size</span>
 <span class="co">#&gt;  [1] 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"size"</span><span class="op">]</span>
-<span class="co">#&gt;  [1] 26.57323 26.57323 26.57323 26.57323 26.57323 26.57323 26.57323 26.57323</span>
-<span class="co">#&gt;  [9] 26.57323 26.57323 26.57323 26.57323 26.57323</span></code></pre></div>
+<span class="co">#&gt;  [1] 26.78116 26.78116 26.78116 26.78116 26.78116 26.78116 26.78116 26.78116</span>
+<span class="co">#&gt;  [9] 26.78116 26.78116 26.78116 26.78116 26.78116</span></code></pre></div>
+<p>The point <code>size</code> in <code>loon</code> identifies the approximate <strong>area</strong> of the point symbol, so when transforming from <code>ggplot</code> to <code>loon</code>, the <code>size</code> parameter of the <code>ggplot</code> is transformed to an integer value in <code>loon</code> that tries to match the area of the point in <code>ggplot</code>.</p>
 </div>
 <div id="colours" class="section level3">
 <h3 class="hasAnchor">
 <a href="#colours" class="anchor"></a>colours</h3>
-<p>The colour values are a little different.<br>
-Visibly, there is a difference in the <code>"grey"</code> points seen in each plot. The two plots have different values stored as their colour state:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<p>Comparing the plots, the points are slightly different <code>"grey"</code> in one plot than in the other.</p>
+<p>This is because the two plots have different values stored as their colour state:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ggp_states</span><span class="op">$</span><span class="va">colour</span>
 <span class="co">#&gt;  [1] "grey" "grey" "grey" "grey" "grey" "grey" "grey" "grey" "grey" "grey"</span>
 <span class="co">#&gt; [11] "grey" "grey" "grey" "grey" "grey"</span>
@@ -212,41 +252,47 @@ Visibly, there is a difference in the <code>"grey"</code> points seen in each pl
 <span class="co">#&gt;  [5] "#808080808080" "#808080808080" "#808080808080" "#808080808080"</span>
 <span class="co">#&gt;  [9] "#808080808080" "#808080808080" "#808080808080" "#808080808080"</span>
 <span class="co">#&gt; [13] "#808080808080"</span></code></pre></div>
-<p>The <code>loon</code> plot colours are twelve hexadecimal digits, as in <code>tk</code> (e.g., see <code><a href="https://great-northern-diver.github.io/loon/reference/tkcolors.html">tkcolors()</a></code>); the <code>ggplot</code> will have named <code>R</code> colours <strong>or</strong> six hexadecimal digits (two for each of the red, green, and blue components).</p>
+<p>First, there is a slight difference between what <code>R</code> regards as <code>"grey"</code> and what <code>Tcl</code> (used by <code>loon</code>) regards as <code>"grey"</code>. Several other <strong>named</strong> colours in <code>R</code> also differ slightly from those in <code>Tcl</code> and hence in <code>loon</code>. <code>R</code> colours whose name <strong>is the same</strong> as that in <code>Tcl</code> <strong>but whose colour is different</strong> are <strong>only</strong> the following: <img src="thereAndBackAgain_files/figure-html/tkcolors-1.png" width="60%" style="display: block; margin: auto;"> (See <code><a href="https://great-northern-diver.github.io/loon/reference/tkcolors.html">?tkcolors</a></code> in <code>loon</code> for more information.)</p>
+<p>Second, <code>loon</code> plot colour values are strings of <strong>twelve</strong> hexadecimal digits, as in <code>tk</code> (e.g., see <code><a href="https://great-northern-diver.github.io/loon/reference/tkcolors.html">?tkcolors</a></code>); in contrast, the <code>ggplot</code> are either strings corresponding to the named <code>R</code> colours (see <code><a href="https://rdrr.io/r/grDevices/colors.html">?grDevices::colors</a></code> in <code>R</code>) or to <strong>six</strong> hexadecimal digits (two for each of the red, green, and blue components).</p>
 <p>Twelve hex digit colours are turned into six hex digits using the <code>loon</code> function <code>hex12to6()</code>. To convert the <code>R</code> named colours to six hex digits, the following function can be used.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">tohex</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">x</span>, <span class="kw">function</span><span class="op">(</span><span class="va">xi</span><span class="op">)</span> <span class="op">{</span>
         <span class="va">crgb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html">as.vector</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/grDevices/col2rgb.html">col2rgb</a></span><span class="op">(</span><span class="va">xi</span><span class="op">)</span><span class="op">)</span>
         <span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html">rgb</a></span><span class="op">(</span><span class="va">crgb</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">crgb</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">crgb</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span>, maxColorValue <span class="op">=</span> <span class="fl">255</span><span class="op">)</span>
     <span class="op">}</span><span class="op">)</span><span class="op">}</span></code></pre></div>
 <p>So, comparing the two <code>"grey"</code> colours, the <code>ggplot</code> has the <code>R</code> hex colour <code>tohex("grey") =</code> #BEBEBE and the <code>loon</code> plot has <code>Tcl</code> hex colour (converted to hex 6) <code>hex12tohex6(lp["color"][1]) =</code> #808080, which are clearly different RGB values.</p>
-<p>This is because the <strong>named</strong> colours in <code>R</code> are slightly different from those in <code>Tcl</code> that <code>loon</code> is built on. The <code>R</code> colours whose name <strong>is the same</strong> as that in <code>Tcl</code> <strong>but whose colour is different</strong> are <strong>only</strong> the following: <img src="thereAndBackAgain_files/figure-html/tkcolors-1.png" width="60%" style="display: block; margin: auto;"> See <code><a href="https://great-northern-diver.github.io/loon/reference/tkcolors.html">tkcolors()</a></code> in <code>loon</code> for more information.</p>
 </div>
-<div id="missing-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#missing-data" class="anchor"></a>missing data</h3>
+</div>
+<div id="effect-of-missing-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#effect-of-missing-data" class="anchor"></a>effect of missing data</h2>
 <p>The <code>loon</code> plot does not include the missing data</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">ggp_states</span><span class="op">)</span> <span class="op">==</span> <span class="va">lp</span><span class="op">[</span><span class="st">"n"</span><span class="op">]</span>
 <span class="co">#&gt; [1] FALSE</span>
+<span class="co"># Compare</span>
 <span class="va">ggp_states</span><span class="op">$</span><span class="va">y</span>
 <span class="co">#&gt;  [1] 68 63 63 13 55 78 14 14 NA 28 NA 55 57 40 78</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"y"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] 68 63 63 13 55 78 14 14 28 55 57 40 78</span></code></pre></div>
 <p>Note that, absent the missing <code>NA</code>s, the <strong>order</strong> of the points is identical.</p>
-</div>
-<div id="linking-keys" class="section level3">
+<div id="on-linking-keys" class="section level3">
 <h3 class="hasAnchor">
-<a href="#linking-keys" class="anchor"></a>linking keys</h3>
+<a href="#on-linking-keys" class="anchor"></a>on linking keys</h3>
 <p>Default linking keys in <code>loon</code> are from <code>"0"</code> to <code>"n-1"</code> where <code>"n"</code> is the number of rows in the original data set.<br>
 Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the number of points actually plotted because <code>loon</code> drops the missing data, unlike <code>ggplot</code>.</p>
 <p>The linking keys reflect this missingness:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp</span><span class="op">[</span><span class="st">"linkingKey"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "9"  "11" "12" "13" "14"</span></code></pre></div>
 <p>which is missing <code>"8"</code> and <code>"10"</code>. Note also that <code>lp["n"] =</code> 13 is the number of points plotted in the <code>loon</code> plot.</p>
-<p>Some care needs to be taken when dealing with linking, especially when there is missing data. See the vignette <code>Linking</code> and the <code>loon</code> vignette <code>Logical Queries</code> for more information.</p>
+<p>Some care needs to be taken when dealing with linking, especially when there is missing data.</p>
+</div>
+<div id="for-more-information" class="section level3">
+<h3 class="hasAnchor">
+<a href="#for-more-information" class="anchor"></a>for more information</h3>
+<p>See the vignette <code>Linking</code> and the <code>loon</code> vignette <code>Logical Queries</code> for more information.</p>
 </div>
 </div>
 </div>
@@ -254,7 +300,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <h1 class="hasAnchor">
 <a href="#loon-to-ggplot-transformation" class="anchor"></a><code>loon</code> to <code>ggplot</code> transformation</h1>
 <p>A <code>ggplot</code> from the <code>loon</code> plot will not have access to the original information.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ggp_lp_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span>
 <span class="va">ggp_lp_1</span></code></pre></div>
 <p><img src="thereAndBackAgain_files/figure-html/ggp%20from%20lp-1.png" width="40%" style="display: block; margin: auto;"></p>
@@ -263,7 +309,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <h2 class="hasAnchor">
 <a href="#the-ggplot-states" class="anchor"></a>the <code>ggplot</code> states</h2>
 <p>To try to reflect the look of the <code>loon</code> plot, the states of the <code>ggplot</code> are <strong>different</strong> from those of the original <code>ggplot</code> <code>ggp</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ggp_lp_1_states</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot_build.html">ggplot_build</a></span><span class="op">(</span><span class="va">ggp_lp_1</span><span class="op">)</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>
 <span class="va">ggp_lp_1_states</span>
 <span class="co">#&gt;     colour size  x  y PANEL group shape fill alpha stroke</span>
@@ -282,13 +328,16 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt; 13 #808080    5 26 78     1     1    19   NA    NA    0.5</span>
 
 <span class="va">lp_ggp_lp_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">ggp_lp_1</span><span class="op">)</span></code></pre></div>
-<p>The <strong>shape</strong> is now <code>pch = 16</code>, which in <code>R</code>, corresponds to a filled circle (without a boundary).</p>
+<div id="nearest-colours" class="section level3">
+<h3 class="hasAnchor">
+<a href="#nearest-colours" class="anchor"></a>nearest colours</h3>
+</div>
 </div>
 <div id="after-interactive-changes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#after-interactive-changes" class="anchor"></a>After interactive changes</h2>
 <p>Perform some interactive changes, including selecting some points</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">selection</span> <span class="op">&lt;-</span> <span class="va">lp</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">50</span> <span class="op">&amp;</span><span class="va">lp</span><span class="op">[</span><span class="st">"y"</span><span class="op">]</span> <span class="op">&gt;</span> <span class="fl">13</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"selected"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">selection</span>
 <span class="va">colorMeRed</span> <span class="op">&lt;-</span> <span class="va">lp</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span> <span class="op">==</span> <span class="fl">34</span>
@@ -310,7 +359,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 </ul>
 <p>An <strong>important special case</strong> is when some observations were <strong>selected</strong> in the first interactive plot at the time the <code>ggplot</code> is created. In this case, the <strong>linking keys will typically not match.</strong></p>
 <p>For example,</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Get a ggplot from the loon plot</span>
 <span class="va">ggp_lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span></code></pre></div>
 <p>The interactive <code>lp</code> and the new <code>ggplot</code> <code>ggp_lp</code> appear as follows. <img src="thereAndBackAgain_files/figure-html/loon%20to%20ggplot-1.png" width="80%" style="display: block; margin: auto;"> The left plot, <code>lp</code>, is an interactive <code>loon</code> plot and the magenta points are selected. The right plot, <code>ggp_lp</code>, is a static <code>ggplot</code> which has no <code>selected</code> state and the magenta points are simply points having that colour (and appear as that in the <code>ggplot</code> legend).</p>
@@ -321,11 +370,11 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 </ul>
 <p>When transferring that to a <code>ggplot</code>, the selected points appear with the highlight colour <strong>and</strong> the <strong>data order is changed</strong> in the <code>ggplot</code> so that they appear on top of all other points in the display. If, instead, the argument <code>selectedOnTop = FALSE</code> is given to <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> call, then the order of points will not be changed in the <code>ggplot</code>. This is <strong>strongly recommended</strong> whenever the <code>ggplot</code> will later be turned into an interactive plot; this will allow the linking to match more easily with the original interactive plot.</p>
 <p>To see the effect of this (and of missing values) on linking, suppose an interactive plot is created from the <code>ggplot</code> <code>ggp_lp</code>:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The loon plot from the resulting ggplot</span>
 <span class="va">lp_ggp_lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">ggp_lp</span><span class="op">)</span></code></pre></div>
 <p>Compare the linking keys of this plot with the original:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The original loon plot has linking keys</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"linkingKey"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "9"  "11" "12" "13" "14"</span>
@@ -335,7 +384,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <p>Clearly, these are not the same and will match observations correctly (<code>"0"</code> to <code>"7"</code>), some incorrectly (<code>"9"</code>, <code>"11"</code>, and <code>"12"</code>), and some not at all (<code>"8"</code>, <code>"13"</code>, and <code>"14"</code>).</p>
 <p>The difference is that <code>lp</code> was created with data missing values corresponding to the missing linking keys <code>"8"</code> and <code>"10"</code>. This information was not available on the <code>ggplot</code> <code>ggp_lp</code> so that the new <code>loon</code> plot would be created with the default values <code>"0"</code> to <code>"12"</code>. The result is that some points will be wrongly linked between <code>lp</code> and <code>lp_ggp_lp</code>.</p>
 <p>The selected points in <code>lp</code> (highlighted magenta) will cause reordering in <code>ggp_lp</code> and hence in <code>lp_ggp_lp</code>. This too will cause problems in linking and other states of the new <code>lp_ggp_lp</code>. For example, the two point orders can be seen in the respective values of their <code>"x"</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># The original point order</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] 19 19 25 62 34 58 62 40 60 40 40 34 26</span>
@@ -344,7 +393,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt;  [1] 19 19 25 62 34 40 40 40 34 26 58 62 60</span></code></pre></div>
 <p>This makes problems for matching the correct observations.</p>
 <p>Other states are also changed because of the transition from <code>loon</code> plot to <code>ggplot</code> to <code>loon</code> plot. In particular, the <code>"color"</code> and <code>"selected"</code> states will not match.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Original selected</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"selected"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE</span>
@@ -354,7 +403,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
 <span class="co">#&gt; [13] FALSE</span></code></pre></div>
 <p>This is for two reasons. First the selected points of <code>lp</code> changed to colour in <code>ggp_lp</code> and so the selected points from <code>lp</code> could not be transferred to <code>lp_ggp_lp</code>. The colours in <code>lp_ggp_lp</code> will not match those ofSecond, the new plot has not (yet) joined the same linking group as the original.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Original selected</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"color"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] "#808080808080" "#808080808080" "#808080808080" "#808080808080"</span>
@@ -369,7 +418,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt; [13] "#FFFF0000FFFF"</span></code></pre></div>
 <p>When observations are also <strong>highlighted</strong> in the original <code>loon</code> plot, as in <code>lp</code>, a little more care needs to be taken with respect to the linking keys. The problem is that in constructing the <code>ggplot</code>, the data has to be reordered to ensure that the selected highlighted points appear on top of the other points in the <code>ggplot</code>.</p>
 <p>Care needs to be taken to manage the linking keys when moving from the static <code>ggplot</code> to the interactive <code>loon</code> plot. This information can be added when the interactive plot is created, as arguments to <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> as follows.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Add the linking information when creating the interactive plot</span>
 <span class="va">lp_ggp_l1_lk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">ggp_lp</span>, 
                             linkingKey <span class="op">=</span><span class="va">lp</span><span class="op">[</span><span class="st">"linkingKey"</span><span class="op">]</span>, 
@@ -381,7 +430,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="va">lp</span><span class="op">[</span><span class="st">"linkingKey"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "9"  "11" "12" "13" "14"</span></code></pre></div>
 <p>Alternatively, the grammar could have been used as in</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Add the linking information when creating the interactive plot</span>
 <span class="va">lp_ggp_l1_ggk</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">ggp_lp</span> <span class="op">+</span> 
                                <span class="fu"><a href="../reference/linking.html">linking</a></span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"NA example"</span>,
@@ -394,7 +443,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt;  [1] "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "9"  "11" "12" "13" "14"</span></code></pre></div>
 <p>Of course, all this depends on the user knowing where to find the correct linking information.</p>
 <p>Comparing the three different interactive plots shows how information can be lost, as well as how it can be maintained, when translating from interactive to static <code>ggplot</code> back to an interactive <code>loon</code> plot.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># PROBLEM</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span>

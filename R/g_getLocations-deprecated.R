@@ -8,12 +8,10 @@
 #' of each plot in \code{g_getPlots()} by their index.
 #'
 #' @seealso \code{\link{l_getLocations}}, \code{\link{g_getPlots}}
-#'
 g_getLocations <- function(target) {
   UseMethod('g_getLocations', target)
 }
 
-#' @export
 #' @rdname g_getLocations
 g_getLocations.default <- function(target) {
 
@@ -35,7 +33,6 @@ g_getLocations.default <- function(target) {
   )
 }
 
-#' @export
 #' @rdname g_getLocations
 g_getLocations.l_pairs <- function(target) {
 
