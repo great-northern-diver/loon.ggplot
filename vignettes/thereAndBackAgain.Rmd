@@ -1,0 +1,411 @@
+---
+title: "There And Back Again"
+subtitle: "Differences When Transforming"
+author: "R.W. Oldford and Zehao Xu"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 3
+geometry: margin=.75in
+urlcolor: blue
+graphics: yes
+vignette: >
+  %\VignetteIndexEntry{There And Back Again}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  
+---
+
+
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 5,
+                      out.width = "40%", 
+                      collapse = TRUE,
+                      comment = "#>",
+                      tidy.opts = list(width.cutoff = 65),
+                      tidy = FALSE)
+library(knitr)
+set.seed(12314159)
+imageDirectory <- "./l_ggplot"
+dataDirectory <- "./l_ggplot"
+
+library(grid, quietly = TRUE)
+library(gridExtra, quietly = TRUE)
+library(ggplot2, quietly = TRUE)
+library(loon, quietly = TRUE)
+library(loon.ggplot, quietly = TRUE)
+```
+
+
+# Some data
+
+Consider the following artificially generated dataset:
+```{r fake data}
+data <- data.frame(A = c(19, 19, 25, 62, 34, 
+                         58, 62, 40, 24, 60, 
+                         70, 40, 40, 34, 26),
+                   B = c(68, 63, 63, 13, 55,
+                         78, 14, 14, NA, 28,
+                         NA, 55, 57, 40, 78) )
+```
+There are `r nrow(data)` observations in the dataset; variable `A` is complete (has no missing values), whereas variables `B` and `C` are missing `r sum(is.na(data$B))` and `r sum(is.na(data$C))` observations, respectively.
+
+# `ggplot` to `loon` transformation
+
+## the `ggplot` and its states
+
+Begin with a `ggplot` defined using the interactive grammar extension:
+
+```{r ggplot}
+ggp <- ggplot(data, 
+               mapping = aes(x = A, y = B)) +
+  ggtitle("Some title") +
+  geom_point(color = "grey", size = 5) +
+  linking(linkingGroup = "my plots")
+plot(ggp)
+```
+
+Information on the `ggplot` corresponding to `loon` states is had using `ggplot_build()`
+
+```{r ggp states}
+# get the ggplot data corresponding to loon "states"
+ggp_states <- ggplot_build(ggp)$data[[1]]
+ggp_states
+```
+
+Note that some of the `x` and `y` values are `NA`, representing missing values.
+
+## the `loon` plot and its states
+
+Now construct the `loon` plot from this `ggplot`:
+```{r loon plot}
+lp <- loon.ggplot(ggp)
+plot(lp)
+```
+
+The `loon` plot looks slightly different:
+
+- title in a different position,
+- the relative sizes of the margins and drawing areas,
+- axis tic marks and labels,
+- font sizes and styles, and
+- points are a slightly darker grey in the `loon` plot.
+
+Plots in `loon` have more constrained layouts than those in `ggplot2`, since focus is primarily on interactive as opposed to publication quality graphics.  
+Some differences (e.g., colour) are also because `loon` is based on `Tcl` for drawing primitives.
+
+Plot states in `loon` are accessible using `[]` and the name of the state.
+Values are assigned in the same way.
+Names of interactively changeable states in `loon` are
+```{r loon plot states}
+names(lp)
+# and accessed with [] as in 
+lp["title"]
+```
+(See also `?l_info_states`.)
+
+Some, like `x`, `y`, and `color`, are *n-dimensional states* whose values correspond to those on individual observations. These may be changed using the `[] <-` notation as well.  
+
+Because `loon` plots exclude observations missing values in any its n-dimensional states, the `loon` plot will have fewer observations than the corresponding `ggplot`, even though the same number of points may be plotted.  The actual number of observations in the `loon` plot is
+```{r loon n}
+lp["n"]
+```
+which is less than the number of observations recorded in the `ggplot` structure (namely `nrow(ggp_states) =` `r nrow(ggp_states)`).
+
+## changing from ggplot to loon
+
+Differences between `ggplot` structure and `loon` plot structure (and how these affect the visualizations) is worth exploring in a little more detail.
+A better understanding will be helpful when transforming back and forth between the two.
+
+### shape to glyph
+
+In `R` the point symbol plotted is associated with a numerical code `pch`. In `loon` the point symbol is a glyph, identified by a string. 
+```{r glyphs}
+ggp_states$shape
+lp["glyph"]
+```
+
+As with other plot "states", there is not always a `glyph` in `loon` that matches a `pch` in `R`.  Values of `pch` with no counterpart in `loon` will map to the default `glyph` in `loon`.
+
+### point size
+
+Size is another plot state that differs between `ggplot` and `loon`.  
+
+```{r sizes}
+ggp_states$size
+lp["size"]
+```
+
+The point `size` in `loon` identifies the approximate **area** of the point symbol, so when transforming from `ggplot` to `loon`, the `size` parameter of the `ggplot` is transformed to an integer value in `loon` that tries to match the area of the point in `ggplot`.
+
+### colours
+  
+Comparing the plots, the points are slightly different `"grey"` in one plot than in the other.
+
+This is because the two plots have different values stored as their colour state:
+```{r colours}
+ggp_states$colour
+lp["color"]
+```
+
+First, there is a slight difference between what `R` regards as `"grey"` and what `Tcl` (used by `loon`) regards as `"grey"`.
+Several other **named** colours in `R` also differ slightly from those in `Tcl` and hence in `loon`.  `R` colours whose name **is the same** as that in `Tcl` **but whose colour is different** are **only** the following:
+```{r tkcolors, echo = FALSE, out.width="60%"}
+tohex <- function(x) {
+    sapply(x, function(xi) {
+        crgb <- as.vector(col2rgb(xi))
+        rgb(crgb[1], crgb[2], crgb[3], maxColorValue = 255)
+    })}
+
+df <- data.frame(
+    R_col = tohex(colors()),
+    Tcl_col = hex12tohex6(l_hexcolor(colors())),
+    row.names = colors(),
+    stringsAsFactors = FALSE
+)
+
+df_diff <- df[df$R_col != df$Tcl_col,]
+
+if (requireNamespace("grid", quietly = TRUE)) {
+  grid::grid.newpage()
+  grid::pushViewport(grid::plotViewport())
+
+  x_col <- grid::unit(0, "npc")
+  x_R <- grid::unit(6, "lines")
+  x_Tcl <- grid::unit(10, "lines")
+
+  grid::grid.text('color', x=x_col, y=grid::unit(1, "npc"),
+                  just='left', gp=grid::gpar(fontface='bold'))
+  grid::grid.text('R', x=x_R, y=grid::unit(1, "npc"), just='center',
+                   gp=grid::gpar(fontface='bold'))
+  grid::grid.text('Tcl', x=x_Tcl, y=grid::unit(1, "npc"), just='center',
+                   gp=grid::gpar(fontface='bold'))
+  for (i in 1:nrow(df_diff)) {
+      y <- grid::unit(1, "npc") - grid::unit(i*1.2, "lines")
+      grid::grid.text(rownames(df_diff)[i], x=x_col, y=y, just='left')
+      grid::grid.rect(x=x_R, y=y, width=grid::unit(3, "line"),
+                height=grid::unit(1, "line"), gp=grid::gpar(fill=df_diff[i,1]))
+      grid::grid.rect(x=x_Tcl, y=y, width=grid::unit(3, "line"),
+                height=grid::unit(1, "line"), gp=grid::gpar(fill=df_diff[i,2]))
+  }
+}
+```
+(See `?tkcolors` in `loon` for more information.)
+
+Second, `loon` plot colour values are strings of **twelve** hexadecimal digits, as in `tk` (e.g., see `?tkcolors`); in contrast, the `ggplot` are either strings corresponding to the named `R` colours (see `?grDevices::colors` in `R`) or to **six** hexadecimal digits (two for each of the red, green, and blue components).  
+
+Twelve hex digit colours are turned into six hex digits using the `loon` function `hex12to6()`.  To convert the `R` named colours to six hex digits, the following function can be used.
+```{r tohex show, eval = FALSE}
+tohex <- function(x) {
+    sapply(x, function(xi) {
+        crgb <- as.vector(col2rgb(xi))
+        rgb(crgb[1], crgb[2], crgb[3], maxColorValue = 255)
+    })}
+```
+So, comparing the two `"grey"` colours, the `ggplot` has the `R` hex colour `tohex("grey") =` `r tohex("grey")` and the `loon` plot has `Tcl` hex colour (converted to hex 6) `hex12tohex6(lp["color"][1]) =` `r hex12tohex6(lp["color"][1])`, which are clearly different RGB values.
+
+## effect of missing data
+
+The `loon` plot does not include the missing data
+```{r missing data}
+nrow(ggp_states) == lp["n"]
+# Compare
+ggp_states$y
+lp["y"]
+```
+Note that, absent the missing `NA`s, the **order** of the points is identical.
+
+### on linking keys
+
+Default linking keys in `loon` are from `"0"` to `"n-1"` where `"n"` is the number of rows in the original data set.  
+Here `nrow(data) =` `r nrow(data)`.  Note that this `"n"`  is not the number of points actually plotted because `loon` drops the missing data, unlike `ggplot`.
+
+The linking keys reflect this missingness:
+```{r missing linking keys}
+lp["linkingKey"]
+```
+which is missing `"8"` and `"10"`.  Note also that `lp["n"] =` `r lp["n"]` is the number of points plotted in the `loon` plot.
+
+Some care needs to be taken when dealing with linking, especially when there is missing data.  
+
+### for more information
+
+See the vignette `Linking` and the `loon` vignette `Logical Queries` for more information.
+
+# `loon` to `ggplot` transformation
+
+A `ggplot` from the `loon` plot will not have access to the original information.
+```{r ggp from lp}
+ggp_lp_1 <- loon.ggplot(lp)
+ggp_lp_1
+```
+
+Note that, though a `ggplot`,  the position of the title is now centred.  This is because the objective of the transformation is to create a `ggplot` that looks as much like the original `loon` plot as possible.
+
+## the `ggplot` states
+To try to reflect the look of the `loon` plot, the states of the `ggplot` are **different** from those of the original `ggplot` `ggp`.
+```{r ggp_lp_1 states}
+ggp_lp_1_states <- ggplot_build(ggp_lp_1)$data[[1]]
+ggp_lp_1_states
+
+lp_ggp_lp_1 <- loon.ggplot(ggp_lp_1)
+```
+
+### nearest colours
+
+
+## After interactive changes
+
+Perform some interactive changes, including selecting some points
+
+```{r change loon plot}
+selection <- lp["x"] > 50 &lp["y"] > 13
+lp["selected"] <- selection
+colorMeRed <- lp["x"] == 34
+lp["color"][colorMeRed] <- "red"
+```
+### linking keys after `loon.ggplot()` 
+
+Linking problems can arise whenever a `ggplot` constructed from a `loon` plot is then made interactive again. 
+
+Suppose a `loon` plot, like `lp`, is turned into a `ggplot` (typically, after some interactive changes) via `loon.ggplot()`, and the resulting new `ggplot` is then itself turned into another interactive plot.
+The new interactive plot will not necessarily share the same linking information as the original. 
+
+This is because the second interactive plot will have the default values of `linkingGroup`, `linkingKey` and linked display states;  these values are lost in the transfer from the first interactive plot to the `ggplot`.  That is,  
+
+- the *linking group* is not automatically carried over to the second interactive plot
+- the *linked states* are not automatically carried over to the second interactive plot
+- the default *linking keys* in the second interactive plot are `"0"`, ..., `"n-1"` where `n` is the number of observations that were displayed in the first plot.
+
+  So, provided the first interactive plot has the default linking keys 
+  (and was built with complete data; i.e., no data was missing at creation), then the linking keys will match.
+
+An **important special case** is when some observations were **selected** in the first interactive plot at the time the `ggplot` is created.  In this case, the **linking keys will typically not match.**
+
+
+For example,
+```{r}
+# Get a ggplot from the loon plot
+ggp_lp <- loon.ggplot(lp)
+```
+The interactive `lp` and the new `ggplot` `ggp_lp` appear as follows.
+```{r loon to ggplot, echo = FALSE, fig.width = 8, fig.height = 4.5, out.width = "80%", warning = FALSE}
+# need grid for text
+library(grid)
+grid.arrange(plot(lp, draw = FALSE),               # the interactive plot
+             ggp_lp,                               # the ggplot fromlp 
+             grid.text("lp"),
+             grid.text("ggp_lp"),               
+             ncol = 2,
+             nrow = 2,
+             widths = c(0.45, 0.55),
+             heights = c(0.5, 0.1))
+```
+The left plot, `lp`,  is an interactive `loon` plot and the magenta points are selected.
+The right plot, `ggp_lp`, is a static `ggplot` which has no `selected` state and the magenta points are simply points having that colour (and appear as that in the `ggplot` legend).
+
+In an interactive plot, selected points are visually emphasized in two ways:
+
+- their colour is changed to the highlight colour (here magenta), and
+- the corresponding part of the display (here the points) are drawn **on top** of the rest of the display.
+
+When transferring that to a `ggplot`, the selected points appear with the highlight colour **and** the **data order is changed** in the `ggplot` so that they appear on top of all other points in the display.  If, instead, the argument `selectedOnTop = FALSE` is given to `loon.ggplot()` call, then the order of points will not be changed in the `ggplot`.  This is **strongly recommended** whenever the `ggplot` will later be turned into an interactive plot; this will allow the linking to match more easily with the original interactive plot.
+
+To see the effect of this (and of missing values) on linking, suppose an interactive plot is created from
+the `ggplot` `ggp_lp`:
+```{r}
+# The loon plot from the resulting ggplot
+lp_ggp_lp <- loon.ggplot(ggp_lp)
+```
+Compare the linking keys of this plot with the original:
+```{r}
+# The original loon plot has linking keys
+lp["linkingKey"]
+# And the loon plot from the derived ggplot
+lp_ggp_lp["linkingKey"]
+```
+Clearly, these are not the same and will match observations correctly (`"0"` to `"7"`), some
+incorrectly (`"9"`, `"11"`, and `"12"`), and some not at all (`"8"`, `"13"`, and `"14"`).
+
+The difference is that `lp` was created with data missing values corresponding to the missing linking keys `"8"` and `"10"`.  This information was not available on the `ggplot` `ggp_lp` so that the new `loon` plot
+would be created with the default values `"0"` to `"12"`.  The result is that some points will be wrongly linked between `lp` and `lp_ggp_lp`.
+
+The selected points in `lp` (highlighted magenta) will cause reordering in `ggp_lp` and hence in `lp_ggp_lp`.  This too will cause problems in linking and other states of the new `lp_ggp_lp`.
+For example, the two point orders can be seen in the respective values of their `"x"`:
+```{r}
+# The original point order
+lp["x"]
+# The new plot's order
+lp_ggp_lp["x"]
+```
+This makes problems for matching the correct observations.
+
+Other states are also changed because of the transition from `loon` plot to `ggplot` to `loon` plot.
+In particular, the `"color"` and `"selected"` states will not match.
+```{r}
+# Original selected
+lp["selected"]
+# the new plot has nothing selected
+lp_ggp_lp["selected"]
+```
+This is for two reasons.  First the selected points of `lp` changed to colour in `ggp_lp` and so the selected points from `lp` could not be transferred to `lp_ggp_lp`. The colours in `lp_ggp_lp` will not match those ofSecond, the new plot has not (yet) joined the same linking group as the original.
+
+```{r}
+# Original selected
+lp["color"]
+# the new plot has nothing selected
+lp_ggp_lp["color"]
+```
+When observations are also **highlighted** in the original `loon` plot, as in `lp`, a little more care needs to be taken with respect to the linking keys.  The problem is that in constructing the `ggplot`, the 
+data has to be reordered to ensure that the selected highlighted points appear on top of the other points in the `ggplot`.  
+
+
+Care needs to be taken to manage the linking keys when moving from the static `ggplot` to the interactive `loon` plot.  This information can be added when the interactive plot is created, as arguments to `loon.ggplot()` as follows.
+```{r}
+# Add the linking information when creating the interactive plot
+lp_ggp_l1_lk <- loon.ggplot(ggp_lp, 
+                            linkingKey =lp["linkingKey"], 
+                            linkingGroup = "NA example")
+# Now compare
+lp_ggp_l1_lk["linkingKey"]
+# to the original loon plot
+lp["linkingKey"]
+```
+Alternatively, the grammar could have been used as in
+
+```{r}
+# Add the linking information when creating the interactive plot
+lp_ggp_l1_ggk <- loon.ggplot(ggp_lp + 
+                               linking(linkingGroup = "NA example",
+                                       linkingKey =lp["linkingKey"]))
+# Again compare
+lp_ggp_l1_ggk["linkingKey"]
+# to the original loon plot
+lp["linkingKey"]
+```
+Of course, all this depends on the user knowing where to find the correct linking information.
+
+Comparing the three different interactive plots shows how information can be lost, as well as how it can be maintained, when translating from interactive to static `ggplot` back to an interactive `loon` plot.
+
+```{r loon to ggplot to loon, fig.width = 12, fig.height = 4, out.width = "100%", warning = FALSE}
+# PROBLEM
+library(grid)
+lp["x"]
+lp_ggp_lp["x"]
+lp_ggp_l1_lk["x"]
+grid.arrange(plot(lp, draw = FALSE), 
+             plot(lp_ggp_lp, draw = FALSE), 
+             plot(lp_ggp_l1_lk, draw = FALSE),  
+             grid.text("lp"), 
+             grid.text("lp_ggp_lp"), 
+             grid.text("lp_ggp_l1_lk"),
+             nrow = 2)
+```
+
+

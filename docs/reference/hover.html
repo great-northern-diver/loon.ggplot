@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Modify the hover component — hover" />
-<meta property="og:description" content="Query in interactive graphics" />
+<meta property="og:description" content="Provides a pop up display as the mouse hovers over a plot element in the interactive plot." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,16 +86,7 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
      
@@ -103,15 +94,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/pipes.html">Pipes</a>
+      <a href="../articles/Pipes.html">Pipes</a>
+    </li>
+    <li>
+      <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/loon2ggplot.html">loon plots to ggplots</a>
+    </li>
+    <li>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -119,8 +122,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon,ggplot">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,7 +146,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Query in interactive graphics</p>
+    <p>Provides a pop up display as the mouse hovers over a plot element in the interactive plot.</p>
     </div>
 
     <pre class="usage"><span class='fu'>hover</span><span class='op'>(</span>itemLabel <span class='op'>=</span> <span class='cn'>NULL</span>, showItemLabels <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -153,11 +156,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>itemLabel</th>
-      <td><p>The customized querying information.</p></td>
+      <td><p>A character vector of length <code>n</code> with a string to be used to pop up when the
+mouse hovers above that element.</p></td>
     </tr>
     <tr>
       <th>showItemLabels</th>
-      <td><p>A logical value. Show item labels or not. Default is <code>FALSE</code></p></td>
+      <td><p>A single logical value: <code>TRUE</code> if pop up labels are to appear on hover,
+<code>FALSE</code> (the default) if they are not.</p></td>
     </tr>
     </table>
 

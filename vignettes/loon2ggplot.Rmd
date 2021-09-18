@@ -1,0 +1,162 @@
+---
+title: "loon plots --> ggplots"
+author: "Wayne Oldford and Zehao Xu"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+geometry: margin=.75in
+urlcolor: blue
+graphics: yes
+vignette: >
+  %\VignetteIndexEntry{loon plots --> ggplots}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+  
+
+---
+
+
+```{r setup, warning=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.align = "center", 
+                      fig.width = 6, 
+                      fig.height = 5,
+                      out.width = "60%", 
+                      collapse = TRUE,
+                      comment = "#>",
+                      tidy.opts = list(width.cutoff = 65),
+                      tidy = FALSE)
+library(knitr)
+set.seed(12314159)
+imageDirectory <- file.path(".", "images", "loon2ggplots")
+
+library(ggplot2, quietly = TRUE)
+library(dplyr, quietly = TRUE)
+library(nycflights13, quietly = TRUE)
+library(loon, quietly = TRUE)
+library(magrittr, quietly = TRUE)
+library(maps, quietly = TRUE)
+library(patchwork, quietly = TRUE)
+```
+
+Package `loon` provides the truly direct manipulation and package `ggplot` provides a unified data structure so that it is easy to be extended. Data analysts who explore data interactively can at any time turn a snapshot of their interactive `loon` plots into `ggplot`s by the simple translation function `loon2ggplot()`.
+
+In `loon`, the current view of any `loon` plot `p` can be turned into a `grid` plot in a variety of ways:
+
+- `plot(p)` 
+- `grid.loon(p)` or `grid.loon(p, draw = FALSE)`
+- `loonGrob(p)` to create the grid object.
+
+The corresponding `grid` object is a rich structure that can be exported, printed, edited, and incorporated into other `grid` structures.  However, adapting that structure to slightly different presentations is a bit of a challenge compared to a `ggplot` (also ultimately a `grid` structure).
+
+In this section, we turn the current state of any `loon` plot into a `ggplot` plot which can then be modified following the rules of the `ggplot2` grammar.
+
+## loon --> ggplot via `loon2ggplot()` 
+
+### Basic
+
+Plot the cars 'horsepower' versus 'lp100km' (100 km per liter) on data `mtcars`.
+
+```{r l_plot, message = FALSE,  warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(dplyr)
+library(loon)
+mt <- mtcars %>%
+  rename(transmission = am, weight = wt, horsepower = hp) %>%
+  mutate(lp100km = (100 * 3.785411784) / (1.609344 * mpg))
+
+p <- mt %>% 
+  with(
+    l_plot(horsepower, lp100km, 
+           color = gear)
+  )
+```
+
+Turn `p` (a `loon` widget) to a `ggplot` object via a simple function `loon2ggplot()`.
+
+```{r l_plot_to_gg, message = FALSE,  warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(loon.ggplot)
+g1 <- loon2ggplot(p)
+g1
+```
+
+```{r l_plot_to_gg_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+include_graphics(file.path(imageDirectory, "ggScatter.png"))
+```
+
+The object `g1` is a `ggplot` graphic. Comparing with the original `loon` widget, the `gg` one provides a legend that is helpful to decode the mapping systems. However, since `loon` widgets do not store the original data information, the labels of each legend are the hex-codes of the color. To better convey the graphics from aesthetics to data, we can edit the legend with more reasonable labels and add titles on top to emphasize the variables.
+
+```{r l_plot_to_gg_modification, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+g1 + 
+  scale_fill_manual(values = c("#999999", "#A6CEE3", "#FFC0CB"), 
+                    name = "gear", 
+                    labels = c("4", "3", "5")) + 
+  ggtitle(label = "horsepower versus lp100km",
+          subtitle = "loon --> ggplot") + 
+  theme( 
+    plot.title = element_text(color = "red", size = 12, face = "bold"),
+    plot.subtitle = element_text(color = "blue")
+  )
+```
+
+```{r l_plot_to_gg_modification_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+include_graphics(file.path(imageDirectory, "ggScatter_modification.png"))
+```
+
+Comparing with static `grid` (via `loonGrob()`), modification of `ggplot` (via `loon2ggplot`) is simpler and more creative. Moreover, `ggplot` has over 100 extended packages. After transforming from `loon` to `ggplot`, users can continually take advantage of these extensions.  
+
+
+### Turn an `l_compound` Object to a `patchwork` Object
+
+Considering the following `loon` pairs plot (an `l_compound` widget) with three variables 'lp100km' (100 km per liter), 'weight' (car weight) and transmission (automatic or manual).
+```{r loon pairs, message = FALSE, warning = FALSE, eval = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+mt %>%
+  select(lp100km, weight, transmission) %>%
+  # and pass the built plot on
+  l_pairs(showHistograms = TRUE,
+          linkingGroup = "Motor Trend 1974") ->  # and assign the result.
+  l_pp
+```
+
+It produces an interactive pairs plot with histograms on the margins (see `?l_pairs`) and assigns the result to `l_pp` (which could have been assigned at the beginning with `<-` as well). Now, turn this pair plot to a `gg` object. Note that the compound `loon` widget like `l_pairs` (the shown one), `l_ts` or `l_facet`, etc, are created by [`patchwork`](https://patchwork.data-imaginist.com/index.html). Features like `theme`, `labels` can be set by the `patchwork` rule. 
+
+```{r p1_piped_staic  ggplot, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(patchwork)
+g2 <- loon2ggplot(l_pp)
+g2
+```
+
+```{r p1_piped_staic_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+include_graphics(file.path(imageDirectory, "loon_l_pairs.png"))
+```
+
+The object `g2` is a `patchwork` object. We can fit a smooth line on the `lp100km vs weight` scatterplot and draw a density curve on the `weight` histogram. Additionally, a title is added.
+
+```{r p1_piped_modification  ggplot, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+# Add a regression line on the `lp100km vs weight` scatterplot
+g2$patches$plots[[1]] <- g2$patches$plots[[1]] + 
+  geom_smooth(method = "lm")
+# Add a density curve on the `weight` histogram
+g2$patches$plots[[4]] <- g2$patches$plots[[4]] +
+  geom_density()
+# Add a title
+g2 <- g2 + 
+  patchwork::plot_annotation(title = "Mtcars Pairs Plot")
+g2
+```
+
+```{r p1_piped_modification_graph, echo = FALSE, message = FALSE,  warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+include_graphics(file.path(imageDirectory,"loon_l_pairs_modification.png"))
+```
+
+## Function `loon.ggplot()`
+
+`loon.ggplot()` function in `loon.ggplot` package is an `S3` method and gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and forth. 
+
+Loon to ggplot: `loon.ggplot(loon)` is equivalent to `loon2ggplot(loon)`.
+
+---
+
+See the vignette `A Grammar of Interactive Graphics` for more.

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>loon.ggplot: Making 'ggplot2' Plots Interactive with 'loon' and Vice Versa — loon.ggplot-package • loon.ggplot</title>
+<title>loon.ggplot: A Grammar of Interactive Graphics — loon.ggplot-package • loon.ggplot</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,9 @@
 
 
 
-<meta property="og:title" content="loon.ggplot: Making 'ggplot2' Plots Interactive with 'loon' and Vice Versa — loon.ggplot-package" />
+<meta property="og:title" content="loon.ggplot: A Grammar of Interactive Graphics — loon.ggplot-package" />
 <meta property="og:description" content="
-It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts who value the grammar pipeline provided by 'ggplot2' can turn these static plots into interactive 'loon' plots. Conversely, data analysts who explore data interactively with 'loon' can turn any 'loon' plot into a 'ggplot2' plot structure. The function 'loon.ggplot()' is applied to one plot structure will return the other." />
+Provides a bridge between the 'loon' and  'ggplot2' packages.  Extends the grammar of ggplot to add clauses to create interactive `loon` plots. Existing ggplots can be turned into interactive 'loon' plots and 'loon' plots into static ggplots; the function 'loon.ggplot()' is the bridge from one plot structure to the other." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -87,16 +87,7 @@ It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts w
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
      
@@ -104,15 +95,27 @@ It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts w
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/pipes.html">Pipes</a>
+      <a href="../articles/Pipes.html">Pipes</a>
+    </li>
+    <li>
+      <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/loon2ggplot.html">loon plots to ggplots</a>
+    </li>
+    <li>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -120,8 +123,8 @@ It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts w
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon,ggplot">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,14 +141,14 @@ It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts w
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>loon.ggplot: Making 'ggplot2' Plots Interactive with 'loon' and Vice Versa</h1>
+    <h1>loon.ggplot: A Grammar of Interactive Graphics</h1>
     <small class="dont-index">Source: <a href='https://github.com/great-northern-diver/loon.ggplot/blob/master/R/loon.ggplot-package.R'><code>R/loon.ggplot-package.R</code></a></small>
     <div class="hidden name"><code>loon.ggplot-package.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p><img src='figures/logo.png' align='right' alt='logo' width='120' /></p>
-<p>It provides a bridge between the 'loon' and  'ggplot2' packages. Data analysts who value the grammar pipeline provided by 'ggplot2' can turn these static plots into interactive 'loon' plots. Conversely, data analysts who explore data interactively with 'loon' can turn any 'loon' plot into a 'ggplot2' plot structure. The function 'loon.ggplot()' is applied to one plot structure will return the other.</p>
+<p>Provides a bridge between the 'loon' and  'ggplot2' packages.  Extends the grammar of ggplot to add clauses to create interactive `loon` plots. Existing ggplots can be turned into interactive 'loon' plots and 'loon' plots into static ggplots; the function 'loon.ggplot()' is the bridge from one plot structure to the other.</p>
     </div>
 
 

@@ -7,22 +7,20 @@
 active(active = NULL, activeGeomLayers = NULL)
 }
 \arguments{
-\item{active}{a logical determining whether points appear or
-not (default is \code{TRUE} for all points). If a logical vector is
-given of length equal to the number of points,
-then it identifies which points appear (\code{TRUE}) and
-which do not (\code{FALSE}).}
+\item{active}{a logical or a logical vector of length \code{n} that determines which observations
+are active (\code{TRUE} and hence appear in the plot) and which are inactive (\code{FALSE} and hence do not appear).
+Default is \code{TRUE}.}
 
-\item{activeGeomLayers}{determine which geom layer is interactive. Only \code{geom_point()}
-and \code{geom_histogram()} can be set as active geom layer(s) so far.
-(Notice, more than one \code{geom_point()} layers can be set as active layers,
-but only one \code{geom_histogram()} can be set as an active geom layer)}
+\item{activeGeomLayers}{determine which geom layer is interactive by its `geom_...` position in the grammar of the expression.
+Currently, only \code{geom_point()} and \code{geom_histogram()} can be set as the active geom layer(s) so far.
+(N.B. more than one \code{geom_point()} layer can be set as an active layer,
+but only one \code{geom_histogram()} can be set as an active geom layer and it can be the only active layer.)}
 }
 \value{
 a \code{ggproto} object
 }
 \description{
-Set \code{active} or \code{activeGeomLayers}
+Set \code{active} and/or \code{activeGeomLayers}
 }
 \examples{
 if(interactive()) {

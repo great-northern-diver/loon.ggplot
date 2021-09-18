@@ -85,16 +85,7 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
      
@@ -102,15 +93,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/pipes.html">Pipes</a>
+      <a href="../articles/Pipes.html">Pipes</a>
+    </li>
+    <li>
+      <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/loon2ggplot.html">loon plots to ggplots</a>
+    </li>
+    <li>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -118,8 +121,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon,ggplot">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -150,8 +153,69 @@
     <tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-main-function" class="hasAnchor"><a href="#section-main-function" class="anchor"></a>Main Function</h2>
-          <p class="section-desc"><p>A bridge between <code>loon</code> widgets and <code>gg</code> objects. It can take either a <code>loon</code> widget, a <code>gg</code> object (<code>ggplot</code> or <code>ggmatrix</code>) or a <code>lggplot</code> object, then create a corresponding <code>gg</code> (or <code>loon</code>) graphics.</p></p>
+          <h2 id="section-an-interactive-grammar-of-graphics" class="hasAnchor"><a href="#section-an-interactive-grammar-of-graphics" class="anchor"></a>An Interactive Grammar of Graphics</h2>
+          <p class="section-desc"><p>Functions and additive clauses that extend the <code>ggplot</code> grammar of graphics to interactive visualization.</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
+        </td>
+        <td><p>Automatically create a loon widget</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="linking.html">linking()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>linking</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="hover.html">hover()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>hover</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="selection.html">selection()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>selected</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="active.html">active()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>active</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="zoom.html">zoom()</a></code> </p>
+        </td>
+        <td><p>Zoom Plot Region</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="interactivity.html">interactivity()</a></code> </p>
+        </td>
+        <td><p>Modify the <code>interactivity</code> component</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="gg_pipe.html">gg_pipe()</a></code> </p>
+        </td>
+        <td><p>Pipe ggplot object</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-the-loon-ggplot-duality" class="hasAnchor"><a href="#section-the-loon-ggplot-duality" class="anchor"></a>The loon &lt;-&gt; ggplot duality</h2>
+          <p class="section-desc"><p>The bridge – static <code>ggplots</code> to interactive <code>loon</code> plots and interactive <code>loon</code> plots to elegant <code>ggplot</code>s. <code>l_ggplot</code>s <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> as <code>loon</code> plots and <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> as <code>ggplot</code>s.</p></p>
         </th>
       </tr>
       
@@ -165,12 +229,30 @@
           <p><code><a href="loon.ggplot.html">loon.ggplot()</a></code> </p>
         </td>
         <td><p>loon.ggplot</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
+        </td>
+        <td><p>Automatically create a loon widget</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.l_ggplot.html">print(<i>&lt;l_ggplot&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Explicitly draw plot</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is.l_ggplot.html">is.l_ggplot()</a></code> </p>
+        </td>
+        <td><p>Reports whether x is a <code>l_ggplot</code> object</p></td>
       </tr>
     </tbody><tbody>
       
       <tr>
         <th colspan="2">
-          <h3 id="section-an-interactive-loon-widget-to-a-static-ggplot-object" class="hasAnchor"><a href="#section-an-interactive-loon-widget-to-a-static-ggplot-object" class="anchor"></a>An interactive `loon` widget to a static `ggplot` object</h3>
+          <h3 id="section-from-loon-plots-to-ggplots" class="hasAnchor"><a href="#section-from-loon-plots-to-ggplots" class="anchor"></a>From loon plots to ggplots</h3>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -179,6 +261,12 @@
       
       
       <tr>
+        
+        <td>
+          <p><code><a href="loon.ggplot.html">loon.ggplot()</a></code> </p>
+        </td>
+        <td><p>loon.ggplot</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="loon2ggplot.html">loon2ggplot()</a></code> </p>
@@ -201,7 +289,7 @@
       
       <tr>
         <th colspan="2">
-          <h3 id="section-a-static-ggplot-object-to-an-interactive-loon-widget" class="hasAnchor"><a href="#section-a-static-ggplot-object-to-an-interactive-loon-widget" class="anchor"></a>A static `ggplot` object to an interactive `loon` widget</h3>
+          <h3 id="section-from-ggplots-to-loon-plots" class="hasAnchor"><a href="#section-from-ggplots-to-loon-plots" class="anchor"></a>From ggplots to loon plots</h3>
           <p class="section-desc"></p>
         </th>
       </tr>
@@ -210,6 +298,12 @@
       
       
       <tr>
+        
+        <td>
+          <p><code><a href="loon.ggplot.html">loon.ggplot()</a></code> </p>
+        </td>
+        <td><p>loon.ggplot</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="ggplot2loon.html">ggplot2loon()</a></code> </p>
@@ -225,68 +319,7 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-automatically-create-a-loon-widget-by-the-ggplot-rule-" class="hasAnchor"><a href="#section-automatically-create-a-loon-widget-by-the-ggplot-rule-" class="anchor"></a>Automatically create a `loon` widget by the &quot;ggplot rule&quot;</h2>
-          <p class="section-desc"><p>Function <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> returns an <code>l_ggplot</code> object, then “print” a <code>loon</code> plot automatically.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="l_ggplot.html">l_ggplot()</a></code> </p>
-        </td>
-        <td><p>Automatically create a loon widget</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="interactivity.html">interactivity()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>interactivity</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="hover.html">hover()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>hover</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="linking.html">linking()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>linking</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="selection.html">selection()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>selected</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="active.html">active()</a></code> </p>
-        </td>
-        <td><p>Modify the <code>active</code> component</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="zoom.html">zoom()</a></code> </p>
-        </td>
-        <td><p>Zoom Plot Region</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="print.l_ggplot.html">print(<i>&lt;l_ggplot&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Explicitly draw plot</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-accessories" class="hasAnchor"><a href="#section-accessories" class="anchor"></a>Accessories</h2>
+          <h2 id="section-utilities" class="hasAnchor"><a href="#section-utilities" class="anchor"></a>Utilities</h2>
           <p class="section-desc"><p>Some useful functions for the transformation</p></p>
         </th>
       </tr>
@@ -296,18 +329,6 @@
       
       
       <tr>
-        
-        <td>
-          <p><code><a href="layout_coords.html">layout_coords()</a></code> </p>
-        </td>
-        <td><p>layout matrix</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_scaledData.html">get_scaledData()</a></code> </p>
-        </td>
-        <td><p>scale data</p></td>
-      </tr><tr>
         
         <td>
           <p><code><a href="gg_pipe.html">gg_pipe()</a></code> </p>
@@ -328,9 +349,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="loonLayer.html">loonLayer()</a></code> </p>
+          <p><code><a href="layout_coords.html">layout_coords()</a></code> </p>
         </td>
-        <td><p>Transform geom layers to loon layers</p></td>
+        <td><p>layout matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_scaledData.html">get_scaledData()</a></code> </p>
+        </td>
+        <td><p>scale data</p></td>
       </tr><tr>
         
         <td>
@@ -346,9 +373,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="is.l_ggplot.html">is.l_ggplot()</a></code> </p>
+          <p><code><a href="loonLayer.html">loonLayer()</a></code> </p>
         </td>
-        <td><p>Reports whether x is a <code>l_ggplot</code> object</p></td>
+        <td><p>Transform geom layers to loon layers</p></td>
       </tr><tr>
         
         <td>

@@ -47,8 +47,7 @@
 
 
 <meta property="og:title" content="Zoom Plot Region — zoom" />
-<meta property="og:description" content="Modify the zoomX, zoomY, panX, panY,
-etc to change the plot region" />
+<meta property="og:description" content="Change the visible plot region by scaling to different elements of the display." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -87,16 +86,7 @@ etc to change the plot region" />
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
      
@@ -104,15 +94,27 @@ etc to change the plot region" />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/pipes.html">Pipes</a>
+      <a href="../articles/Pipes.html">Pipes</a>
+    </li>
+    <li>
+      <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/loon2ggplot.html">loon plots to ggplots</a>
+    </li>
+    <li>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -120,8 +122,8 @@ etc to change the plot region" />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon,ggplot">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -144,8 +146,7 @@ etc to change the plot region" />
     </div>
 
     <div class="ref-description">
-    <p>Modify the <code>zoomX</code>, <code>zoomY</code>, <code>panX</code>, <code>panY</code>,
-etc to change the plot region</p>
+    <p>Change the visible plot region by scaling to different elements of the display.</p>
     </div>
 
     <pre class="usage"><span class='fu'>zoom</span><span class='op'>(</span>layerId <span class='op'>=</span> <span class='cn'>NULL</span>, scaleToFun <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -155,7 +156,7 @@ etc to change the plot region</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>layerId</th>
-      <td><p>numerical; which layer to scale to</p></td>
+      <td><p>numerical; which layer to scale the plot by.</p></td>
     </tr>
     <tr>
       <th>scaleToFun</th>
@@ -178,18 +179,18 @@ If it is <code>NULL</code> (default), based on different layers, different scale
 will be applied. For example, if the layer is the main graphic model, i.e. <code>l_plot</code>
 <code>l_hist</code>, then the default <code>scaleToFun</code> is <code>l_scaleto_plot</code>; else
  if the layer is a general <code>l_layer</code> widget, the default <code>scaleToFun</code> would be
- <code>l_scaleto_layer</code> (see <code><a href='get_activeGeomLayers.html'>get_activeGeomLayers</a></code>).</p>
+ <code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_layer.html'>loon::l_scaleto_layer</a></code> (see <code><a href='get_activeGeomLayers.html'>get_activeGeomLayers</a></code>).</p>
 <p>If it is not <code>NULL</code>, users can select one that precisely tailor their own
 problems. The table shows the available <code>scaleToFun</code> functions</p><table class='table'>
 <tr><td><strong>scale to</strong></td><td><strong>Subfunction</strong></td></tr>
-<tr><td>plot</td><td><code>l_scaleto_plot</code></td></tr>
-<tr><td>world</td><td><code>l_scaleto_world</code></td></tr>
-<tr><td>active</td><td><code>l_scaleto_active</code></td></tr>
-<tr><td>selected</td><td><code>l_scaleto_selected</code></td></tr>
-<tr><td>layer</td><td><code>l_scaleto_layer</code></td></tr>
+<tr><td>plot</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html'>loon::l_scaleto_plot</a></code></td></tr>
+<tr><td>world</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_world.html'>loon::l_scaleto_world</a></code></td></tr>
+<tr><td>active</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_active.html'>loon::l_scaleto_active</a></code></td></tr>
+<tr><td>selected</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_selected.html'>loon::l_scaleto_selected</a></code></td></tr>
+<tr><td>layer</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_layer.html'>loon::l_scaleto_layer</a></code></td></tr>
 </table>
-<p>Expect all these, users can customize their own function. Note that,
-the arguments should match the ones of functions shown in the table.</p>
+<p>Users can also supply their own function, providing its arguments match those
+of the functions shown in the above table.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='active.html'>active</a></code>, <code><a href='linking.html'>linking</a></code>, <code><a href='selection.html'>selection</a></code>,

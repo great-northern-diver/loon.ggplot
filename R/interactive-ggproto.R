@@ -177,20 +177,27 @@ interactivity <- function(linkingGroup = NULL,
 }
 
 #' @title Modify the \code{linking} component
-#' @description In interactive graphics, \code{linking} is often used to discover the patterns of interest in several plots.
-#' @param linkingGroup A character. Plots only in the same linkingGroup can be linked
-#' @param linkingKey LinkingKey is the key of linking. Each object in one plot has a unique linking key.
-#' Elements in different plots are linked if they share the same linking keys.
-#' @param linkedStates The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
-#' "color", "selected", "active" for a `l_hist` object.
-#' @param sync The way to synchronize several linked plots. It can be either "pull" (default) or "push".
-#' If the \code{sync} is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
-#' of the new plot will be pulled from the linked plots;
-#' if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.
+#' @description A group-key-state linking model is used to link plots in \code{loon}.  This allows changes in one plot
+#' to propogate to all plots in the same \code{linkingGroup} and enables interactive features like brushing.
+#' Elements to be matched between plots are identified by \code{linkingKey}; within each plot, the key for each
+#' element (e.g., case, observation) is unique.  The \code{linkedStates} identify which display states (e.g., "color")
+#' should change in concert with other plots in the \code{linkingGroup}.
+#'
+#' @param linkingGroup The string identifying the group of linked plots that the current plot will join.  Default is none.
+#' @param linkingKey The length \code{n} character vector of unique keys.  Default will be \code{"0", "1", ..., "n-1"}
+#' where \code{n} is the number of elements (e.g., points) displayed.
+#' @param linkedStates The character vector of display states to be linked.
+#' These can be "color", "selected", "active", "size" and "glyph" for an `l_plot` object and
+#' "color", "selected", "active" for an `l_hist` object.  (These roughly correspond to aesthetics in a `ggplot`.)
+#' @param sync Either \code{"pull"} (the default) or \code{"push"} to indicate whether the values of the linked states of the plot
+#' are to be pulled from those of the other plots in the linking group, or the values are to be pushed to all other plots
+#' in the linking group. This matters only when joining an existing group of plots and the default value is typically
+#' the right thing to do.
 #' @return a \code{ggproto} object
 #'
 #' @seealso \code{\link{active}}, \code{\link{selection}}, \code{\link{zoom}},
-#' \code{\link{hover}}, \code{\link{interactivity}}
+#' \code{\link{hover}}, \code{\link{interactivity}},
+#' \code{\link{loon::l_getLinkedStates}}, \code{\link{loon::l_setLinkedStates}}, \code{\link{loon::l_configure}}
 #'
 #' @examples
 #' if(interactive() && requireNamespace("dplyr")) {
@@ -220,16 +227,14 @@ linking <- function(linkingGroup = NULL,
 }
 
 #' @title Modify the \code{active} component
-#' @description Set \code{active} or \code{activeGeomLayers}
-#' @param active a logical determining whether points appear or
-#' not (default is \code{TRUE} for all points). If a logical vector is
-#' given of length equal to the number of points,
-#' then it identifies which points appear (\code{TRUE}) and
-#' which do not (\code{FALSE}).
-#' @param activeGeomLayers determine which geom layer is interactive. Only \code{geom_point()}
-#' and \code{geom_histogram()} can be set as active geom layer(s) so far.
-#' (Notice, more than one \code{geom_point()} layers can be set as active layers,
-#' but only one \code{geom_histogram()} can be set as an active geom layer)
+#' @description Set \code{active} and/or \code{activeGeomLayers}
+#' @param active a logical or a logical vector of length \code{n} that determines which observations
+#' are active (\code{TRUE} and hence appear in the plot) and which are inactive (\code{FALSE} and hence do not appear).
+#' Default is \code{TRUE}.
+#' @param activeGeomLayers determine which geom layer is interactive by its `geom_...` position in the grammar of the expression.
+#' Currently, only \code{geom_point()} and \code{geom_histogram()} can be set as the active geom layer(s) so far.
+#' (N.B. more than one \code{geom_point()} layer can be set as an active layer,
+#' but only one \code{geom_histogram()} can be set as an active geom layer and it can be the only active layer.)
 #' @return a \code{ggproto} object
 #'
 #' @seealso \code{\link{linking}}, \code{\link{selection}}, \code{\link{zoom}},
@@ -260,22 +265,27 @@ active <- function(active = NULL,
 }
 
 #' @title Modify the \code{selected} component
-#' @description In interactive graphics, \code{selection} is one of the most fundamental tool
-#' and used to highlight the subset of interest
-#' @param selected A logical vector. If it is set as \code{TRUE}, the elements are highlighted
-#' as the graphics are constructed. Default is \code{FALSE}
-#' @param selectBy Select by "sweeping" (default) or "brushing".
-#' @param selectionLogic Selection logic. One of "select" (default), "deselect" and "invert". See details.
-#' @details There are two ways to directly select elements on the scatterplot using the mouse:
-#' either by "sweep" or by "brushing". "Sweeping" allows us to sweep out a contiguous area of the plot,
-#' while, in "brushing", the area is always fixed during the selection.
+#' @description Set which elements (i.e., observations) are "selected".  These will be shown as highlighted in the
+#' plot using the current "highlight" colour (see \code{\link{loon::l_userOptions}}).
+#' @param selected a logical or a logical vector of length \code{n} that determines which observations
+#' are selected (\code{TRUE} and hence appear highlighted in the plot) and which are not.
+#' Default is \code{FALSE} and no points are highlit.
+#' @param selectBy A string determining how selection will occur in the interactive plot.
+#' Default is \code{"sweeping"} where a rectangular region is reshaped or "swept" out to select observations.; alternately
+#'  \code{"brushing"} will indicate that a fixed rectangular region is moved about the display to select observations.
+#' @param selectionLogic  One of "select" (the default), "deselect", and "invert".
+#'  The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
+#'  highlit observations and highlighting downlighted ones).
+#' @details There are two ways to directly select elements on, for example, a scatterplot using the mouse:
+#' either by "sweeping" or by "brushing". "Sweeping" allows us to sweep out a contiguous rectangular area of the plot,
+#' while, by "brushing", a fixed rectangular area is brushes across the plot selecting all points within the rectangle.
 #'
-#' The selection logic give users more flexibility that users cannot only highlight the elements,
-#' but also can delight or invert (the highlighted to delighted, vice verse) the elements.
+#' The selection logic give users more flexibility to users to not only highlight the elements,
+#' but also to downlight, and even to invert selections (changing the highlighted to downlighted, and vice versa).
 #'
 #' @return a \code{ggproto} object
 #' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
-#' \code{\link{hover}}, \code{\link{interactivity}}
+#' \code{\link{hover}}, \code{\link{interactivity}}, \code{\link{loon::l_userOptions}}
 #' @examples
 #' if(interactive()) {
 #'
@@ -299,9 +309,8 @@ selection <- function(selected = NULL,
 }
 
 #' @title Zoom Plot Region
-#' @description Modify the \code{zoomX}, \code{zoomY}, \code{panX}, \code{panY},
-#' etc to change the plot region
-#' @param layerId numerical; which layer to scale to
+#' @description Change the visible plot region by scaling to different elements of the display.
+#' @param layerId numerical; which layer to scale the plot by.
 #' @param scaleToFun scale to function. See details.
 #'
 #' @details Argument \code{layerId} is used for additional plot region settings.
@@ -315,18 +324,18 @@ selection <- function(selected = NULL,
 #' will be applied. For example, if the layer is the main graphic model, i.e. \code{l_plot}
 #' \code{l_hist}, then the default \code{scaleToFun} is \code{\link{l_scaleto_plot}}; else
 #'  if the layer is a general \code{l_layer} widget, the default \code{scaleToFun} would be
-#'  \code{\link{l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
+#'  \code{\link{loon::l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
 #'
 #' If it is not \code{NULL}, users can select one that precisely tailor their own
 #' problems. The table shows the available \code{scaleToFun} functions
 #' \tabular{ll}{\strong{scale to} \tab \strong{Subfunction}\cr
-#'   plot \tab  \code{\link{l_scaleto_plot}}\cr
-#'   world \tab \code{\link{l_scaleto_world}}\cr
-#'   active \tab \code{\link{l_scaleto_active}}\cr
-#'   selected \tab \code{\link{l_scaleto_selected}}\cr
-#'   layer \tab \code{\link{l_scaleto_layer}}\cr}
-#' Expect all these, users can customize their own function. Note that,
-#' the arguments should match the ones of functions shown in the table.
+#'   plot \tab  \code{\link{loon::l_scaleto_plot}}\cr
+#'   world \tab \code{\link{loon::l_scaleto_world}}\cr
+#'   active \tab \code{\link{loon::l_scaleto_active}}\cr
+#'   selected \tab \code{\link{loon::l_scaleto_selected}}\cr
+#'   layer \tab \code{\link{loon::l_scaleto_layer}}\cr}
+#' Users can also supply their own function, providing its arguments match those
+#' of the functions shown in the above table.
 #'
 #' @return a \code{ggproto} object
 #' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{selection}},
@@ -358,9 +367,11 @@ zoom <- function(layerId = NULL,
 }
 
 #' @title Modify the \code{hover} component
-#' @description Query in interactive graphics
-#' @param itemLabel The customized querying information.
-#' @param showItemLabels A logical value. Show item labels or not. Default is \code{FALSE}
+#' @description Provides a pop up display as the mouse hovers over a plot element in the interactive plot.
+#' @param itemLabel A character vector of length \code{n} with a string to be used to pop up when the
+#' mouse hovers above that element.
+#' @param showItemLabels A single logical value: \code{TRUE} if pop up labels are to appear on hover,
+#' \code{FALSE} (the default) if they are not.
 #'
 #' @return a \code{ggproto} object
 #' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},

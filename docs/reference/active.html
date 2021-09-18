@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Modify the active component — active" />
-<meta property="og:description" content="Set active or activeGeomLayers" />
+<meta property="og:description" content="Set active and/or activeGeomLayers" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,16 +86,7 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
+        <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     Articles
      
@@ -103,15 +94,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/ggplots2loon.html">ggplots --&gt; loon plots</a>
+      <a href="../articles/grammarOfInteractiveGraphics.html">A Grammar of Interactive Graphics</a>
     </li>
     <li>
-      <a href="../articles/loon2ggplots.html">loon plots --&gt; ggplots</a>
+      <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/pipes.html">Pipes</a>
+      <a href="../articles/Pipes.html">Pipes</a>
+    </li>
+    <li>
+      <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
+    </li>
+    <li>
+      <a href="../articles/loon2ggplot.html">loon plots to ggplots</a>
+    </li>
+    <li>
+      <a href="../articles/thereAndBackAgain.html">There and back again</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -119,8 +122,8 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/great-northern-diver/loon.ggplot/">
-    <span class="fab fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon,ggplot">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -143,7 +146,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Set <code>active</code> or <code>activeGeomLayers</code></p>
+    <p>Set <code>active</code> and/or <code>activeGeomLayers</code></p>
     </div>
 
     <pre class="usage"><span class='fu'>active</span><span class='op'>(</span>active <span class='op'>=</span> <span class='cn'>NULL</span>, activeGeomLayers <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
@@ -153,18 +156,16 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>active</th>
-      <td><p>a logical determining whether points appear or
-not (default is <code>TRUE</code> for all points). If a logical vector is
-given of length equal to the number of points,
-then it identifies which points appear (<code>TRUE</code>) and
-which do not (<code>FALSE</code>).</p></td>
+      <td><p>a logical or a logical vector of length <code>n</code> that determines which observations
+are active (<code>TRUE</code> and hence appear in the plot) and which are inactive (<code>FALSE</code> and hence do not appear).
+Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>activeGeomLayers</th>
-      <td><p>determine which geom layer is interactive. Only <code>geom_point()</code>
-and <code>geom_histogram()</code> can be set as active geom layer(s) so far.
-(Notice, more than one <code>geom_point()</code> layers can be set as active layers,
-but only one <code>geom_histogram()</code> can be set as an active geom layer)</p></td>
+      <td><p>determine which geom layer is interactive by its `geom_...` position in the grammar of the expression.
+Currently, only <code>geom_point()</code> and <code>geom_histogram()</code> can be set as the active geom layer(s) so far.
+(N.B. more than one <code>geom_point()</code> layer can be set as an active layer,
+but only one <code>geom_histogram()</code> can be set as an active geom layer and it can be the only active layer.)</p></td>
     </tr>
     </table>
 

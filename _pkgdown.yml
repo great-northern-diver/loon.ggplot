@@ -1,43 +1,83 @@
+home:
+  strip_header: true
+
+navbar:
+  type: default
+
+  left:
+    - text: Articles
+      menu:
+      - text: A Grammar of Interactive Graphics
+        href: articles/grammarOfInteractiveGraphics.html
+      - text: Linking
+        href: articles/linking.html
+      - text: Pipes
+        href: articles/Pipes.html
+      - text: ggplots to loon plots
+        href: articles/ggplot2loon.html
+      - text: loon plots to ggplots
+        href: articles/loon2ggplot.html
+      - text: There and back again
+        href: articles/thereAndBackAgain.html
+    - text: Reference
+      href: reference/index.html
+    - text: Changelog
+      href: news/index.html
+
+
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/great-northern-diver/loon,ggplot
+
+development:
+  mode: release
+
+destination: ./docs/
+
 reference:
 
-  - title: Main Function
-    desc: A bridge between `loon` widgets and `gg` objects. It can take either a `loon` widget, a `gg` object (`ggplot` or `ggmatrix`) or a `lggplot` object, then create a corresponding `gg` (or `loon`) graphics.
+  - title: An Interactive Grammar of Graphics
+    desc:  Functions and additive clauses that extend the `ggplot` grammar of graphics to interactive visualization.
+    contents:
+    - l_ggplot
+    - linking
+    - hover
+    - selection
+    - active
+    - zoom
+    - interactivity
+    - gg_pipe
+
+  - title: The loon <-> ggplot duality
+    desc:  The bridge --  static `ggplots` to interactive `loon` plots and interactive `loon` plots to elegant `ggplot`s.  `l_ggplot`s `print()` as `loon` plots and `plot()` as `ggplot`s.
     contents:
     - loon.ggplot
+    - l_ggplot
+    - print.l_ggplot
+    - is.l_ggplot
 
-  - subtitle: An interactive `loon` widget to a static `ggplot` object
+  - subtitle: From loon plots to ggplots
     contents:
+    - loon.ggplot
     - loon2ggplot
     - g_getLocations
     - g_getPlots
 
-  - subtitle: A static `ggplot` object to an interactive `loon` widget
+  - subtitle: From ggplots to loon plots
     contents:
+    - loon.ggplot
     - ggplot2loon
     - get_activeGeomLayers
 
-  - title: Automatically create a `loon` widget by the "ggplot rule"
-    desc: Function `l_ggplot()` returns an `l_ggplot` object, then "print" a `loon` plot automatically.
-    contents:
-    - l_ggplot
-    - interactivity
-    - hover
-    - linking
-    - selection
-    - active
-    - zoom
-    - print.l_ggplot
-
-  - title: Accessories
+  - title: Utilities
     desc: Some useful functions for the transformation
     contents:
-    - layout_coords
-    - get_scaledData
     - gg_pipe
     - scaleBox
     - scale_multi
-    - loonLayer
+    - layout_coords
+    - get_scaledData
     - is.CoordPolar
     - Cartesianxy2Polarxy
-    - is.l_ggplot
+    - loonLayer
     - l_getSubtitles

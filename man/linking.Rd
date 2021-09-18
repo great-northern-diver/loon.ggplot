@@ -12,24 +12,29 @@ linking(
 )
 }
 \arguments{
-\item{linkingGroup}{A character. Plots only in the same linkingGroup can be linked}
+\item{linkingGroup}{The string identifying the group of linked plots that the current plot will join.  Default is none.}
 
-\item{linkingKey}{LinkingKey is the key of linking. Each object in one plot has a unique linking key.
-Elements in different plots are linked if they share the same linking keys.}
+\item{linkingKey}{The length \code{n} character vector of unique keys.  Default will be \code{"0", "1", ..., "n-1"}
+where \code{n} is the number of elements (e.g., points) displayed.}
 
-\item{linkedStates}{The states to be linked. It can be "color", "selected", "active", "size" and "glyph" for a `l_plot` object and
-"color", "selected", "active" for a `l_hist` object.}
+\item{linkedStates}{The character vector of display states to be linked.
+These can be "color", "selected", "active", "size" and "glyph" for an `l_plot` object and
+"color", "selected", "active" for an `l_hist` object.  (These roughly correspond to aesthetics in a `ggplot`.)}
 
-\item{sync}{The way to synchronize several linked plots. It can be either "pull" (default) or "push".
-If the \code{sync} is "pull", the linked states (aesthetics attributes, e.g. "color", "selected", ...)
-of the new plot will be pulled from the linked plots;
-if the \code{sync} is "push",  the linked states of the new plot will be pushed to the linked plots.}
+\item{sync}{Either \code{"pull"} (the default) or \code{"push"} to indicate whether the values of the linked states of the plot
+are to be pulled from those of the other plots in the linking group, or the values are to be pushed to all other plots
+in the linking group. This matters only when joining an existing group of plots and the default value is typically
+the right thing to do.}
 }
 \value{
 a \code{ggproto} object
 }
 \description{
-In interactive graphics, \code{linking} is often used to discover the patterns of interest in several plots.
+A group-key-state linking model is used to link plots in \code{loon}.  This allows changes in one plot
+to propogate to all plots in the same \code{linkingGroup} and enables interactive features like brushing.
+Elements to be matched between plots are identified by \code{linkingKey}; within each plot, the key for each
+element (e.g., case, observation) is unique.  The \code{linkedStates} identify which display states (e.g., "color")
+should change in concert with other plots in the \code{linkingGroup}.
 }
 \examples{
 if(interactive() && requireNamespace("dplyr")) {
@@ -49,5 +54,6 @@ if(interactive() && requireNamespace("dplyr")) {
 }
 \seealso{
 \code{\link{active}}, \code{\link{selection}}, \code{\link{zoom}},
-\code{\link{hover}}, \code{\link{interactivity}}
+\code{\link{hover}}, \code{\link{interactivity}},
+\code{\link{loon::l_getLinkedStates}}, \code{\link{loon::l_setLinkedStates}}, \code{\link{loon::l_configure}}
 }
