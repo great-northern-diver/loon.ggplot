@@ -11,7 +11,7 @@ random_tip <- function() {
 }
 
 .onAttach <- function(libname, pkgname) {
-  if (runif(1) > 0.5) {
+  if (stats::runif(1) > 0.5) {
     tip <- random_tip()
     initial <- "Random tip:"
     indent <- 1
