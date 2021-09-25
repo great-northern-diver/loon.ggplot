@@ -123,7 +123,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/great-northern-diver/loon,ggplot">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -179,15 +179,15 @@ If it is <code>NULL</code> (default), based on different layers, different scale
 will be applied. For example, if the layer is the main graphic model, i.e. <code>l_plot</code>
 <code>l_hist</code>, then the default <code>scaleToFun</code> is <code>l_scaleto_plot</code>; else
  if the layer is a general <code>l_layer</code> widget, the default <code>scaleToFun</code> would be
- <code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_layer.html'>loon::l_scaleto_layer</a></code> (see <code><a href='get_activeGeomLayers.html'>get_activeGeomLayers</a></code>).</p>
+ <code>l_scaleto_layer</code> (see <code><a href='get_activeGeomLayers.html'>get_activeGeomLayers</a></code>).</p>
 <p>If it is not <code>NULL</code>, users can select one that precisely tailor their own
 problems. The table shows the available <code>scaleToFun</code> functions</p><table class='table'>
 <tr><td><strong>scale to</strong></td><td><strong>Subfunction</strong></td></tr>
-<tr><td>plot</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html'>loon::l_scaleto_plot</a></code></td></tr>
-<tr><td>world</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_world.html'>loon::l_scaleto_world</a></code></td></tr>
-<tr><td>active</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_active.html'>loon::l_scaleto_active</a></code></td></tr>
-<tr><td>selected</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_selected.html'>loon::l_scaleto_selected</a></code></td></tr>
-<tr><td>layer</td><td><code><a href='https://great-northern-diver.github.io/loon/reference/l_scaleto_layer.html'>loon::l_scaleto_layer</a></code></td></tr>
+<tr><td>plot</td><td><code>l_scaleto_plot</code></td></tr>
+<tr><td>world</td><td><code>l_scaleto_world</code></td></tr>
+<tr><td>active</td><td><code>l_scaleto_active</code></td></tr>
+<tr><td>selected</td><td><code>l_scaleto_selected</code></td></tr>
+<tr><td>layer</td><td><code>l_scaleto_layer</code></td></tr>
 </table>
 <p>Users can also supply their own function, providing its arguments match those
 of the functions shown in the above table.</p>

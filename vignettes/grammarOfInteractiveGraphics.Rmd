@@ -491,7 +491,7 @@ plot(lggp)
 
 Note that the interactive effects do not appear in `plot(l_ggp)`; this is because this is still an `l_ggplot`.  To print the interactive plot, a handle to it must be found, for example using `l_getFromPath(".l3.ggplot")`
 
-```{r print the interactive plot}
+```{r print the interactive plot, eval = FALSE}
 l_ggp <- l_getFromPath(".l3.ggplot")
 # Alternatively, the loon plot could have been captured when first
 # created by using loon.ggplot(lggp) in stead of print(lggp) as follows
@@ -503,7 +503,6 @@ plot(l_ggp)
 # and as below when presented as a ggplot
 loon.ggplot(l_ggp)
 ```
-
 
 The **final trick** is that either `l_ggplot()` or `ggplot()` cam be produce interactive plots using the `ggplot` grammar.  
 

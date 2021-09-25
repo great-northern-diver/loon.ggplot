@@ -236,7 +236,7 @@ Some care needs to be taken when dealing with linking, especially when there is 
 
 ### for more information
 
-See the vignette `Linking` and the `loon` vignette `Logical Queries` for more information.
+See the vignette [Linking](https://great-northern-diver.github.io/loon.ggplot/articles/linking.html) and the `loon` vignette [Logical Queries](https://great-northern-diver.github.io/loon/articles/logicalQueries.html) for more information.
 
 # `loon` to `ggplot` transformation
 
@@ -256,9 +256,6 @@ ggp_lp_1_states
 
 lp_ggp_lp_1 <- loon.ggplot(ggp_lp_1)
 ```
-
-### nearest colours
-
 
 ## After interactive changes
 
@@ -354,7 +351,7 @@ lp["selected"]
 # the new plot has nothing selected
 lp_ggp_lp["selected"]
 ```
-This is for two reasons.  First the selected points of `lp` changed to colour in `ggp_lp` and so the selected points from `lp` could not be transferred to `lp_ggp_lp`. The colours in `lp_ggp_lp` will not match those ofSecond, the new plot has not (yet) joined the same linking group as the original.
+This is for two reasons.  First the selected points of `lp` changed to colour in `ggp_lp` and so the selected points from `lp` could not be transferred to `lp_ggp_lp`. The colours in `lp_ggp_lp` will not match those of. Second, the new plot has not (yet) joined the same linking group as the original.
 
 ```{r}
 # Original selected
@@ -392,20 +389,3 @@ lp["linkingKey"]
 Of course, all this depends on the user knowing where to find the correct linking information.
 
 Comparing the three different interactive plots shows how information can be lost, as well as how it can be maintained, when translating from interactive to static `ggplot` back to an interactive `loon` plot.
-
-```{r loon to ggplot to loon, fig.width = 12, fig.height = 4, out.width = "100%", warning = FALSE}
-# PROBLEM
-library(grid)
-lp["x"]
-lp_ggp_lp["x"]
-lp_ggp_l1_lk["x"]
-grid.arrange(plot(lp, draw = FALSE), 
-             plot(lp_ggp_lp, draw = FALSE), 
-             plot(lp_ggp_l1_lk, draw = FALSE),  
-             grid.text("lp"), 
-             grid.text("lp_ggp_lp"), 
-             grid.text("lp_ggp_l1_lk"),
-             nrow = 2)
-```
-
-

@@ -81,7 +81,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/great-northern-diver/loon,ggplot">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,14 +95,14 @@
 
       
 
-      </header><script src="grammarOfInteractiveGraphics_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><script src="grammarOfInteractiveGraphics_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>A Grammar Of Interactive Graphics</h1>
             <h3 class="subtitle"><code>loon.ggplot</code></h3>
                         <h4 class="author">R. W. Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2021-09-17</h4>
+            <h4 class="date">2021-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/grammarOfInteractiveGraphics.Rmd"><code>vignettes/grammarOfInteractiveGraphics.Rmd</code></a></small>
       <div class="hidden name"><code>grammarOfInteractiveGraphics.Rmd</code></div>
@@ -523,7 +523,7 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
   <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span>
 <span class="co"># which is an interactive loon and prints as one</span>
 <span class="va">lggp</span>
-<span class="co">#&gt; [1] ".l3.ggplot.plot"</span>
+<span class="co">#&gt; [1] ".l2.ggplot.plot"</span>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "l_plot" "loon"</span>
 <span class="co"># but plots as a ggplot</span>
@@ -538,12 +538,9 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
 <span class="co"># l_ggp &lt;- loon.ggplot(lggp)</span>
 <span class="co"># </span>
 <span class="co"># Either way, it will look like the following as a grid graphics plot</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_ggp</span><span class="op">)</span></code></pre></div>
-<p><img src="grammarOfInteractiveGraphics_files/figure-html/print%20the%20interactive%20plot-1.png" width="40%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># and as below when presented as a ggplot</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_ggp</span><span class="op">)</span>
+<span class="co"># and as below when presented as a ggplot</span>
 <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">l_ggp</span><span class="op">)</span></code></pre></div>
-<p><img src="grammarOfInteractiveGraphics_files/figure-html/print%20the%20interactive%20plot-2.png" width="40%" style="display: block; margin: auto;"></p>
 <p>The <strong>final trick</strong> is that either <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> or <code>ggplot()</code> cam be produce interactive plots using the <code>ggplot</code> grammar.</p>
 <p>It’s largely a matter of taste.</p>
 </div>
