@@ -81,7 +81,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/great-northern-diver/loon,ggplot">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,14 +95,14 @@
 
       
 
-      </header><script src="thereAndBackAgain_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
+      </header><script src="thereAndBackAgain_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>There And Back Again</h1>
             <h3 class="subtitle">Differences When Transforming</h3>
                         <h4 class="author">R.W. Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2021-09-17</h4>
+            <h4 class="date">2021-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/thereAndBackAgain.Rmd"><code>vignettes/thereAndBackAgain.Rmd</code></a></small>
       <div class="hidden name"><code>thereAndBackAgain.Rmd</code></div>
@@ -286,7 +286,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <div id="for-more-information" class="section level3">
 <h3 class="hasAnchor">
 <a href="#for-more-information" class="anchor"></a>for more information</h3>
-<p>See the vignette <code>Linking</code> and the <code>loon</code> vignette <code>Logical Queries</code> for more information.</p>
+<p>See the vignette <a href="https://great-northern-diver.github.io/loon.ggplot/articles/linking.html">Linking</a> and the <code>loon</code> vignette <a href="https://great-northern-diver.github.io/loon/articles/logicalQueries.html">Logical Queries</a> for more information.</p>
 </div>
 </div>
 </div>
@@ -322,10 +322,6 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt; 13 #808080    5 26 78     1     1    19   NA    NA    0.5</span>
 
 <span class="va">lp_ggp_lp_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">ggp_lp_1</span><span class="op">)</span></code></pre></div>
-<div id="nearest-colours" class="section level3">
-<h3 class="hasAnchor">
-<a href="#nearest-colours" class="anchor"></a>nearest colours</h3>
-</div>
 </div>
 <div id="after-interactive-changes" class="section level2">
 <h2 class="hasAnchor">
@@ -396,7 +392,7 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="va">lp_ggp_lp</span><span class="op">[</span><span class="st">"selected"</span><span class="op">]</span>
 <span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span>
 <span class="co">#&gt; [13] FALSE</span></code></pre></div>
-<p>This is for two reasons. First the selected points of <code>lp</code> changed to colour in <code>ggp_lp</code> and so the selected points from <code>lp</code> could not be transferred to <code>lp_ggp_lp</code>. The colours in <code>lp_ggp_lp</code> will not match those ofSecond, the new plot has not (yet) joined the same linking group as the original.</p>
+<p>This is for two reasons. First the selected points of <code>lp</code> changed to colour in <code>ggp_lp</code> and so the selected points from <code>lp</code> could not be transferred to <code>lp_ggp_lp</code>. The colours in <code>lp_ggp_lp</code> will not match those of. Second, the new plot has not (yet) joined the same linking group as the original.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Original selected</span>
 <span class="va">lp</span><span class="op">[</span><span class="st">"color"</span><span class="op">]</span>
@@ -437,23 +433,6 @@ Here <code>nrow(data) =</code> 15. Note that this <code>"n"</code> is not the nu
 <span class="co">#&gt;  [1] "0"  "1"  "2"  "3"  "4"  "5"  "6"  "7"  "9"  "11" "12" "13" "14"</span></code></pre></div>
 <p>Of course, all this depends on the user knowing where to find the correct linking information.</p>
 <p>Comparing the three different interactive plots shows how information can be lost, as well as how it can be maintained, when translating from interactive to static <code>ggplot</code> back to an interactive <code>loon</code> plot.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># PROBLEM</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span>
-<span class="va">lp</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span>
-<span class="co">#&gt;  [1] 19 19 25 62 34 58 62 40 60 40 40 34 26</span>
-<span class="va">lp_ggp_lp</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span>
-<span class="co">#&gt;  [1] 19 19 25 62 34 40 40 40 34 26 58 62 60</span>
-<span class="va">lp_ggp_l1_lk</span><span class="op">[</span><span class="st">"x"</span><span class="op">]</span>
-<span class="co">#&gt;  [1] 19 19 25 62 34 40 40 40 34 26 58 62 60</span>
-<span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lp</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, 
-             <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lp_ggp_lp</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, 
-             <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lp_ggp_l1_lk</span>, draw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,  
-             <span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html">grid.text</a></span><span class="op">(</span><span class="st">"lp"</span><span class="op">)</span>, 
-             <span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html">grid.text</a></span><span class="op">(</span><span class="st">"lp_ggp_lp"</span><span class="op">)</span>, 
-             <span class="fu"><a href="https://rdrr.io/r/grid/grid.text.html">grid.text</a></span><span class="op">(</span><span class="st">"lp_ggp_l1_lk"</span><span class="op">)</span>,
-             nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<p><img src="thereAndBackAgain_files/figure-html/loon%20to%20ggplot%20to%20loon-1.png" width="100%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

@@ -55,5 +55,5 @@ if(interactive() && requireNamespace("dplyr")) {
 \seealso{
 \code{\link{active}}, \code{\link{selection}}, \code{\link{zoom}},
 \code{\link{hover}}, \code{\link{interactivity}},
-\code{\link{loon::l_getLinkedStates}}, \code{\link{loon::l_setLinkedStates}}, \code{\link{loon::l_configure}}
+\code{\link{l_getLinkedStates}}, \code{\link{l_setLinkedStates}}, \code{\link{l_configure}}
 }

@@ -27,7 +27,7 @@
 #'
 #'
 #' @import ggplot2 tcltk loon methods grid rlang
-#' @importFrom stats quantile approxfun integrate setNames na.omit
+#' @importFrom stats quantile approxfun integrate setNames na.omit runif
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @import patchwork

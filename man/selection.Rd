@@ -24,7 +24,7 @@ a \code{ggproto} object
 }
 \description{
 Set which elements (i.e., observations) are "selected".  These will be shown as highlighted in the
-plot using the current "highlight" colour (see \code{\link{loon::l_userOptions}}).
+plot using the current "highlight" colour (see \code{\link{l_userOptions}}).
 }
 \details{
 There are two ways to directly select elements on, for example, a scatterplot using the mouse:
@@ -49,5 +49,5 @@ if(interactive()) {
 }
 \seealso{
 \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
-\code{\link{hover}}, \code{\link{interactivity}}, \code{\link{loon::l_userOptions}}
+\code{\link{hover}}, \code{\link{interactivity}}, \code{\link{l_userOptions}}
 }
