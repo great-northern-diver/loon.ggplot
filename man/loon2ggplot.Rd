@@ -179,14 +179,16 @@ graphical system, e.g. \code{+ facet_wrap(...)}. See examples.
 }
 \examples{
 \dontrun{
-if(requireNamespace("zenplots") &&
-     packageVersion("zenplots") > "1.0.4" &&
-     requireNamespace("patchwork")) {
-zen <- zenplot(iris, plot1d = "density", pkg = "loon")
+if(interactive()) {
+library(zenplots)
+library(patchwork)
+stopifnot(packageVersion("zenplots") > "1.0.4")
+zen <- zenplots::zenplot(iris, plot1d = "density", pkg = "loon")
 ggzen <- loon.ggplot(zen)
 ggzen +
   patchwork::plot_annotation(title = "This is a ggplot")
-}}
+}
+}
 if(interactive()) {
 lp <- l_plot(iris,
              color = iris$Species,
