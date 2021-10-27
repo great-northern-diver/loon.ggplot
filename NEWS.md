@@ -1,3 +1,7 @@
+# loon.ggplot 1.3.1
+
+* In the past, the "none" and `FALSE` both work for `guides()`. Unfortunately, `FALSE` is deprecated when version >= 3.3.5.
+
 # loon.ggplot 1.3.0
 
 * **Important change**: when we turn a `loon` compound object to a `ggplot` object, package `patchwork` is used (not `GGally`). The benefit is that the size of each plot can be different.
