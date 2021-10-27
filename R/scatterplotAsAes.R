@@ -415,7 +415,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
   # Discussion: should the legend of color and fill be omitted, if
   # the number of unique color/fill is 1?
   if(length(uniColor) <= 1)
-    ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)
+    ggObj <- ggObj + ggplot2::guides(color = "none", fill = "none")
 
   uniSize <- unique(size[!is.na(size)])
   if(length(uniSize) > 0)
@@ -423,7 +423,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
     ggplot2::scale_size_identity(guide = "legend")
 
   if(length(uniSize) <= 1)
-    ggObj <- ggObj + ggplot2::guides(size = FALSE)
+    ggObj <- ggObj + ggplot2::guides(size = "none")
 
   return(ggObj)
 }

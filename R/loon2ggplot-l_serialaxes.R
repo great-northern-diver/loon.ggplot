@@ -89,7 +89,7 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
     }
 
     if(length(uni_color) <= 1)
-      ggObj <- ggObj + ggplot2::guides(color = FALSE)
+      ggObj <- ggObj + ggplot2::guides(color = "none")
 
     uni_size <- unique(size)
     if(length(uni_size) > 0)
@@ -97,7 +97,7 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
         ggplot2::scale_size(range = range(size[!is.na(size)]))
 
     if(length(uni_size) <= 1)
-      ggObj <- ggObj + ggplot2::guides(size = FALSE)
+      ggObj <- ggObj + ggplot2::guides(size = "none")
 
   } else {
 
