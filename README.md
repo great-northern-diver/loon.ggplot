@@ -1,16 +1,18 @@
-# loon.ggplot  <img src="man/figures/logo.png" align="right" width="120" />
+# loon.ggplot  
 
 [![Build Status](https://travis-ci.com/great-northern-diver/loon.ggplot.svg?branch=master)](https://travis-ci.com/great-northern-diver/loon.ggplot)
 [![Codecov test coverage](https://codecov.io/gh/great-northern-diver/loon.ggplot/branch/master/graph/badge.svg)](https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master)
 [![CRAN status](https://www.r-pkg.org/badges/version/loon.ggplot)](https://cran.r-project.org/web/packages/loon.ggplot/index.html)
 [![](https://cranlogs.r-pkg.org/badges/loon.ggplot)](https://cran.r-project.org/package=loon.ggplot)
 
+<img src="man/figures/logo.png" align="right" width="120" /></a>
 An R package to turn ggplot graphic data structures into interactive loon plots.  Extends the grammar to add interactivity.
 
 
 Documentation: [https://great-northern-diver.github.io/loon.ggplot/](https://great-northern-diver.github.io/loon.ggplot/)
 
 ## Introduction
+
 
 The `ggplot2` graphics package (part of the `tidyverse` package collection) uses the base `grid` graphics package to produce publication quality graphics for data analysis.  Based on a grammar for graphics, `ggplot2` also provides a lot of functionality (e.g. `facet`s) that can be extremely useful in data analysis.
 

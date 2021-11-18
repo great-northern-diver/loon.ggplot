@@ -2,6 +2,8 @@
 
 * In the past, the "none" and `FALSE` both work for `guides()`. Unfortunately, `FALSE` is deprecated when version >= 3.3.5.
 
+* Fix a bug: if the point shape is 21 to 25, use "fill" as the point color. If "fill" is not found or it is `NA`, then try "color". 
+
 # loon.ggplot 1.3.0
 
 * **Important change**: when we turn a `loon` compound object to a `ggplot` object, package `patchwork` is used (not `GGally`). The benefit is that the size of each plot can be different.
