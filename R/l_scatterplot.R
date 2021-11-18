@@ -30,9 +30,15 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping
                                                          return(data$colour[j] %||% data$fill[j])
 
                                                        if(data$shape[j] %in% 21:24) {
-                                                         data$fill[j]
+                                                         if (is.na(data$fill[j]) || is.null(data$fill[j]))
+                                                           data$colour[j]
+                                                         else
+                                                           data$fill[j]
                                                        } else {
-                                                         data$colour[j]
+                                                         if (is.na(data$colour[j]) || is.null(data$colour[j]))
+                                                           data$fill[j]
+                                                         else
+                                                           data$colour[j]
                                                        }
                                                      })
                                      glyph <- pch_to_glyph(data$shape, data$alpha)
@@ -83,6 +89,10 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping
     combinedPointsData <- do.call(rbind, combinedPointsData)
     if(!is.null(combinedPointsData$color) && all(is.na(combinedPointsData$color))) {
       # ALL NA
+      if(panelIndex == 1)
+        warning("No legal colors. The color will be set as the default loon color ",
+                loon::l_getOption("color"),
+                call. = FALSE)
       combinedPointsData$color <- loon::l_getOption("color")
     }
 
