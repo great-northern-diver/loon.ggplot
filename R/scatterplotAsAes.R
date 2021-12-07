@@ -2,6 +2,7 @@ scatterplotAsAesTRUE <- function(ggObj, widget, x, y,
                                  glyph, color, size, index, selectedOnTop = TRUE) {
 
   pch <- glyph_to_pch(glyph)
+
   # points with boundary
   pointsWithBoundary <- pch %in% 21:24
   withBoundary <- FALSE
