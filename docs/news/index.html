@@ -148,8 +148,8 @@
 <a href="#loonggplot-131" class="anchor"></a>loon.ggplot 1.3.1<small> Unreleased </small>
 </h1>
 <ul>
-<li><p>In the past, the “none” and <code>FALSE</code> both work for <code><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides()</a></code>. Unfortunately, <code>FALSE</code> is deprecated when version &gt;= 3.3.5.</p></li>
-<li><p>Fix a bug: if the point shape is 21 to 25, use “fill” as the point color. If “fill” is not found or it is <code>NA</code>, then try “color”.</p></li>
+<li><p>In the previous versions of <code>ggplot2</code> (&lt; 3.3.5), both “none” and FALSE work in guides(). In the latest version (e.g., &gt;= 3.3.5), FALSE is deprecated.</p></li>
+<li><p>Fix a bug: if the point shape is between 21 to 25, use the variable “fill” as the points’ color; if the variable “fill” is not found or as NA, then try variable “colour”.</p></li>
 </ul>
 </div>
     <div id="loonggplot-130" class="section level1">

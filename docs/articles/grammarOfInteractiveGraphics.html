@@ -102,7 +102,7 @@
             <h3 class="subtitle"><code>loon.ggplot</code></h3>
                         <h4 class="author">R. W. Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2021-11-18</h4>
+            <h4 class="date">2021-12-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/grammarOfInteractiveGraphics.Rmd"><code>vignettes/grammarOfInteractiveGraphics.Rmd</code></a></small>
       <div class="hidden name"><code>grammarOfInteractiveGraphics.Rmd</code></div>
@@ -165,14 +165,14 @@
 <h1 class="hasAnchor">
 <a href="#the-trick-ggplot-becomes-l_ggplot" class="anchor"></a>The trick: <code>ggplot()</code> becomes <code>l_ggplot()</code>
 </h1>
-<p>The interactive grammar begins by simply replacing <code>ggplot()</code> by <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code>, wherever it appears in the layered grammar. The same arguments (e.g., <code>data</code>, <code>mapping</code>, etc.) and clauses (e.g. geoms, scales, coordinates, etc.) are used, but now to create an interactive plot.</p>
+<p>The interactive grammar begins by simply replacing <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> by <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code>, wherever it appears in the layered grammar. The same arguments (e.g., <code>data</code>, <code>mapping</code>, etc.) and clauses (e.g. geoms, scales, coordinates, etc.) are used, but now to create an interactive plot.</p>
 <p>For example,</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lgp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">airquality</span>, 
-                mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Wind</span>, y <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Air quality in New York (1973)"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </code></pre></div>
-<p>Like <code>ggplot()</code>, <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> produces a data structure containing the information needed to create a plot. No plot is actually yet displayed; rather <code>lgp</code> has the <em>potential</em> to produce a plot on demand.</p>
+                mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Wind</span>, y <span class="op">=</span> <span class="va">Ozone</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Air quality in New York (1973)"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> </code></pre></div>
+<p>Like <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code>, <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> produces a data structure containing the information needed to create a plot. No plot is actually yet displayed; rather <code>lgp</code> has the <em>potential</em> to produce a plot on demand.</p>
 <p>A look at its class</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">lgp</span><span class="op">)</span>
@@ -182,9 +182,9 @@
 In <code>loon.ggplot</code> these functions are different for an <code>l_ggplot</code>:</p>
 <ul>
 <li>
-<code><a href="https://rdrr.io/r/graphics/plot.default.html">plot(lgp)</a></code> displays the <code>lgp</code> structure as a static <code>ggplot</code> on the current device</li>
+<code>plot(lgp)</code> displays the <code>lgp</code> structure as a static <code>ggplot</code> on the current device</li>
 <li>
-<code><a href="https://rdrr.io/r/base/print.html">print(lgp)</a></code> displays it as an interactive <code>loon</code> plot in the <code>R</code> session.</li>
+<code>print(lgp)</code> displays it as an interactive <code>loon</code> plot in the <code>R</code> session.</li>
 </ul>
 <p>For example, to see the <code>ggplot</code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -206,10 +206,10 @@ In <code>loon.ggplot</code> these functions are different for an <code>l_ggplot<
 <p>which is of the form <code>".lXX.ggplot.plot"</code> where <code>XX</code> is a non-negative integer.</p>
 <p>This is the <code>tcltk</code> “path” to the <code>loon</code> plot and uniquely identifies the <code>loon</code> structure. The data structure is now accessed through <code>l_getFromPath(pathname)</code> as below.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu">l_getFromPath</span><span class="op">(</span><span class="st">".lXX.ggplot.plot"</span><span class="op">)</span>  <span class="co"># replace XX by whatever number appeared</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getFromPath.html">l_getFromPath</a></span><span class="op">(</span><span class="st">".lXX.ggplot.plot"</span><span class="op">)</span>  <span class="co"># replace XX by whatever number appeared</span></code></pre></div>
 <p>Of course, this requires you to have noticed and recovered the string pathname for that plot when it first appeared. Fortunately, that is not necessary. In the title bar of the window containing the <code>loon</code> plot, the string following <code>"path: "</code> can also be used. In the present case, this will be of the form <code>".lXX.ggplot"</code> (as before but without the additional <code>".plot"</code> suffix). The call</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu">l_getFromPath</span><span class="op">(</span><span class="st">".lXX.ggplot"</span><span class="op">)</span>  <span class="co"># replace XX by whatever number appeared</span></code></pre></div>
+<code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getFromPath.html">l_getFromPath</a></span><span class="op">(</span><span class="st">".lXX.ggplot"</span><span class="op">)</span>  <span class="co"># replace XX by whatever number appeared</span></code></pre></div>
 <p>will return the interactive plot as before.</p>
 <p>Finally, if you have the foresight to know that you would like to have programmatic access to the interactive plot from the start, you could assign it to a variable when it was first created.<br>
 There are two ways to do this.</p>
@@ -219,15 +219,15 @@ There are two ways to do this.</p>
 <p>The other uses a powerful function called <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> (more on this below):</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">lgp</span><span class="op">)</span></code></pre></div>
-<p><strong>Note</strong>: that unlike <code>l_getFromPath()</code>, either of the above calls will produce a <strong>new</strong> interactive plot from <code>lgp</code> and assign it to <code>lp</code>.</p>
+<p><strong>Note</strong>: that unlike <code><a href="https://great-northern-diver.github.io/loon/reference/l_getFromPath.html">l_getFromPath()</a></code>, either of the above calls will produce a <strong>new</strong> interactive plot from <code>lgp</code> and assign it to <code>lp</code>.</p>
 </div>
 <div id="the-loon-ggplot-duality" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-loon-ggplot-duality" class="anchor"></a>The loon-ggplot duality</h2>
-<p>Using <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> in place of <code>ggplot()</code> extends the graphics grammar of <code>ggplot2</code> to produce interactive <code>loon</code> plots.</p>
+<p>Using <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> in place of <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> extends the graphics grammar of <code>ggplot2</code> to produce interactive <code>loon</code> plots.</p>
 <ul>
 <li>
-<p>use <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> in place of <code>ggplot()</code></p>
+<p>use <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> in place of <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code></p>
 <ul>
 <li><p><em>plotting</em> an <code>l_ggplot</code> produces a static <code>ggplot</code> display</p></li>
 <li><p><em>printing</em> an <code>l_ggplot</code> produces an interactive <code>loon</code> display.</p></li>
@@ -238,7 +238,7 @@ There are two ways to do this.</p>
 <p>Changes to the <code>ggplot</code> have <em>no effect</em> on the interactive plot</p>
 <p>For example,</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lgp</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lgp</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="grammarOfInteractiveGraphics_files/figure-html/unnamed-chunk-16-1.png" width="40%" style="display: block; margin: auto;"> behaves like any other <code>ggplot</code> with no effect on the interactive plot.</p>
 </li>
 <li>
@@ -307,11 +307,11 @@ There are two ways to do this.</p>
 <p>Earlier, <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> was recommended as a means to produce an interactive plot from an <code>l_ggplot</code> and to assign it to a variable, as in</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">lgp</span><span class="op">)</span></code></pre></div>
-<p>This makes it seem essentially equivalent to <code><a href="https://rdrr.io/r/base/print.html">print(lgp)</a></code>, but it is not.</p>
+<p>This makes it seem essentially equivalent to <code>print(lgp)</code>, but it is not.</p>
 <p>Instead, <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> is a powerful <strong>two way bridge</strong> between <code>ggplot</code>s and <code>loon</code> plots.</p>
 <p>When called on</p>
 <ul>
-<li><p>an <code>l_ggplot</code> (an extended <code>ggplot</code>) <code><a href="../reference/loon.ggplot.html">loon.ggplot(lgp)</a></code> produces an interactive <code>loon</code> plot.</p></li>
+<li><p>an <code>l_ggplot</code> (an extended <code>ggplot</code>) <code>loon.ggplot(lgp)</code> produces an interactive <code>loon</code> plot.</p></li>
 <li>
 <p>an interactive <code>loon</code> plot, it produces a static <code>ggplot</code></p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -320,8 +320,8 @@ There are two ways to do this.</p>
 <p>This is a <code>ggplot</code> with parameters to make it look like the <code>loon</code> plot it was built from (e.g. the title is centred in this <code>ggplot</code>).</p>
 <p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> gives us <strong>a second way to produce a static version</strong> of an interactive <code>loon</code> plot.</p>
 <ul>
-<li><p><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot(lp)</a></code> produces a <code>grid</code> graphic object (or <code>grob</code>)</p></li>
-<li><p><code><a href="../reference/loon.ggplot.html">loon.ggplot(lp)</a></code> produces a <code>ggplot</code> graphic object.</p></li>
+<li><p><code>plot(lp)</code> produces a <code>grid</code> graphic object (or <code>grob</code>)</p></li>
+<li><p><code>loon.ggplot(lp)</code> produces a <code>ggplot</code> graphic object.</p></li>
 </ul>
 <p>Either reproduces the current <code>loon</code> plot as a static snapshot of its present appearence (ideally <em>wysiwyg</em>).</p>
 <p>Which is preferred depends on the use intended for the static plot .</p>
@@ -330,11 +330,11 @@ There are two ways to do this.</p>
 <code class="sourceCode R"><span class="va">gp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">lp</span><span class="op">)</span>  <span class="co"># loon to ggplot</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">gp</span><span class="op">)</span>
 <span class="co">#&gt; [1] "gg"     "ggplot"</span>
-<span class="va">gp</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">gp</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="grammarOfInteractiveGraphics_files/figure-html/unnamed-chunk-22-1.png" width="40%" style="display: block; margin: auto;"></p>
 <p>Alternatively, a new <strong>interactive plot can be generated from an ordinary <code>ggplot</code></strong> as</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">new_lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">gp</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">new_lp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">gp</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>and this <strong>interactive plot is turned into a new static <code>ggplot</code> with the same function</strong>, as shown below</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">new_lp</span><span class="op">)</span></code></pre></div>
@@ -431,7 +431,7 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
 </li>
 <li>
 <p><code>activeGeomLayers</code></p>
-<p>determine which geom layer is interactive by its <code>geom_...</code> position in the grammar of the expression. Currently, only <code>geom_point()</code> and <code>geom_histogram()</code> can be set as the active geom layer(s) so far. (N.B. more than one <code>geom_point()</code> layer can be set as an active layer, but only one <code>geom_histogram()</code> can be set as an active geom layer and it can be the only active layer)</p>
+<p>determine which geom layer is interactive by its <code>geom_...</code> position in the grammar of the expression. Currently, only <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> can be set as the active geom layer(s) so far. (N.B. more than one <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> layer can be set as an active layer, but only one <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code> can be set as an active geom layer and it can be the only active layer)</p>
 </li>
 </ul>
 </div>
@@ -496,7 +496,7 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
 <p>Set interactive components (e.g. linking, selection, etc) in one clause. All named arguments are as described in the other clauses.</p>
 <ul>
 <li>
-<code>...</code> other named arguments to modify loon plot states. See <code>l_info_states()</code>.</li>
+<code>...</code> other named arguments to modify loon plot states. See <code><a href="https://great-northern-diver.github.io/loon/reference/l_info_states.html">l_info_states()</a></code>.</li>
 </ul>
 <hr>
 </div>
@@ -505,13 +505,13 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
 <h1 class="hasAnchor">
 <a href="#the-trick-l_ggplot-becomes-ggplot" class="anchor"></a>The trick: <code>l_ggplot()</code> becomes <code>ggplot()</code>
 </h1>
-<p>We began with the recommendation that to have interactive <code>ggplot</code>s, all we need do is replace <code>ggplot()</code> in the grammar by <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> with all the usual arguments. All clauses of the <code>ggplot</code> grammar can be used as before <strong>plus</strong> the new <strong>interactive clauses</strong>. The result is an <code>l_ggplot</code> that <em>prints</em> as an interactive <code>loon</code> plot <strong>and</strong> <em>plots</em> as a <code>ggplot2</code> plot. The advantage is that using <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> makes it clear that an ordinary <code>ggplot</code> is not being produced and emphasizes the <strong>loon-ggplot duality</strong>.</p>
-<p>The final trick is that, with <code>loon.ggplot</code>, one does not actually need to use <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code>, <strong>simply use <code>ggplot()</code></strong>. If no clauses are interactive, then an ordinary <code>ggplot</code> will be produced; if an interactive clause is added, an <code>l_ggplot</code> will be produced.</p>
+<p>We began with the recommendation that to have interactive <code>ggplot</code>s, all we need do is replace <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> in the grammar by <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> with all the usual arguments. All clauses of the <code>ggplot</code> grammar can be used as before <strong>plus</strong> the new <strong>interactive clauses</strong>. The result is an <code>l_ggplot</code> that <em>prints</em> as an interactive <code>loon</code> plot <strong>and</strong> <em>plots</em> as a <code>ggplot2</code> plot. The advantage is that using <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> makes it clear that an ordinary <code>ggplot</code> is not being produced and emphasizes the <strong>loon-ggplot duality</strong>.</p>
+<p>The final trick is that, with <code>loon.ggplot</code>, one does not actually need to use <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code>, <strong>simply use <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code></strong>. If no clauses are interactive, then an ordinary <code>ggplot</code> will be produced; if an interactive clause is added, an <code>l_ggplot</code> will be produced.</p>
 <p>For example, the following produces an ordinary <code>ggplot</code>.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ggp</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">airquality</span>, mapping <span class="op">=</span> <span class="fu">aes</span><span class="op">(</span><span class="va">Solar.R</span>, <span class="va">Temp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_point</span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Air quality in New York (1973)"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">ggp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">airquality</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Solar.R</span>, <span class="va">Temp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"Air quality in New York (1973)"</span><span class="op">)</span>
 <span class="co"># which is an ordinary ggplot and prints as one</span>
 <span class="va">ggp</span></code></pre></div>
 <p><img src="grammarOfInteractiveGraphics_files/figure-html/ordinary%20ggplot-1.png" width="40%" style="display: block; margin: auto;"> Adding an interactive clause, turns the result into an <code>l_ggplot</code>.</p>
@@ -520,7 +520,7 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
   <span class="fu"><a href="../reference/linking.html">linking</a></span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"airquwqality"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/selection.html">selection</a></span><span class="op">(</span>selected <span class="op">=</span> <span class="va">airquality</span><span class="op">$</span><span class="va">Solar.R</span> <span class="op">&lt;</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/zoom.html">zoom</a></span><span class="op">(</span>layerId <span class="op">=</span> <span class="fl">1</span>, scaleToFun <span class="op">=</span> <span class="va">l_scaleto_selected</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co"># which is an interactive loon and prints as one</span>
 <span class="va">lggp</span>
 <span class="co">#&gt; [1] ".l2.ggplot.plot"</span>
@@ -529,9 +529,9 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
 <span class="co"># but plots as a ggplot</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">lggp</span><span class="op">)</span></code></pre></div>
 <p><img src="grammarOfInteractiveGraphics_files/figure-html/interactive%20ggplot-1.png" width="40%" style="display: block; margin: auto;"></p>
-<p>Note that the interactive effects do not appear in <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot(l_ggp)</a></code>; this is because this is still an <code>l_ggplot</code>. To print the interactive plot, a handle to it must be found, for example using <code>l_getFromPath(".l3.ggplot")</code></p>
+<p>Note that the interactive effects do not appear in <code>plot(l_ggp)</code>; this is because this is still an <code>l_ggplot</code>. To print the interactive plot, a handle to it must be found, for example using <code>l_getFromPath(".l3.ggplot")</code></p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">l_ggp</span> <span class="op">&lt;-</span> <span class="fu">l_getFromPath</span><span class="op">(</span><span class="st">".l3.ggplot"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">l_ggp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getFromPath.html">l_getFromPath</a></span><span class="op">(</span><span class="st">".l3.ggplot"</span><span class="op">)</span>
 <span class="co"># Alternatively, the loon plot could have been captured when first</span>
 <span class="co"># created by using loon.ggplot(lggp) in stead of print(lggp) as follows</span>
 <span class="co"># </span>
@@ -541,7 +541,7 @@ The value <code>"pull"</code> pulls the values of the linked states from plots i
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_ggp</span><span class="op">)</span>
 <span class="co"># and as below when presented as a ggplot</span>
 <span class="fu"><a href="../reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">l_ggp</span><span class="op">)</span></code></pre></div>
-<p>The <strong>final trick</strong> is that either <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> or <code>ggplot()</code> cam be produce interactive plots using the <code>ggplot</code> grammar.</p>
+<p>The <strong>final trick</strong> is that either <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> or <code><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot()</a></code> cam be produce interactive plots using the <code>ggplot</code> grammar.</p>
 <p>It’s largely a matter of taste.</p>
 </div>
   </div>

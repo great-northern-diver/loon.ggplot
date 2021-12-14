@@ -1,8 +1,8 @@
 # loon.ggplot 1.3.1
 
-* In the past, the "none" and `FALSE` both work for `guides()`. Unfortunately, `FALSE` is deprecated when version >= 3.3.5.
+* In the previous versions of `ggplot2` (< 3.3.5), both "none" and FALSE work in guides(). In the latest version (e.g., >= 3.3.5), FALSE is deprecated.
 
-* Fix a bug: if the point shape is 21 to 25, use "fill" as the point color. If "fill" is not found or it is `NA`, then try "color". 
+* Fix a bug: if the point shape is between 21 to 25, use the variable "fill" as the points' color; if the variable "fill" is not found or as NA, then try variable "colour".
 
 # loon.ggplot 1.3.0
 
