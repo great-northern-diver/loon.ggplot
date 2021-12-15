@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -58,7 +60,7 @@
       <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/Pipes.html">Pipes</a>
+      <a href="../articles/pipes.html">Pipes</a>
     </li>
     <li>
       <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
@@ -80,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/great-northern-diver/loon,ggplot">
+  <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
     <span class="fas fa-github fa-lg"></span>
      
   </a>
@@ -95,15 +97,15 @@
 
       
 
-      </header><script src="ggplot2loon_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>ggplots –&gt; loon plots</h1>
-                        <h4 class="author">Wayne Oldford and Zehao Xu</h4>
+                        <h4 data-toc-skip class="author">Wayne Oldford and Zehao Xu</h4>
             
-            <h4 class="date">2021-12-14</h4>
+            <h4 data-toc-skip class="date">2021-12-14</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/ggplot2loon.Rmd"><code>vignettes/ggplot2loon.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/vignettes/ggplot2loon.Rmd" class="external-link"><code>vignettes/ggplot2loon.Rmd</code></a></small>
       <div class="hidden name"><code>ggplot2loon.Rmd</code></div>
 
     </div>
@@ -111,60 +113,58 @@
     
     
 <p>The <code>ggplot2</code> graphics package (part of the <code>tidyverse</code> package collection) uses the base <code>grid</code> graphics package to produce publication quality graphics for data analysis. Based on a grammar for graphics, <code>ggplot2</code> also provides a lot of functionality (e.g. <code>facet</code>s) that can be extremely useful in data analysis.</p>
-<p>The <code>loon</code> graphics package provides <strong>interactive</strong> graphics especially valuable in any <strong>exploratory data analysis</strong>. This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, <code>loon</code> also provides publication quality static graphics in <code>grid</code> via loon’s functions <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html">grid.loon()</a></code> and <code><a href="https://great-northern-diver.github.io/loon/reference/loonGrob.html">loonGrob()</a></code>. In particular, the standard <code>R</code> <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function has been specialized to produce a <code>grid</code> version of any <code>loon</code> plot.</p>
+<p>The <code>loon</code> graphics package provides <strong>interactive</strong> graphics especially valuable in any <strong>exploratory data analysis</strong>. This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, <code>loon</code> also provides publication quality static graphics in <code>grid</code> via loon’s functions <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html" class="external-link">grid.loon()</a></code> and <code><a href="https://great-northern-diver.github.io/loon/reference/loonGrob.html" class="external-link">loonGrob()</a></code>. In particular, the standard <code>R</code> <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> function has been specialized to produce a <code>grid</code> version of any <code>loon</code> plot.</p>
 <p>The loon.ggplot package <strong>brings both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now <strong>turn these <code>ggplot</code>s into interactive <code>loon</code> plots</strong> for more dynamic interaction with their data.</p>
-<div id="ggplot-loon-via-ggplot2loon" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ggplot-loon-via-ggplot2loon" class="anchor"></a>ggplot –&gt; loon via <code>ggplot2loon()</code>
+<div class="section level2">
+<h2 id="ggplot-loon-via-ggplot2loon">ggplot –&gt; loon via <code>ggplot2loon()</code><a class="anchor" aria-label="anchor" href="#ggplot-loon-via-ggplot2loon"></a>
 </h2>
-<div id="basic" class="section level3">
-<h3 class="hasAnchor">
-<a href="#basic" class="anchor"></a>Basic</h3>
+<div class="section level3">
+<h3 id="basic">Basic<a class="anchor" aria-label="anchor" href="#basic"></a>
+</h3>
 <p>Consider the <code>mtcars</code> data set and suppose we draw a scatterplot of the mileage <code>mpg</code> (miles per US gallon) versus the weight of the car <code>wt</code> in thousands of pounds. In <code>ggplot2</code> this would be constructed as</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>and displayed by printing the <code>"ggplot"</code> data structure <code>p1</code> as</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p1</span> </code></pre></div>
 <p><img src="ggplot2loon_files/figure-html/mpg_vs_wt_ggplot_display-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>We might also display a histogram of some other variate, say the engine’s horsepower <code>hp</code>. In <code>ggplot2</code> this would be constructed as</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span><span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_histogram</span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></code></pre></div>
 <p>and displayed as</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">h1</span></code></pre></div>
 <p><img src="ggplot2loon_files/figure-html/hp_ggplot_display-1.png" width="50%" style="display: block; margin: auto;"></p>
 </div>
-<div id="transformation-ggplot2loon-and-grid-loon-or-plot-loon" class="section level3">
-<h3 class="hasAnchor">
-<a href="#transformation-ggplot2loon-and-grid-loon-or-plot-loon" class="anchor"></a>Transformation: <code>ggplot2loon()</code> and <code>grid.loon()</code> or <code>plot.loon()</code>
+<div class="section level3">
+<h3 id="transformation-ggplot2loon-and-grid-loon-or-plot-loon">Transformation: <code>ggplot2loon()</code> and <code>grid.loon()</code> or <code>plot.loon()</code><a class="anchor" aria-label="anchor" href="#transformation-ggplot2loon-and-grid-loon-or-plot-loon"></a>
 </h3>
 <p>Using the <code>loon.ggplot</code> package, the <code>"ggplot"</code> data structures <code>p1</code> and <code>h1</code> can be <strong>turned into interactive loon plots</strong> using the <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">loon.ggplot</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">loon.ggplot</span><span class="op">)</span>
 <span class="va">l_p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span>  <span class="co"># the scatterplot</span>
 <span class="va">l_h1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">h1</span><span class="op">)</span>  <span class="co"># the histogram</span></code></pre></div>
-<p>These loon plots should look very much (though not exactly) like the ggplot from which it was constructed. Using <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html">grid.loon()</a></code> <code>grid</code> graphics versions of the loon plots can be created for static display, printing, and incorporation into documents:</p>
+<p>These loon plots should look very much (though not exactly) like the ggplot from which it was constructed. Using <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html" class="external-link">grid.loon()</a></code> <code>grid</code> graphics versions of the loon plots can be created for static display, printing, and incorporation into documents:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html">grid.loon</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html" class="external-link">grid.loon</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_plot_l_p1.png" width="70%" style="display: block; margin: auto;"></p>
-<p>Alternatively, and more simply, we can use the usual <code>plot</code> function in <code>R</code> which has a method for <code>loon</code> objects (<code>plot</code> is essentially “syntactic sugar” since it simply calls <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html">grid.loon()</a></code>)</p>
+<p>Alternatively, and more simply, we can use the usual <code>plot</code> function in <code>R</code> which has a method for <code>loon</code> objects (<code>plot</code> is essentially “syntactic sugar” since it simply calls <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html" class="external-link">grid.loon()</a></code>)</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_h1</span><span class="op">)</span>   <span class="co"># equivalent to grid.loon(l_h1)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_h1</span><span class="op">)</span>   <span class="co"># equivalent to grid.loon(l_h1)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_hist_l_h1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
-<div id="interaction---direct-manipulation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#interaction---direct-manipulation" class="anchor"></a>Interaction - Direct Manipulation</h3>
+<div class="section level3">
+<h3 id="interaction---direct-manipulation">Interaction - Direct Manipulation<a class="anchor" aria-label="anchor" href="#interaction---direct-manipulation"></a>
+</h3>
 <p>Unlike <code>p1</code> and <code>h1</code>, the loon counterparts <code>l_p1</code> and <code>l_h1</code> are both <strong>interactive</strong>; their displays can be changed by <strong>direct manipulation</strong> using the mouse and/or each loon plot’s <strong>loon inspector</strong>.</p>
 <p><img src="images/ggplots2loon/inspector_l_p1.png" width="25%" style="display: block; margin: auto;"></p>
 <p>For example, points in the loon scatterplot <code>l_p1</code>, can be selected with a mouse (<code>&lt;SHIFT&gt;</code> select for multiple selection) and their glyph changed in shape or color, for example. Scrolling over the plot causes zooming and <code>&lt;RIGHT-BUTTON&gt;</code> (or <code>&lt;SECONDARY-BUTTON&gt;</code>, depending on your mouse setup) can be used to pan the plot (the same can be done via the “World View” of the inspector).</p>
 <p>If, for example, the <code>itemLabels</code> box is checked in the inspector, then hovering over any point will pop a little “tool tip” identifying the point.</p>
 <p>Similarly, the loon histogram <code>l_h1</code> has many interactions and a specialized loon inspector. For example, the histogram can be changed from <code>frequency</code> to <code>density</code> in the inspector and the “bin handle” turned on and off; the latter can be directly manipulated to change the size and location of the bins whenever it appears on the histogram plot.</p>
 <p>Many, many, more interactions are possible. You might want to experiment with the plot and the inspector to see some of the possibilities. (<strong>Recommended:</strong> explore the vignettes given in the <code>loon</code> package).</p>
-<div id="linking" class="section level4">
-<h4 class="hasAnchor">
-<a href="#linking" class="anchor"></a>Linking</h4>
+<div class="section level4">
+<h4 id="linking">Linking<a class="anchor" aria-label="anchor" href="#linking"></a>
+</h4>
 <p>One of the basic features of interactive statistical graphics is the ability to <strong>link displays</strong>. In loon this is most easily accomplished via the loon inspector.</p>
 <p>To see the effect, with the mouse select one of the loon plots <code>l_p1</code> or <code>l_h1</code> and then select the inspector. On the inspector, type the text <code>mtcars</code> into the text input box which appears next to “linking group”; then hit return/enter. As a result, the text appearing there will be <code>mtcars [1 linked]</code>; this shows that the selected plot is participating in the linking group named “mtcars” and that it is presently the only one so linked.</p>
 <p>Now select the other plot <code>l_h1</code> or <code>l_p1</code>. On the loon inspector for this plot, you can again enter “mtcars” as this plot’s linking group (this can be done as before or selected from the menu accessible from the down arrow next to the linking group. As soon as the second plot is linked, the user is prompted to choose how to synchronize the linked features of the new plot to the previous plot. The choice is between <em>pushing</em> the display features from the current plot to the rest of the plots in the group and <em>pulling</em> the display features from the group to change those of the current plot. The resulting linking group entry should now show <code>mtcars [2 linked]</code>.</p>
@@ -173,24 +173,24 @@
 <p>See the vignette <code>Linking</code> for more.</p>
 </div>
 </div>
-<div id="interaction---programmatic" class="section level3">
-<h3 class="hasAnchor">
-<a href="#interaction---programmatic" class="anchor"></a>Interaction - Programmatic</h3>
+<div class="section level3">
+<h3 id="interaction---programmatic">Interaction - Programmatic<a class="anchor" aria-label="anchor" href="#interaction---programmatic"></a>
+</h3>
 <p>The loon plot, <code>l_p1</code> is itself a data structure of class <code>"l_plot"</code> and <code>"loon"</code></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
 <span class="va">l_p1</span>
 <span class="co"># [1] "l_plot" "loon"  </span>
 <span class="co"># [1] ".l0.ggplot.plot"</span>
 <span class="co"># attr(,"class")</span>
 <span class="co"># [1] "l_plot" "loon" </span></code></pre></div>
 <p>whose value is a string which uniquely identifies it. As such, it can be interacted with programmatically as well as by direct manipulation using the mouse and/or the plot’s loon inspector.</p>
-<p>For example, via direct manipulation, the plot might have zoomed or panned so that many of the points no longer appear in the plot. The plot can be returned to its original position and scaling (either through the loon inspector’s <code>scale to: plot</code> or) by calling the function <code><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html">l_scaleto_plot()</a></code> programmatically on the loon data structure <code>l_p1</code> as in</p>
+<p>For example, via direct manipulation, the plot might have zoomed or panned so that many of the points no longer appear in the plot. The plot can be returned to its original position and scaling (either through the loon inspector’s <code>scale to: plot</code> or) by calling the function <code><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html" class="external-link">l_scaleto_plot()</a></code> programmatically on the loon data structure <code>l_p1</code> as in</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html">l_scaleto_plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html" class="external-link">l_scaleto_plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
 <p>As a base loon structure, an <code>l_plot</code> has a variety of <code>l_info_states</code> available that can be accessed and/or set. The names of these states are had with <code>names(l_info_states(l_p1))</code> or more simply with</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
 <p>Their values can be accessed using the <code>[]</code> function. For example, the background grid lines which appear by default on ggplots, are called “guides” in loon and the logical state determining whether they appear or not in the loon plot is <code>"showGuides"</code>, accessed as</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"showGuides"</span><span class="op">]</span>
@@ -206,11 +206,11 @@
 <code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"title"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"1974 Motor Trend Car Road Tests"</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"xlabel"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Curb weight (1000s of lbs)"</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"ylabel"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Gas mileage (miles per US gallon)"</span>
-<span class="va">newlabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>, <span class="st">"\n   "</span>,
-                    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"V-"</span>, <span class="st">"straight-"</span><span class="op">)</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span>, <span class="st">" \n   "</span>, 
+<span class="va">newlabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>, <span class="st">"\n   "</span>,
+                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"V-"</span>, <span class="st">"straight-"</span><span class="op">)</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">vs</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>, <span class="va">mtcars</span><span class="op">$</span><span class="va">cyl</span>, <span class="st">" \n   "</span>, 
                     <span class="va">mtcars</span><span class="op">$</span><span class="va">disp</span>, <span class="st">" cubic inch \n   "</span>, 
                     <span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span>, <span class="st">" speed \n   "</span>, 
-                    <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"automatic"</span>, <span class="st">"manual"</span><span class="op">)</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>
+                    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"automatic"</span>, <span class="st">"manual"</span><span class="op">)</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>
                     <span class="op">)</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"itemLabel"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">newlabels</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"showItemLabels"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span></code></pre></div>
@@ -220,54 +220,52 @@
 <code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"size"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">10</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"glyph"</span><span class="op">]</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"ccircle"</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"glyph"</span><span class="op">]</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">am</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"triangle"</span>
-<span class="va">gears</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span><span class="op">)</span>
-<span class="va">ngears</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">gears</span><span class="op">)</span>
-<span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"lightblue"</span>, <span class="st">"steelblue"</span>, <span class="st">"black"</span><span class="op">)</span>
+<span class="va">gears</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span><span class="op">)</span>
+<span class="va">ngears</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">gears</span><span class="op">)</span>
+<span class="va">cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lightblue"</span>, <span class="st">"steelblue"</span>, <span class="st">"black"</span><span class="op">)</span>
 <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">ngears</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">l_p1</span><span class="op">[</span><span class="st">"color"</span><span class="op">]</span><span class="op">[</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">==</span> <span class="va">gears</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cols</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>
 <span class="op">}</span></code></pre></div>
 <p>We might then zoom in on the <code>"black"</code> coloured points (note that these are now <code>hex colors</code>), and maybe remove the others from the display (temporarily render them inactive) as follows.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"active"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">l_p1</span><span class="op">[</span><span class="st">"color"</span><span class="op">]</span> <span class="op">==</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_hexcolor.html">l_hexcolor</a></span><span class="op">(</span><span class="st">"black"</span><span class="op">)</span>
-<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_active.html">l_scaleto_active</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"active"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">l_p1</span><span class="op">[</span><span class="st">"color"</span><span class="op">]</span> <span class="op">==</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_hexcolor.html" class="external-link">l_hexcolor</a></span><span class="op">(</span><span class="st">"black"</span><span class="op">)</span>
+<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_active.html" class="external-link">l_scaleto_active</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"title"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"5 speed manual transmission"</span></code></pre></div>
 <p>The plot should now look something like this (a <code>grid</code> graphics version of <code>l_p1</code>):</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_plot_l_p1_zoomIn.png" width="70%" style="display: block; margin: auto;"></p>
 <p>Again, the plot can be returned to its original scale with all points reactivated as follows:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"active"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
-<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html">l_scaleto_plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
+<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_scaleto_plot.html" class="external-link">l_scaleto_plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"title"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"All points again"</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_plot_l_p1_zoomOut.png" width="70%" style="display: block; margin: auto;"></p>
-<div id="linking-in-loon" class="section level4">
-<h4 class="hasAnchor">
-<a href="#linking-in-loon" class="anchor"></a>Linking in <code>loon</code>
+<div class="section level4">
+<h4 id="linking-in-loon">Linking in <code>loon</code><a class="anchor" aria-label="anchor" href="#linking-in-loon"></a>
 </h4>
 <p>In loon, plots are linked only if they are in the same <code>linkingGroup</code> (which can be any string that meaningfully identifies the group of plots). The <code>linkingGroup</code> can also be set programmatically. For the <strong>first</strong> plot in a linking group, this can be set using the square bracket notation as above. For example, instead of “mtcars” we might want a more meaningful string for the linking group for <code>l_p1</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_p1</span><span class="op">[</span><span class="st">"linkingGroup"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"Motor Trend 1974"</span></code></pre></div>
 <p>The two plots <code>l_p1</code> and <code>l_h1</code> are now no longer linked because they are no longer in the same linking group.</p>
-<p>To add <code>l_h1</code> to this new linking group called “Motor Trend 1974”, <strong>the square bracket assignment will no longer work</strong>. This is because the two plots must be synchronized at the time any plot is added to an existing group. Instead, <code>l_h1</code> (and any subsequent plot) must be added to the group using the <code><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html">l_configure()</a></code> function as follows:</p>
+<p>To add <code>l_h1</code> to this new linking group called “Motor Trend 1974”, <strong>the square bracket assignment will no longer work</strong>. This is because the two plots must be synchronized at the time any plot is added to an existing group. Instead, <code>l_h1</code> (and any subsequent plot) must be added to the group using the <code><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html" class="external-link">l_configure()</a></code> function as follows:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html">l_configure</a></span><span class="op">(</span><span class="va">l_h1</span>, linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span>, sync <span class="op">=</span> <span class="st">"pull"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html" class="external-link">l_configure</a></span><span class="op">(</span><span class="va">l_h1</span>, linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span>, sync <span class="op">=</span> <span class="st">"pull"</span><span class="op">)</span></code></pre></div>
 <p>Notice, by the way, that the (stacked) colours in the histogram will follow those of <code>l_p1</code>. For example,</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_h1</span><span class="op">[</span><span class="st">"showStackedColors"</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_h1</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_h1</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_hist_l_h1_stacked_colours.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
-<div id="linking-with-ggplot2loon" class="section level4">
-<h4 class="hasAnchor">
-<a href="#linking-with-ggplot2loon" class="anchor"></a>Linking with <code>ggplot2loon()</code>
+<div class="section level4">
+<h4 id="linking-with-ggplot2loon">Linking with <code>ggplot2loon()</code><a class="anchor" aria-label="anchor" href="#linking-with-ggplot2loon"></a>
 </h4>
 <p>It is possible to declare the linking group of the loon plot at the time it is created from the ggplot.</p>
 <p>For example, the relationship between the acceleration and the drive axle ratio could be of interest; these are measured by the time taken to accelerate to a quarter mile, <code>qsec</code>, and <code>drat</code>. The <code>gplot</code> is</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># First using another ggplot</span>
-<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">drat</span>, y <span class="op">=</span> <span class="va">qsec</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">drat</span>, y <span class="op">=</span> <span class="va">qsec</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p>which looks like</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">p2</span></code></pre></div>
@@ -283,51 +281,51 @@
 <p>as can any other state of a loon plot, such as <code>title</code>, <code>xlabel</code>, <code>ylabel, or</code>itemLabel` as shown here.<br>
 The points in the loon plot inherit their colours from the linking group “Motor Trend 1974”:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_p2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_p2</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_plot_l_p2.png" width="70%" style="display: block; margin: auto;"></p>
 <p>Note that <code>l_p2</code> did not inherit the shapes of its points from the <code>l_p1</code>. That is because only those states that have been defined as <code>linkedStates</code> are shared by any given plot.</p>
 </div>
-<div id="linked-states" class="section level4">
-<h4 class="hasAnchor">
-<a href="#linked-states" class="anchor"></a>Linked states</h4>
+<div class="section level4">
+<h4 id="linked-states">Linked states<a class="anchor" aria-label="anchor" href="#linked-states"></a>
+</h4>
 <p>The <code>linkedStates</code> of any plot are those which that plot will share (and hence update) with any other plot in the same <code>linkingGroup</code>. The default states that are linked for an <code>l_plot</code> like <code>l_p1</code> are</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html" class="external-link">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span>
 <span class="co"># [1] "color"    "selected" "active"   "size"</span></code></pre></div>
 <p>and a change in any of these states by any plot in the linking group will cause the same change in these states on <code>l_p1</code>. These are the same states linked by <code>l_p2</code>.</p>
 <p>In contrast, the loon histogram <code>l_h1</code> has default linked states</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_h1</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html" class="external-link">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_h1</span><span class="op">)</span>
 <span class="co"># [1] "color"    "selected" "active" </span></code></pre></div>
 <p>which excludes <code>size</code> as not a meaningful state for a loon histogram (class <code>l_hist</code>).</p>
 <p>The linked states can be modified. For example, we might choose to not have the second plot respond to changes in the “active” state of other plots in the same linking group. This is effected by reducing the states for just the plot <code>l_p2</code></p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html">l_setLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span>,  <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"color"</span>, <span class="st">"selected"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html" class="external-link">l_setLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span>,  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"color"</span>, <span class="st">"selected"</span>, <span class="st">"size"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>A more sophisticated change would be also link the glyphs used for each point between plots. This will <em>typically</em> be the shape of the glyph. (<strong>Warning</strong>: but not always. For example, when images are used for the points, a little more care needs to be taken). To do this for both <code>l_p1</code> and <code>l_p2</code> we add to the states being linked as follows.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html">l_setLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"glyph"</span>, <span class="st">"active"</span>, <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html">l_setLinkedStates</a></span><span class="op">(</span><span class="va">l_p2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"glyph"</span>, <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_p2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html" class="external-link">l_setLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"glyph"</span>, <span class="st">"active"</span>, <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html" class="external-link">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_setLinkedStates.html" class="external-link">l_setLinkedStates</a></span><span class="op">(</span><span class="va">l_p2</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"glyph"</span>, <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLinkedStates.html" class="external-link">l_getLinkedStates</a></span><span class="op">(</span><span class="va">l_p2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>Now any <strong>change</strong> to the glyphs in either plot will change the glyphs in both.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">triangles</span> <span class="op">&lt;-</span> <span class="va">l_p1</span><span class="op">[</span><span class="st">"glyph"</span><span class="op">]</span> <span class="op">==</span> <span class="st">"triangle"</span>
 <span class="va">l_p1</span><span class="op">[</span><span class="st">"glyph"</span><span class="op">]</span><span class="op">[</span><span class="va">triangles</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"ctriangle"</span></code></pre></div>
 <p>Here now for <code>l_p1</code></p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_p1</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_plot_l_p1_changed_glyphs.png" width="70%" style="display: block; margin: auto;"></p>
 <p>and propagated to <code>l_p2</code></p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">l_p2</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">l_p2</span><span class="op">)</span></code></pre></div>
 <p><img src="images/ggplots2loon/l_plot_l_p2_changed_glyphs.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>
-<div id="layers" class="section level2">
-<h2 class="hasAnchor">
-<a href="#layers" class="anchor"></a>Layers</h2>
+<div class="section level2">
+<h2 id="layers">Layers<a class="anchor" aria-label="anchor" href="#layers"></a>
+</h2>
 <p>Rather complex plots can be built up in <code>ggplot2</code> by adding <em>layers</em>. For example,</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">drat</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">p_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">drat</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span>
 <span class="va">p_fit</span></code></pre></div>
 <p><img src="ggplot2loon_files/figure-html/mtcars_smooth-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>The <strong>corresponding interactive</strong> loon plot is</p>
@@ -335,40 +333,40 @@ The points in the loon plot inherit their colours from the linking group “Moto
 <code class="sourceCode R"><span class="va">l_p_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p_fit</span><span class="op">)</span></code></pre></div>
 <p>As with ggplots (and grid graphics plots), loon plots have layers. These can be identified (and manipulated) by selecting the “Layers” tab of the inspector.</p>
 <p><img src="images/ggplots2loon/inspector_l_p_fit.png" width="25%" style="display: block; margin: auto;"></p>
-<p>As can be seen, four distinct layers appear. There is the scatterplot (from <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code>), then a group layer called the <code>smooth</code> which has been opened up here by toggling the triangle at its left to reveal it is composed of a <code>line</code> and a <code>polygon</code> layer (in that order).</p>
-<p>The <strong>order of the layers is important</strong> and represent their visual order in the corresponding plot. By default, these will follow the order in which the various <code>geom</code>s appear in the construction of the ggplot. For example, had <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> appeared before the <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> in the left to right reading of the ggplot construction, then the <code>Scatterplot</code> layer would have appeared below the <code>smooth</code> group layer and visually obscured all points at the same location.</p>
+<p>As can be seen, four distinct layers appear. There is the scatterplot (from <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code>), then a group layer called the <code>smooth</code> which has been opened up here by toggling the triangle at its left to reveal it is composed of a <code>line</code> and a <code>polygon</code> layer (in that order).</p>
+<p>The <strong>order of the layers is important</strong> and represent their visual order in the corresponding plot. By default, these will follow the order in which the various <code>geom</code>s appear in the construction of the ggplot. For example, had <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> appeared before the <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code> in the left to right reading of the ggplot construction, then the <code>Scatterplot</code> layer would have appeared below the <code>smooth</code> group layer and visually obscured all points at the same location.</p>
 <p>The order of display can be changed from the inspector via the first two buttons at the bottom left of the layers panel. The order can also be changed programmatically. For example, the scatterplot can be moved lower in the display order as</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_layer_lower.html">l_layer_lower</a></span><span class="op">(</span><span class="va">l_p_fit</span>, <span class="st">"model"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_layer_lower.html" class="external-link">l_layer_lower</a></span><span class="op">(</span><span class="va">l_p_fit</span>, <span class="st">"model"</span><span class="op">)</span></code></pre></div>
 <p>and raised back up again so that the points are again on top</p>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_layer_raise.html">l_layer_raise</a></span><span class="op">(</span><span class="va">l_p_fit</span>, <span class="st">"model"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_layer_raise.html" class="external-link">l_layer_raise</a></span><span class="op">(</span><span class="va">l_p_fit</span>, <span class="st">"model"</span><span class="op">)</span></code></pre></div>
 <p>Note that the scatterplot layer identified by its “layer id”, namely the string <code>"model"</code>. The function <code>l_layer_ids( l_p_fit )</code> will return a list of all the layer ids from its argument <code>l_p_fit</code>.</p>
-<p>Reading left to right, the remaining buttons on the bottom of the layers tab on the inspector allow a (selected) layer to be moved out of a group, into a group, made visible, or made invisible, and add a new group layer, delete any layer, or scale the plot to the selected layer. All of these can also be achieved programmatically and numerous other functions exist in loon to add new layers – see <code><a href="https://great-northern-diver.github.io/loon/reference/l_layer.html">help("l_layer")</a></code> or <code>l_help("learn_R_layer")</code> for the range of possibilities.</p>
-<div id="the-model-layer" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-model-layer" class="anchor"></a>The Model Layer</h3>
+<p>Reading left to right, the remaining buttons on the bottom of the layers tab on the inspector allow a (selected) layer to be moved out of a group, into a group, made visible, or made invisible, and add a new group layer, delete any layer, or scale the plot to the selected layer. All of these can also be achieved programmatically and numerous other functions exist in loon to add new layers – see <code><a href="https://great-northern-diver.github.io/loon/reference/l_layer.html" class="external-link">help("l_layer")</a></code> or <code>l_help("learn_R_layer")</code> for the range of possibilities.</p>
+<div class="section level3">
+<h3 id="the-model-layer">The Model Layer<a class="anchor" aria-label="anchor" href="#the-model-layer"></a>
+</h3>
 <p>There is always one layer in loon that is the <strong>active layer</strong> which at present is always identified as the “model” layer. It is this layer which fields mouse events such as selection and brushing; it is also the layer that reacts to changes in linking states.</p>
-<p>In loon, scatterplots and histograms can be identified as the “model” layer (the former produced via the <code><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html">l_plot()</a></code> function, the latter via <code><a href="https://great-northern-diver.github.io/loon/reference/l_hist.html">l_hist()</a></code>).</p>
-<p>A loon <code><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html">l_plot()</a></code> corresponds to a ggplot <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> and a loon <code><a href="https://great-northern-diver.github.io/loon/reference/l_hist.html">l_hist()</a></code> to a ggplot <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram()</a></code>.<br>
+<p>In loon, scatterplots and histograms can be identified as the “model” layer (the former produced via the <code><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html" class="external-link">l_plot()</a></code> function, the latter via <code><a href="https://great-northern-diver.github.io/loon/reference/l_hist.html" class="external-link">l_hist()</a></code>).</p>
+<p>A loon <code><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html" class="external-link">l_plot()</a></code> corresponds to a ggplot <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and a loon <code><a href="https://great-northern-diver.github.io/loon/reference/l_hist.html" class="external-link">l_hist()</a></code> to a ggplot <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code>.<br>
 In <code>ggplot2</code> several <code>geom</code>s might appear in the construction of a plot, each one providing a layer. But in <code>loon</code> only one layer, namely the <code>"model"</code> layer, can be active. This means which of the ggplot layers are intended to be the active <code>"model"</code> layer in loon must be determined at the time of construction (the call to <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>).</p>
 <p>Consider the following example where three <code>geom</code>s are created as layers in the ggplot. Here a histogram (on a density scale) is overlaid with a scatter of points along the horizontal axis, and then with a curve from a density estimate.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p_hdp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">0.5</span>, 
+<code class="sourceCode R"><span class="va">p_hdp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">..density..</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span>binwidth <span class="op">=</span> <span class="fl">0.5</span>, 
                  fill <span class="op">=</span> <span class="st">"grey"</span>, 
                  color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html">geom_density</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, y <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>, 
-             mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>, 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"firebrick"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">wt</span>, y <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>, 
+             mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span>, 
              color <span class="op">=</span> <span class="st">"firebrick"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 <span class="co"># the ggplot</span>
 <span class="va">p_hdp</span></code></pre></div>
 <p><img src="ggplot2loon_files/figure-html/multiple_geoms-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>To render this in loon, which layer will be interactive needs to be determined. By default, this will be the first layer appearing in the construction of the ggplot – in this case the the histogram. The scatter of points will not be interactive and there are presently no interactive curves in a loon plot.</p>
-<div id="specifying-the-active-geom-layer" class="section level4">
-<h4 class="hasAnchor">
-<a href="#specifying-the-active-geom-layer" class="anchor"></a>Specifying the Active <code>geom</code> Layer</h4>
+<div class="section level4">
+<h4 id="specifying-the-active-geom-layer">Specifying the Active <code>geom</code> Layer<a class="anchor" aria-label="anchor" href="#specifying-the-active-geom-layer"></a>
+</h4>
 <p>The default active layer is the first <code>geom</code> having a “model” layer counterpart in a loon plot. In this way, the order of construction of the ggplot implicitly determines the <code>geom</code> to be active in loon. Alternatively, the active layer can be explicitly specified when creating the loon plot via the <code>activeGeomLayers</code> argument.</p>
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># To have the the histogram active (the first geom in p_hdp)</span>
@@ -384,55 +382,53 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
                        linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span></code></pre></div>
 <p>Note that the colouring will reflect the linking and indicate which layer is actually the active model layer. Check also the layers tab in each of these to see the distinction.</p>
 </div>
-<div id="multiple-active-layers-with-geom_point" class="section level4">
-<h4 class="hasAnchor">
-<a href="#multiple-active-layers-with-geom_point" class="anchor"></a>Multiple Active Layers with <code>geom_point()</code>
+<div class="section level4">
+<h4 id="multiple-active-layers-with-geom_point">Multiple Active Layers with <code>geom_point()</code><a class="anchor" aria-label="anchor" href="#multiple-active-layers-with-geom_point"></a>
 </h4>
-<p>When there are two or more <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> layers in the ggplot, it might sometime be of interest to have two or more of these merged into a single active layer.</p>
+<p>When there are two or more <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> layers in the ggplot, it might sometime be of interest to have two or more of these merged into a single active layer.</p>
 <p>For example, consider the following ggplot construction</p>
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pgps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">pgps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"firebrick"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="va">gear</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span>
 <span class="va">pgps</span></code></pre></div>
 <p><img src="ggplot2loon_files/figure-html/multiple_geom_points-1.png" width="50%" style="display: block; margin: auto;"></p>
 <p>To create the interactive plot, any of the <code>geom_point</code> layers could contribute to the active scatterplot model layer.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_pgps.1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span>
-<span class="va">l_pgps.13</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span>,
+<span class="va">l_pgps.13</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span><span class="op">)</span>,
                          linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span>
-<span class="va">l_pgps.123</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,
+<span class="va">l_pgps.123</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,
                          linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span></code></pre></div>
 <p>These plots now have different subsets of the points as their scatterplot “model” or active layer.</p>
 <p><strong>WARNING</strong> The linking works as expected <em>between these three</em> plots but <strong>not</strong> with any of the other plots in the same linking group. With a little extra care/work, this too is possible.</p>
 </div>
-<div id="forcing-the-correct-linking-linkingkey" class="section level4">
-<h4 class="hasAnchor">
-<a href="#forcing-the-correct-linking-linkingkey" class="anchor"></a>Forcing the Correct Linking – <code>linkingKey</code>
+<div class="section level4">
+<h4 id="forcing-the-correct-linking-linkingkey">Forcing the Correct Linking – <code>linkingKey</code><a class="anchor" aria-label="anchor" href="#forcing-the-correct-linking-linkingkey"></a>
 </h4>
 <p>One solution to getting the linking correct is to force the <code>linkingKey</code> of any new plot to match the keys already defined by the other plots in the linking group.</p>
 <p>The linking key of a loon plot is simply a character vector (default here)</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># this group's linking keys can be found from l_p1</span>
 <span class="va">groupKeys</span> <span class="op">&lt;-</span> <span class="va">l_p1</span><span class="op">[</span><span class="st">"linkingKey"</span><span class="op">]</span></code></pre></div>
-<p>These values need to be selected and matched to the subsetting used by the <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point()</a></code> calls in the ggplot.</p>
+<p>These values need to be selected and matched to the subsetting used by the <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> calls in the ggplot.</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># the subsets were defined as</span>
 <span class="va">dataGeom1</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">==</span> <span class="fl">3</span>
 <span class="va">dataGeom2</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">==</span> <span class="fl">4</span>
 <span class="va">dataGeom3</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">==</span> <span class="fl">5</span></code></pre></div>
-<p>As with <code>linkingGroup</code>, any change to <code>linkingKey</code> must also declare whether the existing linked states are to be pushed to, or pulled from, the group. Hence <code><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html">l_configure()</a></code> must be used.</p>
+<p>As with <code>linkingGroup</code>, any change to <code>linkingKey</code> must also declare whether the existing linked states are to be pushed to, or pulled from, the group. Hence <code><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html" class="external-link">l_configure()</a></code> must be used.</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html">l_configure</a></span><span class="op">(</span><span class="va">l_pgps.1</span>, 
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html" class="external-link">l_configure</a></span><span class="op">(</span><span class="va">l_pgps.1</span>, 
             linkingKey <span class="op">=</span> <span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom1</span><span class="op">]</span>, 
             sync <span class="op">=</span> <span class="st">"pull"</span><span class="op">)</span>
-<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html">l_configure</a></span><span class="op">(</span><span class="va">l_pgps.13</span>, 
-            linkingKey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom1</span><span class="op">]</span>,
+<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html" class="external-link">l_configure</a></span><span class="op">(</span><span class="va">l_pgps.13</span>, 
+            linkingKey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom1</span><span class="op">]</span>,
                            <span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom3</span><span class="op">]</span><span class="op">)</span>, 
             sync <span class="op">=</span> <span class="st">"pull"</span><span class="op">)</span>
-<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html">l_configure</a></span><span class="op">(</span><span class="va">l_pgps.123</span>, 
-            linkingKey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom1</span><span class="op">]</span>,
+<span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_configure.html" class="external-link">l_configure</a></span><span class="op">(</span><span class="va">l_pgps.123</span>, 
+            linkingKey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom1</span><span class="op">]</span>,
                            <span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom2</span><span class="op">]</span>,
                            <span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom3</span><span class="op">]</span><span class="op">)</span>, 
             sync <span class="op">=</span> <span class="st">"pull"</span><span class="op">)</span></code></pre></div>
@@ -440,21 +436,21 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">l_pgps.23</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">pgps</span>, 
                          linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span>,
-                         activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,
-                         linkingKey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom2</span><span class="op">]</span>,
+                         activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span>,
+                         linkingKey <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom2</span><span class="op">]</span>,
                                         <span class="va">groupKeys</span><span class="op">[</span><span class="va">dataGeom3</span><span class="op">]</span><span class="op">)</span>
                          <span class="op">)</span></code></pre></div>
 </div>
 </div>
 </div>
-<div id="facets-and-l_compound-plots" class="section level2">
-<h2 class="hasAnchor">
-<a href="#facets-and-l_compound-plots" class="anchor"></a>Facets and <code>l_compound</code> Plots</h2>
-<p>A significant data analytic feature in the <code>ggplot</code> pipeline is the notion of faceting the plots, for example, via <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap()</a></code></p>
+<div class="section level2">
+<h2 id="facets-and-l_compound-plots">Facets and <code>l_compound</code> Plots<a class="anchor" aria-label="anchor" href="#facets-and-l_compound-plots"></a>
+</h2>
+<p>A significant data analytic feature in the <code>ggplot</code> pipeline is the notion of faceting the plots, for example, via <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap()</a></code></p>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fwrap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">am</span><span class="op">)</span> 
+<code class="sourceCode R"><span class="va">fwrap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">gear</span> <span class="op">+</span> <span class="va">am</span><span class="op">)</span> 
 <span class="va">fwrap</span></code></pre></div>
 <p><img src="ggplot2loon_files/figure-html/fwrap-1.png" width="70%" style="display: block; margin: auto;"> Faceted plots can also be rendered interactive in the same way as any other <code>ggplot</code> objects:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
@@ -462,26 +458,25 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
 <p>which will look like <img src="images/ggplots2loon/l_fwrap.png" width="70%" style="display: block; margin: auto;"> Note that because we set the <code>linkingGroup</code> at the time of creation (and because the <code>linkingKey</code> is the the default in all plots in this group), the interactive faceted plot has pulled the colours from the other plots in the same <code>linkingGroup</code>.</p>
 <p>Note the class of <code>l_fwrap</code>:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span><span class="op">(</span><span class="va">l_fwrap</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">l_fwrap</span><span class="op">)</span>
 <span class="co"># [1] "l_ggplot"   "l_compound" "loon" </span></code></pre></div>
 <p>is an <code>l_ggplot</code> because it is a loon rendition of a more complex <code>ggplot</code>,and it is an <code>l_compound</code> which indicates that it is a composition of individual loon plots.</p>
 <p>As an <code>l_compound</code> plot, other features of the composition can be extracted. Such as the list of plots involved in the construction:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getPlots.html">l_getPlots</a></span><span class="op">(</span><span class="va">l_fwrap</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getPlots.html" class="external-link">l_getPlots</a></span><span class="op">(</span><span class="va">l_fwrap</span><span class="op">)</span></code></pre></div>
 <p>as well as their layout in the composition</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLocations.html">l_getLocations</a></span><span class="op">(</span><span class="va">l_fwrap</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getLocations.html" class="external-link">l_getLocations</a></span><span class="op">(</span><span class="va">l_fwrap</span><span class="op">)</span>
 <span class="co">#     [,1] [,2]</span>
 <span class="co"># [1,]    1    2</span>
 <span class="co"># [2,]    3    4</span></code></pre></div>
 <p>expressed as a matrix of the location of the plots in the order in which they appear in <code>getPlots()</code>.</p>
 <p>Each plot in <code>l_fwrap</code> is an independent loon plot which can be interacted with either through the inspector or programmatically.</p>
 </div>
-<div id="function-loon-ggplot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-loon-ggplot" class="anchor"></a>Function <code>loon.ggplot()</code>
+<div class="section level2">
+<h2 id="function-loon-ggplot">Function <code>loon.ggplot()</code><a class="anchor" aria-label="anchor" href="#function-loon-ggplot"></a>
 </h2>
-<p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code> package is an <code>S3</code> method and gathers features of both <code><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or a <code>gg</code> object and transform back and forth.</p>
+<p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code> package is an <code>S3</code> method and gathers features of both <code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or a <code>gg</code> object and transform back and forth.</p>
 <p>ggplot to loon: <code>loon.ggplot(gg)</code> is equivalent to <code>ggplot2loon(gg)</code>.</p>
 <hr>
 <p>See the vignette <code>A Grammar of Interactive Graphics</code> for more.</p>
@@ -499,11 +494,13 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
 
 
       <footer><div class="copyright">
-  <p>Developed by Zehao Xu, R. Wayne Oldford.</p>
+  <p></p>
+<p>Developed by Zehao Xu, R. Wayne Oldford.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -511,6 +508,8 @@ In <code>ggplot2</code> several <code>geom</code>s might appear in the construct
 
   
 
+
+  
 
   </body>
 </html>

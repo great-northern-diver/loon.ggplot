@@ -12,7 +12,6 @@ vignette: >
   %\VignetteIndexEntry{loon plots --> ggplots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-  
 
 ---
 

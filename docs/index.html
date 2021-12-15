@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -58,7 +60,7 @@
       <a href="articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="articles/Pipes.html">Pipes</a>
+      <a href="articles/pipes.html">Pipes</a>
     </li>
     <li>
       <a href="articles/ggplot2loon.html">ggplots to loon plots</a>
@@ -80,7 +82,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/great-northern-diver/loon,ggplot">
+  <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
     <span class="fas fa-github fa-lg"></span>
      
   </a>
@@ -97,21 +99,21 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="loonggplot" class="section level1">
+<div class="section level1">
 
 
 <p><img src="reference/figures/logo.png" align="right" width="120"> An R package to turn ggplot graphic data structures into interactive loon plots. Extends the grammar to add interactivity.</p>
-<p>Documentation: <a href="https://great-northern-diver.github.io/loon.ggplot/">https://great-northern-diver.github.io/loon.ggplot/</a></p>
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<p>Documentation: <a href="https://great-northern-diver.github.io/loon.ggplot/" class="external-link">https://great-northern-diver.github.io/loon.ggplot/</a></p>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>The <code>ggplot2</code> graphics package (part of the <code>tidyverse</code> package collection) uses the base <code>grid</code> graphics package to produce publication quality graphics for data analysis. Based on a grammar for graphics, <code>ggplot2</code> also provides a lot of functionality (e.g. <code>facet</code>s) that can be extremely useful in data analysis.</p>
 <p>The <code>loon</code> graphics package provides <strong>interactive</strong> graphics especially valuable in any <strong>exploratory data analysis</strong>. This includes programmatic and direct manipulation of the visualizations to effect interactive identification, zooming, panning, and linking between any number of displays. Of course, <code>loon</code> also provides publication quality static graphics in <code>grid</code> via loon’s functions <code>grid.loon()</code> and <code>loonGrob()</code>.</p>
-<p>The loon.ggplot package brings <strong>both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <strong><code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code></strong> and the latter by the simple translation function <strong><code><a href="reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code></strong>.</p>
+<p>The loon.ggplot package brings <strong>both these packages together</strong>. Data analysts who value the ease with which <code>ggplot2</code> can create meaningful graphics can now turn these <code>ggplot</code>s into interactive <code>loon</code> plots for more dynamic interaction with their data. Conversely, data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s. The former is accomplished by the simple translation function <strong><code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code></strong> and the latter by the simple translation function <strong><code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code></strong>.</p>
 </div>
-<div id="an-interactive-grammar" class="section level2">
-<h2 class="hasAnchor">
-<a href="#an-interactive-grammar" class="anchor"></a>An interactive grammar</h2>
+<div class="section level2">
+<h2 id="an-interactive-grammar">An interactive grammar<a class="anchor" aria-label="anchor" href="#an-interactive-grammar"></a>
+</h2>
 <p><code>loon.ggplot</code> extends the grammar of graphic to include interactive clauses:</p>
 <ul>
 <li><code>+ linking()</code></li>
@@ -121,97 +123,99 @@
 <li><code>+ zoom()</code></li>
 <li><code>+ interactivity()</code></li>
 </ul>
-<p>A <code>ggplot()</code> created with any of these clauses (in addition to the usual grammar) will <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> as an interactive <code>loon</code> plot and <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> as a static ggplot.</p>
+<p>A <code>ggplot()</code> created with any of these clauses (in addition to the usual grammar) will <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> as an interactive <code>loon</code> plot and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> as a static ggplot.</p>
 </div>
-<div id="install-from-r" class="section level2">
-<h2 class="hasAnchor">
-<a href="#install-from-r" class="anchor"></a>Install from <code>R</code>
+<div class="section level2">
+<h2 id="install-from-r">Install from <code>R</code>
+<a class="anchor" aria-label="anchor" href="#install-from-r"></a>
 </h2>
 <p>Just as the <code>tidyverse</code> includes <code>ggplot2</code>, the package suite called <code>diveR</code> includes <code>loon.ggplot</code> and many more interactive visualization packages.</p>
 <p>Installing <code>diveR</code> from CRAN will include installing <code>loon.ggplot</code>:</p>
-<pre><code>install.packages("diveR")</code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"diveR"</span><span class="op">)</span></code></pre>
 <p>Alternatively, <code>loon.ggplot</code> (and its dependencies) may be installed directly</p>
 <ul>
 <li>
 <p>from <code>CRAN</code></p>
-<pre><code>install.packages("loon.ggplot")</code></pre>
+<pre><code><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"loon.ggplot"</span><span class="op">)</span></code></pre>
 <p>or</p>
 </li>
 <li>
 <p>from <code>github</code></p>
-<pre><code>remotes::install_github("https://github.com/great-northern-diver/loon.ggplot")</code></pre>
+<pre><code><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"https://github.com/great-northern-diver/loon.ggplot"</span><span class="op">)</span></code></pre>
 </li>
 </ul>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
 <p>More detail is given in the vignettes, especially <code>"A Grammar Of Interactive Graphics"</code> and <code>"There And Back Again"</code>.</p>
 <p>Below functions transforming from a ggplot to a loon plot, and from a loon plot to a ggplot, are demonstrated.</p>
-<div id="ggplot2loon-ggplot--loon" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ggplot2loon-ggplot--loon" class="anchor"></a><code>ggplot2loon()</code>: ggplot –&gt; loon</h3>
+<div class="section level3">
+<h3 id="ggplot2loon-ggplot--loon">
+<code>ggplot2loon()</code>: ggplot –&gt; loon<a class="anchor" aria-label="anchor" href="#ggplot2loon-ggplot--loon"></a>
+</h3>
 <ul>
 <li>Construct <code>ggplot</code>
 </li>
 </ul>
 <p>Consider the <code>mtcars</code> data set. Suppose we draw a scatterplot of the mileage <code>mpg</code> (miles per US gallon) versus the weight of the car <code>wt</code> in thousands of pounds and colour represents different cylinder numbers. In <code>ggplot2</code> this would be constructed as</p>
-<pre><code><a href="https://ggplot2.tidyverse.org">library(ggplot2)
-p &lt;- ggplot(mtcars, aes(wt, mpg, colour = as.factor(cyl))) + geom_point()
-p</a></code></pre>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">p</span></code></pre>
 <p><img src="reference/figures/mtcarsScatterPlot.png"></p>
 <p>We might also display a histogram of some other variate, say the engine’s horsepower <code>hp</code>. In <code>ggplot2</code> this would be constructed as</p>
-<pre><code>h &lt;- ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) + geom_histogram()
-h</code></pre>
+<pre><code><span class="va">h</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">hp</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">h</span></code></pre>
 <p><img src="reference/figures/hpHistogram.png"></p>
 <ul>
 <li>To <code>loon</code>
 </li>
 </ul>
 <p>the <code>"ggplot"</code> data structures <code>p</code> and <code>h</code> can be <strong>turned into interactive loon plot</strong>s using the <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code> function:</p>
-<pre><code><a href="https://rdrr.io/r/base/library.html">library(loon.ggplot)
-pl &lt;- ggplot2loon(p)
-hl &lt;- ggplot2loon(h)</a></code></pre>
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">loon.ggplot</span><span class="op">)</span>
+<span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="va">hl</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">h</span><span class="op">)</span></code></pre>
 <p><img src="reference/figures/scatterAndHist.gif"></p>
 <p>An alternative way of doing so is to replace <code>ggplot()</code> function to <code><a href="reference/l_ggplot.html">l_ggplot()</a></code> function. Then, follow the pipe rules of <code>ggplot()</code> but get a <code>loon</code> plot.</p>
-<pre class="{r}"><code># the scatter plot
-l_ggplot(mtcars, aes(wt, 
-                     mpg, 
-                     colour = as.factor(cyl))) + 
-  geom_point()
-# the histogram
-l_ggplot(mtcars, aes(x = hp, fill = as.factor(cyl))) + 
-  geom_histogram()</code></pre>
+<pre class="{r}"><code><span class="co"># the scatter plot</span>
+<span class="fu"><a href="reference/l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, 
+                     <span class="va">mpg</span>, 
+                     colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co"># the histogram</span>
+<span class="fu"><a href="reference/l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">hp</span>, fill <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></code></pre>
 <p>Note that:</p>
 <ul>
-<li><p>Loon “Hello World”: Introduction to interactive <code>loon</code> plots can be found via <a href="https://cran.r-project.org/web/packages/loon/vignettes/introduction.html">loon</a>. It shows how to create, manipulate (selection, linking and etc) <code>loon</code> plots</p></li>
-<li><p><code>loon.ggplot</code> talk: A talk “Interactive ggplots in R” has been given in <a href="https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216">SDSS 2019</a>. Slides can be found in <a href="https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html">SDSS2019/loon.ggplot talk</a> which gives more details.</p></li>
+<li><p>Loon “Hello World”: Introduction to interactive <code>loon</code> plots can be found via <a href="https://cran.r-project.org/web/packages/loon/vignettes/introduction.html" class="external-link">loon</a>. It shows how to create, manipulate (selection, linking and etc) <code>loon</code> plots</p></li>
+<li><p><code>loon.ggplot</code> talk: A talk “Interactive ggplots in R” has been given in <a href="https://ww2.amstat.org/meetings/sdss/2019/onlineprogram/AbstractDetails.cfm?AbstractID=306216" class="external-link">SDSS 2019</a>. Slides can be found in <a href="https://www.math.uwaterloo.ca/~rwoldfor/talks/SDSS2019/loon.ggplot/assets/player/KeynoteDHTMLPlayer.html" class="external-link">SDSS2019/loon.ggplot talk</a> which gives more details.</p></li>
 <li><p>A <code>ggmatrix</code> object in package <code>GGally</code> can also be converted to a <code>loon</code> widget. See <code><a href="reference/ggplot2loon.html">help(ggplot2loon)</a></code> for more info.</p></li>
 </ul>
 </div>
-<div id="loon2ggplot-loon--ggplot" class="section level3">
-<h3 class="hasAnchor">
-<a href="#loon2ggplot-loon--ggplot" class="anchor"></a><code>loon2ggplot()</code>: loon –&gt; ggplot</h3>
+<div class="section level3">
+<h3 id="loon2ggplot-loon--ggplot">
+<code>loon2ggplot()</code>: loon –&gt; ggplot<a class="anchor" aria-label="anchor" href="#loon2ggplot-loon--ggplot"></a>
+</h3>
 <p>After creating <code>loon</code> plots and adding programmatic and direct manipulation of the visualizations to effect interactive identification, function <code>loon2ggplot</code> can be applied to return a static <code>ggplot</code></p>
-<pre><code>pg &lt;- loon2ggplot(pl)
-hg &lt;- loon2ggplot(hl)</code></pre>
+<pre><code><span class="va">pg</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/loon2ggplot.html">loon2ggplot</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span>
+<span class="va">hg</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/loon2ggplot.html">loon2ggplot</a></span><span class="op">(</span><span class="va">hl</span><span class="op">)</span></code></pre>
 <p>Note that <code>pg</code> and <code>hg</code> are <code>ggplot</code> objects.</p>
 <pre><code>class(pg)
 [1] "gg"     "ggplot"
 class(hg)
 [1] "gg"     "ggplot"</code></pre>
 <p>Layers, theme adjustment can be piped though like:</p>
-<pre><code>pg + 
-  ggplot2::geom_smooth() + 
-  ggplot2::ggtitle("Mtcars")</code></pre>
+<pre><code><span class="va">pg</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Mtcars"</span><span class="op">)</span></code></pre>
 <p><img src="reference/figures/mtcarsAddSmooth.png"></p>
-<pre><code>hg + 
-  ggplot2::geom_density() + 
-  ggplot2::coord_flip()</code></pre>
+<pre><code><span class="va">hg</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span></code></pre>
 <p><img src="reference/figures/hpAddDensity.png"></p>
 <p>Note that:</p>
 <ul>
-<li><p>Compound loon widget like <code>l_ts</code> and <code>l_pairs</code> are created by <a href="https://patchwork.data-imaginist.com/index.html"><code>patchwork</code></a>. The <code>ggplot</code> components like <code>theme</code>, <code>labels</code> can be piped through but by the <code>patchwork</code> rule.</p></li>
+<li><p>Compound loon widget like <code>l_ts</code> and <code>l_pairs</code> are created by <a href="https://patchwork.data-imaginist.com/index.html" class="external-link"><code>patchwork</code></a>. The <code>ggplot</code> components like <code>theme</code>, <code>labels</code> can be piped through but by the <code>patchwork</code> rule.</p></li>
 <li>
 <p>Some functionalities are provided</p>
 <ul>
@@ -222,80 +226,77 @@ class(hg)
 </li>
 </ul>
 </div>
-<div id="loonggplot-loon--ggplot" class="section level3">
-<h3 class="hasAnchor">
-<a href="#loonggplot-loon--ggplot" class="anchor"></a><code>loon.ggplot()</code>: loon &lt;–&gt; ggplot</h3>
-<p><code><a href="reference/loon.ggplot.html">loon.ggplot()</a></code> gathers features of both <code><a href="reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code> and <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
-<pre><code>p &lt;- l_plot(iris)
-# `loon` to `gg`
-g &lt;- loon.ggplot(p)
-g &lt;- g + geom_smooth(method = "lm") + theme_bw() 
-g
-# `gg` to `loon`
-l &lt;- loon.ggplot(g)</code></pre>
+<div class="section level3">
+<h3 id="loonggplot-loon--ggplot">
+<code>loon.ggplot()</code>: loon &lt;–&gt; ggplot<a class="anchor" aria-label="anchor" href="#loonggplot-loon--ggplot"></a>
+</h3>
+<p><code><a href="reference/loon.ggplot.html">loon.ggplot()</a></code> gathers features of both <code><a href="reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
+<pre><code><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html" class="external-link">l_plot</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span>
+<span class="co"># `loon` to `gg`</span>
+<span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
+<span class="va">g</span> <span class="op">&lt;-</span> <span class="va">g</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> 
+<span class="va">g</span>
+<span class="co"># `gg` to `loon`</span>
+<span class="va">l</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></code></pre>
 </div>
 </div>
-<div id="more-than-loon-or-ggplot2" class="section level2">
-<h2 class="hasAnchor">
-<a href="#more-than-loon-or-ggplot2" class="anchor"></a>More than <code>loon</code> or <code>ggplot2</code>
+<div class="section level2">
+<h2 id="more-than-loon-or-ggplot2">More than <code>loon</code> or <code>ggplot2</code>
+<a class="anchor" aria-label="anchor" href="#more-than-loon-or-ggplot2"></a>
 </h2>
 <p>More than connecting <code>ggplot2</code> and <code>loon</code> these two specific graphical systems, <code>loon.ggplot</code> is able to connect the suite behind them.</p>
-<p><img src="reference/figures/loonggplotConnection.PNG"></p>
-<div id="loon--ggplot2--gganimate" class="section level3">
-<h3 class="hasAnchor">
-<a href="#loon--ggplot2--gganimate" class="anchor"></a><code>loon</code> –&gt; <code>ggplot2</code> –&gt; <code>gganimate</code>
-</h3>
+<p><img src="reference/figures/loonggplotConnection.PNG"> ### <code>loon</code> –&gt; <code>ggplot2</code> –&gt; <code>gganimate</code></p>
 <p>Return an animation from a <code>loon</code> plot</p>
-<pre><code><a href="https://github.com/jennybc/gapminder"># a loon plot
-library(gapminder)
-p &lt;- with(gapminder, 
-          l_plot(gdpPercap, lifeExp,
-                 # scale the size into certain amounts
-                 size = scales::rescale(pop, to = c(4, 50)),
-                 color = continent,
-                 itemLabel = as.character(country),
-                 showItemLabels = TRUE
-          ))
+<pre><code><span class="co"># a loon plot</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jennybc/gapminder" class="external-link">gapminder</a></span><span class="op">)</span>
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">gapminder</span>, 
+          <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html" class="external-link">l_plot</a></span><span class="op">(</span><span class="va">gdpPercap</span>, <span class="va">lifeExp</span>,
+                 <span class="co"># scale the size into certain amounts</span>
+                 size <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/rescale.html" class="external-link">rescale</a></span><span class="op">(</span><span class="va">pop</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">50</span><span class="op">)</span><span class="op">)</span>,
+                 color <span class="op">=</span> <span class="va">continent</span>,
+                 itemLabel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">country</span><span class="op">)</span>,
+                 showItemLabels <span class="op">=</span> <span class="cn">TRUE</span>
+          <span class="op">)</span><span class="op">)</span>
           
-# highlight large population countires     
-library(dplyr)
-top10in2007 &lt;- gapminder %&gt;% 
-  filter(year == 2007) %&gt;%
-  top_n(10, pop)
-p['selected'][gapminder$country %in% top10in2007$country] &lt;- TRUE
+<span class="co"># highlight large population countires     </span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="va">top10in2007</span> <span class="op">&lt;-</span> <span class="va">gapminder</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="fl">2007</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/top_n.html" class="external-link">top_n</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">pop</span><span class="op">)</span>
+<span class="va">p</span><span class="op">[</span><span class="st">'selected'</span><span class="op">]</span><span class="op">[</span><span class="va">gapminder</span><span class="op">$</span><span class="va">country</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">top10in2007</span><span class="op">$</span><span class="va">country</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">TRUE</span>
 
-# to `ggplot` then to `animation`
-library(gganimate)
-loon.ggplot(p, selectedOnTop = FALSE) + 
-  facet_wrap(gapminder$continent) + 
-  theme(legend.position = "none") + 
-  labs(title = 'Year: {frame_time}', 
-       x = 'GDP per capita', 
-       y = 'life expectancy') + 
-  transition_time(gapminder$year) +
-  ease_aes('linear')</a></code></pre>
+<span class="co"># to `ggplot` then to `animation`</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://gganimate.com" class="external-link">gganimate</a></span><span class="op">)</span>
+<span class="fu"><a href="reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">p</span>, selectedOnTop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">$</span><span class="va">continent</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">'Year: {frame_time}'</span>, 
+       x <span class="op">=</span> <span class="st">'GDP per capita'</span>, 
+       y <span class="op">=</span> <span class="st">'life expectancy'</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://gganimate.com/reference/transition_time.html" class="external-link">transition_time</a></span><span class="op">(</span><span class="va">gapminder</span><span class="op">$</span><span class="va">year</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://gganimate.com/reference/ease_aes.html" class="external-link">ease_aes</a></span><span class="op">(</span><span class="st">'linear'</span><span class="op">)</span></code></pre>
 <p><img src="reference/figures/gdpVersusLife.gif"></p>
-</div>
-<div id="ggplot2--loon--shiny" class="section level3">
-<h3 class="hasAnchor">
-<a href="#ggplot2--loon--shiny" class="anchor"></a><code>ggplot2</code> –&gt; <code>loon</code> –&gt; <code>shiny</code>
+<div class="section level3">
+<h3 id="ggplot2--loon--shiny">
+<code>ggplot2</code> –&gt; <code>loon</code> –&gt; <code>shiny</code>
+<a class="anchor" aria-label="anchor" href="#ggplot2--loon--shiny"></a>
 </h3>
 <p>Return a shiny web app from a <code>ggplot</code> object</p>
-<pre><code><a href="https://dplyr.tidyverse.org">library(dplyr)
-gp &lt;- gapminder %&gt;% 
-  filter(year == 2007,
-         continent != "Oceania") %&gt;%
-  ggplot(mapping = aes(gdpPercap, lifeExp, 
-                       colour = continent)) + 
-  geom_point(mapping = aes(size = pop)) + 
-  geom_smooth(mapping = aes(weight = pop),
-              method = "lm",
-              se = FALSE)
+<pre><code><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="va">gp</span> <span class="op">&lt;-</span> <span class="va">gapminder</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="fl">2007</span>,
+         <span class="va">continent</span> <span class="op">!=</span> <span class="st">"Oceania"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">gdpPercap</span>, <span class="va">lifeExp</span>, 
+                       colour <span class="op">=</span> <span class="va">continent</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="va">pop</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>weight <span class="op">=</span> <span class="va">pop</span><span class="op">)</span>,
+              method <span class="op">=</span> <span class="st">"lm"</span>,
+              se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
-library(loon.shiny)
-gp %&gt;% 
-  loon.ggplot() %&gt;% 
-  loon.shiny()</a></code></pre>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">loon.shiny</span><span class="op">)</span>
+<span class="va">gp</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="reference/loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="https://rdrr.io/pkg/loon.shiny/man/loon.shiny.html" class="external-link">loon.shiny</a></span><span class="op">(</span><span class="op">)</span></code></pre>
 <p><img src="reference/figures/GDPshiny.gif"></p>
 </div>
 </div>
@@ -304,49 +305,59 @@ gp %&gt;%
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=loon.ggplot">https://​cloud.r-project.org/​package=loon.ggplot</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/great-northern-diver/loon.ggplot/">https://​github.com/​great-northern-diver/​loon.ggplot/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/great-northern-diver/loon.ggplot/issues">https://​github.com/​great-northern-diver/​loon.ggplot/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=loon.ggplot" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/great-northern-diver/loon.ggplot/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/great-northern-diver/loon.ggplot/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-2" class="external-link">GPL-2</a></li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing loon.ggplot</a></li>
+</ul>
+</div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Zehao Xu <br><small class="roles"> Author, maintainer </small>  </li>
 <li>R. Wayne Oldford <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.com/great-northern-diver/loon.ggplot"><img src="https://travis-ci.com/great-northern-diver/loon.ggplot.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master"><img src="https://codecov.io/gh/great-northern-diver/loon.ggplot/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://cran.r-project.org/web/packages/loon.ggplot/index.html"><img src="https://www.r-pkg.org/badges/version/loon.ggplot" alt="CRAN status"></a></li>
-<li><a href="https://cran.r-project.org/package=loon.ggplot"><img src="https://cranlogs.r-pkg.org/badges/loon.ggplot"></a></li>
+<li><a href="https://travis-ci.com/great-northern-diver/loon.ggplot" class="external-link"><img src="https://travis-ci.com/great-northern-diver/loon.ggplot.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/gh/great-northern-diver/loon.ggplot?branch=master" class="external-link"><img src="https://codecov.io/gh/great-northern-diver/loon.ggplot/branch/master/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://cran.r-project.org/web/packages/loon.ggplot/index.html" class="external-link"><img src="https://www.r-pkg.org/badges/version/loon.ggplot" alt="CRAN status"></a></li>
+<li><a href="https://cran.r-project.org/package=loon.ggplot" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/loon.ggplot"></a></li>
 </ul>
 </div>
-</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Zehao Xu, R. Wayne Oldford.</p>
+  <p></p>
+<p>Developed by Zehao Xu, R. Wayne Oldford.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -354,6 +365,8 @@ gp %&gt;%
 
   
 
+
+  
 
   </body>
 </html>
