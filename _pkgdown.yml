@@ -12,7 +12,7 @@ navbar:
       - text: Linking
         href: articles/linking.html
       - text: Pipes
-        href: articles/Pipes.html
+        href: articles/pipes.html
       - text: ggplots to loon plots
         href: articles/ggplot2loon.html
       - text: loon plots to ggplots
