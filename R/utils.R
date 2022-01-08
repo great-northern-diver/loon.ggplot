@@ -25,6 +25,7 @@ is.sec_axis <- function (x) inherits(x, "AxisSecondary")
 is.l_compound <- function(x) inherits(x, "l_compound")
 is.ggmatrix <- function(x) inherits(x, "ggmatrix")
 is.ggmatrix_plot_obj <- function(x) inherits(x, "ggmatrix_plot_obj")
+is.element_blank <- function(x) inherits(x, "element_blank")
 
 # default aesthetics attributes in loon
 loon_default_setting <- function(x) {
@@ -90,6 +91,10 @@ plot_range <- function(x = "x.range", panelParams, flip = FALSE) {
   }
 
   panelParams[[x]] %||% c(0, 1)
+}
+
+len_unique <- function(x, incomparables = FALSE, ...) {
+  length(unique(x, incomparables, ...))
 }
 
 
