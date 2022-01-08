@@ -101,14 +101,20 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
   } else {
 
+    color <- get_display_color(
+      as_hex6color(data$color[active_displayOrder]),
+      data$selected[active_displayOrder]
+    )
+    if(len_unique(color) == 1L) color <- color[1L]
+
+    size <- as_ggplot_size(data$linewidth[active_displayOrder], "lines")
+    if(len_unique(size) == 1L) size <- size[1L]
+
     ggObj <- ggplot2::ggplot(data = data) +
       ggmulti::geom_serialaxes(
         data = serialaxes.data[active_displayOrder, ],
-        color = get_display_color(
-          as_hex6color(data$color[active_displayOrder]),
-          data$selected[active_displayOrder]
-        ),
-        size = as_ggplot_size(data$linewidth[active_displayOrder], "lines"),
+        color = color,
+        size = size,
         stat = stat,
         scaling = widget['scaling'],
         axes.sequence = axes.sequence
