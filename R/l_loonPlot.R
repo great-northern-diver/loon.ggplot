@@ -1,6 +1,7 @@
 l_loonPlot <- function(ggObj, panelIndex, args, plotInfo, numOfSubtitles,
                        modelLayers, activeInfo, index, parent,
-                       showGuides, showScales, swapAxes, xlabel, ylabel, loonTitle) {
+                       showGuides, showScales, showLabels, swapAxes,
+                       xlabel, ylabel, loonTitle) {
 
 
   # grab objects from the input
@@ -28,18 +29,27 @@ l_loonPlot <- function(ggObj, panelIndex, args, plotInfo, numOfSubtitles,
   if (is.data.frame(dataFrame) && !is.waive(dataFrame)) {
     mapping <- ggObj$mapping
   } else {
-    if(length(activeGeomLayers) == 1) {
-      dataFrame <- ggObj$layers[[activeGeomLayers]]$data
+    mapping <- ggplot2::aes()
+  }
+
+  if(rlang::is_empty(mapping)) {
+
+    if(length(activeGeomLayers) == 0L) {
+      NULL
+    } else {
+      # take the first layer as the active geom layer
+      layerDataFrame <- ggObj$layers[[activeGeomLayers[1L]]]$data
+      if(!is.waive(layerDataFrame))
+        dataFrame <- layerDataFrame
       linkingKey <- loonLinkingKey(dataFrame, args)
       itemLabel <- loonItemLabel(dataFrame, args)
-
-      mapping <- ggObj$layers[[activeGeomLayers]]$mapping
-    } else mapping <- ggplot2::aes() # activeGeomLayers > 1 not implemented so far
+      mapping <- ggObj$layers[[activeGeomLayers[1L]]]$mapping
+    }
   }
 
   # l_serialaxesplot, l_histgoram and l_scatterplot are loon.ggplot customized plots
   # they are wrappers of `loon::l_serialaxes`, `loon::l_hist`, `loon::l_plot`
-  if(activeModel == "l_serialaxes" & length(activeGeomLayers) > 0) {
+  if(activeModel == "l_serialaxes" && length(activeGeomLayers) > 0) {
 
     l_serialaxesplot(ggBuild = ggBuild,
                      index = index,
@@ -52,7 +62,7 @@ l_loonPlot <- function(ggObj, panelIndex, args, plotInfo, numOfSubtitles,
                      showGuides = showGuides,
                      linkingKey = linkingKey,
                      itemLabel = itemLabel,
-                     showLabels = plotInfo$showLabels,
+                     showLabels = showLabels,
                      showItemLabels = plotInfo$showItemLabels,
                      loonTitle = loonTitle)
 
@@ -86,14 +96,14 @@ l_loonPlot <- function(ggObj, panelIndex, args, plotInfo, numOfSubtitles,
                 swapAxes = swapAxes,
                 linkingKey = linkingKey,
                 nDimStates = nDimStates,
-                showLabels = plotInfo$showLabels,
+                showLabels = showLabels,
                 xlabel = xlabel,
                 ylabel = ylabel,
                 loonTitle = loonTitle,
                 FacetWrap = FacetWrap,
                 FacetGrid = FacetGrid)
 
-  } else if(activeModel == "l_plot" & length(boxplotPointLayers) > 0) {
+  } else if(activeModel == "l_plot" && length(boxplotPointLayers) > 0) {
 
     l_scatterplot(ggBuild = ggBuild,
                   ggObj = ggObj,
@@ -110,7 +120,7 @@ l_loonPlot <- function(ggObj, panelIndex, args, plotInfo, numOfSubtitles,
                   linkingKey = linkingKey,
                   itemLabel = itemLabel,
                   nDimStates = nDimStates,
-                  showLabels = plotInfo$showLabels,
+                  showLabels = showLabels,
                   showItemLabels = plotInfo$showItemLabels,
                   xlabel = xlabel,
                   ylabel = ylabel,
@@ -122,7 +132,7 @@ l_loonPlot <- function(ggObj, panelIndex, args, plotInfo, numOfSubtitles,
     loon::l_plot(parent = parent,
                  showGuides = showGuides,
                  showScales = showScales,
-                 showLabels = plotInfo$showLabels,
+                 showLabels = showLabels,
                  showItemLabels = plotInfo$showItemLabels,
                  swapAxes = swapAxes,
                  xlabel = if(is.null(xlabel)) "" else xlabel,
