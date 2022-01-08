@@ -105,12 +105,17 @@ l_scatterplot <- function(ggBuild, ggObj, ggplotPanelParams, panelIndex, mapping
                 call. = FALSE)
     }
   } else {
-    # mainly used for boxplot
-    if(is.null(mapping$x) & !is.null(mapping$y)) {
+    # activeGeomLayers is 0
+    # used for boxplot
+    # an issue may occur
+    # considering this
+    # ggplot() + geom_boxplot(data, mapping = aes())
+    # the boxplot may not be interactive
+    if(is.null(mapping$x) && !is.null(mapping$y)) {
 
       combinedPointsData <- data.frame(x = rep(0, dim(dataFrame)[1]),
                                        y = rlang::eval_tidy(rlang::quo(!!mapping$y),  dataFrame))
-    } else if(!is.null(mapping$x) & is.null(mapping$y)) {
+    } else if(!is.null(mapping$x) && is.null(mapping$y)) {
 
       combinedPointsData <- data.frame(x = rlang::eval_tidy(rlang::quo(!!mapping$x),  dataFrame),
                                        y = rep(0, dim(dataFrame)[1]))
