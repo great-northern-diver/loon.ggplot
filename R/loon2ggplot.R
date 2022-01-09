@@ -18,28 +18,32 @@
 #' which are the "nearest" of these hex codes.
 #' @param ... arguments used inside \code{loon2ggplot()}, not used by this method
 #'
-#' @return a \code{ggplot} object
+#' @return a \code{ggplot} object (or a \code{patchwork} object, a extension of \code{ggplot2})
 #'
 #' @details
-#' in \code{ggplot}, generally speaking, there are two ways to set the
-#' aesthetics attributes, either take it as variables \code{asAes = TRUE}
-#' (set in function \code{aes()}) or visual properties \code{asAes = FALSE}.
-#' The main benefits to consider it as variables are that 1. legend could be shown;
+#' In \code{ggplot2}, typically, there are two ways to set the
+#' aesthetic attributes, either take them as variables \code{asAes = TRUE}
+#' (set in the function \code{aes()}) or constants \code{asAes = FALSE}.
+#' The main benefits to consider them as variables are that 1. legend could be displayed;
 #' 2. convenient for further analysis.
 #'
-#' In \code{loon}, if the \code{selected} state is changed, the order of the points will be changed so that
-#' the highlighted points will be displayed on top. To turn it static, if \code{selectedOnTop = TRUE},
-#' the points will be partitioned into two
-#' groups, one group presents the un-selected (un-highlighted) points and
-#' the other group presents selected (highlighted) points.
-#' the un-selected group will be drawn first, then selected group will be displayed on top of it;
-#' if \code{selectedOnTop = FALSE}, no partition is applied so that the displayed order will be identical to
-#' the original data set order. This is very helpful when further analysis will be operated in ggplot
-#' graphical system, e.g. \code{+ facet_wrap(...)}. See examples.
+#' In \code{loon}, when points were \code{selected} (highlighted),
+#' the order would be changed so that
+#' the highlighted points would be displayed at the front.
+#' To turn the \code{loon} plot static, if \code{selectedOnTop = TRUE},
+#' the points would be partitioned into two
+#' groups -- one group representing the un-highlighted points,
+#' and the other group representing the highlighted points.
+#' The un-highlighted group would be drawn first,
+#' then the selected group;
+#' if \code{selectedOnTop = FALSE}, no partition would be applied so that
+#' the displayed order remained. However, the highlighted points could be
+#' displayed at the back. See examples.
 #'
 #' @export
 #' @examples
 #' if(interactive()) {
+#' ######## Basic ########
 #' lp <- l_plot(iris,
 #'              color = iris$Species,
 #'              glyph = "circle")
@@ -64,18 +68,17 @@
 #' # facet by `fill`
 #' gh0 + facet_wrap(~fill)
 #'
-#' # set `asAes = FALSE`
+#' ######## Argument `asAes` ########
 #' gh1 <- loon2ggplot(lh, asAes = FALSE)
-#' # Expect the legend, they both are identical
 #' gh1
 #' \dontrun{
-#' # ERROR
 #' # The bins are constructed by `ggplot2::geom_rect()`
-#' # Very limited operations can be made
+#' # Very limited manipulations can be made
+#' # ERROR
 #' gh1 + facet_wrap(~fill)
 #' }
 #'
-#' # Argument `selectedOnTop`
+#' ######## Argument `selectedOnTop` ########
 #' p <- l_plot(iris, color = iris$Species)
 #' p['selected'][iris$Petal.Length > 5] <- TRUE
 #' g <- loon.ggplot(p)
@@ -83,15 +86,44 @@
 #' g
 #' # facet by "Species"
 #' \dontrun{
-#' g + facet_wrap(iris$Species)}
+#' g + facet_wrap(iris$Species)
+#' }
 #' # Something is wrong here. There is a pink point (at least one)
-#' # in species "versicolor"! The reason is because after points are
-#' # hightligthed, the displayed order has been changed. One way to
-#' # fix it is to set the `selectedOnTop` as FALSE.
-#'
+#' # in species "versicolor"! It is because after points are
+#' # highlighted, the displayed order has been changed.
+#' # Set `selectedOnTop` as FALSE, as in
 #' loon.ggplot(p, selectedOnTop = FALSE) +
 #'   facet_wrap(iris$Species)
-#' }
+#'
+#' \donttest{
+#' ######## l_patchwork --> ggplot ########
+#' library(patchwork)
+#' p1 <- ggplot(mtcars) + geom_point(aes(mpg, disp))
+#' p2 <- ggplot(mtcars) +
+#'    geom_boxplot(aes(gear, disp, group = gear))
+#' p3 <- ggplot(mtcars) + geom_smooth(aes(disp, qsec))
+#' design <- c(
+#'   area(1,1),
+#'   area(1,2),
+#'   area(2,1,2,2)
+#' )
+#' pp <- p1 + p2 + p3 + plot_layout(design = design)
+#'
+#' # turn a patchwork obj to a loon (l_compound)
+#' lp <- ggplot2loon(pp)
+#' # turn a loon (l_compound) back to a patchwork
+#' plp <- loon2ggplot(lp)
+#' plp # almost identical to pp
+#'
+#'
+#' ######## zneplots --> ggplot ########
+#' library(zenplots)
+#' stopifnot(packageVersion("zenplots") > "1.0.4")
+#' zen <- zenplots::zenplot(iris, plot1d = "density", pkg = "loon")
+#' ggzen <- loon.ggplot(zen)
+#' ggzen +
+#'   patchwork::plot_annotation(title = "This is a ggplot")
+#' }}
 loon2ggplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         showNearestColor = FALSE, ...) {
 
@@ -141,7 +173,7 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
   setLimits <- TRUE
   if(target['yshows'] == "density") {
-    if(length(unique(target['color'])) > 1 || length(unique(target['selected'])) > 1) {
+    if(len_unique(target['color']) > 1 || length(unique(target['selected'])) > 1) {
       setLimits <- FALSE
       message("In `ggplot` histogram, if `y` shows density, ",
               "the area of each category (grouped by color) is 1; ",
@@ -344,51 +376,51 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
 
       layer <- loon::l_create_handle(c(widget, layerid))
 
-      if(layerid == 'model') {
-
-        x <- widget['x']
-        if(length(x) > 0) {
-
-          ndimNames <- loon::l_nDimStateNames(widget)
-          # N dim names
-          data <- as.data.frame(
-            remove_null(
-              stats::setNames(
-                lapply(ndimNames,
-                       function(s) {
-                         if(s == "color") {
-                           l_colorName(widget[s], error = FALSE,
-                                       precise = !showNearestColor)
-                         } else if (s == "size") {
-                           as.numeric(widget[s])
-                         } else {
-                           state <- widget[s]
-                           if(length(state) == 0) return(NULL)
-                           state
-                         }
-                       }),
-                ndimNames
-              ), as_list = FALSE)
-          )
-
-          if(selectedOnTop) {
-            displayOrder <- suppressWarnings(get_model_display_order(widget))
-            data <- data[displayOrder, ]
-          }
-
-          if(inherits(widget, "l_hist")) {
-
-            # histogram
-            ggObj <<- ggplot2::ggplot(data = data,
-                                      mapping = ggplot2::aes(x = x))
-
-          } else {
-            ggObj <<- ggplot2::ggplot(data = data,
-                                      mapping = ggplot2::aes(x = x,
-                                                             y = y))
-          }
-        } else NULL
-      }
+      # if(layerid == 'model') {
+      #
+      #   x <- widget['x']
+      #   if(length(x) > 0) {
+      #
+      #     ndimNames <- loon::l_nDimStateNames(widget)
+      #     # N dim names
+      #     data <- as.data.frame(
+      #       remove_null(
+      #         stats::setNames(
+      #           lapply(ndimNames,
+      #                  function(s) {
+      #                    if(s == "color") {
+      #                      l_colorName(widget[s], error = FALSE,
+      #                                  precise = !showNearestColor)
+      #                    } else if (s == "size") {
+      #                      as.numeric(widget[s])
+      #                    } else {
+      #                      state <- widget[s]
+      #                      if(length(state) == 0) return(NULL)
+      #                      state
+      #                    }
+      #                  }),
+      #           ndimNames
+      #         ), as_list = FALSE)
+      #     )
+      #
+      #     if(selectedOnTop) {
+      #       displayOrder <- suppressWarnings(get_model_display_order(widget))
+      #       data <- data[displayOrder, ]
+      #     }
+      #
+      #     if(inherits(widget, "l_hist")) {
+      #
+      #       # histogram
+      #       ggObj <<- ggplot2::ggplot(data = data,
+      #                                 mapping = ggplot2::aes(x = x))
+      #
+      #     } else {
+      #       ggObj <<- ggplot2::ggplot(data = data,
+      #                                 mapping = ggplot2::aes(x = x,
+      #                                                        y = y))
+      #     }
+      #   } else NULL
+      # }
 
       layer
     })
@@ -618,6 +650,11 @@ loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, selectedOnTop = TRUE
     df$x <- as.numeric(df$x)
     df$y <- as.numeric(df$y)
 
+    if(len_unique(angle) == 1L) angle <- angle[1L]
+    if(len_unique(size) == 1L) size <- size[1L]
+    if(len_unique(justify) == 1L) justify <- justify[1L]
+    if(len_unique(color) == 1L) color <- color[1L]
+
     ggObj <- ggObj +
       ggplot2::geom_text(
         data = df,
@@ -646,12 +683,17 @@ loon2ggplot.l_layer_points <- function(target, asAes = TRUE, selectedOnTop = TRU
 
   if(length(x) > 0  && length(y)  > 0) {
 
+    color <- states$color[active]
+    if(len_unique(color) == 1L) color <- color[1L]
+    size <- as_ggplot_size(states$size[active])
+    if(len_unique(size) == 1L) size <- size[1L]
+
     ggObj <- ggObj +
       ggplot2::geom_point(
         data = data.frame(x = x, y = y),
         mapping = ggplot2::aes(x = x, y = y),
-        colour =  states$color[active],
-        size = as_ggplot_size(states$size[active]),
+        colour =  color,
+        size = size,
         pch = 19
       )
   }
@@ -672,13 +714,30 @@ loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, selectedOnTop = T
 
   ggObj <- list(...)$ggObj
 
-  if(length(x) > 0  & length(y) > 0){
-
-    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
-    linecolor <- states$linecolor[active]
-    fill <- states$color[active]
+  if(length(x) > 0 && length(y) > 0) {
 
     len_x <- lengths(x)
+
+    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
+    linewidth <- if(len_unique(linewidth) == 1L) {
+      linewidth[1L]
+    } else {
+      rep(linewidth, times = len_x)
+    }
+
+    linecolor <- states$linecolor[active]
+    linecolor <- if(len_unique(linecolor) == 1L) {
+      linecolor[1L]
+    } else {
+      rep(linecolor, times = len_x)
+    }
+
+    fill <- states$color[active]
+    fill <- if(len_unique(fill) == 1L) {
+      fill[1L]
+    } else {
+      rep(fill, times = len_x)
+    }
 
     group <- as.factor(rep(1:length(len_x), times = len_x))
     df <- data.frame(
@@ -691,9 +750,9 @@ loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, selectedOnTop = T
       ggplot2::geom_polygon(
         data =df,
         mapping = ggplot2::aes(x = x, y = y, group = group),
-        fill = rep(fill, times = len_x),
-        colour = rep(linecolor, times = len_x),
-        size = rep(linewidth, times = len_x)
+        fill = fill,
+        colour = linecolor,
+        size = linewidth
       )
   }
 
@@ -727,14 +786,23 @@ loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, selectedOnTop =
       ymax = ymax
     )
 
+    fill <- states$color[active]
+    if(len_unique(fill) == 1L) fill <- fill[1L]
+
+    color <- states$linecolor[active]
+    if(len_unique(color) == 1L) color <- color[1L]
+
+    size <- as_ggplot_size(states$linewidth[active], "lines")
+    if(len_unique(size) == 1L) size <- size[1L]
+
     ggObj <- ggObj +
       ggplot2::geom_rect(
         data =df,
         mapping = ggplot2::aes(xmin = xmin, xmax = xmax,
                                ymin = ymin, ymax = ymax),
-        fill = states$color[active],
-        colour = states$linecolor[active],
-        size = as_ggplot_size(states$linewidth[active], "lines")
+        fill = fill,
+        colour = color,
+        size = size
       )
   }
 
@@ -756,10 +824,21 @@ loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, selectedOnTop = TRUE
 
   if(length(x) > 0  & length(y) > 0){
 
-    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
-    linecolor <- states$color[active]
-
     len_x <- lengths(x)
+
+    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
+    linewidth <- if(len_unique(linewidth) == 1L) {
+      linewidth[1L]
+    } else {
+      rep(linewidth, times = len_x)
+    }
+
+    linecolor <- states$color[active]
+    linecolor <- if(len_unique(linecolor) == 1L) {
+      linecolor[1L]
+    } else {
+      rep(linecolor, times = len_x)
+    }
 
     group <- as.factor(rep(seq(length(len_x)),
                            times = len_x))
@@ -774,8 +853,8 @@ loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, selectedOnTop = TRUE
       ggplot2::geom_path(
         data =df,
         mapping = ggplot2::aes(x = x, y = y, group = group),
-        colour = rep(linecolor, times = len_x),
-        size = rep(linewidth, times = len_x)
+        colour = linecolor,
+        size = linewidth
       )
   }
 

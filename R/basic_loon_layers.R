@@ -1017,7 +1017,7 @@ loonLayer.GeomPath <- function(widget,
          function(i){
            groupData <- data[data$group == uniGroup[i], ]
            linesColor <- groupData$colour
-           len_uni_col <- length(unique(groupData$colour))
+           len_uni_col <- len_unique(groupData$colour)
 
            linesWidth <- as_loon_size(groupData$size, "lines")
            linesDash <- as_loon_dash(groupData$linetype)

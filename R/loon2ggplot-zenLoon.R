@@ -1,17 +1,5 @@
 #' @rdname loon2ggplot
 #' @export
-#' @examples
-#' \dontrun{
-#' if(interactive()) {
-#' library(zenplots)
-#' library(patchwork)
-#' stopifnot(packageVersion("zenplots") > "1.0.4")
-#' zen <- zenplots::zenplot(iris, plot1d = "density", pkg = "loon")
-#' ggzen <- loon.ggplot(zen)
-#' ggzen +
-#'   patchwork::plot_annotation(title = "This is a ggplot")
-#' }
-#' }
 loon2ggplot.zenLoon <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                 showNearestColor = FALSE, ...) {
   # get loon plot paths

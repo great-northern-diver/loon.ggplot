@@ -392,7 +392,7 @@ Set which elements (i.e., observations) are `"selected"`. These are shown highli
 
 - `selected`	
 
-  a logical or a logical vector of length n that determines which observations are selected (TRUE and hence appear highlighted in the plot) and which are not. Default is FALSE and no points are highlit.
+  a logical or a logical vector of length n that determines which observations are selected (TRUE and hence appear highlighted in the plot) and which are not. Default is FALSE and no points are highlighted.
 
 - `selectBy` 
 
@@ -400,7 +400,7 @@ Set which elements (i.e., observations) are `"selected"`. These are shown highli
 
 - `selectionLogic` 
 
-  One of `"select"` (the default), `"deselect"`, and `"invert"`. The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting highlit observations and highlighting downlighted ones).
+  One of `"select"` (the default), `"deselect"`, and `"invert"`. The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting highlighted observations and highlighting downlighted ones).
 
 ## `+ active()`
 

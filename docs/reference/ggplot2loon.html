@@ -131,73 +131,12 @@ exterior labels (title, subtitle, xlabel or ylabel) using <code>tk.grid()</code>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>loon</code> single or compound widget</p>
+    <p>a <code>loon</code> single widget or a compound object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>,</span>
-<span class="r-in">     colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">am</span><span class="op">)</span></span>
-<span class="r-in">  <span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  z <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">df</span>, <span class="op">-</span><span class="va">z</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">scatterplots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df2</span>, colour <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">z</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># We can select the first geom_point layer to be</span></span>
-<span class="r-in"><span class="co"># the active layer as in</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">lp_scatterplots_active1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span>
-<span class="r-in">                               activeGeomLayers <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">                               linkingGroup <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Here the grey points are linked (not the coloured ones)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># We can select the second geom_point layer to be</span></span>
-<span class="r-in"><span class="co"># the active layer as in</span></span>
-<span class="r-in"><span class="va">lp_scatterplots_active2</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>, activeGeomLayers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Here the colour points are linked</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># We can also select the both geom_point layers to be</span></span>
-<span class="r-in"><span class="co"># the active layer as in</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
-<span class="r-in"> <span class="va">lp_scatterplots_active12</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>, activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Here the colour points and grey points are both linked</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">########### ggmatrix to loon ###########</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"GGally"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pm</span> <span class="op">&lt;-</span> <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html" class="external-link">ggpairs</a></span><span class="op">(</span><span class="va">iris</span>, column <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lg</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">pm</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: GGally</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 method overwritten by 'GGally':</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   method from   </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   +.gg   ggplot2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> The 'space', 'carriage returns', or 'new lines' is not legal in `l_glyph_add_text()`.They will be replaced by the underscore `_`.If you do not want the text to be interactive, set `activeGeomLayers = 0L`</span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
-<span class="r-in"></span>
-</code></pre></div>
+    
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

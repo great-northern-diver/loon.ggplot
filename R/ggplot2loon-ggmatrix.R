@@ -9,7 +9,9 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
     list(activeGeomLayers = activeGeomLayers,
          parent = parent,
          ggGuides = ggGuides,
-         pack = pack,
+         pack = FALSE,
+         layerId = layerId,
+         scaleToFun = scaleToFun,
          exteriorLabelProportion = exteriorLabelProportion,
          canvasHeight = canvasHeight,
          canvasWidth = canvasWidth),
@@ -19,7 +21,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
   if(is.null(parent)) {
     parent <- l_toplevel()
     subwin <- loon::l_subwin(parent, 'ggplot')
-    tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
+    tcltk::tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
     parent <- as.character(tcltk::tcl('frame', subwin))
   }
 
@@ -38,7 +40,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
                       } else if(is.ggmatrix_plot_obj(plot)) {
                         plot$fn(ggObj$data, plot$mapping)
                       } else {
-                        stop("not implemented so far", call. = FALSE)
+                        stop("Not implemented yet", call. = FALSE)
                       }
                     }
   )
@@ -98,9 +100,6 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
         # one facet
         args$parent <- parent
         args$showLabels <- FALSE
-        args$pack <- FALSE
-        args$layerId <- layerId
-        args$scaleToFun <- scaleToFun
 
         lp <- do.call(
           ggplot2loon.ggplot,
@@ -122,10 +121,11 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
                         rowspan = rowspan,
                         columnspan = columnspan,
                         sticky = "nesw")
-          # tk column row configure
+          # tk column configure
           for (ii in col.start:(col.start + columnspan - 1)) {
             tcltk::tkgrid.columnconfigure(parent, ii, weight=1)
           }
+          # tk row configure
           for (ii in row.start:(row.start + rowspan - 1)) {
             tcltk::tkgrid.rowconfigure(parent, ii, weight=1)
           }
@@ -192,6 +192,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
   }
 
   modify_loon_tk_labes(parent = parent,
+                       pack = pack,
                        title = title,
                        xlab = xlab,
                        ylab = ylab,
@@ -215,6 +216,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
 
 ##################################### modify loon tk labels #####################################
 modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
+                                 pack = TRUE,
                                  title = NULL,
                                  xlab = NULL,
                                  ylab = NULL,
@@ -329,5 +331,6 @@ modify_loon_tk_labes <- function(parent = tcltk::tktoplevel(),
                   sticky="nesw")
   }
 
-  tkpack(parent, fill="both", expand=TRUE)
+  if(pack)
+    tcltk::tkpack(parent, fill="both", expand=TRUE)
 }

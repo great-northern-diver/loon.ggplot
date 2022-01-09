@@ -13,7 +13,9 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
     data <- histogramAsAesTRUE(widget, showNearestColor)
 
     fill <- data$fill
-    color <- data$colour
+    color <- data$color
+    if(len_unique(color) == 1L) color <- color[1L]
+
     x <- data$x
     values <- data$values
 
@@ -27,7 +29,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
                        y = ..density..)
           # the layout would be different from the loon one
         },
-        colour = color,
+        color = color,
         boundary = widget['origin'],
         binwidth = widget['binwidth'],
         inherit.aes = FALSE,
@@ -50,8 +52,12 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
     ymin <- data$y
     xmax <- data$x + data$width
     ymax <- data$y + data$height
+
     fill <- data$fill
-    colour <- data$colour
+    if(len_unique(fill) == 1L) fill <- fill[1L]
+
+    color <- data$color
+    if(len_unique(color) == 1L) color <- color[1L]
 
     if(!selectedOnTop)
       warning("For histogram, if the `asAes` is set as FALSE, the plot will be created by adding layer `geom_rect()`. ",
@@ -69,7 +75,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
                                xmax = xmax,
                                ymax = ymax),
         fill = fill,
-        colour = colour,
+        color = color,
         inherit.aes = FALSE
       )
   }
@@ -124,7 +130,7 @@ histogramAsAesTRUE <- function(widget, showNearestColor = FALSE) {
     list(
       x = activeX,
       fill = activeColor,
-      colour = colorOutline,
+      color = colorOutline,
       values = values
     )
   )
@@ -172,7 +178,7 @@ histogramAsAesFALSE <- function(widget) {
                               fills = bnames,
                               x = bin$x0,
                               width = bin$x1 - bin$x0,
-                              colour = colorOutline,
+                              color = colorOutline,
                               default_fill = default_fill)
                    })
 
@@ -193,7 +199,7 @@ bin_data <- function(count,
                      fills,
                      x,
                      width,
-                     colour,
+                     color,
                      default_fill = NULL) {
   y0 <- 0
   bin_dataFrame <- do.call(rbind,
@@ -217,7 +223,7 @@ bin_data <- function(count,
                                         width = width,
                                         height = height,
                                         fill = fill,
-                                        colour = colour
+                                        color = color
                                       )
                                     )
                                   })

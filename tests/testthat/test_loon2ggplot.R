@@ -16,7 +16,6 @@ test_that("test l_plot (loon to ggplot)", {
   pi <- predict(fit, data.frame(x=xseq),
                 interval="prediction", level=0.95)
 
-
   p <- l_plot(y~x, color='black', showScales=TRUE, showGuides=TRUE)
   gLayer <- l_layer_group(
     p, label="simple linear regression",

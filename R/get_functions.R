@@ -187,11 +187,27 @@ get_showScales <- function(theme) {
   # do not set theme, default showScales is TRUE
   if(length(theme) == 0) return(TRUE)
 
+  # any of them is turned off --> showScales is FALSE
   if(any(names(theme) %in% c("axis.text.x", "axis.text.y", "axis.ticks"))) {
     !(
-      inherits(theme$axis.text.x, "element_blank") ||
-        inherits(theme$axis.text.y, "element_blank") ||
-        inherits(theme$axis.ticks, "element_blank")
+      is.element_blank(theme$axis.text.x) ||
+        is.element_blank(theme$axis.text.y) ||
+        is.element_blank(theme$axis.ticks)
+    )
+  } else TRUE
+}
+
+get_showLabels <- function(theme) {
+
+  # do not set theme, default showLabels is TRUE
+  if(length(theme) == 0) return(TRUE)
+
+  # any of them is turned off --> showLabels is FALSE
+  if(any(names(theme) %in% c("axis.title.y", "axis.title.x", "axis.title"))) {
+    !(
+      is.element_blank(theme$axis.title.x) ||
+        is.element_blank(theme$axis.title.y) ||
+        is.element_blank(theme$axis.title)
     )
   } else TRUE
 }
