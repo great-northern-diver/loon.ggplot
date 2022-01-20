@@ -25,7 +25,7 @@ loonItemLabel <- function(data, args) {
     # check itemLabel
     if (is.null(args[['itemLabel']])) {
       # default itemLabel
-      row.names(data)
+      gsub(" ", "-", row.names(data))
     } else {
       as.character(args[['itemLabel']])
     }
