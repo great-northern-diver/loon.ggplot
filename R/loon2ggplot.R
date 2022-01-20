@@ -123,7 +123,8 @@
 #' ggzen <- loon.ggplot(zen)
 #' ggzen +
 #'   patchwork::plot_annotation(title = "This is a ggplot")
-#' }}
+#' }
+#' }
 loon2ggplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         showNearestColor = FALSE, ...) {
 
@@ -160,7 +161,8 @@ loon2ggplot.l_plot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                ggObj = loon2ggplot(rl,
                                    asAes = asAes,
                                    selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor))
+                                   showNearestColor = showNearestColor,
+                                   ...))
 }
 
 #' @rdname loon2ggplot
@@ -185,7 +187,7 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes,
                                    selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor),
+                                   showNearestColor = showNearestColor, ...),
                setLimits = setLimits)
 }
 
@@ -197,7 +199,7 @@ loon2ggplot.l_graph <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor))
+                                   showNearestColor = showNearestColor, ...))
 }
 
 #' @rdname loon2ggplot
@@ -230,7 +232,7 @@ loon2ggplot.l_plot3D <- function(target,  asAes = TRUE, selectedOnTop = TRUE,
 
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor)) +
+                                   showNearestColor = showNearestColor, ...)) +
     ggplot2::geom_line(
       data = data.frame(
         x = x,
@@ -430,13 +432,14 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
       loon::l_layer_isVisible(widget, layerid)
     },
     l_children_layers)
+
   lapply(l_visible_children_layer,
          function(layer) {
 
            ggObj <<- loon2ggplot(layer, asAes = asAes,
                                  selectedOnTop = selectedOnTop,
                                  showNearestColor = showNearestColor,
-                                 ggObj = ggObj)
+                                 ggObj = ggObj, ...)
          })
 
   ggObj
