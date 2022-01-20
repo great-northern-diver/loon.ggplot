@@ -3,8 +3,54 @@
 loon2ggplot.l_facet_wrap <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                      showNearestColor = FALSE, ...) {
 
+  tryCatch(
+    expr = {
+      labels <- l_facet_wrap_getLabels(target)
+      facetsLabels <- labels$facetsLabels
+      levels <- labels$levels
+      # widgets in a loon facet object can have different layers
+      # (after creating an l_facet object,
+      # people can still modify each of them individually),
+      # however, ggplot2 cannot. Therefore, layers in the first plot in
+      # the facet will be referred.
+      n <- length(target)
+      lp <- loon2ggplot(target[[1L]],
+                        asAes = asAes, selectedOnTop = selectedOnTop,
+                        showNearestColor = showNearestColor,
+                        facets = target,
+                        facetsLabels = facetsLabels,
+                        levels = levels, ...)
+
+      lp$labels$x <- labels$xlabel
+      lp$labels$y <- labels$ylabel
+      lp$labels$title <- labels$title
+
+      locations <- loon::l_getLocations(target)
+
+      lp +
+        ggplot2::facet_wrap(facets = rownames(facetsLabels),
+                            nrow = locations$nrow,
+                            ncol = locations$ncol,
+                            strip.position = labels$labelsLocation,
+                            drop = FALSE)
+    },
+    error = function(e) {
+
+      warning(e$message,
+              ". The plots will be constructed by `patchwork`.", call. = FALSE)
+
+      # pack plots via `patchwork`
+      patchwork_facet_wrap(target, asAes = asAes, selectedOnTop = selectedOnTop,
+                           showNearestColor = showNearestColor, ...)
+    }
+  )
+}
+
+patchwork_facet_wrap <- function(target, asAes = TRUE, selectedOnTop = TRUE,
+                                 showNearestColor = FALSE, ...) {
+
   args <- loon::l_get_arrangeGrobArgs(target)
-  # they are loonGrobs
+  # return loonGrobs
   grobs <- args$grobs
 
   plots <- lapply(seq_along(target),
@@ -17,7 +63,7 @@ loon2ggplot.l_facet_wrap <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                    function(j) {
 
                                      if(!grepl("facet.label", grobNames[[j]])) {
-                                       p <- loon.ggplot(target[[i]], asAes,
+                                       p <- loon2ggplot(target[[i]], asAes,
                                                         selectedOnTop,
                                                         showNearestColor) +
                                          themeNULL()
@@ -61,7 +107,7 @@ loon2ggplot.l_facet_wrap <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                   })
 
   layout_matrix <- args$layout_matrix
-  positions <- layout_matrix2tlbr(layout_matrix, n = length(grobs))
+  positions <- layout_matrix2positions(layout_matrix, n = length(grobs))
 
   plots$design <- do.call(c,
                           lapply(seq(nrow(positions)),
