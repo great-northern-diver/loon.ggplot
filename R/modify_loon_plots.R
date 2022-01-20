@@ -63,8 +63,8 @@ modify_loon_plots <- function(plotInfo = list()) {
   return(gp)
 }
 
-# Two jobs for this function
-## 1. Suppose the transformed `loon` histograms are joined  into a linking group,
+# This function has two jobs
+## 1. Suppose the transformed `loon` histograms are joined into a linking group,
 ##    the color of each bin could be different from the original `ggplot`.
 ##    Thus, the state `colorStackingOrder` (queried from the `ggplot` object)
 ##    will be reset to the default settings
