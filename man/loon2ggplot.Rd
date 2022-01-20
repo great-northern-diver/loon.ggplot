@@ -272,5 +272,6 @@ zen <- zenplots::zenplot(iris, plot1d = "density", pkg = "loon")
 ggzen <- loon.ggplot(zen)
 ggzen +
   patchwork::plot_annotation(title = "This is a ggplot")
-}}
+}
+}
 }
