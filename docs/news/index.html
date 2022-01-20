@@ -74,63 +74,64 @@
 
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.1" id="loonggplot-131">loon.ggplot 1.3.1<a class="anchor" aria-label="anchor" href="#loonggplot-131"></a></h2>
-<ul><li><p>In the previous versions of <code>ggplot2</code> (&lt; 3.3.5), both “none” and FALSE work in guides(). In the latest version (e.g., &gt;= 3.3.5), FALSE is deprecated.</p></li>
-<li><p>Fix a bug: if the point shape is between 21 to 25, use the variable “fill” as the points’ color; if the variable “fill” is not found or as NA, then try variable “colour”.</p></li>
+<ul><li><p><strong>Important Update</strong>: to transform a <code>loon</code> <code>l_facet</code> object to a <code>ggplot</code> object, instead of relying on the package <code>patchwork</code> to combine plots, the function <code><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid()</a></code> or <code><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap()</a></code> is used.</p></li>
+<li><p>A <code>patchwork</code> object can be transformed to a <code>loon</code> <code>l_compound</code> object.</p></li>
+<li><p>In the previous versions of <code>ggplot2</code> (&lt; 3.3.5), both <code>none</code> and <code>FALSE</code> work in <code><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides()</a></code>. In the latest version (e.g., &gt;= 3.3.5), <code>FALSE</code> is deprecated. Therefore, to set <code><a href="https://ggplot2.tidyverse.org/reference/guides.html" class="external-link">guides()</a></code> in the package <code>loon.ggplot</code>, we use <code>none</code>.</p></li>
+<li>
+<p>Fix bugs:</p>
+<ul><li><p>To transform a <code>ggplot</code> object to a <code>loon</code> plot, if the points shapes are between 21 to 25, the variable “fill” is used as the <code>loon</code> points color; if the variable “fill” is not found or set as NA, then the variable “colour” is used.</p></li>
+<li><p>To transform a <code>ggplot</code> barplot to a <code>loon</code> <code>l_hist</code> widget, the binwidth is set as 1 by default.</p></li>
+</ul></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.3.0" id="loonggplot-130">loon.ggplot 1.3.0<small>2021-09-28</small><a class="anchor" aria-label="anchor" href="#loonggplot-130"></a></h2>
-<ul><li><p><strong>Important change</strong>: when we turn a <code>loon</code> compound object to a <code>ggplot</code> object, package <code>patchwork</code> is used (not <code>GGally</code>). The benefit is that the size of each plot can be different.</p></li>
-<li><p>Fix a bug: a error is encountered when transforming a swapped <code>loon</code> histogram to a <code>ggplot</code> object.</p></li>
-<li><p>A <code>loon</code> <code>zenplot</code> can be turned to a <code>ggplot</code> object via function <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> or <code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code>.</p></li>
+<ul><li><p><strong>Important Changes</strong>: when we turn a <code>loon</code> compound object to a <code>ggplot</code> object, package <code>patchwork</code> is used (not <code>GGally</code>). The benefit is that the size of each plot can be different.</p></li>
+<li><p>Fix a bug: a error is encountered when we transform a swapped <code>loon</code> histogram to a <code>ggplot</code> object.</p></li>
+<li><p>A <code>loon</code> <code>zenplot</code> can be turned to a <code>ggplot</code> object via the function <code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> (or <code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code>).</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.1" id="loonggplot-121">loon.ggplot 1.2.1<small>2021-06-10</small><a class="anchor" aria-label="anchor" href="#loonggplot-121"></a></h2>
-<ul><li><p>Fix a bug: in previous version, <code>showItemLabels</code> and <code>itemLabels</code> cannot be passed into the <code>l_serialaxes</code> widget.</p></li>
-<li><p>Fix some typos and edit documentations</p></li>
-<li><p>Set <code>ggmulti</code> as “Imports” rather than the “Depends” and replace <code>coord_serialaxes</code> to <code>geom_serialaxes</code> to avoid potential risks from <code>coord_serialaxes</code>.</p></li>
-<li><p>For function <code>print.l_ggplot</code>, if the <code>l_ggplot</code> object is printed on the top level (in the global environment), a message will be given to show how to access the loon plot.</p></li>
+<ul><li><p>Fix a bug: in the previous versions, to transform a <code>ggplot</code> object to a <code>loon</code> plot, <code>showItemLabels</code> and <code>itemLabels</code> are failed to be passed into the <code>l_serialaxes</code> widget.</p></li>
+<li><p>Set <code>ggmulti</code> as “Imports” rather than the “Depends”, and replace <code>coord_serialaxes</code> to <code>geom_serialaxes</code> in order to avoid potential failures (in <code>coord_serialaxes</code>).</p></li>
+<li><p>Executing the function <code><a href="../reference/print.l_ggplot.html">print.l_ggplot()</a></code>, a message will be given to show the <code>loon</code> plot path name.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.2.0" id="loonggplot-120">loon.ggplot 1.2.0<small>2021-05-06</small><a class="anchor" aria-label="anchor" href="#loonggplot-120"></a></h2>
-<ul><li>
-<p>Class name modification</p>
-<ul><li><p>In 1.1.0 or earlier version, if a <code>ggplot</code> object with facets is transformed to a <code>loon</code> widget, the class of a returned object is c(“l_ggplot”, “l_compound”, “loon”). However, for an <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> function, the class of a returned object is c(“lggplot”, “gg”, “ggplot”) which brings much confusion.</p></li>
-<li><p>To eliminate the confustion, in 1.2.0 version, if a <code>ggplot</code> object with facets is transformed to a <code>loon</code> widget, the class of a returned object is <strong>c(“l_facet_ggplot”, “l_facet”, “l_compound”, “loon”)</strong>; for an <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> function, the class of a returned object is <strong>c(“l_ggplot”, “gg”, “ggplot”)</strong>.</p></li>
-</ul></li>
+<ul><li><p>Class name modification: in the earlier versions, to transform a <code>ggplot</code> object with facets to a <code>loon</code> plot, the class of the returned object is c(“l_ggplot”, “l_compound”, “loon”). However, for an <code><a href="../reference/l_ggplot.html">l_ggplot()</a></code> function, the class of the returned object is c(“lggplot”, “gg”, “ggplot”) which is confusing. In this version, the class of the former one is <strong>c(“l_facet_ggplot”, “l_facet”, “l_compound”, “loon”)</strong>; and the class of latter one is <strong>c(“l_ggplot”, “gg”, “ggplot”)</strong>.</p></li>
 <li>
 <p>For an <code>l_facet_ggplot</code> object (transformed from the ggplot with multiple <code>facet</code>s), the returned object is changed.</p>
 <ul><li>
-<p>In 1.1.0 or earlier version, the returned object is a list of three components:</p>
+<p>In the earlier versions, the returned object is a list of three components:</p>
 <ul><li><p><code>plots</code>: a list of loon widgets;</p></li>
 <li><p><code>facet</code>: a list of four logical components, <code>FacetWrap</code>, <code>FacetGrid</code>, <code>byCOLS</code> and <code>byROWS</code></p></li>
-<li><p><code>titles</code>: a list of three components, title of the whole widget, column subtitles and row substitles.</p></li>
+<li><p><code>titles</code>: a list of three components, title of the whole widget, column subtitles and row subtitles.</p></li>
 </ul></li>
-<li><p>In 1.2.0 version, the returned object is just a list of <code>loon</code> widgets, like other <code>l_compound</code> objects, e.g. a <code>l_facet</code> object, a <code>l_pairs</code> object, etc.</p></li>
+<li><p>In this version, the returned object is just a list of <code>loon</code> widgets, like other <code>l_compound</code> objects (e.g., <code>l_facet</code>, <code>l_pairs</code>).</p></li>
 </ul></li>
 <li>
-<p>Two changes for the transformation from a <code>ggplot</code> histogram to a <code>loon</code> <code>l_hist</code> widget:</p>
-<ul><li><p>If the ggplot histogram “y shows” is density, the area of each category (grouped by color) is 1; however, for an <code>l_hist</code> widget, the whole area is one and the area of each category is proportional to the counts. Thus, when the transformation occurs, the y limits are identical but the display is very different. To fix it, the y limits are released and a message is given to users to explain what happens.</p></li>
-<li><p>Suppose the transformed <code>loon</code> histograms are joined into a linking group, the color of each bin could be different from the original <code>ggplot</code>. Thus, the state <code>colorStackingOrder</code> (queried from the <code>ggplot</code> object) will be reset to the default settings (it is meaningless to set the <code>colorStackingOrder</code> to some color that never appears).</p></li>
+<p>Two changes are made when we transform a <code>ggplot</code> histogram to a <code>loon</code> <code>l_hist</code> widget:</p>
+<ul><li><p>If the <code>ggplot</code> histogram shows “density”, the area of each category (grouped by color) is 1; however, in an <code>l_hist</code> widget, the whole area is 1 and the area of each category is proportional to the counts. Thus, after transformation, the y limits are identical but the display could be very different. To get a better display, the y limits are released (may result the different visual displays) and a message is given.</p></li>
+<li><p>Suppose the transformed <code>loon</code> histograms are joined into a linking group, the colors of each bin could be different from the original <code>ggplot</code> object. Therefore, the state <code>colorStackingOrder</code> will be reset.</p></li>
 </ul></li>
 <li>
 <p>New interactive component</p>
-<ul><li><p><code>scaleTo</code>: used to change the region (i.e. to selected points, active points or a specific geometric layer) of the <code>loon</code> plot.</p></li>
+<ul><li><p><code>scaleTo</code>: used to change the region (i.e., scale to selected points, active points, or a specific geometric layer) of the <code>loon</code> plot.</p></li>
 <li><p><code>active</code>: determine which geom layer could be interactive or which points could be activated.</p></li>
 </ul></li>
 <li><p>From <code>loon</code> to <code>ggplot</code>, a logical argument <code>asAes</code> is given (default is <code>TRUE</code>). If <code>TRUE</code>, the color, size, other aesthetics will be taken as variables and set in the function <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code>; else they are the general aesthetics attributes.</p></li>
 <li><p>Fix a bug: the NA of some n dimensional states should be checked before passing through.</p></li>
-<li><p>Multiple active layers are not suggested. So a warning will be given.</p></li>
-<li><p>Remove <code>tidyverse</code> dependency</p></li>
+<li><p>A warning is given once multiple active layers are not set.</p></li>
+<li><p>Remove the <code>tidyverse</code> dependency</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.1.0" id="loonggplot-110">loon.ggplot 1.1.0<small>2021-03-21</small><a class="anchor" aria-label="anchor" href="#loonggplot-110"></a></h2>
 <ul><li>
-<p>When a <code>loon</code> widget –&gt; a <code>ggplot</code> object, several things are changed here</p>
-<ol style="list-style-type: decimal"><li><p>To meet the changes (or new features) of the loon version 1.3.2 (or higher version), i.e. ‘Andrews curves’.</p></li>
-<li><p>For layer <code>geom_point</code>, if <code>z</code> is provided in mapping aesthetics, an <code>l_plot3D</code> object could be created.</p></li>
-<li><p>If the points are non-primitive glyphs, (i.e. <code>text</code> glyph, <code>pointrange</code> glyph, <code>image</code> glyph, <code>polygon</code> glyph, and <code>serialaxes</code> glyph), during the tranformation, function <code>geom_imageGlyph</code>, <code>geom_polygonGlyph</code>, <code>geom_pointrangeGlyph</code>, <code>geom_serialaxesGlyph</code> and <code>geom_textGlyph</code> are deprecated and not maintained any more. Instead, we encourage people to use package <code>ggmulti</code> which provides <code>geom_image_glyph</code>, <code>geom_polygon_glyph</code> and <code>geom_serialaxes_glyph</code> to draw such glyphs. For layer <code>geom_text</code> and <code>geom_pointrange</code>, they can be interactive automatically. However, the argument <code>activeGeomLayers</code> can be set as 0, if users do not expect any of them to be interactive.</p></li>
-<li><p>For a <code>l_serialaxes</code> object, <code>ggSerialaxes</code> is deprecated and <code><a href="https://rdrr.io/pkg/ggmulti/man/coord_serialaxes.html" class="external-link">ggmulti::coord_serialaxes()</a></code> is suggested.</p></li>
-<li><p>For some <code>ggplot2</code> extension packages (providing new <code>geom</code> layers), one can edit the function <code>loonLayer</code> to realize the transformation.</p></li>
+<p>When a <code>loon</code> widget –&gt; a <code>ggplot</code> object, several things are changed here:</p>
+<ol style="list-style-type: decimal"><li><p>Add new features (e.g., ‘Andrews curves’);</p></li>
+<li><p>If <code>z</code> is provided in the mapping aesthetics of <code>geom_point</code>, an <code>l_plot3D</code> object would be created.</p></li>
+<li><p>In <code>loon</code>, if points have non-primitive glyphs (viz., <code>text</code> glyph, <code>pointrange</code> glyph, <code>image</code> glyph, <code>polygon</code> glyph, and <code>serialaxes</code> glyph), in the transformation, functions <code><a href="../reference/geom_imageGlyph-deprecated.html">geom_imageGlyph()</a></code>, <code><a href="../reference/geom_imageGlyph-deprecated.html">geom_polygonGlyph()</a></code>, <code><a href="../reference/geom_pointrangeGlyph-deprecated.html">geom_pointrangeGlyph()</a></code>, <code>geom_serialaxesGlyph()</code> and <code><a href="../reference/geom_textGlyph-deprecated.html">geom_textGlyph()</a></code> are deprecated and not maintained any more. Instead, we use the package <code>ggmulti</code> who provides functions <code><a href="https://rdrr.io/pkg/ggmulti/man/geom_image_glyph.html" class="external-link">geom_image_glyph()</a></code>, <code><a href="https://rdrr.io/pkg/ggmulti/man/geom_polygon_glyph.html" class="external-link">geom_polygon_glyph()</a></code> and <code><a href="https://rdrr.io/pkg/ggmulti/man/geom_serialaxes_glyph.html" class="external-link">geom_serialaxes_glyph()</a></code> to draw the non-primitive glyphs (for the layer <code>geom_text</code> and <code>geom_pointrange</code>, they would be turned into an interactive layer automatically. To turn them as static, one can set the argument <code>activeGeomLayers</code> as 0).</p></li>
+<li><p>To transform an <code>l_serialaxes</code> object, the function <code><a href="../reference/ggSerialAxes-deprecated.html">ggSerialAxes()</a></code> is deprecated and <code><a href="https://rdrr.io/pkg/ggmulti/man/coord_serialaxes.html" class="external-link">ggmulti::coord_serialaxes()</a></code> is used.</p></li>
+<li><p>Some <code>ggplot2</code> extensions provide new <code>geom</code> layers (e.g., <code>geom_textpath</code>). To transform these layers in <code>loon</code>, one can customize the function <code><a href="../reference/loonLayer.html">loonLayer()</a></code>.</p></li>
 </ol></li>
 </ul></div>
     <div class="section level2">

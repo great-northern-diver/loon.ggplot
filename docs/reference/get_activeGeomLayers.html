@@ -103,7 +103,8 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># \donttest{</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in">  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, y <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">3</span>,<span class="fl">5</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">xgrid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">interp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -116,9 +117,6 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
 <span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">agL</span> <span class="op">&lt;-</span> <span class="fu">get_activeGeomLayers</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p1</span>, activeGeomLayers <span class="op">=</span> <span class="va">agL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".l0.ggplot.plot"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "l_plot" "loon"  </span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">economics</span><span class="op">)</span> <span class="op">+</span></span>
 <span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html" class="external-link">geom_rect</a></span><span class="op">(</span></span>
@@ -136,11 +134,8 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
 <span class="r-in">  <span class="va">agL</span> <span class="op">&lt;-</span> <span class="fu">get_activeGeomLayers</span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span>
 <span class="r-in">  <span class="co">#transparency is not allowed in tcltk</span></span>
 <span class="r-in">  <span class="fu"><a href="ggplot2loon.html">ggplot2loon</a></span><span class="op">(</span><span class="va">p2</span>, ggGuides <span class="op">=</span> <span class="cn">TRUE</span>, activeGeomLayers <span class="op">=</span> <span class="va">agL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] ".l1.ggplot.plot"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "l_plot" "loon"  </span>
 <span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"></span>
+<span class="r-in"><span class="op">}</span></span>
 </code></pre></div>
     </div>
   </div>
