@@ -28,7 +28,7 @@
 #' @export
 #'
 #' @examples
-#' if(require(magrittr) && interactive()) {
+#' if(requireNamespace("magrittr") && interactive()) {
 #' \dontrun{
 #'  # Error
 #'  g <- mtcars %>%
