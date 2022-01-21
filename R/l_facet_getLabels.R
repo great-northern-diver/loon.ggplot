@@ -138,18 +138,18 @@ l_facet_grid_getLabels <- function(target) {
 
   n <- length(target)
   names <- names(target)
-  pat <- "^.*extent.*?([0-9]+)"
+  pat <- "^.*extend.*?([0-9]+)"
   offset <- 0
 
   if(length(tkColumnlabelPathNames) > 0) {
-    expendCol <- as.numeric(gsub(pat, "\\1", tkColumnlabelPathNames))
-    uniCol <- unique(expendCol)
+    extendCol <- as.numeric(gsub(pat, "\\1", tkColumnlabelPathNames))
+    uniCol <- unique(extendCol)
     facetsColLabels <- stats::setNames(
       as.data.frame(
         do.call(rbind,
                 lapply(uniCol,
                        function(col) {
-                         labelij <- rep(tkColumnlabelPathNames[expendCol == col], each = col)
+                         labelij <- rep(tkColumnlabelPathNames[extendCol == col], each = col)
                          colLables <- unname(vapply(labelij,
                                                     function(l)
                                                       paste0(as.character(tkcget(l, "-text")),
@@ -167,14 +167,14 @@ l_facet_grid_getLabels <- function(target) {
   }
 
   if(length(tkRowlabelPathNames) > 0) {
-    expendRow <- as.numeric(gsub(pat, "\\1", tkRowlabelPathNames))
-    uniRow <- unique(expendRow)
+    extendRow <- as.numeric(gsub(pat, "\\1", tkRowlabelPathNames))
+    uniRow <- unique(extendRow)
     facetsRowLabels <- stats::setNames(
       as.data.frame(
         do.call(rbind,
                 lapply(uniRow,
                        function(row) {
-                         labelij <- rep(tkRowlabelPathNames[expendRow == row], each = row)
+                         labelij <- rep(tkRowlabelPathNames[extendRow == row], each = row)
                          rowLables <- unname(vapply(labelij,
                                                     function(l)
                                                       paste0(as.character(tkcget(l, "-text")),
