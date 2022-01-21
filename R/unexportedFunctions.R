@@ -77,7 +77,7 @@ glyph_to_pch <- function(glyph) {
 
   if(any(is.na(glyph))) {
     # Set NAs of glyph as the most common value
-    glyph[is.na(glyph)] <- names(sort(table(na.omit(g)),
+    glyph[is.na(glyph)] <- names(sort(table(na.omit(glyph)),
                                       decreasing=TRUE)[1L])
   }
 
