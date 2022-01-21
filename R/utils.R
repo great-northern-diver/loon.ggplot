@@ -197,7 +197,8 @@ wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
 
 utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
                          "height", "positive", "setup_mapping", "x", "y",
-                         "ymax", "ymin", "fill", "..density..", "label"))
+                         "size", "color", "colour", "ymax", "ymin", "fill",
+                         "..density..", "label"))
 
 get_textCoords <- function(angle, anchor, just) {
 
