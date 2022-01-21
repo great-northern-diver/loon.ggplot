@@ -151,7 +151,8 @@ test_that("test loon basic layers (loon to ggplot)", {
   expect_equal(class(g), c("gg", "ggplot"))
 
   p <- l_plot()
-  l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10], size= as.integer(seq(5, 30, length.out = 10)))
+  l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10],
+                     size= as.integer(seq(5, 30, length.out = 10)))
   l_scaleto_world(p)
   g <- loon2ggplot(p)
   g
