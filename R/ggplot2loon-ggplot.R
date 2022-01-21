@@ -26,8 +26,7 @@
 #' @return a \code{loon} single widget or a compound object
 #'
 #'
-#' @import ggplot2 tcltk loon methods grid rlang
-#' @importFrom stats quantile approxfun integrate setNames na.omit runif
+#' @import ggplot2 tcltk loon methods grid rlang stats
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @import patchwork
