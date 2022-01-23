@@ -24,6 +24,8 @@ modify_loon_plots <- function(plotInfo = list()) {
     gp <- plots
     class(gp) <- c("l_facet_ggplot", "l_facet", "l_compound", "loon")
 
+    # turn off labels
+    lapply(gp, function(g) g['showLabels'] <- FALSE)
     # model_layer_nDimStates <- l_allNDimStateNames(plots)
   }
 
