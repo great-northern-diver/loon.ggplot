@@ -140,3 +140,46 @@ test_that("facet basic (loon to ggplot)", {
   gg
   expect_true(inherits(gg$facet, "FacetWrap"))
 })
+
+test_that("facet basic (loon to ggplot)", {
+
+  gg <- mpg %>%
+    mutate(drv2 = paste(drv, drv)) %>%
+    ggplot(aes(displ, hwy)) +
+    geom_point()
+  gg1 <-  gg + facet_wrap(vars(cyl))
+  lg <- loon.ggplot(gg1)
+  gg1 <- loon.ggplot(lg)
+  gg1
+  expect_true(inherits(gg1$facet, "FacetWrap"))
+
+  gg2 <-  gg + facet_wrap(vars(cyl, drv2))
+  lg <- loon.ggplot(gg2)
+  gg2 <- loon.ggplot(lg)
+  gg2
+  expect_true(inherits(gg2$facet, "FacetWrap"))
+  gg3 <-  gg + facet_wrap(vars(cyl, drv2), drop = FALSE)
+  lg <- loon.ggplot(gg3)
+  gg3 <- loon.ggplot(lg)
+  expect_warning(plot(gg3))
+  expect_true(inherits(gg3$facet, "FacetWrap"))
+
+  gg1 <- gg + facet_grid(cyl ~ fl)
+  lg <- loon.ggplot(gg1)
+  gg1 <- loon.ggplot(lg)
+  expect_warning(plot(gg1))
+  expect_true(inherits(gg1$facet, "FacetGrid"))
+
+  gg2 <- gg + facet_grid( ~ fl + cyl)
+  lg <- loon.ggplot(gg2)
+  gg2 <- loon.ggplot(lg)
+  plot(gg2)
+  expect_true(inherits(gg1$facet, "FacetGrid"))
+
+
+  gg3 <- gg + facet_grid(fl + cyl ~.)
+  lg <- loon.ggplot(gg3)
+  gg3 <- loon.ggplot(lg)
+  plot(gg3)
+  expect_true(inherits(gg1$facet, "FacetGrid"))
+})
