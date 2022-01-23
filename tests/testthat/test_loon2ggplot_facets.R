@@ -141,7 +141,7 @@ test_that("facet basic (loon to ggplot)", {
   expect_true(inherits(gg$facet, "FacetWrap"))
 })
 
-test_that("facet basic (loon to ggplot)", {
+test_that("facet basic (ggplot to loon to ggplot)", {
 
   gg <- mpg %>%
     mutate(drv2 = paste(drv, drv)) %>%
