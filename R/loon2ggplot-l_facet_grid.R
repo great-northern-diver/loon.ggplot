@@ -6,9 +6,9 @@ loon2ggplot.l_facet_grid <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   tryCatch(
     expr = {
 
-      labels <- l_facet_grid_getLabels(target)
-      facetsLabels <- labels$facetsLabels
-      levels <- labels$levels
+      subtitles <- list(...)$subtitles %||% l_getSubtitles(target)
+      facetsLabels <- subtitles$facetsLabels
+      levels <- subtitles$levels
       # widgets in a loon facet object can have different layers
       # (after creating an l_facet object,
       # people can still modify each of them individually),
@@ -22,12 +22,12 @@ loon2ggplot.l_facet_grid <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         facetsLabels = facetsLabels,
                         levels = levels, ...)
 
-      lp$labels$x <- labels$xlabel
-      lp$labels$y <- labels$ylabel
-      lp$labels$title <- labels$title
+      lp$labels$x <- subtitles$xlabel
+      lp$labels$y <- subtitles$ylabel
+      lp$labels$title <- subtitles$title
 
-      facetsColLabels <- labels$facetsColLabels
-      facetsRowLabels <- labels$facetsRowLabels
+      facetsColLabels <- subtitles$facetsColLabels
+      facetsRowLabels <- subtitles$facetsRowLabels
 
       cols <- rownames(facetsColLabels)
       rows <- rownames(facetsRowLabels)
@@ -41,7 +41,7 @@ loon2ggplot.l_facet_grid <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                      paste(cols, collapse = "+")))
       } else stop("No `rows` and `cols`", call. = FALSE)
 
-      labelsLocation <- labels$labelsLocation
+      labelsLocation <- subtitles$labelsLocation
       if (labelsLocation[1] == "top" && labelsLocation[2] == "right") {
         switch <- NULL
       } else if (labelsLocation[1] == "top" && labelsLocation[2] == "left") {
@@ -53,10 +53,11 @@ loon2ggplot.l_facet_grid <- function(target, asAes = TRUE, selectedOnTop = TRUE,
         switch <- "both"
       }
 
+      drop <- subtitles$drop %||% FALSE
       lp +
         ggplot2::facet_grid(formula,
                             switch = switch,
-                            drop = FALSE)
+                            drop = drop)
     },
     error = function(e) {
 

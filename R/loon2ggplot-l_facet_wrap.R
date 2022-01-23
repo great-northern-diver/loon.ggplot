@@ -5,9 +5,10 @@ loon2ggplot.l_facet_wrap <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
   tryCatch(
     expr = {
-      labels <- l_facet_wrap_getLabels(target)
-      facetsLabels <- labels$facetsLabels
-      levels <- labels$levels
+
+      subtitles <- list(...)$subtitles %||% l_getSubtitles(target)
+      facetsLabels <- subtitles$facetsLabels
+      levels <- subtitles$levels
       # widgets in a loon facet object can have different layers
       # (after creating an l_facet object,
       # people can still modify each of them individually),
@@ -21,18 +22,19 @@ loon2ggplot.l_facet_wrap <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         facetsLabels = facetsLabels,
                         levels = levels, ...)
 
-      lp$labels$x <- labels$xlabel
-      lp$labels$y <- labels$ylabel
-      lp$labels$title <- labels$title
+      lp$labels$x <- subtitles$xlabel
+      lp$labels$y <- subtitles$ylabel
+      lp$labels$title <- subtitles$title
 
       locations <- loon::l_getLocations(target)
 
+      drop <- subtitles$drop %||% FALSE
       lp +
         ggplot2::facet_wrap(facets = rownames(facetsLabels),
                             nrow = locations$nrow,
                             ncol = locations$ncol,
-                            strip.position = labels$labelsLocation,
-                            drop = FALSE)
+                            strip.position = subtitles$labelsLocation,
+                            drop = drop)
     },
     error = function(e) {
 
