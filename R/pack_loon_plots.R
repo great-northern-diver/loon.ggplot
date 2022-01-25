@@ -64,21 +64,14 @@ pack_loon_plots <- function(plotInfo = list(),
       rowSub <- as.character(
         tcltk::tcl('label',
                    as.character(
-                     # loon::l_subwin(parent,
-                     #                paste0('facet:grid-',
-                     #                       'rowlabel-',
-                     #                       'byCOLS:', plotInfo$byCOLS, '-',
-                     #                       'byROWS:', plotInfo$byROWS, '-',
-                     #                       'left-',
-                     #                       'x', i,
-                     #                       'extend', 1))
                      loon::l_subwin(parent,
                                     paste0('rowlabel-',
                                            'facet:grid-',
                                            'byCOLS:', plotInfo$byCOLS, '-',
                                            'byROWS:', plotInfo$byROWS, '-',
                                            'x', i, '-',
-                                           'drop:', ggObj$facet$params$drop))
+                                           'drop:', ggObj$facet$params$drop, '-',
+                                           'scales:', facet_scales(ggObj$facet$params$free)))
                    ),
                    text = paste(paste0(" ", strsplit(uniqueRowSubtitles[i], "")[[1]], " "),
                                 collapse = "\n"),
@@ -102,20 +95,14 @@ pack_loon_plots <- function(plotInfo = list(),
       colSub <- as.character(
         tcltk::tcl('label',
                    as.character(
-                     # loon::l_subwin(parent,
-                     #                paste0('facet:grid-',
-                     #                       'columnlabel-',
-                     #                       'byCOLS:', plotInfo$byCOLS, '-',
-                     #                       'byROWS:', plotInfo$byROWS, '-',
-                     #                       'y', i,
-                     #                       'extend', 1))
                      loon::l_subwin(parent,
                                     paste0('columnlabel-',
                                            'facet:grid-',
                                            'byCOLS:', plotInfo$byCOLS, '-',
                                            'byROWS:', plotInfo$byROWS, '-',
                                            'y', i, '-',
-                                           'drop:', ggObj$facet$params$drop))
+                                           'drop:', ggObj$facet$params$drop, '-',
+                                           'scales:', facet_scales(ggObj$facet$params$free)))
                    ),
                    text= uniqueColSubtitles[i],
                    bg = set_tkLabel()$labelBackground,

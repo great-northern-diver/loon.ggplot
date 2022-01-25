@@ -30,6 +30,19 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
   FacetWrap <- any(grepl("wrap", tkLabelPathNames))
   FacetGrid <- any(grepl("grid", tkLabelPathNames))
 
+  # default settings
+  colSubtitles <- NULL
+  rowSubtitles <- NULL
+  byCOLS <- FALSE
+  byROWS <- FALSE
+  facetsLabels <- NULL
+  levels <- NULL
+  labelsLocation <- NULL
+  drop <- NULL
+  facetsColLabels <- data.frame()
+  facetsRowLabels <- data.frame()
+  scales <- NULL
+
   # title column subtitle or row subtitle
   if(FacetWrap) {
 
@@ -50,19 +63,14 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
 
       levels <- lapply(seq(nrow(facetsLabels)),
                        function(i) {
-                         levels(factor(unlist(facetsLabels[i, ])))
+                         unique(unlist(facetsLabels[i, ]))
                        })
 
       colSubtitles <- apply(facetsLabels, 2, function(x) paste0(x, collapse = " "))
-    } else {
-      colSubtitles <- NULL
-      facetsLabels <- NULL
-      levels <- NULL
     }
 
-    # TODO default
+    # TODO c("top") is default
     labelsLocation <- "top"
-    rowSubtitles <- NULL
     labelPathName1L <- c(columnlabelPathName)[1L]
     pathSplit <- strsplit(labelPathName1L, "-")[[1L]]
     byCOLSChar <- pathSplit[grepl("byCOLS", pathSplit)]
@@ -72,8 +80,9 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
     # drop or not
     dropChar <- pathSplit[grepl("drop", pathSplit)]
     drop <- grepl("TRUE", dropChar)
-    facetsColLabels <- data.frame()
-    facetsRowLabels <- data.frame()
+    # scales
+    scalesChar <- pathSplit[grepl("scales", pathSplit)]
+    scales <- strsplit(scalesChar, ":")[[1L]][2]
 
   } else if (FacetGrid) {
 
@@ -98,10 +107,6 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
       rownames(facetsColLabels) <- paste0("facet", seq(offset))
 
       colSubtitles <- apply(facetsColLabels, 2, function(x) paste0(x, collapse = " "))
-
-    } else {
-      colSubtitles <- NULL
-      facetsColLabels <- data.frame()
     }
 
     facetsLabels <- facetsColLabels
@@ -134,17 +139,14 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
       } else {
         facetsLabels <- facetsRowLabels
       }
-    } else {
-      rowSubtitles <- NULL
-      facetsRowLabels <- data.frame()
     }
 
     levels <- lapply(seq(nrow(facetsLabels)),
                      function(i) {
-                       levels(factor(unlist(facetsLabels[i, ])))
+                       unique(unlist(facetsLabels[i, ]))
                      })
 
-    # TODO default
+    # TODO c("top", "right") is default
     labelsLocation <- c("top", "right")
     labelPathName1L <- c(columnlabelPathName, rowlabelPathName)[1L]
     pathSplit <- strsplit(labelPathName1L, "-")[[1L]]
@@ -155,19 +157,12 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
     # drop or not
     dropChar <- pathSplit[grepl("drop", pathSplit)]
     drop <- grepl("TRUE", dropChar)
+    # scales
+    scalesChar <- pathSplit[grepl("scales", pathSplit)]
+    scales <- strsplit(scalesChar, ":")[[1L]][2]
 
   } else {
-
-    colSubtitles <- NULL
-    rowSubtitles <- NULL
-    byCOLS <- FALSE
-    byROWS <- FALSE
-    facetsLabels <- NULL
-    levels <- NULL
-    labelsLocation <- NULL
-    drop <- NULL
-    facetsColLabels <- data.frame()
-    facetsRowLabels <- data.frame()
+    stop("`facet_wrap()` or `facet_grid()`?", call. = FALSE)
   }
 
   list(
@@ -178,6 +173,7 @@ l_getSubtitles.l_facet_ggplot <- function(target) {
     facetsLabels = facetsLabels,
     levels = levels,
     drop = drop,
+    scales = scales,
     FacetWrap = FacetWrap,
     FacetGrid = FacetGrid,
     colSubtitles = colSubtitles,
