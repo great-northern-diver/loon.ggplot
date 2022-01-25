@@ -21,6 +21,7 @@ The default setting is `integer(0)`, however, `ggplot2loon` will automatically s
 to make it active. `get_activeGeomLayers` is more like a guidance and give us a hint which one can be set as active.
 }
 \examples{
+if(interactive()) {
 \donttest{
   df <- data.frame(x = 1:3, y = 1:3, colour = c(1,3,5))
   xgrid <- with(df, seq(min(x), max(x), length = 50))
@@ -52,7 +53,7 @@ to make it active. `get_activeGeomLayers` is more like a guidance and give us a 
   #transparency is not allowed in tcltk
   ggplot2loon(p2, ggGuides = TRUE, activeGeomLayers = agL)
 }
-
+}
 }
 \seealso{
 \code{\link{ggplot2loon}}

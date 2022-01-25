@@ -26,21 +26,21 @@
 #' @return a \code{loon} single widget or a compound object
 #'
 #'
-#' @import ggplot2 tcltk loon methods grid rlang
-#' @importFrom stats quantile approxfun integrate setNames na.omit runif
+#' @import ggplot2 tcltk loon methods grid rlang stats
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
 #' @import patchwork
 #'
 #' @export
 #' @examples
-#'
 #' if(interactive()) {
 #' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
 #' g <- ggplot2loon(p)
 #'
-#' p1 <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-#'        colour = factor(gear))) + facet_wrap(~am)
+#' p1 <- ggplot(mtcars) +
+#'         geom_point(aes(x = wt, y = mpg,
+#'                        colour = factor(gear))) +
+#'         facet_wrap(~am)
 #' g1 <- ggplot2loon(p1)
 #' \donttest{
 #' df <- data.frame(
@@ -63,12 +63,14 @@
 #' # Here, the gray points are interactive (not the colourful ones)
 #'
 #' # The second point layer is set as the model layer
-#' lp_scatterplots_active2 <- ggplot2loon(scatterplots, activeGeomLayers = 2)
+#' lp_scatterplots_active2 <- ggplot2loon(scatterplots,
+#'                                        activeGeomLayers = 2)
 #' # Here, the colourful points are interactive
 #'
 #' # Both point layers could be interactive
 #' suppressWarnings(
-#'  lp_scatterplots_active12 <- ggplot2loon(scatterplots, activeGeomLayers = c(1,2))
+#'  lp_scatterplots_active12 <- ggplot2loon(scatterplots,
+#'                                          activeGeomLayers = c(1,2))
 #' )
 #' # Here, all points are interactive
 #'
@@ -89,7 +91,9 @@
 #' patchwork <- p1 + p2
 #' ggplot2loon(patchwork)
 #' # See vignette `ggplots --> loon plots` for more details
-#' }}}
+#' }
+#' }
+#' }
 ggplot2loon <- function(ggObj, ..., activeGeomLayers = integer(0),
                         layerId = NULL, scaleToFun = NULL,
                         ggGuides = FALSE, parent = NULL, pack = TRUE,

@@ -35,8 +35,6 @@ test_that("facet wrap basic (ggplot to loon)", {
   # expect_equal(class(g), c("l_facet_ggplot", "l_facet", "l_compound", "loon"))
 })
 
-
-
 test_that("facet wrap scales (ggplot to loon)", {
 
   df <- data.frame(
@@ -91,3 +89,4 @@ test_that("facet grid basic (ggplot to loon)", {
   g <- ggplot2loon(p3)
   expect_equal(class(g), c("l_facet_ggplot", "l_facet", "l_compound", "loon"))
 })
+

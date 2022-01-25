@@ -4,125 +4,13 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                      showNearestColor = FALSE, ...) {
 
   widget <- target
-  n <- widget['n']
-  if(n == 0) return(ggplot2::ggplot())
 
-  serialaxes.data <- char2num.data.frame(widget['data'])
-  colNames <- colnames(serialaxes.data)
+  ggObj <- ggSerialaxes(widget, asAes = asAes,
+                        selectedOnTop = selectedOnTop,
+                        showNearestColor = showNearestColor,
+                        ...)
 
-  # active or not
-  displayOrder <- if(selectedOnTop) {
-    get_model_display_order(widget)
-  } else {
-    seq(n)
-  }
-
-  # We do not call `get_layer_states(widget, native_unit = FALSE)`
-  # Because, `loon::l_nDimStateNames` will return all n dimensional states,
-  # but the `get_layer_states` only return the n dimensional aesthetics attributes
-  # e.g, `itemLabels` will not be returned.
-  # `data` is used in `ggplot()`
-
-  # N dim names
-  ndimNames <- loon::l_nDimStateNames(widget)
-  data <- as.data.frame(
-    remove_null(
-      stats::setNames(
-        lapply(ndimNames,
-               function(s) {
-                 state <- widget[s]
-                 if(length(state) == 0) return(NULL)
-                 state
-               }),
-        ndimNames
-      ), as_list = FALSE)
-  )
-
-  active <- data$active[displayOrder]
-  active_displayOrder <- displayOrder[active]
-
-  if(widget['showArea']) {
-    message("`showArea` is not implemented yet.")
-  }
-
-  stat <- "serialaxes"
-  if(widget['andrews'])
-    stat <- "dotProduct"
-
-  axes.layout <- widget['axesLayout']
-  axes.sequence <- widget['sequence']
-  if(axes.layout == "radial" && stat == "serialaxes") {
-    axes.sequence <- c(axes.sequence, axes.sequence[1L])
-  }
-
-  if(asAes) {
-
-    color <- l_colorName(
-      get_display_color(
-        data$color[active_displayOrder],
-        data$selected[active_displayOrder]
-      ), error = FALSE,
-      precise = !showNearestColor
-    )
-    size <- as_ggplot_size(data$linewidth[active_displayOrder], "lines")
-
-    ggObj <- ggplot2::ggplot(data = data) +
-      ggmulti::geom_serialaxes(
-        data = serialaxes.data[active_displayOrder, ],
-        mapping = ggplot2::aes(
-          color = color,
-          size = size
-        ),
-        stat = stat,
-        axes.sequence = axes.sequence,
-        scaling = widget['scaling']
-      ) +
-      ggplot2::scale_x_continuous(labels = axes.sequence)
-
-    uni_color <- unique(color)
-    if(length(uni_color) > 0) {
-
-      ggObj <- ggObj +
-        ggplot2::scale_color_manual(values = uni_color,
-                                    labels = uni_color,
-                                    breaks = uni_color)
-    }
-
-    if(length(uni_color) <= 1)
-      ggObj <- ggObj + ggplot2::guides(color = "none")
-
-    uni_size <- unique(size)
-    if(length(uni_size) > 0)
-      ggObj <- ggObj +
-        ggplot2::scale_size(range = range(size[!is.na(size)]))
-
-    if(length(uni_size) <= 1)
-      ggObj <- ggObj + ggplot2::guides(size = "none")
-
-  } else {
-
-    color <- get_display_color(
-      as_hex6color(data$color[active_displayOrder]),
-      data$selected[active_displayOrder]
-    )
-    if(len_unique(color) == 1L) color <- color[1L]
-
-    size <- as_ggplot_size(data$linewidth[active_displayOrder], "lines")
-    if(len_unique(size) == 1L) size <- size[1L]
-
-    ggObj <- ggplot2::ggplot(data = data) +
-      ggmulti::geom_serialaxes(
-        data = serialaxes.data[active_displayOrder, ],
-        color = color,
-        size = size,
-        stat = stat,
-        scaling = widget['scaling'],
-        axes.sequence = axes.sequence
-      ) +
-      ggplot2::scale_x_continuous(labels = axes.sequence)
-  }
-
-  if(axes.layout == "radial") {
+  if(widget['axesLayout'] == "radial") {
 
     if(utils::packageVersion("ggmulti") >= "1.0.2") {
       coord_radial <- ggmulti::coord_radial
@@ -154,6 +42,203 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
     )
   )
 }
+
+ggSerialaxes <- function(widget, asAes = TRUE, selectedOnTop = TRUE,
+                         showNearestColor = FALSE, ...) {
+
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
+  facetsLabels <- args$facetsLabels
+  levels <- args$levels
+
+  if(is.null(facets)) {
+
+    n <- widget['n']
+    if(n == 0) return(ggplot2::ggplot())
+
+    data <- serialaxes_states(widget = widget,
+                              selectedOnTop = selectedOnTop,
+                              showNearestColor = showNearestColor)
+    axes.sequence <- widget['sequence']
+
+  } else {
+
+    n <- sum(vapply(facets, function(facet) facet['n'], numeric(1L)))
+    if(n == 0) return(ggObj)
+
+    facetNum <- nrow(facetsLabels)
+    facetsVar <- rownames(facetsLabels)
+
+    axes.sequence <- widget['sequence']
+    if (length(axes.sequence) == 0) {
+      for(facet in facets) {
+        axes.sequence <- facet['sequence']
+        if (length(axes.sequence) > 0) break
+      }
+    }
+
+    data <- do.call(rbind,
+                    lapply(seq_along(facets),
+                           function(i) {
+                             facet <- facets[[i]]
+                             dat <- serialaxes_states(widget = facet,
+                                                      selectedOnTop = selectedOnTop,
+                                                      showNearestColor = showNearestColor,
+                                                      axes.sequence = axes.sequence)
+
+                             do.call(cbind,
+                                     c(list(dat),
+                                       stats::setNames(as.list(facetsLabels[, i]),
+                                                       facetsVar),
+                                       facetGroup = i))
+                           })
+    )
+  }
+
+  if(widget['showArea']) {
+    message("`showArea` is not implemented yet.")
+  }
+
+  stat <- "serialaxes"
+  if(widget['andrews'])
+    stat <- "dotProduct"
+
+  axes.layout <- widget['axesLayout']
+  if(axes.layout == "radial" && stat == "serialaxes") {
+    axes.sequence <- c(axes.sequence, axes.sequence[1L])
+  }
+
+  scaling <- widget['scaling']
+  color <- na.omit(data$color)
+  size <- na.omit(data$size)
+
+  if(asAes) {
+
+    ggObj <- ggplot2::ggplot(data = data) +
+      ggmulti::geom_serialaxes(
+        mapping = ggplot2::aes(
+          color = color,
+          size = size
+        ),
+        axes.sequence = axes.sequence, # used as mapping
+        stat = stat,
+        scaling = scaling
+      ) +
+      ggplot2::scale_x_continuous(labels = axes.sequence)
+
+    # modify color guides
+    uni_color <- unique(color)
+    if(length(uni_color) > 0) {
+
+      ggObj <- ggObj +
+        ggplot2::scale_color_manual(values = uni_color,
+                                    labels = uni_color,
+                                    breaks = uni_color)
+    }
+    if(length(uni_color) <= 1) {
+      ggObj <- ggObj + ggplot2::guides(color = "none")
+    }
+
+    # modify size guides
+    uni_size <- unique(size)
+    if(length(uni_size) > 0) {
+      ggObj <- ggObj + ggplot2::scale_size(range = range(size[!is.na(size)]))
+    }
+
+    if(length(uni_size) <= 1) {
+      ggObj <- ggObj + ggplot2::guides(size = "none")
+    }
+  } else {
+
+
+    if(len_unique(color) == 1L) color <- color[1L]
+    if(len_unique(size) == 1L) size <- size[1L]
+
+    ggObj <- ggplot2::ggplot(data = data) +
+      ggmulti::geom_serialaxes(
+        color = color,
+        size = size,
+        stat = stat,
+        scaling = scaling,
+        axes.sequence = axes.sequence # used as mapping
+      ) +
+      ggplot2::scale_x_continuous(labels = axes.sequence)
+  }
+
+  return(ggObj)
+}
+
+serialaxes_states <- function(widget, selectedOnTop = TRUE, showNearestColor = FALSE,
+                              axes.sequence = c()) {
+
+  n <- widget['n']
+  if (n == 0 || !any(widget['active'])) {
+    serialaxes.data <- as.data.frame(stats::setNames(lapply(axes.sequence,
+                                                            function(x) NA),
+                                                     axes.sequence))
+
+    ndimNames <- loon::l_nDimStateNames(widget)
+    states <- as.data.frame(stats::setNames(lapply(ndimNames,
+                                                   function(x) NA),
+                                            ndimNames))
+    states$data <- NULL
+    return(
+      cbind(states, serialaxes.data)
+    )
+  }
+
+  # active or not
+  displayOrder <- if(selectedOnTop) {
+    get_model_display_order(widget)
+  } else {
+    seq(n)
+  }
+
+  # We do not call `get_layer_states(widget, native_unit = FALSE)`
+  # Because, `loon::l_nDimStateNames` will return all n dimensional states,
+  # but the `get_layer_states` only return the n dimensional aesthetics attributes
+  # e.g, `itemLabels` will not be returned.
+  # `data` is used in `ggplot()`
+  # N dim names
+  ndimNames <- loon::l_nDimStateNames(widget)
+
+  states <- as.data.frame(
+    remove_null(
+      stats::setNames(
+        lapply(ndimNames,
+               function(s) {
+                 if(s == "data") return(NULL)
+                 state <- widget[s]
+                 state
+               }),
+        ndimNames
+      ), as_list = FALSE)
+  )
+  serialaxes.data <- char2num.data.frame(widget['data'])
+  # merge states and serialaxes.data
+  data <- cbind(states, serialaxes.data)
+
+  # modify color
+  color <- l_colorName(
+    get_display_color(
+      data$color,
+      data$selected
+    ), error = FALSE,
+    precise = !showNearestColor
+  )
+  data$color <- color
+  # modify size
+  size <- as_ggplot_size(data$linewidth, "lines")
+  data$size <- size
+  # reorder
+  data <- data[displayOrder, ]
+  # only visualize active points
+  data <- data[data$active, ]
+
+  return(data)
+}
+
 
 set_serialaxes_themes <- function(ggObj, sequence = NULL,
                                   showGuides = TRUE, showAxesLabels = TRUE,

@@ -10,7 +10,7 @@ loon2ggplot.zenLoon <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   plots <- stats::setNames(
     lapply(children,
            function(x){
-             loon.ggplot(loon::l_getFromPath(x),
+             loon2ggplot(loon::l_getFromPath(x),
                          asAes, selectedOnTop,
                          showNearestColor)
            }),

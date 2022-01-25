@@ -11,6 +11,24 @@ random_tip <- function() {
 }
 
 .onAttach <- function(libname, pkgname) {
+
+  if(utils::packageVersion("loon") < "1.3.9") {
+    msg <- paste0("the current `loon` package version is ",
+                  utils::packageVersion("loon"),
+                  ". Please update it to 1.3.9 or above.")
+    initial <- "Warning:"
+    indent <- 1
+    exdent <- 1
+    prefix <- paste0(rep(" ", nchar(initial)), collapse = "")
+    msg <-  paste(strwrap(msg,
+                          initial = initial,
+                          indent = indent,
+                          prefix = prefix,
+                          exdent = exdent),
+                  collapse = "\n")
+    packageStartupMessage(msg)
+  }
+
   if (stats::runif(1) > 0.5) {
     tip <- random_tip()
     initial <- "Random tip:"

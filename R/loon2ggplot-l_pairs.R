@@ -23,8 +23,8 @@ loon2ggplot.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   layout_matrix <- locations$layout_matrix
   plots <- lapply(target,
                   function(x) {
-                    loon.ggplot(x, asAes = asAes, selectedOnTop = selectedOnTop,
-                                showNearestColor = showNearestColor) +
+                    loon2ggplot(x, asAes = asAes, selectedOnTop = selectedOnTop,
+                                showNearestColor = showNearestColor, ...) +
                       themeNULL() # a wrap of `theme()`
                   }
   )
@@ -43,7 +43,7 @@ loon2ggplot.l_pairs <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   # l r t b
   # 1 1 1 1
   # 1 2 2 2
-  positions <- layout_matrix2tlbr(layout_matrix, n = length(plots))
+  positions <- layout_matrix2positions(layout_matrix, n = length(plots))
 
   plots$design <- do.call(c,
                           lapply(seq(nrow(positions)),

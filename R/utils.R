@@ -23,9 +23,11 @@ is.waive <- function (x) inherits(x, "waiver")
 is.formula <- function (x) inherits(x, "formula")
 is.sec_axis <- function (x) inherits(x, "AxisSecondary")
 is.l_compound <- function(x) inherits(x, "l_compound")
+is.l_facet <- function(x) inherits(x, "l_facet")
 is.ggmatrix <- function(x) inherits(x, "ggmatrix")
 is.ggmatrix_plot_obj <- function(x) inherits(x, "ggmatrix_plot_obj")
 is.element_blank <- function(x) inherits(x, "element_blank")
+is.patchwork <- function(x) inherits(x, "patchwork")
 
 # default aesthetics attributes in loon
 loon_default_setting <- function(x) {
@@ -195,7 +197,8 @@ wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
 
 utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
                          "height", "positive", "setup_mapping", "x", "y",
-                         "ymax", "ymin", "fill", "..density..", "label"))
+                         "size", "color", "colour", "ymax", "ymin", "fill",
+                         "..density..", "label"))
 
 get_textCoords <- function(angle, anchor, just) {
 
