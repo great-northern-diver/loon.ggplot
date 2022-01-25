@@ -69,7 +69,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Turn a <code>loon</code> widget to a <code>ggplot</code> object</h1>
-    <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/R/loon2ggplot-l_compound.R" class="external-link"><code>R/loon2ggplot-l_compound.R</code></a>, <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/R/loon2ggplot-l_facet_grid.R" class="external-link"><code>R/loon2ggplot-l_facet_grid.R</code></a>, <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/R/loon2ggplot-l_facet_wrap.R" class="external-link"><code>R/loon2ggplot-l_facet_wrap.R</code></a>, and 8 more</small>
+    <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/R/loon2ggplot-l_compound.R" class="external-link"><code>R/loon2ggplot-l_compound.R</code></a>, <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/R/loon2ggplot-l_facet_ggplot.R" class="external-link"><code>R/loon2ggplot-l_facet_ggplot.R</code></a>, <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/R/loon2ggplot-l_facet_grid.R" class="external-link"><code>R/loon2ggplot-l_facet_grid.R</code></a>, and 9 more</small>
     <div class="hidden name"><code>loon2ggplot.Rd</code></div>
     </div>
 
@@ -79,6 +79,15 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="co"># S3 method for l_compound</span>
+<span class="fu">loon2ggplot</span><span class="op">(</span>
+  <span class="va">target</span>,
+  asAes <span class="op">=</span> <span class="cn">TRUE</span>,
+  selectedOnTop <span class="op">=</span> <span class="cn">TRUE</span>,
+  showNearestColor <span class="op">=</span> <span class="cn">FALSE</span>,
+  <span class="va">...</span>
+<span class="op">)</span>
+
+<span class="co"># S3 method for l_facet_ggplot</span>
 <span class="fu">loon2ggplot</span><span class="op">(</span>
   <span class="va">target</span>,
   asAes <span class="op">=</span> <span class="cn">TRUE</span>,
