@@ -24,7 +24,6 @@ loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop 
   } else {
     n <- sum(vapply(facets, function(facet) facet['n'], numeric(1L)))
     if(n == 0) return(ggObj)
-    facetNum <- nrow(facetsLabels)
     facetsVar <- rownames(facetsLabels)
 
     states <- do.call(rbind,
