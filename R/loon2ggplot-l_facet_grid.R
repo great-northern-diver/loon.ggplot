@@ -22,9 +22,18 @@ loon2ggplot.l_facet_grid <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         facetsLabels = facetsLabels,
                         levels = levels, ...)
 
-      lp$labels$x <- subtitles$xlabel
-      lp$labels$y <- subtitles$ylabel
-      lp$labels$title <- subtitles$title
+      if(!is.null(subtitles$xlabel) || subtitles$xlabel != "") {
+        lp$labels$x <- subtitles$xlabel
+        lp$theme$axis.title.x <- ggplot2::element_text()
+      }
+      if(!is.null(subtitles$ylabel) || subtitles$ylabel != "") {
+        lp$labels$y <- subtitles$ylabel
+        lp$theme$axis.title.y <- ggplot2::element_text()
+      }
+      if(!is.null(subtitles$ylabel) || subtitles$ylabel != "") {
+        lp$labels$title <- subtitles$title
+        lp$theme$axis.title <- ggplot2::element_text()
+      }
 
       facetsColLabels <- subtitles$facetsColLabels
       facetsRowLabels <- subtitles$facetsRowLabels
@@ -54,9 +63,16 @@ loon2ggplot.l_facet_grid <- function(target, asAes = TRUE, selectedOnTop = TRUE,
       }
 
       drop <- subtitles$drop %||% FALSE
+      scales <- subtitles$scales %||% "fixed"
+      if(grepl("free", scales)) {
+        lp$coordinates$limits <- list(x = NULL, y = NULL)
+        lp$coordinates$expand <- TRUE
+      }
+
       lp +
         ggplot2::facet_grid(formula,
                             switch = switch,
+                            scales = scales,
                             drop = drop)
     },
     error = function(e) {

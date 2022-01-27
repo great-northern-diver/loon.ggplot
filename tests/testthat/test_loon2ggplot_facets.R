@@ -19,15 +19,15 @@ test_that("facet basic (loon to ggplot)", {
   fp <- l_facet(p, by = "color", layout = "wrap",
                 linkingGroup = "quakes")
 
-  gg <- loon2ggplot(fp)
+  expect_warning(gg <- loon2ggplot(fp))
   gg
   expect_true(inherits(gg$facet, "FacetWrap"))
-  gg <- loon2ggplot(fp, asAes = FALSE)
+  expect_warning(gg <- loon2ggplot(fp, asAes = FALSE))
   gg
   expect_true(inherits(gg$facet, "FacetWrap"))
   fp <- l_facet(p, by = "color", layout = "grid",
                 linkingGroup = "quakes")
-  gg <- loon2ggplot(fp)
+  expect_warning(gg <- loon2ggplot(fp))
   gg
   expect_true(inherits(gg$facet, "FacetGrid"))
 
@@ -141,7 +141,7 @@ test_that("facet basic (loon to ggplot)", {
   expect_true(inherits(gg$facet, "FacetWrap"))
 })
 
-test_that("facet basic (loon to ggplot)", {
+test_that("facet basic (ggplot to loon to ggplot)", {
 
   gg <- mpg %>%
     mutate(drv2 = paste(drv, drv)) %>%
@@ -182,4 +182,13 @@ test_that("facet basic (loon to ggplot)", {
   gg3 <- loon.ggplot(lg)
   plot(gg3)
   expect_true(inherits(gg1$facet, "FacetGrid"))
+
+  # lines
+  gg <- ggplot(economics_long, aes(date, value)) +
+    geom_line() +
+    facet_wrap(vars(variable), scales = "free_y", nrow = 2, strip.position = "top") +
+    theme(strip.background = element_blank(), strip.placement = "outside")
+  xx <- loon.ggplot(loon.ggplot(gg))
+  xx
+  expect_true(inherits(xx$facet, "FacetWrap"))
 })

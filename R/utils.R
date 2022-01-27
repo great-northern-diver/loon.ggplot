@@ -195,6 +195,23 @@ wrap_num <- function(ggLayout, FacetWrap, FacetGrid){
   } else 0
 }
 
+facet_scales <- function(free) {
+
+  x <- free$x
+  y <- free$y
+
+  if(x && y) {
+    "free"
+  } else if (x && !y) {
+    "free_x"
+  } else if (!x && y) {
+    "free_y"
+  } else {
+    # !x && !y
+    "fixed"
+  }
+}
+
 utils::globalVariables(c("PANEL", "axes.sequence", "density", "group",
                          "height", "positive", "setup_mapping", "x", "y",
                          "size", "color", "colour", "ymax", "ymin", "fill",
