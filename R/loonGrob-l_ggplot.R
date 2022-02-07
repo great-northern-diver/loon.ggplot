@@ -12,7 +12,7 @@ l_get_arrangeGrobArgs.l_facet_ggplot <- function(target) {
   subtitles <- l_getSubtitles(target)
   xlabel <- subtitles$xlabel
   ylabel <- subtitles$ylabel
-  title <- subtitles$title %||% ""
+  title <- if(length(subtitles$title) == 0) "" else subtitles$title
   FacetWrap <- subtitles$FacetWrap
   FacetGrid <- subtitles$FacetGrid
   colSubtitles <- subtitles$colSubtitles
