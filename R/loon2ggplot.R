@@ -622,16 +622,14 @@ loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, selectedOnTop = TRUE
                                                 just = justify[i])
 
                    c(label = label[i],
-                     x = x[i] + textCoords[1],
-                     y = y[i] + textCoords[2])
+                     x = as.numeric(x[i] + textCoords[1]),
+                     y = as.numeric(y[i] + textCoords[2]))
                  })
 
   df <- as.data.frame(
     do.call(rbind, data),
     stringsAsFactors = FALSE
   )
-  df$x <- as.numeric(df$x)
-  df$y <- as.numeric(df$y)
 
   if(len_unique(angle) == 1L) angle <- angle[1L]
   if(len_unique(size) == 1L) size <- size[1L]
