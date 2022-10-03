@@ -34,16 +34,22 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/Cartesianxy2Polarxy.html</loc>
+  </url>
+  <url>
     <loc>/reference/active.html</loc>
   </url>
   <url>
     <loc>/reference/add_serialaxes_layers.html</loc>
   </url>
   <url>
-    <loc>/reference/Cartesianxy2Polarxy.html</loc>
+    <loc>/reference/coord_serialaxes.html</loc>
   </url>
   <url>
-    <loc>/reference/coord_serialaxes.html</loc>
+    <loc>/reference/g_getLocations.html</loc>
+  </url>
+  <url>
+    <loc>/reference/g_getPlots.html</loc>
   </url>
   <url>
     <loc>/reference/geom_imageGlyph-deprecated.html</loc>
@@ -82,9 +88,6 @@
     <loc>/reference/get_scaledData.html</loc>
   </url>
   <url>
-    <loc>/reference/ggplot2loon.html</loc>
-  </url>
-  <url>
     <loc>/reference/ggSerialAxes-deprecated.html</loc>
   </url>
   <url>
@@ -97,13 +100,10 @@
     <loc>/reference/gg_pipe.html</loc>
   </url>
   <url>
+    <loc>/reference/ggplot2loon.html</loc>
+  </url>
+  <url>
     <loc>/reference/glyphGeoms.html</loc>
-  </url>
-  <url>
-    <loc>/reference/g_getLocations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/g_getPlots.html</loc>
   </url>
   <url>
     <loc>/reference/hover.html</loc>
@@ -125,6 +125,12 @@
   </url>
   <url>
     <loc>/reference/itemLabel.html</loc>
+  </url>
+  <url>
+    <loc>/reference/l_getSubtitles.html</loc>
+  </url>
+  <url>
+    <loc>/reference/l_ggplot.html</loc>
   </url>
   <url>
     <loc>/reference/layout_coords.html</loc>
@@ -160,19 +166,13 @@
     <loc>/reference/loonLayer.html</loc>
   </url>
   <url>
-    <loc>/reference/l_getSubtitles.html</loc>
-  </url>
-  <url>
-    <loc>/reference/l_ggplot.html</loc>
-  </url>
-  <url>
     <loc>/reference/polygonGlyph.html</loc>
   </url>
   <url>
-    <loc>/reference/print.lggplot.html</loc>
+    <loc>/reference/print.l_ggplot.html</loc>
   </url>
   <url>
-    <loc>/reference/print.l_ggplot.html</loc>
+    <loc>/reference/print.lggplot.html</loc>
   </url>
   <url>
     <loc>/reference/reexports.html</loc>

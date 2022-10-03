@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,125 +78,150 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ggplot2loon</span><span class="op">(</span>
-  <span class="va">ggObj</span>,
-  <span class="va">...</span>,
-  activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,
-  layerId <span class="op">=</span> <span class="cn">NULL</span>,
-  scaleToFun <span class="op">=</span> <span class="cn">NULL</span>,
-  ggGuides <span class="op">=</span> <span class="cn">FALSE</span>,
-  parent <span class="op">=</span> <span class="cn">NULL</span>,
-  pack <span class="op">=</span> <span class="cn">TRUE</span>,
-  exteriorLabelProportion <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>,
-  canvasHeight <span class="op">=</span> <span class="fl">700</span>,
-  canvasWidth <span class="op">=</span> <span class="fl">850</span>,
-  tkLabels <span class="op">=</span> <span class="cn">NULL</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggplot2loon</span><span class="op">(</span></span>
+<span>  <span class="va">ggObj</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">integer</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>,</span>
+<span>  layerId <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scaleToFun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ggGuides <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  parent <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pack <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  exteriorLabelProportion <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>,</span>
+<span>  canvasHeight <span class="op">=</span> <span class="fl">700</span>,</span>
+<span>  canvasWidth <span class="op">=</span> <span class="fl">850</span>,</span>
+<span>  tkLabels <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ggObj</dt>
 <dd><p>a <code>ggplot</code> or <code>ggmatrix</code> object</p></dd>
+
+
 <dt>...</dt>
 <dd><p>named arguments to modify loon plot states</p></dd>
+
+
 <dt>activeGeomLayers</dt>
 <dd><p>to determine which geom layer is active. Only <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code>
  and <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code> can be set as active geom layer(s) so far.
 (Notice, more than one <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> layers can be set as active layers,
  but only one <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code> can be set as an active geom layer)</p></dd>
+
+
 <dt>layerId</dt>
 <dd><p>numerical; which layer to scale to</p></dd>
+
+
 <dt>scaleToFun</dt>
 <dd><p>scale to function. See <code><a href="zoom.html">zoom</a></code>.</p></dd>
+
+
 <dt>ggGuides</dt>
 <dd><p>logical (default <code>FALSE</code>) to determine whether to draw a ggplot background or not.</p></dd>
+
+
 <dt>parent</dt>
 <dd><p>parent widget path (Tk toplevel)</p></dd>
+
+
 <dt>pack</dt>
 <dd><p>logical (default <code>TRUE</code>) to pack widgets.
 If <code>FALSE</code>, widgets will be produced but won't be packed and so will not appear in the display.</p></dd>
+
+
 <dt>exteriorLabelProportion</dt>
 <dd><p>space assigned to the vertical height/horizontal width of each exterior label
 expressed as a proportion of a single plot's height/width.  Default is 0.2.
 This is translated to a row/column span = 1 / exteriorLabelProportion for the plot size in
 <code><a href="https://rdrr.io/r/tcltk/TkCommands.html" class="external-link">tkgrid()</a></code>.</p></dd>
+
+
 <dt>canvasHeight</dt>
 <dd><p>the height of canvas</p></dd>
+
+
 <dt>canvasWidth</dt>
 <dd><p>the width of canvas</p></dd>
+
+
 <dt>tkLabels</dt>
 <dd><p>Deprecated: logical (or <code>NULL</code>) to indicate whether the plot(s) are to be wrapped by
 exterior labels (title, subtitle, xlabel or ylabel) using <code>tk.grid()</code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>loon</code> single widget or a compound object</p>
+    
+
+<p>a <code>loon</code> single widget or a compound object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>,</span>
-<span class="r-in">                       colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">am</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">  z <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">df</span>, <span class="op">-</span><span class="va">z</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">scatterplots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df2</span>, colour <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">z</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The first point layer is set as the model layer</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
-<span class="r-in">  <span class="va">lp_scatterplots_active1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span>
-<span class="r-in">                               activeGeomLayers <span class="op">=</span> <span class="fl">1</span>,</span>
-<span class="r-in">                               linkingGroup <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Here, the gray points are interactive (not the colourful ones)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># The second point layer is set as the model layer</span></span>
-<span class="r-in"><span class="va">lp_scatterplots_active2</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span>
-<span class="r-in">                                       activeGeomLayers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Here, the colourful points are interactive</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Both point layers could be interactive</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span>
-<span class="r-in"> <span class="va">lp_scatterplots_active12</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span>
-<span class="r-in">                                         activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Here, all points are interactive</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">########### ggmatrix to loon ###########</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"GGally"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">pm</span> <span class="op">&lt;-</span> <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html" class="external-link">ggpairs</a></span><span class="op">(</span><span class="va">iris</span>, column <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span>
-<span class="r-in">                      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">lg</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">pm</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co">########### patchwork to loon ###########</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"patchwork"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">disp</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">gear</span>, <span class="va">disp</span>, group <span class="op">=</span> <span class="va">gear</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># place two plots side by side</span></span>
-<span class="r-in"><span class="va">patchwork</span> <span class="op">&lt;-</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span>
-<span class="r-in"><span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">patchwork</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># See vignette `ggplots --&gt; loon plots` for more details</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"><span class="co"># }</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">wt</span>, <span class="va">mpg</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">mpg</span>,</span></span>
+<span class="r-in"><span>                       colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">gear</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">am</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">120</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  z <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">df</span>, <span class="op">-</span><span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">scatterplots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df2</span>, colour <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">z</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">z</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The first point layer is set as the model layer</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">lp_scatterplots_active1</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span></span>
+<span class="r-in"><span>                               activeGeomLayers <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>                               linkingGroup <span class="op">=</span> <span class="st">"test"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Here, the gray points are interactive (not the colourful ones)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># The second point layer is set as the model layer</span></span></span>
+<span class="r-in"><span><span class="va">lp_scatterplots_active2</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span></span>
+<span class="r-in"><span>                                       activeGeomLayers <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Here, the colourful points are interactive</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Both point layers could be interactive</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/warning.html" class="external-link">suppressWarnings</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span> <span class="va">lp_scatterplots_active12</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">scatterplots</span>,</span></span>
+<span class="r-in"><span>                                         activeGeomLayers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Here, all points are interactive</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">########### ggmatrix to loon ###########</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"GGally"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">pm</span> <span class="op">&lt;-</span> <span class="fu">GGally</span><span class="fu">::</span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html" class="external-link">ggpairs</a></span><span class="op">(</span><span class="va">iris</span>, column <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span>,</span></span>
+<span class="r-in"><span>                      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour<span class="op">=</span><span class="va">Species</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">lg</span> <span class="op">&lt;-</span> <span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">pm</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">########### patchwork to loon ###########</span></span></span>
+<span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"patchwork"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">disp</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">gear</span>, <span class="va">disp</span>, group <span class="op">=</span> <span class="va">gear</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># place two plots side by side</span></span></span>
+<span class="r-in"><span><span class="va">patchwork</span> <span class="op">&lt;-</span> <span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></span>
+<span class="r-in"><span><span class="fu">ggplot2loon</span><span class="op">(</span><span class="va">patchwork</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># See vignette `ggplots --&gt; loon plots` for more details</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -211,7 +236,7 @@ exterior labels (title, subtitle, xlabel or ylabel) using <code>tk.grid()</code>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

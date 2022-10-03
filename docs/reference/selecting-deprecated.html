@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">selecting</span><span class="op">(</span>selected <span class="op">=</span> <span class="cn">NULL</span>, selectBy <span class="op">=</span> <span class="cn">NULL</span>, selectionLogic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">selecting</span><span class="op">(</span>selected <span class="op">=</span> <span class="cn">NULL</span>, selectBy <span class="op">=</span> <span class="cn">NULL</span>, selectionLogic <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,14 +87,19 @@
 <dd><p>a logical or a logical vector of length <code>n</code> that determines which observations
 are selected (<code>TRUE</code> and hence appear highlighted in the plot) and which are not.
 Default is <code>FALSE</code> and no points are highlit.</p></dd>
+
+
 <dt>selectBy</dt>
 <dd><p>A string determining how selection will occur in the interactive plot.
 Default is <code>"sweeping"</code> where a rectangular region is reshaped or "swept" out to select observations.; alternately
  <code>"brushing"</code> will indicate that a fixed rectangular region is moved about the display to select observations.</p></dd>
+
+
 <dt>selectionLogic</dt>
 <dd><p>One of "select" (the default), "deselect", and "invert".
 The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
 highlit observations and highlighting downlighted ones).</p></dd>
+
 </dl></div>
 
   </div>
@@ -109,7 +114,7 @@ highlit observations and highlighting downlighted ones).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

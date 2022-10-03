@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,20 +78,20 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">geom_pointrangeGlyph</span><span class="op">(</span>
-  mapping <span class="op">=</span> <span class="cn">NULL</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  stat <span class="op">=</span> <span class="st">"identity"</span>,
-  position <span class="op">=</span> <span class="st">"identity"</span>,
-  <span class="va">...</span>,
-  <span class="va">ymin</span>,
-  <span class="va">ymax</span>,
-  showArea <span class="op">=</span> <span class="cn">TRUE</span>,
-  linewidth <span class="op">=</span> <span class="fl">1</span>,
-  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,
-  show.legend <span class="op">=</span> <span class="cn">NA</span>,
-  inherit.aes <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">geom_pointrangeGlyph</span><span class="op">(</span></span>
+<span>  mapping <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  stat <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>  position <span class="op">=</span> <span class="st">"identity"</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  <span class="va">ymin</span>,</span>
+<span>  <span class="va">ymax</span>,</span>
+<span>  showArea <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  linewidth <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  na.rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show.legend <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  inherit.aes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -101,6 +101,8 @@
 <code><a href="https://ggplot2.tidyverse.org/reference/aes_.html" class="external-link">aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply <code>mapping</code> if there is no plot mapping.</p></dd>
+
+
 <dt>data</dt>
 <dd><p>The data to be displayed in this layer. There are three
 options:</p>
@@ -113,39 +115,60 @@ data. All objects will be fortified to produce a data frame. See
 the plot data. The return value must be a <code>data.frame</code>, and
 will be used as the layer data. A <code>function</code> can be created
 from a <code>formula</code> (e.g. <code>~ head(.x, 10)</code>).</p></dd>
+
+
 <dt>stat</dt>
 <dd><p>The statistical transformation to use on the data for this
 layer, as a string.</p></dd>
+
+
 <dt>position</dt>
 <dd><p>Position adjustment, either as a string, or the result of
 a call to a position adjustment function.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed on to <code><a href="https://ggplot2.tidyverse.org/reference/layer.html" class="external-link">layer()</a></code>. These are
 often aesthetics, used to set an aesthetic to a fixed value, like
 <code>colour = "red"</code> or <code>size = 3</code>. They may also be parameters
 to the paired geom/stat.</p></dd>
+
+
 <dt>ymin</dt>
 <dd><p>y min</p></dd>
+
+
 <dt>ymax</dt>
 <dd><p>y max</p></dd>
+
+
 <dt>showArea</dt>
 <dd><p>show area; deprecated now, please set `fill` or `colour` to control the shown area.</p></dd>
+
+
 <dt>linewidth</dt>
 <dd><p>line width</p></dd>
+
+
 <dt>na.rm</dt>
 <dd><p>If <code>FALSE</code>, the default, missing values are removed with
 a warning. If <code>TRUE</code>, missing values are silently removed.</p></dd>
+
+
 <dt>show.legend</dt>
 <dd><p>logical. Should this layer be included in the legends?
 <code>NA</code>, the default, includes if any aesthetics are mapped.
 <code>FALSE</code> never includes, and <code>TRUE</code> always includes.
 It can also be a named logical vector to finely select the aesthetics to
 display.</p></dd>
+
+
 <dt>inherit.aes</dt>
 <dd><p>If <code>FALSE</code>, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. <code><a href="https://ggplot2.tidyverse.org/reference/borders.html" class="external-link">borders()</a></code>.</p></dd>
+
 </dl></div>
 
   </div>
@@ -160,7 +183,7 @@ the default plot specification, e.g. <code><a href="https://ggplot2.tidyverse.or
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

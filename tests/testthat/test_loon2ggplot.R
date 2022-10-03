@@ -170,7 +170,7 @@ test_that("test compound loon widgets to ggplot", {
   g <- loon.ggplot(p)
   expect_equal(class(g), c("patchwork", "gg", "ggplot"))
 
-  p <- l_pairs(iris, showHistograms = TRUE)
+  p <- l_pairs(iris[, 1:4], showHistograms = TRUE)
   g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("patchwork", "gg", "ggplot"))

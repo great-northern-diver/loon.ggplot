@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,78 +78,107 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ggSerialAxes</span><span class="op">(</span>
-  <span class="va">ggObj</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  axesLabels <span class="op">=</span> <span class="cn">NULL</span>,
-  showAxes <span class="op">=</span> <span class="cn">TRUE</span>,
-  showAxesLabels <span class="op">=</span> <span class="cn">TRUE</span>,
-  scaling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variable"</span>, <span class="st">"observation"</span>, <span class="st">"data"</span>, <span class="st">"none"</span><span class="op">)</span>,
-  layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parallel"</span>, <span class="st">"radial"</span><span class="op">)</span>,
-  displayOrder <span class="op">=</span> <span class="cn">NULL</span>,
-  title <span class="op">=</span> <span class="st">""</span>,
-  showLabels <span class="op">=</span> <span class="cn">TRUE</span>,
-  color <span class="op">=</span> <span class="cn">NULL</span>,
-  size <span class="op">=</span> <span class="cn">NULL</span>,
-  showGuides <span class="op">=</span> <span class="cn">TRUE</span>,
-  showArea <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggSerialAxes</span><span class="op">(</span></span>
+<span>  <span class="va">ggObj</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axesLabels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  showAxes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  showAxesLabels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  scaling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"variable"</span>, <span class="st">"observation"</span>, <span class="st">"data"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  layout <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"parallel"</span>, <span class="st">"radial"</span><span class="op">)</span>,</span>
+<span>  displayOrder <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  title <span class="op">=</span> <span class="st">""</span>,</span>
+<span>  showLabels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  color <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  showGuides <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  showArea <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>ggObj</dt>
 <dd><p>A `ggplot` object</p></dd>
+
+
 <dt>data</dt>
 <dd><p>A data frame for serialaxes. If `NULL`, data must be set in `ggObj`</p></dd>
+
+
 <dt>axesLabels</dt>
 <dd><p>A vector with variable names that defines the axes sequence.</p></dd>
+
+
 <dt>showAxes</dt>
 <dd><p>Logical value to indicate whether axes should be shown or not</p></dd>
+
+
 <dt>showAxesLabels</dt>
 <dd><p>Logical value to indicate whether axes labels should be shown or not</p></dd>
+
+
 <dt>scaling</dt>
 <dd><p>one of 'variable', 'data', 'observation' or 'none' to
 specify how the data is scaled. See Details for more information</p></dd>
+
+
 <dt>layout</dt>
 <dd><p>either "radial" or "parallel"</p></dd>
+
+
 <dt>displayOrder</dt>
 <dd><p>The display order of the observations.</p></dd>
+
+
 <dt>title</dt>
 <dd><p>title of the display</p></dd>
+
+
 <dt>showLabels</dt>
 <dd><p>Logical value to indicate whether label (mainly **title**) should be shown or not</p></dd>
+
+
 <dt>color</dt>
 <dd><p>Line color</p></dd>
+
+
 <dt>size</dt>
 <dd><p>Line width</p></dd>
+
+
 <dt>showGuides</dt>
 <dd><p>Logical value to indicate whether guides should be shown or not</p></dd>
+
+
 <dt>showArea</dt>
 <dd><p>Logical value to indicate whether to display lines or area</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a ggplot object</p>
+    
+
+<p>a ggplot object</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># Blank plot</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Add serial axes (returns a ggplot object)</span></span>
-<span class="r-in"><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">ggSerialAxes</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">g</span></span>
-<span class="r-in"><span class="co"># An eulerian path of iris variables</span></span>
-<span class="r-in"><span class="co"># ordSeq &lt;- PairViz::eulerian(4)</span></span>
-<span class="r-in"><span class="va">ordSeq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">ggSerialAxes</span><span class="op">(</span></span>
-<span class="r-in">       ggObj <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">iris</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">       axesLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span><span class="op">[</span><span class="va">ordSeq</span><span class="op">]</span>,</span>
-<span class="r-in">       layout <span class="op">=</span> <span class="st">"radial"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Blank plot</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Add serial axes (returns a ggplot object)</span></span></span>
+<span class="r-in"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu">ggSerialAxes</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">g</span></span></span>
+<span class="r-in"><span><span class="co"># An eulerian path of iris variables</span></span></span>
+<span class="r-in"><span><span class="co"># ordSeq &lt;- PairViz::eulerian(4)</span></span></span>
+<span class="r-in"><span><span class="va">ordSeq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">ggSerialAxes</span><span class="op">(</span></span></span>
+<span class="r-in"><span>       ggObj <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">iris</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>       axesLabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">iris</span><span class="op">)</span><span class="op">[</span><span class="va">ordSeq</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>       layout <span class="op">=</span> <span class="st">"radial"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -164,7 +193,7 @@ specify how the data is scaled. See Details for more information</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

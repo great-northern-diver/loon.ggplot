@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scale_multi</span><span class="op">(</span>trans <span class="op">=</span> <span class="fu"><a href="scaleBox.html">scaleBox</a></span><span class="op">(</span>center <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scale_multi</span><span class="op">(</span>trans <span class="op">=</span> <span class="fu"><a href="scaleBox.html">scaleBox</a></span><span class="op">(</span>center <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,13 +90,18 @@ Built-in transformations include "asn", "atanh", "boxcox", "date", "exp", "hms",
 A transformation object bundles together a transform, its inverse, and methods for generating breaks and labels.
 Transformation objects are defined in the scales package, and are called  &lt;name&gt;_trans (e.g., <code><a href="https://scales.r-lib.org/reference/boxcox_trans.html" class="external-link">scales::boxcox_trans()</a></code>).
 You can create your own transformation with <code><a href="https://scales.r-lib.org/reference/trans_new.html" class="external-link">scales::trans_new()</a></code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed on to <code>scale_(x|y)_continuous()</code>. To set the position scales,
 three scales (x, y, z) has to be set simultaneously.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a list of the <code>ggproto</code> objects</p>
+    
+
+<p>a list of the <code>ggproto</code> objects</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -108,37 +113,37 @@ we rotate the plot, most points will stay inside the current view.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="va">dsamp</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_n</a></span><span class="op">(</span><span class="va">diamonds</span>, <span class="fl">100</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># press `R`, then rotate with a minor tweak,</span></span>
-<span class="r-in"><span class="co"># Issues:</span></span>
-<span class="r-in"><span class="co">#   1: the points are off the window</span></span>
-<span class="r-in"><span class="co">#   2: Always in a line shape</span></span>
-<span class="r-in"><span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">dsamp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span>,</span>
-<span class="r-in">                    z <span class="op">=</span> <span class="va">depth</span>, colour <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># set scales</span></span>
-<span class="r-in"><span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">dsamp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y  <span class="op">=</span><span class="va">price</span>,</span>
-<span class="r-in">                    z <span class="op">=</span> <span class="va">depth</span>, colour <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu">scale_multi</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># customized `trans`</span></span>
-<span class="r-in"><span class="va">logp1_base10_trans</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/trans_new.html" class="external-link">trans_new</a></span><span class="op">(</span></span>
-<span class="r-in">  name <span class="op">=</span> <span class="st">"logp"</span>,</span>
-<span class="r-in">  trans <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">1</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">  inverse <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">10</span><span class="op">**</span><span class="va">x</span> <span class="op">-</span> <span class="fl">1</span>,</span>
-<span class="r-in">  breaks <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/breaks_log.html" class="external-link">log_breaks</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">dsamp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span>,</span>
-<span class="r-in">                    z <span class="op">=</span> <span class="va">depth</span>, colour <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu">scale_multi</span><span class="op">(</span>trans <span class="op">=</span> <span class="va">logp1_base10_trans</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">dsamp</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html" class="external-link">sample_n</a></span><span class="op">(</span><span class="va">diamonds</span>, <span class="fl">100</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># press `R`, then rotate with a minor tweak,</span></span></span>
+<span class="r-in"><span><span class="co"># Issues:</span></span></span>
+<span class="r-in"><span><span class="co">#   1: the points are off the window</span></span></span>
+<span class="r-in"><span><span class="co">#   2: Always in a line shape</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">dsamp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span>,</span></span>
+<span class="r-in"><span>                    z <span class="op">=</span> <span class="va">depth</span>, colour <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># set scales</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">dsamp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y  <span class="op">=</span><span class="va">price</span>,</span></span>
+<span class="r-in"><span>                    z <span class="op">=</span> <span class="va">depth</span>, colour <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">scale_multi</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># customized `trans`</span></span></span>
+<span class="r-in"><span><span class="va">logp1_base10_trans</span> <span class="op">&lt;-</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/trans_new.html" class="external-link">trans_new</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  name <span class="op">=</span> <span class="st">"logp"</span>,</span></span>
+<span class="r-in"><span>  trans <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">x</span> <span class="op">+</span> <span class="fl">1</span>, base <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  inverse <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fl">10</span><span class="op">**</span><span class="va">x</span> <span class="op">-</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  breaks <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/breaks_log.html" class="external-link">log_breaks</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">dsamp</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">carat</span>, y <span class="op">=</span> <span class="va">price</span>,</span></span>
+<span class="r-in"><span>                    z <span class="op">=</span> <span class="va">depth</span>, colour <span class="op">=</span> <span class="va">color</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu">scale_multi</span><span class="op">(</span>trans <span class="op">=</span> <span class="va">logp1_base10_trans</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -153,7 +158,7 @@ we rotate the plot, most points will stay inside the current view.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
