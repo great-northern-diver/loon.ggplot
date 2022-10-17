@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,77 +78,106 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">interactivity</span><span class="op">(</span>
-  linkingGroup <span class="op">=</span> <span class="cn">NULL</span>,
-  linkingKey <span class="op">=</span> <span class="cn">NULL</span>,
-  linkedStates <span class="op">=</span> <span class="cn">NULL</span>,
-  sync <span class="op">=</span> <span class="cn">NULL</span>,
-  active <span class="op">=</span> <span class="cn">NULL</span>,
-  activeGeomLayers <span class="op">=</span> <span class="cn">NULL</span>,
-  selected <span class="op">=</span> <span class="cn">NULL</span>,
-  selectBy <span class="op">=</span> <span class="cn">NULL</span>,
-  selectionLogic <span class="op">=</span> <span class="cn">NULL</span>,
-  layerId <span class="op">=</span> <span class="cn">NULL</span>,
-  scaleToFun <span class="op">=</span> <span class="cn">NULL</span>,
-  itemLabel <span class="op">=</span> <span class="cn">NULL</span>,
-  showItemLabels <span class="op">=</span> <span class="cn">NULL</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">interactivity</span><span class="op">(</span></span>
+<span>  linkingGroup <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  linkingKey <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  linkedStates <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sync <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  active <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  activeGeomLayers <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  selected <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  selectBy <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  selectionLogic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  layerId <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scaleToFun <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  itemLabel <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  showItemLabels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>linkingGroup</dt>
 <dd><p>The string identifying the group of linked plots that the current plot will join.  Default is none.</p></dd>
+
+
 <dt>linkingKey</dt>
 <dd><p>The length <code>n</code> character vector of unique keys.  Default will be <code>"0", "1", ..., "n-1"</code>
 where <code>n</code> is the number of elements (e.g., points) displayed.</p></dd>
+
+
 <dt>linkedStates</dt>
 <dd><p>The character vector of display states to be linked.
 These can be "color", "selected", "active", "size" and "glyph" for an `l_plot` object and
 "color", "selected", "active" for an `l_hist` object.  (These roughly correspond to aesthetics in a `ggplot`.)</p></dd>
+
+
 <dt>sync</dt>
 <dd><p>Either <code>"pull"</code> (the default) or <code>"push"</code> to indicate whether the values of the linked states of the plot
 are to be pulled from those of the other plots in the linking group, or the values are to be pushed to all other plots
 in the linking group. This matters only when joining an existing group of plots and the default value is typically
 the right thing to do.</p></dd>
+
+
 <dt>active</dt>
 <dd><p>a logical or a logical vector of length <code>n</code> that determines which observations
 are active (<code>TRUE</code> and hence appear in the plot) and which are inactive (<code>FALSE</code> and hence do not appear).
 Default is <code>TRUE</code>.</p></dd>
+
+
 <dt>activeGeomLayers</dt>
 <dd><p>determine which geom layer is interactive by its `geom_...` position in the grammar of the expression.
 Currently, only <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> and <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code> can be set as the active geom layer(s) so far.
 (N.B. more than one <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point()</a></code> layer can be set as an active layer,
 but only one <code><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram()</a></code> can be set as an active geom layer and it can be the only active layer.)</p></dd>
+
+
 <dt>selected</dt>
 <dd><p>a logical or a logical vector of length <code>n</code> that determines which observations
 are selected (<code>TRUE</code> and hence appear highlighted in the plot) and which are not.
 Default is <code>FALSE</code> and no points are highlit.</p></dd>
+
+
 <dt>selectBy</dt>
 <dd><p>A string determining how selection will occur in the interactive plot.
 Default is <code>"sweeping"</code> where a rectangular region is reshaped or "swept" out to select observations.; alternately
  <code>"brushing"</code> will indicate that a fixed rectangular region is moved about the display to select observations.</p></dd>
+
+
 <dt>selectionLogic</dt>
 <dd><p>One of "select" (the default), "deselect", and "invert".
 The first highlights observations as selected, the second downlights them, and the third inverts them (downlighting
 highlit observations and highlighting downlighted ones).</p></dd>
+
+
 <dt>layerId</dt>
 <dd><p>numerical; which layer to scale to</p></dd>
+
+
 <dt>scaleToFun</dt>
 <dd><p>scale to function. See <code><a href="zoom.html">zoom</a></code>.</p></dd>
+
+
 <dt>itemLabel</dt>
 <dd><p>A character vector of length <code>n</code> with a string to be used to pop up when the
 mouse hovers above that element.</p></dd>
+
+
 <dt>showItemLabels</dt>
 <dd><p>A single logical value: <code>TRUE</code> if pop up labels are to appear on hover,
 <code>FALSE</code> (the default) if they are not.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>named arguments to modify <code>loon</code> plot states. See <code><a href="https://great-northern-diver.github.io/loon/reference/l_info_states.html" class="external-link">l_info_states</a></code></p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>a <code>ggproto</code> object</p>
+    
+
+<p>a <code>ggproto</code> object</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -157,26 +186,26 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="co"># Modify the 'linkingGroup' and 'origin' of a hist object</span></span>
-<span class="r-in">  <span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu">interactivity</span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"mt"</span>, origin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="co"># linking with the histogram</span></span>
-<span class="r-in">  <span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu">interactivity</span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"mt"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">cyl</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in">  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">economics_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">'free_x'</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in">  <span class="co"># `p` is a ggplot object</span></span>
-<span class="r-in">  <span class="va">p</span></span>
-<span class="r-in">  <span class="co"># turn static `ggplot` to interactive `loon`</span></span>
-<span class="r-in">  <span class="va">p</span> <span class="op">+</span> <span class="fu">interactivity</span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="co"># Modify the 'linkingGroup' and 'origin' of a hist object</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu">interactivity</span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"mt"</span>, origin <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="co"># linking with the histogram</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="l_ggplot.html">l_ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu">interactivity</span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"mt"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">cyl</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>  <span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">economics_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">variable</span>, scales <span class="op">=</span> <span class="st">'free_x'</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>         <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="co"># `p` is a ggplot object</span></span></span>
+<span class="r-in"><span>  <span class="va">p</span></span></span>
+<span class="r-in"><span>  <span class="co"># turn static `ggplot` to interactive `loon`</span></span></span>
+<span class="r-in"><span>  <span class="va">p</span> <span class="op">+</span> <span class="fu">interactivity</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -191,7 +220,7 @@ Component <code>interactivity</code> is used to set these features.</p><table cl
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

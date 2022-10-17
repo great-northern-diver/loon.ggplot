@@ -1,3 +1,7 @@
+# loon.ggplot 1.3.2
+
+* No functionality changes. A minor change is made on the website html.
+
 # loon.ggplot 1.3.1
 
 * **Important Update**: to transform a `loon` `l_facet` object to a `ggplot` object, instead of relying on the package `patchwork` to combine plots, the function `facet_grid()` or `facet_wrap()` is used.

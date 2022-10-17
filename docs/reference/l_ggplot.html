@@ -17,13 +17,13 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -55,7 +55,7 @@
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
-    <span class="fas fa-github fa-lg"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -78,7 +78,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">l_ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NULL</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span>, environment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">l_ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="cn">NULL</span>, mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span>, environment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,17 +86,26 @@
     <dl><dt>data</dt>
 <dd><p>Default dataset to use for plot. If not already a data.frame, will be converted to one by fortify().
 If not specified, must be supplied in each layer added to the plot.</p></dd>
+
+
 <dt>mapping</dt>
 <dd><p>Default list of aesthetic mappings to use for plot.
 If not specified, must be supplied in each layer added to the plot.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Other arguments passed on to methods. Not currently used.</p></dd>
+
+
 <dt>environment</dt>
 <dd><p>DEPRECATED. Used prior to tidy evaluation.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>It will return an <code>l_ggplot</code> object with class <code>c("l_ggplot", "gg", "ggplot")</code>.
+    
+
+<p>It will return an <code>l_ggplot</code> object with class <code>c("l_ggplot", "gg", "ggplot")</code>.
 Then print a <code>loon</code> plot automatically.</p>
     </div>
     <div id="details">
@@ -116,44 +125,44 @@ which will return an interactive <code>loon</code> widget.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">l_ggplot</span><span class="op">(</span><span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">displ</span>, <span class="va">cty</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span>
-<span class="r-in">      size <span class="op">=</span> <span class="fl">4</span>,</span>
-<span class="r-in">      mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in">    <span class="op">)</span></span>
-<span class="r-in"><span class="co"># p is an `l_ggplot` object, `print.l_ggplot(p)` will be called automatically.</span></span>
-<span class="r-in"><span class="co"># Then, at printing time, an `l_ggplot` object will be transformed to a `loon` widget</span></span>
-<span class="r-in"><span class="va">p</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># Assign a widget from current path</span></span>
-<span class="r-in"><span class="co"># suppose the path of `p` is '.l0.ggplot'</span></span>
-<span class="r-in"><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getFromPath.html" class="external-link">l_getFromPath</a></span><span class="op">(</span><span class="st">'.l0.ggplot'</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># q is a `loon` widget</span></span>
-<span class="r-in"><span class="va">q</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># An alternative way to return a real loon widget from `p` (a `l_ggplot` object)</span></span>
-<span class="r-in"><span class="co"># is to call the function `loon.ggplot()`.</span></span>
-<span class="r-in"><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">q</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># pipe more components</span></span>
-<span class="r-in"><span class="va">p</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">drv</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="linking.html">linking</a></span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"displ versus cty"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># a linked bar plot</span></span>
-<span class="r-in"><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_hist.html" class="external-link">l_hist</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">$</span><span class="va">class</span>, linkingGroup <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># a 3D object</span></span>
-<span class="r-in"><span class="co"># press the button key `R` to rotate the plot</span></span>
-<span class="r-in"><span class="fu">l_ggplot</span><span class="op">(</span><span class="va">mtcars</span>,</span>
-<span class="r-in">         mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">hp</span>, z <span class="op">=</span> <span class="va">drat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
-<span class="r-in">   <span class="fu"><a href="scale_multi.html">scale_multi</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">l_ggplot</span><span class="op">(</span><span class="va">mpg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">displ</span>, <span class="va">cty</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>      size <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>      mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># p is an `l_ggplot` object, `print.l_ggplot(p)` will be called automatically.</span></span></span>
+<span class="r-in"><span><span class="co"># Then, at printing time, an `l_ggplot` object will be transformed to a `loon` widget</span></span></span>
+<span class="r-in"><span><span class="va">p</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># Assign a widget from current path</span></span></span>
+<span class="r-in"><span><span class="co"># suppose the path of `p` is '.l0.ggplot'</span></span></span>
+<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_getFromPath.html" class="external-link">l_getFromPath</a></span><span class="op">(</span><span class="st">'.l0.ggplot'</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># q is a `loon` widget</span></span></span>
+<span class="r-in"><span><span class="va">q</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># An alternative way to return a real loon widget from `p` (a `l_ggplot` object)</span></span></span>
+<span class="r-in"><span><span class="co"># is to call the function `loon.ggplot()`.</span></span></span>
+<span class="r-in"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">q</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pipe more components</span></span></span>
+<span class="r-in"><span><span class="va">p</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html" class="external-link">facet_grid</a></span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">drv</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="linking.html">linking</a></span><span class="op">(</span>linkingGroup <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"displ versus cty"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># a linked bar plot</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_hist.html" class="external-link">l_hist</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">$</span><span class="va">class</span>, linkingGroup <span class="op">=</span> <span class="st">"mpg"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># a 3D object</span></span></span>
+<span class="r-in"><span><span class="co"># press the button key `R` to rotate the plot</span></span></span>
+<span class="r-in"><span><span class="fu">l_ggplot</span><span class="op">(</span><span class="va">mtcars</span>,</span></span>
+<span class="r-in"><span>         mapping <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">hp</span>, z <span class="op">=</span> <span class="va">drat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>   <span class="fu"><a href="scale_multi.html">scale_multi</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -168,7 +177,7 @@ which will return an interactive <code>loon</code> widget.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

@@ -5,8 +5,8 @@
 [![CRAN status](https://www.r-pkg.org/badges/version/loon.ggplot)](https://cran.r-project.org/web/packages/loon.ggplot/index.html)
 [![](https://cranlogs.r-pkg.org/badges/loon.ggplot)](https://cran.r-project.org/package=loon.ggplot)
 
-<img src="man/figures/logo.png" align="right" width="120" /></a>
-An R package to turn ggplot graphic data structures into interactive loon plots.  Extends the grammar to add interactivity.
+<img src="man/figures/logo.png" align = "right" width="120"></a>
+An R package to turn ggplot graphic data structures into interactive loon plots.  Extends the grammar to add interactivity. 
 
 
 Documentation: [https://great-northern-diver.github.io/loon.ggplot/](https://great-northern-diver.github.io/loon.ggplot/)
