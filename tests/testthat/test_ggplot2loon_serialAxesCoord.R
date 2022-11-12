@@ -36,7 +36,7 @@ test_that("test serialaxes ggplot 2 loon",
               geom_serialaxes_hist() +
               geom_serialaxes_quantile(quantiles = c(0.25, 0.5, 0.75),
                                        colour = c("red", "blue", "green"),
-                                       size = 4) -> p
+                                       linewidth = 4) -> p
             expect_warning(q <- loon.ggplot(p))
             expect_true("l_plot" %in% class(q))
 

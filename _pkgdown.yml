@@ -27,7 +27,7 @@ navbar:
 
   right:
     - icon: fa-github fa-lg
-      href: https://github.com/great-northern-diver/loon,ggplot
+      href: https://github.com/great-northern-diver/loon.ggplot
 
 development:
   mode: release

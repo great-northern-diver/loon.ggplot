@@ -1,3 +1,11 @@
+# loon.ggplot 1.3.3
+
+Fix bugs resulted from the new released version of `ggplot2` 3.4.0
+
+* 1. in `ggplot2` 3.4.0, the aesthetic attribute `size` is no longer recommended to set the line width for all geometric objects. Most errors and warnings are caused by this.
+
+* 2. in the new release of `ggplot2`, `GeomCol` (geometric layer `geom_col`) is now inherited from `GeomBar` (its supper class). Therefore, in the transformation, a `ggplot` with  `geom_col()` layer will be converted to an interactive `l_hist` plot, which should not be (note that, only `geom_bar` and `geom_histogram` could be turned an interactive `l_hist` plot).
+
 # loon.ggplot 1.3.2
 
 * No functionality changes. A minor change is made on the website html.
