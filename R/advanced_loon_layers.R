@@ -486,7 +486,7 @@ loonLayer.GeomCrossbar <- function(widget,
                               label = "bar")
 
            nd <- data[i, ]
-           nd$size <- 3 * nd$size
+           nd$size <- 3 * (nd$size %||% nd$linewidth)
            nd$xend <- NA
            nd$yend <- NA
            nd$x <- nd$xmin

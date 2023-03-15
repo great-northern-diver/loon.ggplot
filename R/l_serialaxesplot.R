@@ -34,7 +34,8 @@ l_serialaxesplot <- function(ggBuild,
   aesData <- activeLayerData[id, ]
 
   color <- aesData$colour[which(!duplicated(aesData$group))]
-  size <- aesData$size[which(!duplicated(aesData$group))]
+  lineWidth <- aesData$size %||% aesData$linewidth
+  size <- lineWidth[which(!duplicated(aesData$group))]
 
 
   dat <- modify_n_dim_data(nDimStates,

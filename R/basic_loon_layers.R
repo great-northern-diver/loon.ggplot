@@ -107,7 +107,7 @@ loonLayer.GeomRect <- function(widget,
   n <- dim(data)[1]
   fillColor <- data$fill
   linesColor <- data$colour
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
   xrange <- ggplotPanelParams$x.range
   yrange <- ggplotPanelParams$y.range
 
@@ -297,7 +297,7 @@ loonLayer.GeomPolygon <- function(widget,
   uniGroup <- unique(data$group)
   fillColor <- data$fill
   linesColor <- data$colour
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
 
   coordinates <- ggObj$coordinates
   if(length(uniGroup) == 1) {
@@ -498,7 +498,7 @@ loonLayer.GeomVline <- function(widget,
 
   isCoordPolar <- is.CoordPolar(ggObj$coordinates)
   n <- dim(data)[1L]
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
   linesColor <- data$colour
   linesDash <- as_loon_dash(data$linetype)
   yrange <- ggplotPanelParams$y.range
@@ -587,7 +587,7 @@ loonLayer.GeomHline <- function(widget,
 
   isCoordPolar <- is.CoordPolar(ggObj$coordinates)
   n <- dim(data)[1]
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
   linesColor <- data$colour
   xrange <- ggplotPanelParams$x.range
   linesDash <- as_loon_dash(data$linetype)
@@ -673,7 +673,7 @@ loonLayer.GeomAbline <- function(widget,
   if(dim(data)[1] == 0) return(NULL)
   isCoordPolar <- is.CoordPolar(ggObj$coordinates)
   n <- dim(data)[1]
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size  %||% data$linewidth, "lines")
   linesColor <- (data$colour)
   xrange <- ggplotPanelParams$x.range
   yrange <- ggplotPanelParams$y.range
@@ -764,7 +764,7 @@ loonLayer.GeomSegment <- function(widget,
   if(dim(data)[1] == 0) return(NULL)
   isCoordPolar <- is.CoordPolar(ggObj$coordinates)
   n <- dim(data)[1]
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
   linesColor <- (data$colour)
   linesDash <- as_loon_dash(data$linetype)
 
@@ -887,7 +887,7 @@ loonLayer.GeomHex <- function(widget,
                   })
   fillColor <- (data$fill)
   linesColor <- (data$colour)
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
 
   method <- get_stat_param(layerGeom, "bins", ...)
 
@@ -1019,7 +1019,7 @@ loonLayer.GeomPath <- function(widget,
            linesColor <- groupData$colour
            len_uni_col <- len_unique(groupData$colour)
 
-           linesWidth <- as_loon_size(groupData$size, "lines")
+           linesWidth <- as_loon_size(groupData$size %||% groupData$linewidth, "lines")
            linesDash <- as_loon_dash(groupData$linetype)
            # a single line with a single color
            if(len_uni_col == 1) {
@@ -1097,7 +1097,7 @@ loonLayer.GeomRaster <- function(widget,
   n <- dim(data)[1]
   fillColor <- data$fill
   linesColor <- data$colour
-  linesWidth <- as_loon_size(data$size, "lines")
+  linesWidth <- as_loon_size(data$size %||% data$linewidth, "lines")
   xrange <- ggplotPanelParams$x.range
   yrange <- ggplotPanelParams$y.range
 

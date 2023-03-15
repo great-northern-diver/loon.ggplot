@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
       </span>
     </div>
 
@@ -54,7 +54,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul><ul class="nav navbar-nav navbar-right"><li>
-  <a href="https://github.com/great-northern-diver/loon,ggplot" class="external-link">
+  <a href="https://github.com/great-northern-diver/loon.ggplot" class="external-link">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -360,7 +360,7 @@ displayed at the back. See examples.</p>
 <span class="r-in"><span><span class="co">######## zneplots --&gt; ggplot ########</span></span></span>
 <span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/great-northern-diver/zenplots" class="external-link">zenplots</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"zenplots"</span><span class="op">)</span> <span class="op">&gt;</span> <span class="st">"1.0.4"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">zen</span> <span class="op">&lt;-</span> <span class="fu">zenplots</span><span class="fu">::</span><span class="fu">zenplot</span><span class="op">(</span><span class="va">iris</span>, plot1d <span class="op">=</span> <span class="st">"density"</span>, pkg <span class="op">=</span> <span class="st">"loon"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">zen</span> <span class="op">&lt;-</span> <span class="fu">zenplots</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zenplots/man/zenplot.html" class="external-link">zenplot</a></span><span class="op">(</span><span class="va">iris</span>, plot1d <span class="op">=</span> <span class="st">"density"</span>, pkg <span class="op">=</span> <span class="st">"loon"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ggzen</span> <span class="op">&lt;-</span> <span class="fu"><a href="loon.ggplot.html">loon.ggplot</a></span><span class="op">(</span><span class="va">zen</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ggzen</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"This is a ggplot"</span><span class="op">)</span></span></span>

@@ -50,6 +50,7 @@ get_modelLayers <- function(len_layers, ggObj, isCoordPolar = FALSE, isCoordSeri
   histogramLayers <- which(
     sapply(layerNames,
            function(layerName){
+             if("GeomCol" %in% layerName) return(FALSE)
              if("GeomBar" %in% layerName) {
                if(isCoordPolar) {
                  warning("loon `l_hist` is built based on Cartesian coordinate system ",
