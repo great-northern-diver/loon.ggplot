@@ -50,9 +50,12 @@
 #' gp <- loon2ggplot(lp)
 #' gp # a ggplot object
 #'
-#' # add smooth layer, grouped by color
+#' # Add a smooth layer
+#' # Reset initial plot object
+#' gp$data <- gp$layers[[1]]$data
+#' gp$mapping <- gp$layers[[1]]$mapping
 #' gp +
-#'   geom_smooth(aes(color = color)) +
+#'   geom_smooth() +
 #'   # give meaningful legend label names
 #'   scale_color_manual(
 #'     # make sure the order is correct
@@ -74,7 +77,7 @@
 #' \dontrun{
 #' # The bins are constructed by `ggplot2::geom_rect()`
 #' # Very limited manipulations can be made
-#' # ERROR
+#' # ERROR will be returned
 #' gh1 + facet_wrap(~fill)
 #' }
 #'
@@ -82,12 +85,10 @@
 #' p <- l_plot(iris, color = iris$Species)
 #' p['selected'][iris$Petal.Length > 5] <- TRUE
 #' g <- loon.ggplot(p)
-#' # It looks correct.
 #' g
 #' # facet by "Species"
-#' \dontrun{
 #' g + facet_wrap(iris$Species)
-#' }
+#'
 #' # Something is wrong here. There is a pink point (at least one)
 #' # in species "versicolor"! It is because after points are
 #' # highlighted, the displayed order has been changed.
@@ -122,7 +123,7 @@
 #' zen <- zenplots::zenplot(iris, plot1d = "density", pkg = "loon")
 #' ggzen <- loon.ggplot(zen)
 #' ggzen +
-#'   patchwork::plot_annotation(title = "This is a ggplot")
+#'   patchwork::plot_annotation(title = "This is a Patchwork!")
 #' }
 #' }
 loon2ggplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
