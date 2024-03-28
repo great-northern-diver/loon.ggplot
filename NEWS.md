@@ -1,3 +1,9 @@
+# loon.ggplot 1.3.4
+
+1. The recently released ggplot2 version 3.5.0 introduces coord_radial as a new function, which conflicts with the function we utilized, leading to the package check failure.
+
+2. Review all examples to ensure they execute flawlessly.
+
 # loon.ggplot 1.3.3
 
 Fix bugs resulted from the new released version of `ggplot2` 3.4.0
