@@ -23,7 +23,7 @@
 #' \dontrun{
 #' # press `R`, then rotate with a minor tweak,
 #' # Issues:
-#' #   1: the points are off the window
+#' #   1: Points are displayed outside the window
 #' #   2: Always in a line shape
 #' l_ggplot(dsamp, aes(x = carat, y = price,
 #'                     z = depth, colour = color)) +
