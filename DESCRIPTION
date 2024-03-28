@@ -3,7 +3,7 @@ Type: Package
 Title: A Grammar of Interactive Graphics
 Version: 1.3.3
 Authors@R: c(
-  person('Zehao', 'Xu', email = 'z267xu@uwaterloo.ca', role = c("aut", "cre")),
+  person('Zehao', 'Xu', email = 'z267xu@gmail.com', role = c("aut", "cre")),
   person('R. Wayne', 'Oldford', email = 'rwoldford@uwaterloo.ca', role = c("aut"))
   )
 Description: Provides a bridge between the 'loon' and  'ggplot2' packages.  Extends the grammar of ggplot to add clauses to create interactive 'loon' plots. Existing ggplot(s) can be turned into interactive 'loon' plots and 'loon' plots into static ggplot(s); the function 'loon.ggplot()' is the bridge from one plot structure to the other.
