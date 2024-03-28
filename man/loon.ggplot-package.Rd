@@ -3,7 +3,6 @@
 \docType{package}
 \name{loon.ggplot-package}
 \alias{loon.ggplot-package}
-\alias{_PACKAGE}
 \title{loon.ggplot: A Grammar of Interactive Graphics}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
@@ -18,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Zehao Xu \email{z267xu@uwaterloo.ca}
+\strong{Maintainer}: Zehao Xu \email{z267xu@gmail.com}
 
 Authors:
 \itemize{
