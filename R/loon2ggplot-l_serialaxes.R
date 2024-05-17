@@ -12,10 +12,14 @@ loon2ggplot.l_serialaxes <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
   if(widget['axesLayout'] == "radial") {
 
-    if(utils::packageVersion("ggmulti") >= "1.0.2") {
-      coord_radial <- ggmulti::coord_radial
-    } else {
-      coord_radial <- ggmulti::coord_radar
+    coord_radial <- function (theta = "x", start = 0, direction = 1, clip = "on") {
+      theta <- match.arg(theta, c("x", "y"))
+      r <- if (theta == "x")
+        "y"
+      else "x"
+      ggplot2::ggproto(NULL, ggplot2::CoordPolar, theta = theta,
+                       r = r, start = start, direction = sign(direction), clip = clip,
+                       is_linear = function(coord) TRUE)
     }
 
     ggObj <- ggObj +
@@ -125,7 +129,8 @@ ggSerialaxes <- function(widget, asAes = TRUE, selectedOnTop = TRUE,
         stat = stat,
         scaling = scaling
       ) +
-      ggplot2::scale_x_continuous(labels = axes.sequence)
+      ggplot2::scale_x_continuous(labels = axes.sequence,
+                                  breaks = seq_along(axes.sequence))
 
     # modify color guides
     uni_color <- unique(color)

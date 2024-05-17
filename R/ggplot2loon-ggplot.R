@@ -29,6 +29,7 @@
 #' @import ggplot2 tcltk loon methods grid rlang stats
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
+#' @importFrom ggmulti andrews geom_image_glyph geom_polygon_glyph geom_serialaxes_glyph coord_serialaxes
 #' @import patchwork
 #'
 #' @export

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Wayne Oldford and Zehao Xu" />
+
+<meta name="date" content="2024-03-28" />
+
+<title>loon plots –&gt; ggplots</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">loon plots –&gt; ggplots</h1>
+<h4 class="author">Wayne Oldford and Zehao Xu</h4>
+<h4 class="date">2024-03-28</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#loon-ggplot-via-loon2ggplot" id="toc-loon-ggplot-via-loon2ggplot">loon –&gt; ggplot via
+<code>loon2ggplot()</code></a>
+<ul>
+<li><a href="#basic" id="toc-basic">Basic</a></li>
+<li><a href="#turn-an-l_compound-object-to-a-patchwork-object" id="toc-turn-an-l_compound-object-to-a-patchwork-object">Turn an
+<code>l_compound</code> Object to a <code>patchwork</code>
+Object</a></li>
+</ul></li>
+<li><a href="#function-loon.ggplot" id="toc-function-loon.ggplot">Function
+<code>loon.ggplot()</code></a></li>
+</ul>
+</div>
+
+<p>Package <code>loon</code> provides the truly direct manipulation and
+package <code>ggplot</code> provides a unified data structure so that it
+is easy to be extended. Data analysts who explore data interactively can
+at any time turn a snapshot of their interactive <code>loon</code> plots
+into <code>ggplot</code>s by the simple translation function
+<code>loon2ggplot()</code>.</p>
+<p>In <code>loon</code>, the current view of any <code>loon</code> plot
+<code>p</code> can be turned into a <code>grid</code> plot in a variety
+of ways:</p>
+<ul>
+<li><code>plot(p)</code></li>
+<li><code>grid.loon(p)</code> or
+<code>grid.loon(p, draw = FALSE)</code></li>
+<li><code>loonGrob(p)</code> to create the grid object.</li>
+</ul>
+<p>The corresponding <code>grid</code> object is a rich structure that
+can be exported, printed, edited, and incorporated into other
+<code>grid</code> structures. However, adapting that structure to
+slightly different presentations is a bit of a challenge compared to a
+<code>ggplot</code> (also ultimately a <code>grid</code> structure).</p>
+<p>In this section, we turn the current state of any <code>loon</code>
+plot into a <code>ggplot</code> plot which can then be modified
+following the rules of the <code>ggplot2</code> grammar.</p>
+<div id="loon-ggplot-via-loon2ggplot" class="section level2">
+<h2>loon –&gt; ggplot via <code>loon2ggplot()</code></h2>
+<div id="basic" class="section level3">
+<h3>Basic</h3>
+<p>Plot the cars ‘horsepower’ versus ‘lp100km’ (100 km per liter) on
+data <code>mtcars</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(loon)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>mt <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt, <span class="at">horsepower =</span> hp) <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg))</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>p <span class="ot">&lt;-</span> mt <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="fu">with</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>    <span class="fu">l_plot</span>(horsepower, lp100km, </span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>           <span class="at">color =</span> gear)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  )</span></code></pre></div>
+<p>Turn <code>p</code> (a <code>loon</code> widget) to a
+<code>ggplot</code> object via a simple function
+<code>loon2ggplot()</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(loon.ggplot)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">loon2ggplot</span>(p)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>g1</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="70%" style="display: block; margin: auto;" /></p>
+<p>The object <code>g1</code> is a <code>ggplot</code> graphic.
+Comparing with the original <code>loon</code> widget, the
+<code>gg</code> one provides a legend that is helpful to decode the
+mapping systems. However, since <code>loon</code> widgets do not store
+the original data information, the labels of each legend are the
+hex-codes of the color. To better convey the graphics from aesthetics to
+data, we can edit the legend with more reasonable labels and add titles
+on top to emphasize the variables.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>g1 <span class="sc">+</span> </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#999999&quot;</span>, <span class="st">&quot;#A6CEE3&quot;</span>, <span class="st">&quot;#FFC0CB&quot;</span>), </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>                    <span class="at">name =</span> <span class="st">&quot;gear&quot;</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>                    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;4&quot;</span>, <span class="st">&quot;3&quot;</span>, <span class="st">&quot;5&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="at">label =</span> <span class="st">&quot;horsepower versus lp100km&quot;</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">&quot;loon --&gt; ggplot&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">theme</span>( </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">12</span>, <span class="at">face =</span> <span class="st">&quot;bold&quot;</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="70%" style="display: block; margin: auto;" /></p>
+<p>Comparing with static <code>grid</code> (via
+<code>loonGrob()</code>), modification of <code>ggplot</code> (via
+<code>loon2ggplot</code>) is simpler and more creative. Moreover,
+<code>ggplot</code> has over 100 extended packages. After transforming
+from <code>loon</code> to <code>ggplot</code>, users can continually
+take advantage of these extensions.</p>
+</div>
+<div id="turn-an-l_compound-object-to-a-patchwork-object" class="section level3">
+<h3>Turn an <code>l_compound</code> Object to a <code>patchwork</code>
+Object</h3>
+<p>Considering the following <code>loon</code> pairs plot (an
+<code>l_compound</code> widget) with three variables ‘lp100km’ (100 km
+per liter), ‘weight’ (car weight) and transmission (automatic or
+manual).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>mt <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>  <span class="fu">select</span>(lp100km, weight, transmission) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>  <span class="co"># and pass the built plot on</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>  <span class="fu">l_pairs</span>(<span class="at">showHistograms =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>          <span class="at">linkingGroup =</span> <span class="st">&quot;Motor Trend 1974&quot;</span>) <span class="ot">-&gt;</span>  <span class="co"># and assign the result.</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>  l_pp</span></code></pre></div>
+<p>It produces an interactive pairs plot with histograms on the margins
+(see <code>?l_pairs</code>) and assigns the result to <code>l_pp</code>
+(which could have been assigned at the beginning with <code>&lt;-</code>
+as well). Now, turn this pair plot to a <code>gg</code> object. Note
+that the compound <code>loon</code> widget like <code>l_pairs</code>
+(the shown one), <code>l_ts</code> or <code>l_facet</code>, etc, are
+created by <a href="https://patchwork.data-imaginist.com/index.html"><code>patchwork</code></a>.
+Features like <code>theme</code>, <code>labels</code> can be set by the
+<code>patchwork</code> rule.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">loon2ggplot</span>(l_pp)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>g2</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAWUAAAEqCAMAAAD6VbEwAAAAh1BMVEUAAAAAADUAAF8ANYUAX18AX6k1AAA1ADU1AF81NV81NYU1X181hak1hcxfAABfADVfAF9fNQBfNTVfNYVfXwBfqe2FNQCFNTWFNV+FhTWFzO2ZmZmpXwCpXzWphTWp7amp7e3MhTXMqV/MzIXM7anM7czM7e3tqV/tzIXt7ant7czt7e3///8SyrkeAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAKEklEQVR4nO2djXbaNhiGtWQ0LStpu410g64LTRcg4v6vb7Yl25ItY9mSX/zzPoeTgIAP+UH5JMuOLCQZHnHrCiwCWkZAywhoGQEtI6BlBLSMgJYRACxfolIJXdzzL7n2koGgZTkPy4rKJla3+NLlYRmUlm1oGQEtI6hZ3lcwn/W2XA1Sg5ZpOSINg4Wqj45jDHeQGn1GLvFhW3YGjgwtOwNHhpadgSMz2bysQtNyDi1PN2O4v6oafb67+NAyLbP36wgtI6DlYWlIhVUffTIoLVdgW0ZAywg4kkNwo7bc3tadgSMz996Plmk5OswYCGgZAS0juNFIro3ZjOSG6f1o2QUzBgKv7aXlQGgZAS0Pi2c/xX2/IGh5uhmDIzkXsS2rkmDLDYEjQ8vOwJGhZWfgyNCyM3BkxjPGqMIxRg/6bD/HGF2hZQSxLauSYMsNgSPDvCxpmZa70Wf7mTG6EuxjT8vt0DKC2JY5knMR23IG23JBpFa35xijnXDLbMvt0DICWkZAy8MyTO/HkZxNw4RET4aNOhBc6cwZODK07AwcGVp2Bo4MLTsDR4brLyOgZQS0jICWEdAyAlpGQMsIaBkBeq+kuqdxZaeh6R1m0KZgrZ9W+3RX1Cv7On4vyqFlO94wE30TsSxEcqtbFsJ+LS0XG2IXeFkW+316q8Ysy5gxGurSwbKSXNNslNFy+J9eYdn4M1TFqiwcu8LGEav8w4rnys+vFk29LaMzxkIto3o/XbhUy1aBEbRFIi2P0bLO0vUzCQKTPS07qsq2bAelZRtaHpYIw1lHshsmqgpNy8NGVaGnaLmhLswYAzAJy7plcyRnB6VlGz/LyS5zF8vD72E7qdfbXVLW0/Epg+BlWWRzbC3vKAHMFs3Qsp7KbHlHwWDzy7RsQMsGHfoL0T4rb0b1eLkndoWnaLmhLrXWlHZl7P3CaN3uvCtzm0p91isvBHs/i7btFnshMs1OU9lXUMvLaWlYXhb29uv80Wa5cxoai2WhlAm3KbtbzCm+mN6WXQcTZ9yWhT5IvXfn5QbLoW3ZdfqBnKtl1Y6V5Ya9EnfGKCVN3PJp/arvnT8/S3kUYqt/ls940bzdWnH+y7/3Cx8vjyVjFC7Pj3fP8vxpd3r/rH56W27pI4pGrJp0UnB1DGxEVRnDsytyf3Sa2O2O6kaWXz58ESv59te/SVtOzL593RU/D6tT8uTHJ7EJtqwMp85adjXMqOkXEyDZODmpm+VWelh+2L09bVXGOK6k/LZVP0/rHxt5etilN49mfT1jSH1ii5kGmt5R1j36GEPbD7ZsNwgvy4nCw8Zh+d1d1rjVrSVMS++n7mXb3MXyrcbLA1u2M8b3TRzLenu1X1Hp0UY4W9RKNWK3jGH3fj8/7aJZLk+evVT2mhdiOev9nCO54/1LJMvFQMPDVFn38IwxEsuy67i4CR/L2exPB8vBvd8iLJfTFrpZdjsiFb/308/dwHIw14arorgrstu+dV7eiBp+Ln5Rg+lb1lXPfxd3cklZNbL76CNStXmMW43kolHZbpFPdQqVOVTPBz6GbSR2q6rBlmsVve4mHvZ2ZwM3NRWnDat/aOh2RCr0WImR2K2qzsSymSB0q/Y3VXCzmc9pWBZWGtYtmpYjYGy3sGY6i03tbjn4WMmMMoZr/KTnhfVMZ5fxmBG1nB7uPZDrN788CcuVKeRu566YUYPPeqmOl3VxsGW7qjfJGHoiOf8bLk8RyF9Qe0elICfCHvZIZj6jUWxWcXaLLg/Iy/k7e1vuedyvlWpEsGWxr0utakfuleznOMYwl2Aot7vjOMEg8Dy52VlWu2n5GQHZtuhNKvuzSoGH5ba02zqSK/cezahTtZzveeSnaclRWJ5ZXi5Oz8qmK8Ro2nJWrXrUiVvOJoOEe0hBy0Hkw/+9uUfde0fCjBpKeXKSHTTYsl1VbO9nzhGNpC3PcH7ZmIOTI7G8d2aMapUcJX4vyoGOl/WhkNH0fk1jjGlbdh0KuanlhmPYE7csr2z3TSxf6jFpuRaUlkkBLSOgZQS0jICWEdAyAlpGMG3Lw46XL1EepdByc1RaVsS2HGPSuqSMO23LvJIGgKHWemHGyLlE+G93V7OTtGwD+a9KWqZlAJD/XV28ZchKZ8u2nHVakfq+0r2ifmpFSFA5dcvRsEOzLVsMtIdNyxa0jICWEQw0W8Tez4KWETBjDExAG7va7CQtVwG05dK29QZalrQcFeC6+Mu1HPq/qz5jjICxhlHRiBuNBro24jLb8iXC+hg+Y4zFW4ZeFWaZliUzBob4lnXLZu9nAF3lesGWRdMCBZ6WO6wpMI+MkS+Nq36f//BYKDd43aIu/+0+D8s5yrLXcsTQa+9M03Lq8dtKvn3dpUuTr7KlycXd39v02hyrtydx36L5MvaVgUdhOdF7/r1Y7z29MMfPT7vz4/b0sDt/9rvkTIQxxoCrXI/Csjxsjpt/dodN2pSF2KiLSaS29WUkPEIEz2OM5Xolw3Faf98eP6YJY6UedrYM7f0m2pbfvn54Pv2WjCVO2aU6iozRxfI+LGMswLI83L++PaVXoDJ6vz+15fOjR+8Xf51PHXpOlh2kIw5PlKXAyaLicl926DlbPj+K6xdXqxN4RKq2/rKWH2z5UvnqRmS5B6GWUyO03EZsy/q5YMvWR8mlWx5yxfb5WA5ds3bI1VRnY3nUV4WZheVLlNmifiM5OZk5uQhEWLG9kjA8xxie36FR07gbjiU4Y/TMy3JJbTlC79dvjCGXZflG42VJy+ZjWg4kZGhRjjH6zclJWu4kuXIdKV3eZtkzfFnZyVrOuNFsES1bjznGiEGg5dpeiX6Oli3YlhFwJIdgIMse7hZiucuIrZGGa1VGoqzsZC1nhPZ+16/xwLasCLZc2euzC2lZQcsIaJmU0DICWkZAywhoGQEtI6BlBLSMgJYR0DICWkZAywhoGQEtI6BlBLSMgJYR0DICWkZAywhoGQEtI6BlBLSMgJYR0DICWkZAywhoGQEtI6BlBLSMgJYR0DICWkZAywgmb7n1ahD2Us5+i5THZvKWb6OtI1O3nF4N4uXDl7vnQ7ZU9m+Pyc+kTGxkerGIj0/pgvv/ZY916fr1kP3OXoli6pZTbaeHXforvTTE++fk53El0/sPu/S2fln/yB7r0vVL8ppPO/VKVCVnYTlNGqd34pedXlT/XdpMT/oyHS/rF/VYlybOi4scoCo5F8vHu6yFaneJ0W1p+TV7nJfScg9yyyt5zNvyIfW4KS1/zx7npTpj0HIXzo/3aWs9P4pf88twyG9C3L8abTl7XJQmvd9W0vL8oGUEtIyAlhHQMgJaRkDLCGgZAS0joGUEtIyAlhHQMgJaRkDLCGgZAS0joGUEtIyAlhHQMgJaRkDLCGgZAS0joGUEtIyAlhHQMgJaRkDLCGgZAS0joGUEtIyAlhHQMgJaRkDLCGgZwf9FAQmoWiDQPgAAAABJRU5ErkJggg==" width="70%" style="display: block; margin: auto;" /></p>
+<p>The object <code>g2</code> is a <code>patchwork</code> object. We can
+fit a smooth line on the <code>lp100km vs weight</code> scatterplot and
+draw a density curve on the <code>weight</code> histogram. Additionally,
+a title is added.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># Add a regression line on the `lp100km vs weight` scatterplot</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>g2<span class="sc">$</span>patches<span class="sc">$</span>plots[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> g2<span class="sc">$</span>patches<span class="sc">$</span>plots[[<span class="dv">1</span>]] <span class="sc">+</span> </span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co"># Add a density curve on the `weight` histogram</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>g2<span class="sc">$</span>patches<span class="sc">$</span>plots[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> g2<span class="sc">$</span>patches<span class="sc">$</span>plots[[<span class="dv">4</span>]] <span class="sc">+</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">geom_density</span>()</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># Add a title</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> g2 <span class="sc">+</span> </span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>  patchwork<span class="sc">::</span><span class="fu">plot_annotation</span>(<span class="at">title =</span> <span class="st">&quot;Mtcars Pairs Plot&quot;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>g2</span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="function-loon.ggplot" class="section level2">
+<h2>Function <code>loon.ggplot()</code></h2>
+<p><code>loon.ggplot()</code> function in <code>loon.ggplot</code>
+package is an <code>S3</code> method and gathers features of both
+<code>loon2ggplot()</code> and <code>ggplot2loon()</code>. It can take
+either a <code>loon</code> widget or <code>gg</code> object and
+transform back and forth.</p>
+<p><code>Loon</code> to <code>ggplot</code>:
+<code>loon.ggplot(loon)</code> is equivalent to
+<code>loon2ggplot(loon)</code>.</p>
+<hr />
+<p>See the vignette <code>A Grammar of Interactive Graphics</code> for
+more.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

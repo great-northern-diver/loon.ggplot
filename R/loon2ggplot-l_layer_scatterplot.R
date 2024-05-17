@@ -1,5 +1,4 @@
 #' @export
-#' @import ggmulti
 #' @rdname loon2ggplot
 loon2ggplot.l_layer_scatterplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                                             showNearestColor = FALSE, ...) {
