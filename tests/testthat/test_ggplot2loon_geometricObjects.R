@@ -87,7 +87,7 @@ test_that("geometric layers (ggplot to loon)", {
   p <- ggplot(mtcars, aes(log10(hp), log10(mpg))) +
     geom_bin2d() +
     geom_abline(intercept = mod_coef[1], slope = mod_coef[2],
-                colour = "white", size = 1) +
+                colour = "white") +
     facet_wrap(~am, nrow = 1)
 
   g <- ggplot2loon(p)
@@ -101,7 +101,7 @@ test_that("geometric layers (ggplot to loon)", {
     colour = approx(df$x, df$colour, xout = xgrid)$y
   )
   p <- ggplot(interp, aes(x, y, colour = colour)) +
-    geom_line(size = 2) +
+    geom_line(linewidth = 2) +
     geom_point(data = df, size = 5)
   g <- ggplot2loon(p)
   expect_equal(class(g), c("l_plot", "loon"))
@@ -139,11 +139,12 @@ test_that("geometric layers (ggplot to loon)", {
   expect_equal(class(g), c("l_plot", "loon"))
 
   p <- ggplot(data = mtcars, mapping = aes(x = mpg, y = hp))
-  pp <- p + geom_point() + geom_density_2d(lwd = 1.5, col = "steelblue")
+  pp <- p + geom_point() + geom_density_2d(linewidth = 1.5,
+                                           col = "steelblue")
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_plot", "loon"))
 
-  pp <- ggplot(mtcars, aes(hp, colour = am)) +
+  pp <- ggplot(mtcars, aes(hp, colour = factor(am))) +
     geom_density(na.rm = TRUE) +
     xlim(100, 200)
   g <- ggplot2loon(pp)
@@ -270,7 +271,7 @@ test_that("geometric (histogram, bar) layers (ggplot to loon)", {
 
   #### TODO:This is an interesting case
   #### FIX LATER
-  pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = ..density.., fill = trans))
+  pp <- ggplot() + geom_histogram(mpg, mapping = aes(x = cty, y = after_stat(density), fill = trans))
   g <- ggplot2loon(pp)
   expect_equal(class(g), c("l_hist", "loon"))
 

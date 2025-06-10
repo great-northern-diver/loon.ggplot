@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Wayne Oldford and Zehao Xu" />
+
+<meta name="date" content="2024-03-28" />
+
+<title>Pipes</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Pipes</h1>
+<h4 class="author">Wayne Oldford and Zehao Xu</h4>
+<h4 class="date">2024-03-28</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#using-gg_pipedata-ggplotobj" id="toc-using-gg_pipedata-ggplotobj">Using
+<code>gg_pipe(data, ggplotObj)</code></a></li>
+<li><a href="#using-l_ggplot" id="toc-using-l_ggplot">Using
+<code>l_ggplot()</code></a></li>
+<li><a href="#just-use-loon-for-built-in-interactive-plots" id="toc-just-use-loon-for-built-in-interactive-plots">Just use loon for
+built-in interactive plots</a></li>
+</ul>
+</div>
+
+<p>The <code>magrittr</code> package provides several different types of
+pipes which can be a handy way to organize computation, especially when
+the computation involves processing data for input to another procedure,
+in this case <code>ggplot()</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(dplyr)  <span class="co"># load this to also have dplyr functionality</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>p1_piped <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> weight, <span class="at">y =</span> lp100km)) <span class="sc">+</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Litres per 100 kilometres&quot;</span>) <span class="sc">+</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Gas usage&quot;</span>)</span></code></pre></div>
+<p>Here the “pipe” <code>%&gt;%</code> takes the output of its left hand
+side and pushes it into the first argument of its right hand side.
+Arbitrary many pipes may be gathered together.<br />
+This connects nicely with <code>ggplot2</code>’s addition <code>+</code>
+operator (<code>+</code> itself is sometimes a pipe, sometimes a layer
+in <code>ggplot</code> construction) to create the <code>ggplot</code>
+from the data and assign it to <code>p1_piped</code>.</p>
+<p>Two things to note here are. First, the result of the data
+manipulation is assigned at the beginning using the <code>&lt;-</code>
+assignment function which seems to run counter to the data flow
+indicated by the pipes. A more consistent flow would be to have instead
+written</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> weight, <span class="at">y =</span> lp100km)) <span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Litres per 100 kilometres&quot;</span>) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Gas usage&quot;</span>)  <span class="ot">-&gt;</span>   <span class="co"># Note assignment occurs here</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  p1_piped</span></code></pre></div>
+<p>Now the assignment operator <code>-&gt;</code> is used at the end,
+matching the data flow of the pipes.</p>
+<p>Second, in either case the <code>ggplot</code> is
+<strong>not</strong> itself displayed (or rendered) until it is
+printed.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>p1_piped</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYAAAAGACAYAAACkx7W/AAAEDmlDQ1BrQ0dDb2xvclNwYWNlR2VuZXJpY1JHQgAAOI2NVV1oHFUUPpu5syskzoPUpqaSDv41lLRsUtGE2uj+ZbNt3CyTbLRBkMns3Z1pJjPj/KRpKT4UQRDBqOCT4P9bwSchaqvtiy2itFCiBIMo+ND6R6HSFwnruTOzu5O4a73L3PnmnO9+595z7t4LkLgsW5beJQIsGq4t5dPis8fmxMQ6dMF90A190C0rjpUqlSYBG+PCv9rt7yDG3tf2t/f/Z+uuUEcBiN2F2Kw4yiLiZQD+FcWyXYAEQfvICddi+AnEO2ycIOISw7UAVxieD/Cyz5mRMohfRSwoqoz+xNuIB+cj9loEB3Pw2448NaitKSLLRck2q5pOI9O9g/t/tkXda8Tbg0+PszB9FN8DuPaXKnKW4YcQn1Xk3HSIry5ps8UQ/2W5aQnxIwBdu7yFcgrxPsRjVXu8HOh0qao30cArp9SZZxDfg3h1wTzKxu5E/LUxX5wKdX5SnAzmDx4A4OIqLbB69yMesE1pKojLjVdoNsfyiPi45hZmAn3uLWdpOtfQOaVmikEs7ovj8hFWpz7EV6mel0L9Xy23FMYlPYZenAx0yDB1/PX6dledmQjikjkXCxqMJS9WtfFCyH9XtSekEF+2dH+P4tzITduTygGfv58a5VCTH5PtXD7EFZiNyUDBhHnsFTBgE0SQIA9pfFtgo6cKGuhooeilaKH41eDs38Ip+f4At1Rq/sjr6NEwQqb/I/DQqsLvaFUjvAx+eWirddAJZnAj1DFJL0mSg/gcIpPkMBkhoyCSJ8lTZIxk0TpKDjXHliJzZPO50dR5ASNSnzeLvIvod0HG/mdkmOC0z8VKnzcQ2M/Yz2vKldduXjp9bleLu0ZWn7vWc+l0JGcaai10yNrUnXLP/8Jf59ewX+c3Wgz+B34Df+vbVrc16zTMVgp9um9bxEfzPU5kPqUtVWxhs6OiWTVW+gIfywB9uXi7CGcGW/zk98k/kmvJ95IfJn/j3uQ+4c5zn3Kfcd+AyF3gLnJfcl9xH3OfR2rUee80a+6vo7EK5mmXUdyfQlrYLTwoZIU9wsPCZEtP6BWGhAlhL3p2N6sTjRdduwbHsG9kq32sgBepc+xurLPW4T9URpYGJ3ym4+8zA05u44QjST8ZIoVtu3qE7fWmdn5LPdqvgcZz8Ww8BWJ8X3w0PhQ/wnCDGd+LvlHs8dRy6bLLDuKMaZ20tZrqisPJ5ONiCq8yKhYM5cCgKOu66Lsc0aYOtZdo5QCwezI4wm9J/v0X23mlZXOfBjj8Jzv3WrY5D+CsA9D7aMs2gGfjve8ArD6mePZSeCfEYt8CONWDw8FXTxrPqx/r9Vt4biXeANh8vV7/+/16ffMD1N8AuKD/A/8leAvFY9bLAAAAOGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAACoAIABAAAAAEAAAGAoAMABAAAAAEAAAGAAAAAAE9IQwkAAEAASURBVHgB7Z0HuBRFtscPOQfJOUgG5ZEXhCVLliAGBITn4mJ4CCJBQFkEFgnioshTBFEQJOcsIChBsoiSJOecc3Re/+ttz/bMnZnbc+/0TPfMv77v3ulYfepXM3W6qk6dk8SlJWEiARIgARKIOQJJY67ELDAJkAAJkIAiQAXALwIJkAAJxCgBKoAYrXgWmwRIgASoAPgdIAESIIEYJUAFEKMVz2KTAAmQABUAvwMkQAIkEKMEkju53LBg3b17t6xfv142bNggx48flzJlykjFihWlQ4cOkiJFCicXj7KTAAmQgKUEkjh1HcDly5elffv2smzZMsmaNauULVtWsmTJIr///rvs379fKleuLNOmTZMiRYpYCpCZkwAJkIBTCThSAeDNv0GDBrJmzRoZMGCA9O3bV5In/09nZt68edKxY0elBH744Qen1g3lJgESIAFLCST7QEuWPsGCzBcuXCgffvih9O7dWwYPHixJk3pOZZQqVUoePHgg33zzjbRo0UJy587tluLevXuyb98+2bp1q9y+fVsyZszoc6jojz/+kM2bN8utW7ckc+bMPq9xZ6ptnDx5UpB3unTpjIfl6NGjaj916tTu4zdu3JAtW7aonkqqVKmUDO6T/94wKycu37lzpxw5ckRy5Mgh9+/fl1OnTkmGDBk8uDx69EiVe/v27UpZokxMJEACMU4AQ0BOS927d4f7CtelS5f8in716lWXNhzkcX7SpEkureFT92pKQ31my5bNtXTpUvd1WoPvql+/vjqXLFky9ZkpUybXjBkz3Nf42ihUqJCrdevWHqe0xljdr/VQ3MdnzZrl0pSOR/5Nmzb1KIsZOZHh8uXLXXny5FF5oTzYxrPA5sSJE+5nao2+q2TJkh7PbNSokevs2bPua7hBAiQQewTEiUWuWrWqq2DBgkGJ/ttvv6kG8KWXXnIdOnTIhYZ+wYIFLm3+wFW4cGF3XgMHDnRpw0kubW7BdffuXZc2n+CqUaOGS3uzd2lv7u7rvDfMKIA7d+640qRJ43r22Wddx44dc2k9ENfEiROVXNpQlsrSrJwHDhxQyqxZs2auM2fOuG7evOnSekUqL6MCgJJEGbU5ElVeKKW1a9e68ubN66pXr553MbhPAiQQQwT+M3DukJ7Qw4cP5ZdffhHtLT2OxPPnz1fDH1r9uc898cQTUrt2bblw4YK88sorMmLECNHe+tX55s2bS8uWLWXChAmCfDGPgKEUDI9UqlRJMDxTrFgxdR7DLBhGSUw6d+6caEpATVgXKFBAZYW5irRp04qmQNS+WTnHjBkjf/75p3z77bfy2GOPqXsxFwKLKK1Ho/bxb9SoUaIpAZk6daqaN8Gxv/71r9KrVy95++23RVMGUrNmTRxmIgESiDECjlMAaKSzZ88u2ht0nKr69NNP5ccff/Q4/sYbbygFULduXcEfxt83bdqkxsN37dolq1evVtdrb/uSPn16efHFF2Xy5MlStGhR0YZJ1F+TJk3k+eef98g3ITtar0WqV68umHbBPEbjxo3VnzZ05B6vNysnlGD58uXdjb8uDybHjQoA12H+Aeaye/bs0S8TbfhHbWs9DioANxVukEBsEXCcAkD1oBGdPXu2mqA1TrouXrzY/ZaOyVttTNxdm5hUhTJA4463/Zw5c6q3fLyJ461f7zWg0V+1apV8/PHHqpHWxv5FmwuQv//97wIFkzJlSnee8W3oeRqvW7FihQwZMkRmzpypPrENxYA39KeeekpNJJuREzJXqFDBmLXahimsMWFyOkmSJPLVV18ZD6vt0qVLq+fFOcEDJEACsUHAicNdWkOsxrq1RtOv+Bjj12rQpTWm6poePXq4tIbQNXLkSI8J0tdee01dd+3atTh5Ycz++++/d2GcHXmNHz8+zjX6gccff9yFyVxj0hppdZ9xEth4HnMRKAsmmfPly6dOmZVTUxYuTQEYs1PbmkJRz9QngbXei0uzCFJzHnEu5gESIIGYJuBpP+kQnde2bVvB2D7G9I3DHUbxMR9gTFgzgLd9rYEVrbFVp2Aq+vPPP6ttfXwfeWJMXPtWqKETDKl8+eWX6pqDBw8as/TYhjkp3raNCUNNxrRt2zbRJpxVzwLHNaUhXbt2VcNO2kSuaBO5am2DGTnRU9mxY4dgCEdPKMOUKVP0XfWJBXEY9sLaCGOCiSwWycEclYkESCBGCThV/WkTqi7N7YNLG5JRb95Dhw51oUfQp08fl9boqbdgbQLXpc0JqCK2adNGHRs7dqxLm2h1bdy40aWtEXDppp6wykHShpHUdTA1hfkkrmvXrp3qPaxbt05d4+ufNqGq7sPzcR96CzAxhdWP3gPQJm2VbMWLF3dpq5RdmkJxaQ22Sxu2UaanyNesnNevX3dpQ0cubSjLNXr0aJVPrVq1FA/tq+zSlJESEz2bXLlyqeu0NROuvXv3KssjmKJ691h8lYvHSIAEopeAI81A9eqAEtAWg7kwHAJFgIZP8//jevLJJ13Dhw93aeP++qWqQdR6Dmq4BddpFj4u7e3btXLlSnWfNjfgvhaNuZ4froV9/Zw5c9znfW3A3BJDRRhmwj1odDF8pE0muxUA7tN6AS5t7F1dg+vwnFatWrmuXLmiskXDbVZOlF+btFbyQcYuXbq4+vfvr/LWXGW4xYSiqVOnjodsnTp1cisJ94XcIAESiCkCjnQFoTWccRKseDAximENrVGNc14/gJWysCDCUIzRfYR+Xv+EuSacy2Fox7iSWD/v71N74xb4KUL+gRKscHAdrI18yRufnJANE+Dwg2RMPXv2FK1HoMxNMXltTFj5jFXCeCYmhplIgARim0DUKIBYq8ZBgwaJtmhNYMoK1xdIp0+fdntDhSUTEwmQAAkEIkAFEIiOjc9pVj7KjBXmrtrYv5q01uYolD+gn376yT3RbeMiUDQSIIEIE6ACiHAFJObxGNLRJrlFm2tQzu+qVaumFq5hoRwTCZAACcRHgAogPkI8TwIkQAJRSsCR6wCitC5YLBIgARIIKwEqgLDi5sNIgARIwD4EqADsUxeUhARIgATCSoAKIKy4+TASIAESsA8BKgD71AUlIQESIIGwEqACCCtuPowESIAE7EPAcfEAEDEL/vyDSXB7AJcOcNNgtwRXDiiPHWVDpDHNR5HdkKnAPXCDgQhrdksIKoTYE/A0a6ekB1K6ePGiLWVD0CJ4w7VbypEjh2C9jR1lM/P7RFRD7xghRsbsARhpcJsESIAEYogAFUAMVTaLSgIkQAJGAlQARhrcJgESIIEYIkAFEEOVzaKSAAmQgJEAFYCRBrdJgARIIIYIUAHEUGWzqCRAAiRgJEAFYKTBbRIgARKIIQJUADFU2SwqCZAACRgJUAEYaXCbBEiABGKIgONWAsdQ3bCoJEACUUTg7t27qjRY9Ww2YUU5/pIlSyZY1RvqxB5AqIkyPxIgARLwIvDhhx9K6dKlpVixYlK2bFnRlYHXZR67+/fvV/G+cX3hwoVV+FePC0KwQwUQAojMggRIgAT8ERgwYIB89dVXqtF/9OiRXL16VZ5//nlxuVz+bpFLly5J7dq15ejRo8oXES7s2LGj7Nixw+89CTlBBZAQaryHBEiABEwSmDx5sscbP5w/Hj58WPbt2+c3h5kzZ0qKFCk8zmMoaPz48R7HErtDBZBYgryfBEiABAIQSJkyZZyzUAKBvBrjnK8ewv379+PklZgDjpsETpo0qcC1bTAJ7qATcl8wz0jotXaXLVjWCeUQzH2oSyS7yoYJO18/3mDKGOprdVZ2lS2af5+tW7eWiRMnenwnbty4oeYCUB++UosWLWTo0KFxTnXu3Nn9vUfboddrnAv/fQDXBEpJtC+q/4GoQHdG6Nz169clvkL5Eg0z72YmXnzda+WxtGnTyp9//mlL2dKkSSN37tyxsvgJyhtvVPizo492yIW3N9SpnRIaWMRQuHXrli1lQ0MW6rfbUPAHMwy9JEY2jPs3aNBAtm7dquKSFChQQBYvXhzQTz9kX7dunTRt2lTg9x8yDB48WDp16uQulpnfJ5p3xELxlxynABgQxl9Vhv64mYAToX9q/Dki6AoDwsTPyXgFGtjs2bMLA8IYqcS/HcqAMKdPn1aKBApA78XGJwEU9vnz55USyJw5s8flZn6f8QWECW4sxePx3CEBEiABEjBLIE+ePGYvdV+HFx2YgFqVOAlsFVnmSwIkQAI2J0AFYPMKongkQAIkYBUBKgCryDJfEiABErA5ASoAm1cQxSMBEiABqwhQAVhFlvmSAAmQgM0JUAHYvIIoHgmQAAlYRYAKwCqyzJcESIAEbE6ACsDmFUTxSIAESMAqAlQAVpFlviRAAiRgcwJUADavIIpHAiRAAlYRoAKwiizzJQESIAGbE6ACsHkFUTwSIAESsIoAFYBVZJkvCZAACdicABWAzSuI4pEACZCAVQSoAKwiy3xJgARIwOYEqABsXkEUjwRIgASsIkAFYBVZ5ksCJEACNidABWDzCqJ4JEACJGAVASoAq8gyXxIgARKwOQEqAJtXEMUjARIgAasIUAFYRZb5kgAJkIDNCVAB2LyCKB4JkAAJWEWACsAqssyXBEiABGxOgArA5hVE8UiABEjAKgJUAFaRZb4kQAIkYHMCVAA2ryCKRwIkQAJWEaACsIos8yUBEiABmxOgArB5BVE8EiABErCKABWAVWSZLwmQAAnYnAAVgM0riOKRAAmQgFUEqACsIst8SYAESMDmBKgAbF5BFI8ESIAErCJABWAVWeZLAiRAAjYnQAVg8wqieCRAAiRgFQEqAKvIMl8SIAESsDkBKgCbVxDFIwESIAGrCFABWEWW+ZIACZCAzQlQAdi8gigeCZAACVhFIGwK4MqVK7Jq1So5c+ZMnLL88ccfsmLFCrl48WKcczxAAiRAAiRgDYGwKIAFCxZI165d5ciRIzJw4ED55JNP3KUZNWqUfPTRR7Jjxw7p1KmTHD9+3H2OGyRAAiRAAtYRSG5d1v+f86NHj2Ty5MmqkS9cuLC0a9dOXnjhBenYsaNcu3ZN1q1bJ7Nnz5akSZPK9OnT5bvvvpO+fftaLRbzJwESIIGYJ2C5AkiWLJlMmjRJ0qVLp2DfvXtXbt68KVAMhw8flrJly6rGHycrVKggS5Ys8aiUnTt3yvbt293H6tWrJ4899ph73+xG8uTJ3TKYvScc10Hx2VU21J1eb+FgYfYZKVKkkCRJkthWNtRpypQpzRYnLNdBJqQ0adLYUja7/gbwPUNd2vF3YOb36XK5An6/LFcAeLoO788//5RPP/1UGjVqJNmyZVPzAZkyZXILmDFjRrl06ZJ7HxubN2+W0aNHu49Vq1ZNChQo4N4PZgMNhx0TKtKusmXIkMGOyJRMdpbNrtDSpk1rV9EkVapUtpQNCsBuCl0HFd9v4M6dO/qlPj/DogDw5Hv37smgQYMEGum9995TwqDhQ09ATw8fPlRvKPo+Pjt37qz+9GMXLlyQs2fP6rumPqHFoVww5GS3lDVrVkG57SgbelqYvLdbSp8+vXqpOHfunN1EE8iG7/qDBw9sJRvesLNnz65esOwoW+rUqdXIgK2gacLkyJFDbt++bUvZzPw+oVQDKf2wTAIDYM+ePQXaavDgwW5tii/k5cuX3XWO7dy5c7v3uUECJEACJGAdgbAogAEDBkiJEiWkT58+grd+PVWuXFl27dolJ06cUG/BixYtkipVquin+UkCJEACJGAhAcuHgPbu3SubNm1SfzNnznQXZcyYMWoCGEM8r776qmTJkkUKFiwobdu2dV/DDRIgARIgAesIWK4ASpUqpUw9/RWhWbNm0rBhQzVuivFTJhIgARIggfAQsFwBmCkGLGDsagVjRn5eQwIkQAJOJBCWOQAngqHMJEACJBDtBKgAor2GWT4SIAES8EOACsAPGB4mARIggWgnQAUQ7TXM8pEACZCAHwJUAH7A8DAJkAAJRDsBKoBor2GWjwRIgAT8EKAC8AOGh0mABEgg2glQAUR7DbN8JEACJOCHgGkFAFfOy5cvl/v376usRo4cKS1atJBvvvnGT9Y8TAIkQAIkYGcCphUAXDjDbQNi+k6dOlU5dkPBEOpxxowZdi4jZSMBEiABEvBBwLQC+OKLL2Tp0qXKYRtCPDZt2lQQ6xc+/hHKkYkESIAESMBZBEwpAPjpv3HjhtSuXVsQYebHH3+UVq1aqZIWKVJELl686KxSU1oSIAESIAEx5QwOkWcQVQYB3DEEhHkAhHVEJCsM/9SpU4coSYAESIAEHEbAlAJASEXMAcBtMyaD33rrLcmVK5e0bNlSxex99913HVZsiksCJEACJGBKAQATonk1btxY7t69647a1a1bN7WtB30nThIgARIgAecQMDUHoBenePHicuTIERXX9/Tp0yrGb5o0afTT/CQBEiABEnAQAdM9AIR2RA/g7NmzahjomWeekf79+8u1a9dk7ty5akjIQeWmqCRAAiQQ8wRM9wA6deok1apVk/Pnz0v+/PkVuIkTJ0rSpEll2rRpMQ+SAEiABEjAaQRMKYDbt2/Lli1blM1/xowZ3WXMmTOnYB4A6wOYSIAESIAEnEXAlAJInjy5etO/detWnNLt3r1bnYtzggdIgARIgARsTcCUAkiZMqU0aNBAunfvLlu3blUFQq8ALiGwQhhrAphIgARIgAScRcD0JPC4cePU6t8qVaoI1gVg8deDBw+kTZs2yh+Qs4pNaUmABEiABEwrACz82rRpk1oNvG/fPkGvoFy5cuqPGEmABEiABJxHwLQCeOKJJ2TYsGHSvHlzqVmzpvNKSolJgARIgAQ8CJiaA4ADuEOHDin7f4+7uUMCJEACJOBYAqZ6AFjti7f/3r17y6lTp6RYsWJiXAGcLVs2KVWqlGMhUHASIAESiEUCphQAwAwcOFCt+u3SpUscTs8//7zMnDkzznEeIAESIAESsC8B0woAb/4ul8tnSbBOgIkESIAESMBZBEzNAaBIcP2MlD59eo+/2bNny9/+9jd1jv9IgARIgAScQyDgq/vmzZtl5cqVqjTr169X8wCpU6d2l+7Ro0cyf/58NSfgPsgNEiABEiABRxAIqACKFi0q77zzjty7d08t+lqyZIkkS5bMXbAUKVJIoUKFpF+/fu5j3CABEiABEnAGgYAKIGvWrLJhwwZVEtj/w/UDhoCYSIAEIksAfrkQmhXhWplIIKEETM8BLFy4UL39T58+XXkFRUCYbdu2cW1AQsnzPhJIIAHE4XjyySelfPnykidPHrl582YCc+JtsU4gYA/ACIcBYYw0uE0CkSGA2NyIv4HQrEjwy/Xss8/K8uXL6ZU3MlXi6Kea7gEwIIyj65nCRwmBWbNmuRt/FAmm2TDR3rVrV5SUkMUIJwFTCoABYcJZJXwWCfgnYLTC06+CNR4TCSSEgCkFwIAwCUHLe0gg9ATgft2YMAR0/fp1gbNGJhIIloApBcCAMMFi5fUkYA2Bvn37SsOGDVXmsMgrW7as7Nmzh+P/1uCO+lyTaGOIvv07eBUdVj+tWrVSsYHx1oFegR4QZsqUKR7rA7xuDekuzN+MaxHMZo41C5DXbgnKFVVgR9nsygz1j+8f1qfYLUG2P//806/blFDJe/nyZWUGijgdZhJ+s6lSpVLMTP7kzWQbkmsgG7g9fPgwJPmFMhMwwxCbHWUz8/uE3IFM900rAEDFF2fdunUSyYAwFy5cCLoy8AVDMPtr166F8rsRkryw1gKVZEfZYGN+5cqVkJQzlJngC50uXTo5d+5cKLMNSV6QTV84GZIMQ5QJFGb27Nnl4sWLtnvZgGyY27CjOWuOHDkEc6B2lM3M7xMKLEuWLH6/RabNQJEDFp6gMS1cuLDKEI0xXEXkzJlTdUX9PoUnSIAESIAEbEfAtAL49NNPBQtQbty4EacQdAcdBwkPkAAJkIDtCZhSABjT/Oijj2To0KHSoUMH1f02lgy9AiYSIAESIAFnETClADD0g7FDuITOkCGDs0pIaUmABEiABHwSMGUGigmadu3ayahRo9SEiM+ceJAESIAESMBRBEz1AFCif/zjH1KmTBn5/PPP1YRv0qT/0R1169aVf/7zn44qOIUlARIggVgnYFoBwB107ty51SIUbxe0XIUY618jlp8ESMCJBEwpANjA/vbbb2rFYalSpZxYTspMAiRAAiTgReA/4zheJ4y7WNxSsGBBuXPnjvEwt0mABEiABBxMwFQPAOUbOHCgtG7dWnr27KkWgqVJk8ZdbKyWw/wAEwmQAAmQgHMImFYA3bp1U+4KunTpEqd0XAgWBwkPkAAJkIDtCZhWAPC74s+JVEKcs9meDAUkARIggSgnYFoBwKkQEwmQAAmQQPQQMK0AUOSrV6/K1KlTZf/+/QI3tAhKXadOHYFLYyYSIAESIAFnETCtAGAG2qBBA+WCF0Eo4An0zJkz0qhRI5k3b55y5+qsolNaErCewN69e+X9998X+O+vX7++IKg7EwnYhYApM1AI27lzZ6lWrZqcOHFCdu7cqQJR//LLLyo2ADyFMpEACXgSQLD2p59+WjZu3Ch//PGHTJgwQQVV8ryKeyQQOQKmFAACImzbtk2GDBki+fLlU9LCAyiGgN555x1ZvXp15ErAJ5OATQn893//t4oOpot39+5dtZhyxYoV+iF+kkBECZhSAPD7AwsgKALvhBCNdgyX5i0n90kg3AQQrN1XgmddJhKwAwFTCgDeQGvXri3vvvuubN26VSkDvM0sW7ZMRo8erbq5digMZSABOxGoWbOmIG6rMSGgUuXKlY2HuE0CESNgSgFAurFjx6oJ4CpVqqgQkIgz2aRJE6lUqZL06NEjYgXgg0nArgQGDx6sXpZgJZc2bVqlDD7++GMpVqyYXUWmXDFGwLQVEL6027dvl1WrVqmJX/QKypUrJ9WrV48xZCwuCZgjgN/IsWPHZO7cuSqUKl6eSpcube5mXkUCYSAQUAH8+uuvccb94Qoa1kB6+vnnnyVbtmxSvHhx/RA/SYAE/k0AxhLwocVEAnYkEFABtG/fXnbv3h2v3PQFFC8iXkACJEACPgnAkObDDz+Uw4cPC9ztY61IuNzrBFQAsF9GQPj4kvdEV3zX8zwJkAAJkIDIgwcP1JwQ2lBsr1+/Xs23HjlyRMLhfiegAtizZ48gFgBcPf/0009+zT1z5swpjArGrzMJkAAJBEdgxIgRkjx5ctX4485Hjx4prwrjxo2Tt956K7jMEnB1QAXQqVMnFf8X/n9atGih3EH7egaHgHxR4TESIAESCEzg5MmTcV6sYWIPNzvhSAEVwI4dOwSTWEjnz5/3Kw9CRjKRAAmQAAkERwCWYcuXL5d79+553FihQgWPfat2Aq4DwLgUuidIo0aNUl4/YdOs/2GF8LBhw8LSVbEKAPMlARIggUgRgLsQhNvFizbaU6wXgZXlc889FxaRAvYAjBKMGTNG0DUZMGCAOgzvoBD+wIED8uWXXxov5TYJkMC/CaxcuVKtoL927ZoUKlRIlixZQs+5/Ha4CaDh//HHH5VH5dOnTytl0KxZM/d5qzdMK4BFixYpd7boEcAvEFY51qtXT+bPny8FChSwWk7mTwKOIwBvuZhH031l4WUJLqHxg9d71o4rFAW2hECrVq0syTe+TE0rAKz6hddPNPpwCgfXtlgnwEQCJOCbADzl6o0/rsD2pUuX1JhvON/yfEvHoyQgElABbN68WbwneBHcAr5/sMT9hx9+UAxpBsqvUqwRwKQdfPynSZPGr28f74k9MMK6Gl9edQPxg/dQDA/kzp1bsmfPHuhSniOBoAgEVADovvpbCQxFoCeageok+BkLBGCihy473D3jD36yMNbvPazz7LPPCoIlGRdTwhtorVq1TGOaPXu29O/fX60MRVQxGF106NDB9P28kAQCEQioAGAGivH++BJmr5lIIBYI4K2+YsWKHkXF2D6W7w8fPtzjeM+ePdXKTrhQz5w5s7L0+O6775Q3XY8L/ewgCFPXrl09zvbp00f53apatarHce6QQEIIBFQAdPGQEKS8J5oJIBxqpkyZPBZF4g1/wYIFcRQALDxwHBZzV69elSeffFLgTNFsQqxtXwm9AioAX2R4LFgCARVAsJnxehKIdgJYA6MvjjSWFX5c/KWyZcv6OxXwOJ4Fp2BwD6An9LbD4SNGfx4/o5sAx26iu35ZuhATgDUcxvyN4/3w+4/hnlCnV155xeM5yB+9De9hoVA/l/nFDgEqgNipa5Y0RARmzZol+fPnV40znCX26tVL3njjDZX78ePH1SpOhIN87bXXPMxAg3081tdgchkKBtZGjz/+uCCgPKzumEggFAQ4BBQKiswjpghgaGbDhg1xygyLIHjFxRARjCdgKo2QqZs2bUrw6t+iRYsqP/FxHsYDJBACAqYUAL7YsGSA+duVK1ckT548UrhwYdUVzpAhg2kxsKYAk2jGMJJ4Y4KNs56yZs3q165av4afJGBHArDQwRi9bvaJeQF857/99lvp3LmzHUWmTDFOIF4F0K9fP/nss88EUWsyZswoaPBhywzfJtiHXfLrr7/uc2LMyBZ+hD744AP1AzEqgK+++koFm4eZHBImzBg020iO204hgFW+euOvy3znzh1lAaTv85ME7EQgoAIYOXKkenuZPHmyNG7c2MP6AA06HFt16dJFBY15+eWX/ZYLoc6gSGA+hz9jgg017KfpT8hIhdtOJPD000+r4R6jRRCGgowxtJ1YLsocvQQCKgA4esNKxpYtW8YhgIkpBLvGl33atGkSSAFg6TsWyuANaenSpe68cByrGy9cuCBr166V2rVrS758+dznsXHq1CnBMJGeoCjw7GASxmTRNcfYrd0SZIOpnx1lsyszPV6qWWboscKd+dmzZ9XwY7t27Sz5Grz55puyePFi2bJli3opQm8Ax+A/K9JJZ4a1Pb7MWCMpH2Sz62/A6b9P/IYDpYAKAItWDh48GOh+uX//fhx/Qd436OEif9S8IBrToUOHVCAEzC/AyuHtt98WmL41bdrUfdnChQvlk08+ce/PnTtXhah0HwhiI1jFEUTWib7UrrbdmJOxazIjG15QsmXLpl4a0GudOXOmcr27Zs0aS4oF/1kI8IH5MnzvK1eubMlzEpqpdw88oflYcR984dsxQS67yhbfbyA+v1MBFQB8/HTr1k2yZMki8F6YI0cOpanxZoO3drzt9O7dW4YOHZqgeitVqpT6MeqrI2Hx8PXXX3sogDZt2kiDBg3c+adLl049233A5AbM9bwd25m81dLLMPeBhT54S7VbwhwPDADslvBjxAsDepTxJTguxNslGn894YVjypQp0rBhQ/1QyD4h21/+8he3+Sd+J3ZIWLeA3xmMOIweSu0gG+oHL0DxNVaRkBUNLOZx7Cibmd8n6j2Q8gqoAOB0Cl0IvJnDigHdITTAmBDG2CasgeAULqEWDlgejwZGVwAY3jl37pyaSNO7Ljinn8cXAD+oYL/AkBvyBntfOL5wkAsK1a6y2VEufaLVjGzw2GlcSYs6Ra8A81Jm7g/2OwDZ8Dwr8g5WFl/X21U2O/8G7CxbfN8zKNdAKaACwI3w+f/iiy/KiRMn5MiRI6prC62Ixh9v8GbHYX0JAUsi+EyfPn266qKjRwFPiXrj7+seHiOBYAiULFlS4NTQODGLYUuE4WMigVgnEHiG4N900AXSG390IdEdwpuEL3/nwQAtUqSIwGUuehBt27aVX3/9VTp27BhMFryWBAISQA8Vjb/u2BBDDTVq1PAYVgyYAU+SQBQTiLcHEKp1AGBYW7PywZ8xocGHBRHG5zGmxUQCoSSAuR9YkcEK6Pz581KlShXB3BYTCZBAPBHBQrUOID7QGPJh4x8fJZ5PKAFMhMFfDxMJkIAngYA9gFCtA/B8JPdIgARIgATsQCDgHACsb0KxDsAOBaUMJEACJEACngQCKgCMlcLXz/jx45X1j25OB7MomGtOmDBBunfvrqyEPLPlHgmQgN0JYC1Eo0aN5JlnnlGrl+0uL+ULPYGAQ0BWrwMIfXGYIwmQgBkCcM3yzTffuC994YUXZMSIEYJPptghEFABAIOV6wBiBzNLSgL2IQA3FcbGH5JhbUT//v2lRYsWHk4f7SM1JbGCQLwKAA+FDTWiEeGPiQRIwNkEsALfO7A9SmR0l+HsElJ6swQCzgGYzYTXkQAJOIcAVkF7O0aEuxT8JWZlv3MIUFKdQMAewJdffqkCv+gX+/ssUaKE6jr6O8/jJEAC9iEA52BTp05VbqqxUA7rcNDLh4dUKAGm2CEQUAFs3LhRJk2aJNmzZw8YiBpeFTF2yEQCJOAMAvDj9fvvv8uqVatUcHv8hqEMmGKLQEAFgIki+FKfPXu2rFu3TvSwjbGFiKUlgegkAKeOcPTIFLsEAs4BoDuIdQBYEPbBBx/ELiWWnARIgASikEBABYDywo/KjBkzpGLFilFYfBaJBEiABGKXQMAhIB1L8eLFBX9MJEACJEAC0UMg3h5A9BSVJSEBEiABEjASoAIw0uA2CZAACcQQAVNDQDHEg0UlgYgTOHbsmOzatUtZ4CHAPBMJWEXAtAKAB1DG6rWqGpgvCfw/gXnz5knv3r3Vwiy4bHjqqaeUGTb5kIAVBEwPAT3xxBOycOFCK2RgniRAAhqBPXv2yP/8z//IrVu3BI0/0ubNm+WLL75Q2/xHAqEmYEoBICj8oUOHBL0AJhIgAWsIrF+/Po4nTsTgWLBggTUPZK4xT8DUEFCaNGnUgjB0TU+dOiXFihUTHNMTVgtjaTkTCZBAwgnARw988ty7d88jEyzEZCIBKwgkcWnJTMZwA3Ht2jWflyJy2MyZM32eC/XBCxcuyMOHD4PKFiuaEXTen/xBZRbii7EcH+Wxo2xoeK5cuRLiEic+O/isSZcunYpKl/jcQpsDZEMD/uDBg6Azxn0Y8/f+jm/fvl1y584ddH7GG7CgEz69Ll68mCDZjHmFehuywTvpzZs3Q511ovPLkSOH3L5925aymfl9pkqVSrJkyeKXg6keAO7Gm78/XYEKZCIBEkgcAfxYN2zYIC+99JKKxY0G+5NPPkl04584qXh3NBMw3XLjjQtzARiP3L9/v7z66qty+vRpqVChAq2DovkbwrL5JIAIWnPmzFETtjVq1JCSJUv6vC7Yg3gThiUQEwmEg4BpBbB3715p3LixnD17Vk0GI5A0Qshh6GLu3LmSK1eucMjLZ5BAxAmg8a9Vq5ZcvnxZDd/hxWjs2LHSvHnziMtGAUggGAKmrICQYadOnaRatWpy/vx5yZ8/v3rGxIkT1dv/tGnTgnkmryUBRxNo27at6v3euHFD9YpRmHfeeUdOnDjh6HJR+NgjYEoBYBJky5YtMmjQIDWZqmPKmTOndOvWTZYuXaof4icJRD2BAwcOxJlIRSjFnTt3Rn3ZWcDoImBKAWCSF6uAsUDFO+3evZtzAN5QuB/VBGC55Z2wcAuWZkwk4CQCphQA3m4aNGgg3bt3l61bt6ryoVeAuKJYpdioUSMnlZmykkCiCHz88cdxYufC1LhNmza2NJtNVGF5c1QTMKUAQGDcuHHKHrZKlSpy5MgRqVOnjrRr107q1q0rXbt2jWpILBwJGAmUL19eGT4Yj8FEOlmyZPLGG28YD3ObBGxNwLQVUJ48eWTTpk0qNvC+ffsEvYJy5cqpP1uXkMKRgAUELl26pGJk6z578Ai4bdi2bZsFT2OWJGANAdM9ADweJp9YSYhFYdevX1c9AmvEYq4kYG8CWCHqa0W60UWKvUtA6UhAC/lrFsKvv/4qrVq1kqNHj6pFLzAHhR00TOK+/vrrOE6szObL60jAiQQqVaqkhj+NHnIxBLRo0SInFocyxygB0z2AN998Uy1+OXnypGBRGPyVwDQUw0JYrs5EArFGAIu/hgwZIpgXg5HE6tWrpVChQrGGgeV1MAFTzuBg/gnTNyx0gX8SY8LkMBaCrVmzxnjYsm1vR1lmHkRncGYoxb3GjLOpuHdZfyRancFZSY7O4BJGN9qdwZnqAcAPUKZMmQReCb0T/AJhQRgTCcQSgVmzZkmZMmXUG3/16tXjuHCOJRYsq3MJmJ4DeO+995QDuPbt2yu7f/QKvv/+e/nmm28EdtF6DyBv3rxSvHhx5xKh5CQQD4Hly5dLr169BD6BkNAzbtKkiaxYsSKeO3maBOxFwNQQEEQOFA/AWCSEtBszZozxUEi3OQQUUpwBM+MQkG888IALp4jGhN8HvvdwCJfQeADG/EK9zSGghBGN9iEg0z2Ac+fO+Y0HYETL2ABGGtyOFQJYCKb3CGKlzCyn8wmY7gHYpagYeoK5XbAJofYSEqUp2OcEez0W1KHxsKNsdmWG+seLhnfoxGDZJ/T6999/X0aNGhUnRvaZM2eUsQRiZ/sLnpTQZyb2PhhCIOAMmNlRNtSpr3UViS13Yu8HMyzws6NsZn6fkBtGE/6S4xQAh4D8VWXoj3MIyDdTNPAY6vnll1+UcQQaidmzZ0vRokXVjy0cQ0DobeClAYoQz48vcQgoPkK+z0f7EJApKyDfaHiUBGKTADzjNmzYULlDQY8Uq+O9zaOtJAO307A8wlxE4cKFZePGjVY+jnlHMQEqgCiuXBbNGgKTJ09WQ0B4C0cXG0MqWAgWjiEphGFFZD64Y0FAGiR4IYVbdiYSCJYAFUCwxHh9zBMYPXq03L17180BCuDmzZtheROfMmVKnDkwDAV9++23bnm4QQJmCZhWABj3hP2zbukwcuRIadGihVoHYPZhvI4EooGALyME/D4wWWh1wjN8TeLacZLSahbMP/EETCsALARr1qyZwNIBgWD69Omjno5YADNmzEi8JMyBBBxCAIshvRM85SJmttUJDhmhbLxTx44dvQ9xnwTiJWBaASDyF2L/FixYUDAG2rRpU1mwYIGKEzx9+vR4H8QLSADfH3iOXbt2raNhdOnSRVq3bq3KkCFDBuUOApHy0qZNa3m5SpYsKRgGQsqSJYvg+fhtli1b1vJn8wHRR8DUQjC4fcaEU+3ateXOnTvy448/qi8dcBQpUiROdKTow8QSJZYAeo/wG4XxakyWtmzZUj7//PPEZhux+z/77DPp37+/GvvPnz+/wCY7XAlR+MASQWlgqstYxOEiH33PMaUA8CXD2826devUEBDmARAHGOOOGP5BeEgmEvBHYMKECcpm3nh+2bJlgj9YtDg1wUYcf5FIWNwTaIFPJGTiM51HwNQQEFYRYg4Ats8dOnQQdIFz5colzz33nPKBjk8mEvBHAC8O3gm9AIZP9KbCfRIILwFTPQCIhElfvK3B/A0BMJC6deumtuEumokE/BHAywJWohotVTBkghgTTCRAApEjYKoHoIsHN89HjhyRwYMHCxakYAKKMVB1Ovz0R+Ddd99Vjb9uPqn7MHnttdf83cLjJEACYSBgugeAMJDoAcANLszQnnnmGTUJBvO3uXPnqiGhMMjLRziQAOaQDh8+LO+8844c1WJK/9d//Zf67ugKwYFFosgkEBUETPcAOnXqpOycEQweVg9IEydOFPhFQUhIJhIIRCB16tTK6gemoEOHDg2LyWQgeXiOBEhAxJQCuH37tgoAP2jQIA+TM4SCxDwAftRMJEACJEACziJgSgFgAg9v+vB86J3ghArnmEiABEiABJxFwFTLjaAl8HbYvXt3wYpHJPQK4BICqxCxJoCJBEiABEjAWQRMTwKPGzdO4IcEJqBYF4DFX1jVCVe08AfERAIkQAIk4CwCphUAbLk3bdqkVgPv27dPBcMoV66c4I+JBEiABEjAeQRMK4AnnnhChg0bpkLh1axZ03klpcQhJwC3xOfOnVMhCWHqmdgEP1NXr15VhgZcXJhYmryfBOInYGoOAD/MQ4cO+XRDG/8jeEU0EkBDDY+weBkoU6aMwEzYl596s2WHW4iqVasKHJ0VK1ZMFi5caPZWXkcCJJBAAqZ6AFjti7f/3r17q1B0+IEaVwBny5ZNSpUqlUAReJvTCGAhYOnSpdVckN7ow7Hb8OHD3XEiginTyZMnVc/SeM/rr7+uFhfqbkeM57hNAiQQGgKmFAAeNXDgQMGqXziC807PP/+8zJw50/sw96OUwK5du5QbED0mrV5MY6Ag/ZiZzzlz5sTxFYT7vvvuO7ffKTP58BoSIIHgCJhWAAhCrb/teT8C6wSYYouArzo3xsn1RQPfH8SSwHqSv/zlL5I9e3Z1GazKfCV/x31dG8wxxLfYuHGjYHUyhpysek4wMvFaEogEAdMtNwJ4zJs3L44PcriDWLFihVoTEIkC8JmhIwAljwY6VapUcYZkjE+BQUCePHnUhK3+UoDG9MUXXzRe5rGNWLbNmzdXPoFwAr1JjPNXqlRJxZbGEKN3ssJZ3J49e9TzoMAQ1wLzWwcPHqRrCm/43I8JAgEVwObNm2XlypUKxPr169U8AH7oesKPev78+WrSTj/GT2cSwAI/rPNA4B+M8WNtB8bmfa3yxjG8DMA7LBYJYh9xcuEqxF9CzFqsGkejq6eXXnpJmRYjzKgeHAYeZpHfqFGjQj6vhCGr+vXr649Xn3BIB3cm48eP9zjOHRKIBQIBFUDRokWVB0cE78CiryVLlojRgyPc+hYqVEj69esXC6yitox4G2/RooUq382bN9UnGuG2bduKv3jPiEYFl+BXrlxR4RDji061Y8cOj8YfD8H3Z8uWLcrLLDyEwtU4hofwkmFFfN2dO3dK5syZVc9FFVL7h5cY9HqYSCAWCQRUAAjYsWHDBsUF3XdM8sX3Q49FiE4vM+LLejeM6AWgBxhfMmv/nylTJqUsjPmhsccbv54w9IQ/qxKehQbfOxkD1Xif4z4JRDOBgAoADQAafNh59+jRw2+DAK+gGBdmciYBNOLo4XknX8e8rzG7P2TIEMEwkN7YoieJF4waNWqYzSLR16GX8dRTT6k3fvRqkdALgT8rJhKIRQIBFQAW95QtW1a9+WOIAEMFvhLNQH1Rcc4xDPVh/H/27Nkq5CckR8MI88xQJfiOQn5vvPGGUgJNmjRRpsWhyt9sPl9//bUa1ly9erVacYxY13RmaJYer4s2AgEVAMZtdRM5BILxlzBezORsAiNGjJAiRYrIrFmz1Pg7Fv09/fTTcYZtElPKypUrRzwQPL7PmGBmIgESEAmoAPAWqCdYe/hKU6ZMUZNqvhaI+bqex+xLAGaXVphe2rfElIwEYptAol/dYcWxdu3a2KbI0pMACZCAAwkkWgE4sMwUmQRIgARIQCNABcCvAQmQAAnEKAEqgCiveLg6gJ0//PbHYoLZ6YEDB5QX21gsP8tMAoEIBJwEhsncxYsXA90v27dvl7x58wa8hicjQwCuF+CiAU7adE+usbRqG0rvueeekwsXLsj169elVq1ayqRZt2yLTK3wqSRgHwIBFcCECRPkjz/+iFfakiVLxnsNLwgvAShumHEa05gxY5T/HjSK0Z6w0Kt8+fIexfzpp59k6NChdF3iQYU7sUwgoALQ3UDEMiCnln358uXKnv/27dseRZg8ebJ6K/Y4GIU7iDAG9xPeixdnzJhBBRCF9c0iJYwA5wASxs32d8Hdsa8Fesa1HbYvRCIERDl9lT+U7i0SIR5vJQFbEAirAoCnSV+9CgwzIaZAfPMNtiDmECHg3sA7aAsW88XKHEDFihVVSEmj91p4GeWCRYd8gSlmWAiETQFgIvKDDz6QBQsWeBQMy/I/+ugjgdsJ+B46fvy4x3nuJIwAvHvC3w3egtHwwxMm3D1UqFAhYRk67C40/IsWLVLDYGCAGNaIcfDmm286rCQUlwSsIxBwDiBUjz18+LB688SYLP70dPToUVm3bp1yQoYfKXzPIw5s37599Uv4mQgCuXLlUgoVE6KwfDEG80lEto65FTEF0LvUPX9a6WraMVAoKAkYCIRFAWAiEl4XL126JEuXLnU/HooB3kb1sVq8nSLojDEhgpQx1iz81Adrxqdfr38a87fDNuSySja8CScmuIpVcoWCu1nZwq34rKzPhHLTWdldtoSWz8r77MhML69er/p+sJ9hUQB6rIAfvSIvnTlzxqNHkDFjRqUkjIWAKeonn3ziPjR37lwVn8B9IIiNxDSEQTwmQZdiiMKOCb0IuyY7y2ZXZojBYNdkDA5kJxkRE8WugbDi+w14WwF6cw2LAvB+qL6Pt1NjhCas2vRuCBHD1bjQzFdkKT0/f5/Qksg3Phj+7rfyuB6lyo6ypUuXToVotLL8Cckbb/QYzvE28UxIXqG+B7Lhe6wHvgl1/gnND781vGBhQZzxN5fQ/EJ5H2SD1Zaxpx/K/BOTF9obDCHaUTYzv099dMUfg4gqgOzZs8tvv/3mlu3y5cuSO3du9z42ihUr5hF0Hqs6g60MKABMhAZ7n4cgFu2gEvGDtKNsUJp2lAvWTVAAdpUNDYbdzE11izAMqdpRNvxG7VifUJpQ5naUzczvM755r7BZAflqPxEgZNeuXXLixAkFGVYbVapU8XUpj5EACZAACYSYQEQVALRr586d5dVXX5WXX35Zbty4IW3btg1xEZkdCYh6wejVq5eUKFFCChcuLB9//DGxkEDMEwjrEFDt2rUFf8bUrFkzadiwoRpns+tEi1FebjuTQIMGDZRXVFiRIf3v//6vWijXrVs3ZxaIUpNACAhEtAegy48JIDb+Og1+hprAoUOHPBp/5I8xXTjHYyKBWCZgCwUQyxXAsltPABOfvkwMESuBiQRimQAVQCzXfoyUHZZkWbJk8SgtrGIKFCjgcYw7JBBrBKgAYq3GY7C8aOx1H1QwPICfJKw6916YGINoWOQYJxDWSeAYZ83iR5BAtmzZ5NixY8rsGHNO+ur0CIrER5NAxAlQAUS8CihAuAig4feOEhauZ/M5JGBHAhwCsmOtUCYSIAESCAMBKoAwQOYjSIAESMCOBKgA7FgrPmSCEy/ETjD6TvJxGQ+RAAmQgGkCnAMwjSpyF+7Zs0defPFFwSrWK1euSLly5WTx4sXuOAqRk4xPJgEScDIB9gBsXnsIogOX2PhE44+EXsDw4cNtLjnFIwESsDsBKgCb19D69euVH3ejmOgJzJkzx3iI2yRAAiQQNAEqgKCRhfcG+Pz2FfZN9+8eXmn4NBIggWgiQAVg89qsV6+eIOybscGHPTvdGdu84igeCTiAABWAzSsJ4fKWLVsmRYsWVVGwEEUNXiyrV69uc8kpHgmQgN0J0ArI7jWkyYc4s6tXr3aApBSRBEjASQSoAMJUW/BJv2LFCjWU06ZNG5/uicMkCh9DAiRAAooAFUAYvghYwAU7fgSmT5o0qQwYMEA2bdpEd8RhYM9HkAAJ+CfAOQD/bEJy5tq1a6rxR2YITIJIVEidOnVSn/xHAiRAApEiQAVgMfkTJ07IY489FucpBw8ejHOMB0iABEggnASoACymnTVrVhXw3vsx9+7d8z7EfRIgARIIKwEqAItx586dW9566y2Pp8COf+bMmR7HuEMCJEAC4SbASeAwEO/WrZsUL15cJk2apGz5sY+QhEwkQAIkEEkCVABhot+4cWPBHxMJkAAJ2IUAh4DsUhOUgwRIgATCTIAKIMzA+TgSIAESsAsBKgC71ATlIAESIIEwE6ACCDNwPo4ESIAE7EKACsAuNUE5SIAESCDMBKgAwgycjyMBEiABuxCgArBLTVAOEiABEggzASqAMAPn40iABEjALgRiYiHYxYsXpX///nLq1Clp0KCB2zunXgnHjh2Tzz77TG7cuCGtWrWSRo0a6af4SQIkQAJRSyDqFQAa9UqVKsmjR4/k4cOHKrzimjVrZOzYsapSjx49KrVq1VLn//zzT1m0aJH069dPunTpErWVzoKRAAmQAAhE/RDQ3/72N3nw4IFq/PUq/+GHH+Tnn39Wu82bN1fn0fjrafTo0XLkyBF9l58kQAIkEJUEol4BXLhwQYyNO2oRUblOnz6tKhS9Au+EyF36ee9z3CcBEiCBaCEQ9QqgRIkSkixZMo/6wrBQ4cKF1bHHH3/c4xx2Ll++LAULFoxznAdIgARIIJoIRL0CGDZsmBrfx1s9UvLkyeXll1+WihUrqv0vvvhCfcJHv54GDx4s+fLl03f5SQIkQAJRSSDqJ4ERjhETvePHj1fDOrVr15ann37aXZn58+eXffv2CRTBrVu3pEmTJlK1alX3eW6QAAmQQLQSSOLSkpMKh+Eb7yEdM/KjB4Cg7HZLqVKlElSBXWWzY+hK9OLQY7tz547dqlP1MDHn5D3vFGlBkyRJImnSpJG7d+/aUjbUKYw17JbADPOEdpQNbUd8v09YP2bIkMEvVsf1AFBgFCqYhC8/IEB52C2hIcMXLCGygQUmtPGXEKUYHwvkmRC54ss3sefTpUunGlq7ygZlbrcGAw0sGrPbt2/bUjY0ZuiB2y3pjawdZTPz+zQObfti6zgFgLflYN+uoAAScp8vYKE+BrkSItv3338v3bt3V290aGw2btwY8nmLhMgVaj6+8oNcSMF+D3zlFepjOjO7yabLg099O9RlT2h+kEfnltA8rLzPrrKFQq6onwS28osRqbwxZ/HKK6/I1atXlQJAj6hu3bpy6dKlSInE55IACTiQABWAAytt6NChcaSGEpg3b16c4zxAAiRAAv4IUAH4I2Pj477Gl9GN9rWozcbFoGgkQAIRJkAFEOEKSMjj27dvH+c2TAg3a9YsznEeIAESIAF/BKgA/JFJwPE9e/bIL7/8osblE3C76VuwVqFXr17qeqxzyJIli8yfPz/kk8CmBeKFJEACjiTgOCsgO1LG8AsmZTdt2qRMMq9duyZbt26VvHnzWiYuLIDatWsnV65cUc9Jnz69Zc9ixiRAAtFJgD2AENRrx44dZe3atcpmHo0/EoZjYHNtZcqRI4fA1xEbfyspM28SiF4CVAAhqFu8+XuvyMNiIAwHMZEACZCAXQlQAYSgZrAy1TvBTQFWETKRAAmQgF0JUAGEoGZ69Ojh0djr7hkqV64cgtyZBQmQAAlYQ4AKIARc4V76H//4h5oATp06tfIo+vvvv4cgZ2ZBAiRAAtYRoBVQiNjCCgh/TCRAAiTgFALsATilpignCZAACYSYABVAiIEyOxIgARJwCgEqAKfUFOUkARIggRAToAIIMVBmRwIkQAJOIUAF4JSaopwkQAIkEGICVAAhBsrsSIAESMApBKgAnFJTlJMESIAEQkyACiDEQJkdCZAACTiFABWAU2qKcpIACZBAiAlQAYQYKLMjARIgAacQSOLSklOEjUY527RpIwUKFJARI0ZEY/EsKdMXX3whkyZNUgF4LHlAFGaKaHWtW7eWadOmSbly5aKwhNYU6a9//as899xz0q1bN2seEOFc2QOIcAU8evRIqIODqwREYAM3JvME8B0DN37XzDPDlWCGv2hNVADRWrMsFwmQAAnEQ4DeQOMBZPXpatWqCUI7MpknULRoUalfv775G3ilZMyYURo1aiSZM2cmjSAI1KlTR4oXLx7EHc66lHMAzqovSksCJEACISPAIaCQoWRGJEACJOAsAhwCimB9XblyRbZv3y5lypSR3LlzR1AS5zz67t27snnzZkEcZlizJE/Or7DZ2rtx44Zs27ZNMKzBFJjAzZs3ZdeuXR4XVa1a1WM/Gnb464lQLS5YsEBmz54tNWvWVJ8lS5aUt99+O0LSOOOxFy5ckNdff13q1q0rx48flxkzZshHH33kDOFtIOW//vUvOXz4MBWAibrYunWrjBkzRjDfpCcqAJ0EPxNFACaMkydPVo1X4cKFpV27dvLCCy9Ix44d5bHHHktU3tF88w8//KBs2du2bavMQJs3by7Hjh2TggULRnOxQ1K2FStWKFYhySwGMjlw4IDg+4XfZDQnzgFEoHaTJUumFjKh8UfCsAa6nLRtD1wZWDSHxh9px44dildxEz55AAAG5klEQVT27NkD38Szcu7cOZk6daq8+eabpGGSABRA+vTpFTf0BqJ1/QQVgMkvRKgvwxg2EhaZfPrpp8pEL1u2bKF+TFTmN2DAAOnevbt06NBB0qZNG5VlDFWh8P0aMmSIGl7Uv3Ohyjua84EC2LRpk6RKlUq+/fZb6dWrV1QWl3MAEazWe/fuyaBBg9TbxXvvvRdBSZz16IEDB0rnzp2lR48eavKck5r+6w+uHzC/hAnzvXv3+r+QZzwIfP3112rNRNKkSeWZZ56RFi1ayMmTJyVfvnwe1zl9hz2ACNXg7du3pWfPnpIhQwYZPHiwpEyZMkKSOOexu3fvlkuXLimB8+bNK7Vr11ZWLc4pQfglXbp0qcyfP18aNGggXbt2lSNHjqjGLPySOOeJ9+/fV/MlaPyR8NvMmTOnnD171jmFMCkpFYBJUKG+DMMYJUqUkD59+gjmBJjiJ4Cx2K+++kpdiHmTjRs3elhpxJ9D7F3x3XffCSaA8Td69GjBvBMs0Jj8E0iRIoXAYgpDQEjoOeHFIxqd6HElsP/vgWVn8IXCEAZSkiRJ3M+B2VnZsmXd+9zwJICJ8uHDh8upU6fUBDA8Nb7yyitUoJ6Y/O7hezds2DBlgOD3Ip5QBLA+Z9y4cfLgwQOB+TFe1KpXrx51dKgAoq5Ko79AGD5LnTq16F306C8xSxgpAteuXVN+lIwvapGSxYrnUgFYQZV5kgAJkIADCHAOwAGVRBFJgARIwAoCVABWUGWeJEACJOAAAlQADqgkikgCJEACVhCgArCCKvMkARIgAQcQoAJwQCVRRPsS+P3332XEiBGmBcTK3CVLlgS8/vr16wHP8yQJhIoAFUCoSDKfmCQABTBy5EjTZYdTtkAKACt3EbqRiQTCQYAKIByU+YyoJQDvpOfPnw9Z+RCE5NatWyHLjxmRQCACVACB6PBcVBKA473vv//eXbZVq1apldlwzqenfv36yYYNG9QuhmTef/999Wb+8ssvC+IS6AnRyYyBfJDH559/Li1btpROnTopNwJ///vf1epl/R64Fp4wYYLyNw+PpmvWrFGnfvrpJ5kzZ45yOoZ7EDGOiQSsJEAFYCVd5m1LAmfOnJEvv/zSLdv48eMFf/AthARXE3CZkCdPHvU2XrFiRVm2bJlyooYQlE2bNlUBfXDtwYMH3dvYh899eHhF9Cg4EYPDOvgvMjbmU6ZMkenTp0vjxo3l6tWr6nPPnj2SI0cO5W0SLq6rVKlCB4EAymQtAe1thIkEYorAvHnzXJkyZXJpfl5cWhAeV9asWV1PPvmkq3///oqDphxcmk8mtf3hhx+6ND/6Lq2hdjPCMc07pEvzte/SGnNXlixZ1DnNf4xL+7W6tDd697UffPCBOvbbb7+pY82aNXNp7pldmsdJta+5tXClSZPGpSkJta/5OnI/250JN0jAIgKMB2CtfmXuNiQA18gYqsHwDQJ+4O/VV1+VmTNnqrf3xYsXqyEciL5lyxbJlSuXDB061F0S9BAQZQv+4Y0JAdc1xSI1atRwH0ZvQVMC7n1soEcBj5NIWuMvpUuXltOnT6t9/iOBcBLgEFA4afNZtiCAIZb69esrF8krV65UQebr1aunGvuLFy+qMX6M4SNh6AbXw/Gc/pc/f37p27dvHGd0ly9fVn7jMUykp8yZM+ub7s+MGTO6t7EBR2PaC57HMe6QQDgI/OebGo6n8RkkYBMCCPiNiVgE5Gnfvr2UKVNGEJIT0cYQZ7h8+fJK0qJFiypF8c9//tPd4B86dEhNEHvHI0YeCFIPRaANC6n7jZPNZooerV4nzZSd14SfAHsA4WfOJ9qAAML8wec7LH3w9o+Ez7Fjx3pEzHrttdfUUA8UA3oDmEBu166dYJjIO4pbkyZN5PHHH5dnn31WYNGDRV8ILBJMguLAM/bv3y8PHz4M5lZeSwJBE6ACCBoZb4gGAhjXx1g8hnP0OK8YFkKjqw//oJyVK1cWRNWCYsidO7eKr4twlJ999lkcDIjsBpNS9CqQB0J9dunSRV2HsX4zqWbNmirADaLFYU6BiQSsJMB4AFbSZd5RRQCTvxj28X7z1wuJyFFYyAXTT30oZ926dVKrVi3Ve8AEsdkE81Bf8wdm7+d1JGCGABWAGUq8hgRMEIAlT4ECBZTFEBZyHT9+XDCEhIYc6wiYSMBuBDgEZLcaoTyOJYCFY/D1s3z5cmU6iiElBGGfNWuWY8tEwaObAHsA0V2/LF2ECGCdAdYXMJGAnQlQAdi5digbCZAACVhIgENAFsJl1iRAAiRgZwJUAHauHcpGAiRAAhYSoAKwEC6zJgESIAE7E6ACsHPtUDYSIAESsJAAFYCFcJk1CZAACdiZwP8BTuopCebPaIYAAAAASUVORK5CYII=" width="50%" style="display: block; margin: auto;" /></p>
+<p>Once built, as happens when the plot has been displayed as above, an
+interactive loon plot can be had as always, simply by calling
+<code>ggplot2loon()</code> on the built <code>ggplot</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(loon.ggplot)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">ggplot2loon</span>(p1_piped, <span class="at">linkingGroup =</span> <span class="st">&quot;Motor Trend 1974&quot;</span>)</span></code></pre></div>
+<p>Again, the additional specification here of the
+<code>linkingGroup</code> will cause display attributes to be pulled
+from the plots in that linking group.</p>
+<div id="using-gg_pipedata-ggplotobj" class="section level3">
+<h3>Using <code>gg_pipe(data, ggplotObj)</code></h3>
+<p>Note that before a <code>ggplot</code> can be displayed, a number of
+steps are performed so as to prepare the plot object for rendering
+(e.g. see <code>ggplot2::ggplot_build</code>). Unfortunately, this delay
+in completing the preparation of the <code>ggplot</code> can make it
+difficult to attach further operations in the <code>%&gt;%</code>
+pipeline after the <code>ggplot</code> itself – apart of course from
+further <code>ggplot2</code> additions via the <code>+</code> operator.
+For example, one cannot simply add <code>%&gt;% ggplot2loon()</code> at
+the end of the pipeline used to construct the <code>ggplot</code>. That
+is,</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> weight, <span class="at">y =</span> lp100km)) <span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Litres per 100 kilometres&quot;</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Gas usage&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">ggplot2loon</span>()</span></code></pre></div>
+<p>would produce neither a <code>ggplot</code> or an interactive
+<code>loon</code> plot.</p>
+<p>To get around this problem, in <code>loon.ggplot</code> the function
+<code>gg_pipe()</code> is provided to encapsulate the
+<code>ggplot</code> construction in any pipeline and force the
+<code>ggplot</code> to be built (though not rendered in a display). The
+output of this function can then be passed on to
+<code>ggplot2loon()</code>.</p>
+<p>For example,</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="co"># encapsulate the ggplot construction with gg_pipe()</span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="fu">gg_pipe</span>(<span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> weight, <span class="at">y =</span> lp100km)) <span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>            <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>            <span class="fu">ylab</span>(<span class="st">&quot;Litres per 100 kilometres&quot;</span>) <span class="sc">+</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>            <span class="fu">ggtitle</span>(<span class="st">&quot;Gas usage&quot;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>          )  <span class="sc">%&gt;%</span> </span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>  <span class="co"># and pass the built plot on</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="fu">ggplot2loon</span>(<span class="at">linkingGroup =</span> <span class="st">&quot;Motor Trend 1974&quot;</span>)</span></code></pre></div>
+<p>constructs the interactive plot which could have been assigned to a
+variable as was done with the original <code>ggplot</code>
+construction.</p>
+<p>From here, the pipeline can be grown as before, recognizing of course
+that the output of <code>ggplot2loon()</code> is a <code>loon</code>
+plot of some sort. This means that functions that operate on
+<code>loon</code> plots (as their first argument can be used). As with
+any piping operation, attention must be given to the first argument of
+the functions in the pipeline as well as to what the input and outputs
+are of any function.</p>
+<p>For example,</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="co"># encapsulate the ggplot construction with gg_pipe()</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">gg_pipe</span>(<span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> weight, <span class="at">y =</span> lp100km)) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>            <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>            <span class="fu">ylab</span>(<span class="st">&quot;Litres per 100 kilometres&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>            <span class="fu">ggtitle</span>(<span class="st">&quot;Gas usage&quot;</span>) )  <span class="sc">%&gt;%</span> </span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>  <span class="co"># and pass the built plot on</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>  <span class="fu">ggplot2loon</span>(<span class="at">linkingGroup =</span> <span class="st">&quot;Motor Trend 1974&quot;</span>) <span class="sc">%&gt;%</span>  <span class="co"># pipe the loon plot on</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>  <span class="fu">l_cget</span>(<span class="st">&#39;color&#39;</span>)  <span class="co"># Gets and returns the vector of point colours</span></span></code></pre></div>
+<p>In the <code>magrittr</code> package (the source of the pipeline
+operation) there are a variety of pipeline operators which might also be
+useful – not just <code>%&gt;%</code>.</p>
+</div>
+<div id="using-l_ggplot" class="section level3">
+<h3>Using <code>l_ggplot()</code></h3>
+<p>Additionally, using function <code>l_ggplot</code>, can also create a
+<code>loon</code> plot with <code>ggplot</code> pipe model.</p>
+<p>The display of <code>ggplot</code> object relies on the default
+<code>print()</code> function in <code>R</code>. Function
+<code>l_ggplot</code>, inserts a new class <code>l_ggplot</code> into
+the original <code>ggplot</code> object. At the printing time, <a href="http://adv-r.had.co.nz/S3.html">S3 method</a>
+<code>print.l_ggplot()</code> will be executed to transform a
+<code>ggplot</code> plot to a <code>loon</code> plot.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>obj <span class="ot">&lt;-</span> mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="co"># replace `ggplot` to `lggplot`</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">l_ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> weight, <span class="at">y =</span> lp100km)) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Litres per 100 kilometres&quot;</span>) <span class="sc">+</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Gas usage&quot;</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>obj</span></code></pre></div>
+<p>However, this design has an obvious drawback: confusion of the output
+data structure. Since the transformation is accomplished at the printing
+time, object <code>obj</code> is still a <code>ggplot</code> data
+structure. To create a <code>loon</code> “handle”, we have to use
+<code>l_getFromPath()</code></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="cf">if</span>(utils<span class="sc">::</span><span class="fu">packageVersion</span>(<span class="st">&quot;loon&quot;</span>) <span class="sc">&gt;=</span> <span class="st">&quot;1.2.4&quot;</span>) {</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="co"># **THIS IS IMPORTANT**</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="co"># The path name can be obtained at the top left tk window</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="co"># Suppose the label is &quot;loon.ggplot --path: .l13.ggplot&quot;</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="co"># The path would be the char right after &quot;path: &quot; which is &quot;.l13.ggplot&quot;</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  loonWidget <span class="ot">&lt;-</span> <span class="fu">l_getFromPath</span>(<span class="st">&quot;.l13.ggplot&quot;</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">class</span>(loonWidget)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="co"># [1] &quot;l_plot&quot; &quot;loon&quot;</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="just-use-loon-for-built-in-interactive-plots" class="section level3">
+<h3>Just use loon for built-in interactive plots</h3>
+<p>Of course, for plots already existing in <code>loon</code>,
+<code>ggplot()</code> and hence <code>gg_pipe()</code> could be avoided
+entirely:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>mtcars <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">transmission =</span> am, <span class="at">weight =</span> wt) <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">lp100km =</span> (<span class="dv">100</span> <span class="sc">*</span> <span class="fl">3.785411784</span>) <span class="sc">/</span> (<span class="fl">1.609344</span> <span class="sc">*</span> mpg)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">select</span>(weight, lp100km) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="co"># and pass the built plot on</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">l_plot</span>(<span class="at">title =</span> <span class="st">&quot;Gas Usage&quot;</span>, </span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>         <span class="at">showGuides =</span> <span class="cn">TRUE</span>, <span class="at">showScales =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a>         <span class="at">ylabel =</span> <span class="st">&quot;Litres per 100 kilometres&quot;</span>, </span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>         <span class="at">linkingGroup =</span> <span class="st">&quot;Motor Trend 1974&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>  <span class="fu">plot</span>()   <span class="co"># get a static version via grid</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

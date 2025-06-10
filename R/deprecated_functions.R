@@ -469,7 +469,7 @@ ggParallelSerialAxes <- function(ggObj,
                                                           nm = uni_fill))
 
     if(length(uni_fill) == 1)
-      ggObj <- ggObj + ggplot2::guides(fill = FALSE)
+      ggObj <- ggObj + ggplot2::guides(fill = "none")
 
   } else {
 
@@ -499,10 +499,10 @@ ggParallelSerialAxes <- function(ggObj,
       ggplot2::scale_size(range = range(size))
 
     if(length(uni_color) == 1)
-      ggObj <- ggObj + ggplot2::guides(color = FALSE)
+      ggObj <- ggObj + ggplot2::guides(color = "none")
 
     if(length(uni_size) == 1)
-      ggObj <- ggObj + ggplot2::guides(size = FALSE)
+      ggObj <- ggObj + ggplot2::guides(size = "none")
 
   }
 
@@ -712,7 +712,7 @@ ggRadialSerialAxes <- function(ggObj,
                                                           nm = uni_fill))
 
     if(length(uni_fill) == 1)
-      ggObj <- ggObj + ggplot2::guides(fill = FALSE)
+      ggObj <- ggObj + ggplot2::guides(fill = "none")
 
   } else {
 
@@ -738,10 +738,10 @@ ggRadialSerialAxes <- function(ggObj,
       ggplot2::scale_size(range = range(size))
 
     if(length(uni_color) == 1)
-      ggObj <- ggObj + ggplot2::guides(color = FALSE)
+      ggObj <- ggObj + ggplot2::guides(color = "none")
 
     if(length(uni_size) == 1)
-      ggObj <- ggObj + ggplot2::guides(size = FALSE)
+      ggObj <- ggObj + ggplot2::guides(size = "none")
   }
 
   return(ggObj)

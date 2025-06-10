@@ -75,24 +75,31 @@ l_colorName <- function(color, error = TRUE, precise = FALSE) {
 
 glyph_to_pch <- function(glyph) {
 
-  vapply(glyph, function(x) {
-    switch(
-      x,
-      circle = 19,
-      ocircle = 1,
-      ccircle = 21,
-      square = 15,
-      osquare = 0,
-      csquare = 22,
-      triangle = 17,
-      otriangle = 2,
-      ctriangle = 24,
-      diamond = 18,
-      odiamond = 5,
-      cdiamond = 23,
-      NA_integer_
-    )
-  }, numeric(1))
+  if(any(is.na(glyph))) {
+    # Set NAs of glyph as the most common value
+    glyph[is.na(glyph)] <- names(sort(table(na.omit(glyph)),
+                                      decreasing=TRUE)[1L])
+  }
+
+  vapply(glyph,
+         function(x) {
+           switch(
+             x,
+             circle = 19,
+             ocircle = 1,
+             ccircle = 21,
+             square = 15,
+             osquare = 0,
+             csquare = 22,
+             triangle = 17,
+             otriangle = 2,
+             ctriangle = 24,
+             diamond = 18,
+             odiamond = 5,
+             cdiamond = 23,
+             NA_integer_
+           )
+         }, numeric(1))
 
 }
 

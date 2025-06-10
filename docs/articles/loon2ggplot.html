@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,14 +40,14 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">loon.ggplot</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.3.3</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -58,7 +60,7 @@
       <a href="../articles/linking.html">Linking</a>
     </li>
     <li>
-      <a href="../articles/Pipes.html">Pipes</a>
+      <a href="../articles/pipes.html">Pipes</a>
     </li>
     <li>
       <a href="../articles/ggplot2loon.html">ggplots to loon plots</a>
@@ -80,8 +82,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/great-northern-diver/loon,ggplot">
-    <span class="fas fa-github fa-lg"></span>
+  <a href="https://github.com/great-northern-diver/loon.ggplot" class="external-link">
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -95,114 +97,164 @@
 
       
 
-      </header><script src="loon2ggplot_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>loon plots –&gt; ggplots</h1>
-                        <h4 class="author">Wayne Oldford and Zehao Xu</h4>
+                        <h4 data-toc-skip class="author">Wayne Oldford
+and Zehao Xu</h4>
             
-            <h4 class="date">2021-09-25</h4>
+            <h4 data-toc-skip class="date">2022-11-12</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/master/vignettes/loon2ggplot.Rmd"><code>vignettes/loon2ggplot.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/great-northern-diver/loon.ggplot/blob/HEAD/vignettes/loon2ggplot.Rmd" class="external-link"><code>vignettes/loon2ggplot.Rmd</code></a></small>
       <div class="hidden name"><code>loon2ggplot.Rmd</code></div>
 
     </div>
 
     
     
-<p>Package <code>loon</code> provides the truly direct manipulation and package <code>ggplot</code> provides a unified data structure so that it is easy to be extended. Data analysts who explore data interactively can at any time turn a snapshot of their interactive <code>loon</code> plots into <code>ggplot</code>s by the simple translation function <code><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code>.</p>
-<p>In <code>loon</code>, the current view of any <code>loon</code> plot <code>p</code> can be turned into a <code>grid</code> plot in a variety of ways:</p>
+<p>Package <code>loon</code> provides the truly direct manipulation and
+package <code>ggplot</code> provides a unified data structure so that it
+is easy to be extended. Data analysts who explore data interactively can
+at any time turn a snapshot of their interactive <code>loon</code> plots
+into <code>ggplot</code>s by the simple translation function
+<code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code>.</p>
+<p>In <code>loon</code>, the current view of any <code>loon</code> plot
+<code>p</code> can be turned into a <code>grid</code> plot in a variety
+of ways:</p>
 <ul>
-<li><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot(p)</a></code></li>
+<li><code>plot(p)</code></li>
 <li>
-<code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html">grid.loon(p)</a></code> or <code><a href="https://great-northern-diver.github.io/loon/reference/grid.loon.html">grid.loon(p, draw = FALSE)</a></code>
+<code>grid.loon(p)</code> or
+<code>grid.loon(p, draw = FALSE)</code>
 </li>
 <li>
-<code><a href="https://great-northern-diver.github.io/loon/reference/loonGrob.html">loonGrob(p)</a></code> to create the grid object.</li>
+<code>loonGrob(p)</code> to create the grid object.</li>
 </ul>
-<p>The corresponding <code>grid</code> object is a rich structure that can be exported, printed, edited, and incorporated into other <code>grid</code> structures. However, adapting that structure to slightly different presentations is a bit of a challenge compared to a <code>ggplot</code> (also ultimately a <code>grid</code> structure).</p>
-<p>In this section, we turn the current state of any <code>loon</code> plot into a <code>ggplot</code> plot which can then be modified following the rules of the <code>ggplot2</code> grammar.</p>
-<div id="loon-ggplot-via-loon2ggplot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#loon-ggplot-via-loon2ggplot" class="anchor"></a>loon –&gt; ggplot via <code>loon2ggplot()</code>
+<p>The corresponding <code>grid</code> object is a rich structure that
+can be exported, printed, edited, and incorporated into other
+<code>grid</code> structures. However, adapting that structure to
+slightly different presentations is a bit of a challenge compared to a
+<code>ggplot</code> (also ultimately a <code>grid</code> structure).</p>
+<p>In this section, we turn the current state of any <code>loon</code>
+plot into a <code>ggplot</code> plot which can then be modified
+following the rules of the <code>ggplot2</code> grammar.</p>
+<div class="section level2">
+<h2 id="loon-ggplot-via-loon2ggplot">loon –&gt; ggplot via <code>loon2ggplot()</code><a class="anchor" aria-label="anchor" href="#loon-ggplot-via-loon2ggplot"></a>
 </h2>
-<div id="basic" class="section level3">
-<h3 class="hasAnchor">
-<a href="#basic" class="anchor"></a>Basic</h3>
-<p>Plot the cars ‘horsepower’ versus ‘lp100km’ (100 km per liter) on data <code>mtcars</code>.</p>
+<div class="section level3">
+<h3 id="basic">Basic<a class="anchor" aria-label="anchor" href="#basic"></a>
+</h3>
+<p>Plot the cars ‘horsepower’ versus ‘lp100km’ (100 km per liter) on
+data <code>mtcars</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://great-northern-diver.github.io/loon/">loon</a></span><span class="op">)</span>
-<span class="va">mt</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>transmission <span class="op">=</span> <span class="va">am</span>, weight <span class="op">=</span> <span class="va">wt</span>, horsepower <span class="op">=</span> <span class="va">hp</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>lp100km <span class="op">=</span> <span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="fl">3.785411784</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1.609344</span> <span class="op">*</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="va">mt</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html">l_plot</a></span><span class="op">(</span><span class="va">horsepower</span>, <span class="va">lp100km</span>, 
-           color <span class="op">=</span> <span class="va">gear</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
-<p>Turn <code>p</code> (a <code>loon</code> widget) to a <code>ggplot</code> object via a simple function <code><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code>.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://great-northern-diver.github.io/loon/" class="external-link">loon</a></span><span class="op">)</span></span>
+<span><span class="va">mt</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>transmission <span class="op">=</span> <span class="va">am</span>, weight <span class="op">=</span> <span class="va">wt</span>, horsepower <span class="op">=</span> <span class="va">hp</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>lp100km <span class="op">=</span> <span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="fl">3.785411784</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1.609344</span> <span class="op">*</span> <span class="va">mpg</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">mt</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_plot.html" class="external-link">l_plot</a></span><span class="op">(</span><span class="va">horsepower</span>, <span class="va">lp100km</span>, </span>
+<span>           color <span class="op">=</span> <span class="va">gear</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>Turn <code>p</code> (a <code>loon</code> widget) to a
+<code>ggplot</code> object via a simple function
+<code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">loon.ggplot</span><span class="op">)</span>
-<span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span>
-<span class="va">g1</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">loon.ggplot</span><span class="op">)</span></span>
+<span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon2ggplot.html">loon2ggplot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
+<span><span class="va">g1</span></span></code></pre></div>
 <p><img src="images/loon2ggplots/ggScatter.png" width="70%" style="display: block; margin: auto;"></p>
-<p>The object <code>g1</code> is a <code>ggplot</code> graphic. Comparing with the original <code>loon</code> widget, the <code>gg</code> one provides a legend that is helpful to decode the mapping systems. However, since <code>loon</code> widgets do not store the original data information, the labels of each legend are the hex-codes of the color. To better convey the graphics from aesthetics to data, we can edit the legend with more reasonable labels and add titles on top to emphasize the variables.</p>
+<p>The object <code>g1</code> is a <code>ggplot</code> graphic.
+Comparing with the original <code>loon</code> widget, the
+<code>gg</code> one provides a legend that is helpful to decode the
+mapping systems. However, since <code>loon</code> widgets do not store
+the original data information, the labels of each legend are the
+hex-codes of the color. To better convey the graphics from aesthetics to
+data, we can edit the legend with more reasonable labels and add titles
+on top to emphasize the variables.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">g1</span> <span class="op">+</span> 
-  <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#999999"</span>, <span class="st">"#A6CEE3"</span>, <span class="st">"#FFC0CB"</span><span class="op">)</span>, 
-                    name <span class="op">=</span> <span class="st">"gear"</span>, 
-                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"4"</span>, <span class="st">"3"</span>, <span class="st">"5"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">ggtitle</span><span class="op">(</span>label <span class="op">=</span> <span class="st">"horsepower versus lp100km"</span>,
-          subtitle <span class="op">=</span> <span class="st">"loon --&gt; ggplot"</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu">theme</span><span class="op">(</span> 
-    plot.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">12</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,
-    plot.subtitle <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">g1</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#999999"</span>, <span class="st">"#A6CEE3"</span>, <span class="st">"#FFC0CB"</span><span class="op">)</span>, </span>
+<span>                    name <span class="op">=</span> <span class="st">"gear"</span>, </span>
+<span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"4"</span>, <span class="st">"3"</span>, <span class="st">"5"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span>label <span class="op">=</span> <span class="st">"horsepower versus lp100km"</span>,</span>
+<span>          subtitle <span class="op">=</span> <span class="st">"loon --&gt; ggplot"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span> </span>
+<span>    plot.title <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">12</span>, face <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span>,</span>
+<span>    plot.subtitle <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="images/loon2ggplots/ggScatter_modification.png" width="70%" style="display: block; margin: auto;"></p>
-<p>Comparing with static <code>grid</code> (via <code><a href="https://great-northern-diver.github.io/loon/reference/loonGrob.html">loonGrob()</a></code>), modification of <code>ggplot</code> (via <code>loon2ggplot</code>) is simpler and more creative. Moreover, <code>ggplot</code> has over 100 extended packages. After transforming from <code>loon</code> to <code>ggplot</code>, users can continually take advantage of these extensions.</p>
+<p>Comparing with static <code>grid</code> (via
+<code><a href="https://great-northern-diver.github.io/loon/reference/loonGrob.html" class="external-link">loonGrob()</a></code>), modification of <code>ggplot</code> (via
+<code>loon2ggplot</code>) is simpler and more creative. Moreover,
+<code>ggplot</code> has over 100 extended packages. After transforming
+from <code>loon</code> to <code>ggplot</code>, users can continually
+take advantage of these extensions.</p>
 </div>
-<div id="turn-an-l_compound-object-to-a-patchwork-object" class="section level3">
-<h3 class="hasAnchor">
-<a href="#turn-an-l_compound-object-to-a-patchwork-object" class="anchor"></a>Turn an <code>l_compound</code> Object to a <code>patchwork</code> Object</h3>
-<p>Considering the following <code>loon</code> pairs plot (an <code>l_compound</code> widget) with three variables ‘lp100km’ (100 km per liter), ‘weight’ (car weight) and transmission (automatic or manual).</p>
+<div class="section level3">
+<h3 id="turn-an-l_compound-object-to-a-patchwork-object">Turn an <code>l_compound</code> Object to a <code>patchwork</code>
+Object<a class="anchor" aria-label="anchor" href="#turn-an-l_compound-object-to-a-patchwork-object"></a>
+</h3>
+<p>Considering the following <code>loon</code> pairs plot (an
+<code>l_compound</code> widget) with three variables ‘lp100km’ (100 km
+per liter), ‘weight’ (car weight) and transmission (automatic or
+manual).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mt</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">lp100km</span>, <span class="va">weight</span>, <span class="va">transmission</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="co"># and pass the built plot on</span>
-  <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_pairs.html">l_pairs</a></span><span class="op">(</span>showHistograms <span class="op">=</span> <span class="cn">TRUE</span>,
-          linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span> <span class="op">-&gt;</span>  <span class="co"># and assign the result.</span>
-  <span class="va">l_pp</span></code></pre></div>
-<p>It produces an interactive pairs plot with histograms on the margins (see <code><a href="https://great-northern-diver.github.io/loon/reference/l_pairs.html">?l_pairs</a></code>) and assigns the result to <code>l_pp</code> (which could have been assigned at the beginning with <code><a href="https://rdrr.io/r/base/assignOps.html">&lt;-</a></code> as well). Now, turn this pair plot to a <code>gg</code> object. Note that the compound <code>loon</code> widget like <code>l_pairs</code> (the shown one), <code>l_ts</code> or <code>l_facet</code>, etc, are created by <a href="https://patchwork.data-imaginist.com/index.html"><code>patchwork</code></a>. Features like <code>theme</code>, <code>labels</code> can be set by the <code>patchwork</code> rule.</p>
+<code class="sourceCode R"><span><span class="va">mt</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">lp100km</span>, <span class="va">weight</span>, <span class="va">transmission</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># and pass the built plot on</span></span>
+<span>  <span class="fu"><a href="https://great-northern-diver.github.io/loon/reference/l_pairs.html" class="external-link">l_pairs</a></span><span class="op">(</span>showHistograms <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>          linkingGroup <span class="op">=</span> <span class="st">"Motor Trend 1974"</span><span class="op">)</span> <span class="op">-&gt;</span>  <span class="co"># and assign the result.</span></span>
+<span>  <span class="va">l_pp</span></span></code></pre></div>
+<p>It produces an interactive pairs plot with histograms on the margins
+(see <code><a href="https://great-northern-diver.github.io/loon/reference/l_pairs.html" class="external-link">?l_pairs</a></code>) and assigns the result to <code>l_pp</code>
+(which could have been assigned at the beginning with <code>&lt;-</code>
+as well). Now, turn this pair plot to a <code>gg</code> object. Note
+that the compound <code>loon</code> widget like <code>l_pairs</code>
+(the shown one), <code>l_ts</code> or <code>l_facet</code>, etc, are
+created by <a href="https://patchwork.data-imaginist.com/index.html" class="external-link"><code>patchwork</code></a>.
+Features like <code>theme</code>, <code>labels</code> can be set by the
+<code>patchwork</code> rule.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com">patchwork</a></span><span class="op">)</span>
-<span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot</a></span><span class="op">(</span><span class="va">l_pp</span><span class="op">)</span>
-<span class="va">g2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
+<span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/loon2ggplot.html">loon2ggplot</a></span><span class="op">(</span><span class="va">l_pp</span><span class="op">)</span></span>
+<span><span class="va">g2</span></span></code></pre></div>
 <p><img src="images/loon2ggplots/loon_l_pairs.png" width="70%" style="display: block; margin: auto;"></p>
-<p>The object <code>g2</code> is a <code>patchwork</code> object. We can fit a smooth line on the <code>lp100km vs weight</code> scatterplot and draw a density curve on the <code>weight</code> histogram. Additionally, a title is added.</p>
+<p>The object <code>g2</code> is a <code>patchwork</code> object. We can
+fit a smooth line on the <code>lp100km vs weight</code> scatterplot and
+draw a density curve on the <code>weight</code> histogram. Additionally,
+a title is added.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Add a regression line on the `lp100km vs weight` scatterplot</span>
-<span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> 
-  <span class="fu">geom_smooth</span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span>
-<span class="co"># Add a density curve on the `weight` histogram</span>
-<span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span>
-  <span class="fu">geom_density</span><span class="op">(</span><span class="op">)</span>
-<span class="co"># Add a title</span>
-<span class="va">g2</span> <span class="op">&lt;-</span> <span class="va">g2</span> <span class="op">+</span> 
-  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Mtcars Pairs Plot"</span><span class="op">)</span>
-<span class="va">g2</span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Add a regression line on the `lp100km vs weight` scatterplot</span></span>
+<span><span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span>
+<span><span class="co"># Add a density curve on the `weight` histogram</span></span>
+<span><span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">g2</span><span class="op">$</span><span class="va">patches</span><span class="op">$</span><span class="va">plots</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_density.html" class="external-link">geom_density</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># Add a title</span></span>
+<span><span class="va">g2</span> <span class="op">&lt;-</span> <span class="va">g2</span> <span class="op">+</span> </span>
+<span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Mtcars Pairs Plot"</span><span class="op">)</span></span>
+<span><span class="va">g2</span></span></code></pre></div>
 <p><img src="images/loon2ggplots/loon_l_pairs_modification.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 </div>
-<div id="function-loon-ggplot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#function-loon-ggplot" class="anchor"></a>Function <code>loon.ggplot()</code>
+<div class="section level2">
+<h2 id="function-loon-ggplot">Function <code>loon.ggplot()</code><a class="anchor" aria-label="anchor" href="#function-loon-ggplot"></a>
 </h2>
-<p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code> package is an <code>S3</code> method and gathers features of both <code><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take either a <code>loon</code> widget or <code>gg</code> object and transform back and forth.</p>
-<p>Loon to ggplot: <code><a href="../reference/loon.ggplot.html">loon.ggplot(loon)</a></code> is equivalent to <code><a href="../reference/loon2ggplot.l_compound.html">loon2ggplot(loon)</a></code>.</p>
+<p><code><a href="../reference/loon.ggplot.html">loon.ggplot()</a></code> function in <code>loon.ggplot</code>
+package is an <code>S3</code> method and gathers features of both
+<code><a href="../reference/loon2ggplot.html">loon2ggplot()</a></code> and <code><a href="../reference/ggplot2loon.html">ggplot2loon()</a></code>. It can take
+either a <code>loon</code> widget or <code>gg</code> object and
+transform back and forth.</p>
+<p><code>Loon</code> to <code>ggplot</code>:
+<code>loon.ggplot(loon)</code> is equivalent to
+<code>loon2ggplot(loon)</code>.</p>
 <hr>
-<p>See the vignette <code>A Grammar of Interactive Graphics</code> for more.</p>
+<p>See the vignette <code>A Grammar of Interactive Graphics</code> for
+more.</p>
 </div>
   </div>
 
@@ -217,11 +269,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Zehao Xu, R. Wayne Oldford.</p>
+  <p></p>
+<p>Developed by Zehao Xu, R. Wayne Oldford.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -229,6 +283,8 @@
 
   
 
+
+  
 
   </body>
 </html>

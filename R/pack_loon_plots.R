@@ -69,7 +69,9 @@ pack_loon_plots <- function(plotInfo = list(),
                                            'facet:grid-',
                                            'byCOLS:', plotInfo$byCOLS, '-',
                                            'byROWS:', plotInfo$byROWS, '-',
-                                           'x', i))
+                                           'x', i, '-',
+                                           'drop:', ggObj$facet$params$drop, '-',
+                                           'scales:', facet_scales(ggObj$facet$params$free)))
                    ),
                    text = paste(paste0(" ", strsplit(uniqueRowSubtitles[i], "")[[1]], " "),
                                 collapse = "\n"),
@@ -98,7 +100,9 @@ pack_loon_plots <- function(plotInfo = list(),
                                            'facet:grid-',
                                            'byCOLS:', plotInfo$byCOLS, '-',
                                            'byROWS:', plotInfo$byROWS, '-',
-                                           'y', i))
+                                           'y', i, '-',
+                                           'drop:', ggObj$facet$params$drop, '-',
+                                           'scales:', facet_scales(ggObj$facet$params$free)))
                    ),
                    text= uniqueColSubtitles[i],
                    bg = set_tkLabel()$labelBackground,

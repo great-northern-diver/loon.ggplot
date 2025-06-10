@@ -23,27 +23,26 @@
 #' @param tkLabels Deprecated: logical (or \code{NULL}) to indicate whether the plot(s) are to be wrapped by
 #'         exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}
 #'
-#' @return a \code{loon} single or compound widget
+#' @return a \code{loon} single widget or a compound object
 #'
 #'
-#' @import ggplot2 tcltk loon methods grid rlang
-#' @importFrom stats quantile approxfun integrate setNames na.omit runif
+#' @import ggplot2 tcltk loon methods grid rlang stats
 #' @importFrom grDevices extendrange rgb as.raster col2rgb
 #' @importFrom gridExtra arrangeGrob tableGrob
+#' @importFrom ggmulti andrews geom_image_glyph geom_polygon_glyph geom_serialaxes_glyph coord_serialaxes
 #' @import patchwork
 #'
 #' @export
 #' @examples
-#'
 #' if(interactive()) {
-#'   p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
-#'   g <- ggplot2loon(p)
+#' p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+#' g <- ggplot2loon(p)
 #'
-#'   p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-#'      colour = factor(gear))) + facet_wrap(~am)
-#'   g1 <- ggplot2loon(p)
-#' }
-#'
+#' p1 <- ggplot(mtcars) +
+#'         geom_point(aes(x = wt, y = mpg,
+#'                        colour = factor(gear))) +
+#'         facet_wrap(~am)
+#' g1 <- ggplot2loon(p1)
 #' \donttest{
 #' df <- data.frame(
 #'   x = rnorm(120, c(0, 2, 4)),
@@ -56,35 +55,46 @@
 #'   geom_point(aes(colour = z)) +
 #'   facet_wrap(~z)
 #'
-#' # We can select the first geom_point layer to be
-#' # the active layer as in
+#' # The first point layer is set as the model layer
 #' suppressWarnings(
 #'   lp_scatterplots_active1 <- ggplot2loon(scatterplots,
 #'                                activeGeomLayers = 1,
 #'                                linkingGroup = "test")
 #' )
-#' # Here the grey points are linked (not the coloured ones)
+#' # Here, the gray points are interactive (not the colourful ones)
 #'
-#' # We can select the second geom_point layer to be
-#' # the active layer as in
-#' lp_scatterplots_active2 <- ggplot2loon(scatterplots, activeGeomLayers = 2)
-#' # Here the colour points are linked
+#' # The second point layer is set as the model layer
+#' lp_scatterplots_active2 <- ggplot2loon(scatterplots,
+#'                                        activeGeomLayers = 2)
+#' # Here, the colourful points are interactive
 #'
-#' # We can also select the both geom_point layers to be
-#' # the active layer as in
+#' # Both point layers could be interactive
 #' suppressWarnings(
-#'  lp_scatterplots_active12 <- ggplot2loon(scatterplots, activeGeomLayers = c(1,2))
+#'  lp_scatterplots_active12 <- ggplot2loon(scatterplots,
+#'                                          activeGeomLayers = c(1,2))
 #' )
-#' # Here the colour points and grey points are both linked
+#' # Here, all points are interactive
 #'
 #' ########### ggmatrix to loon ###########
 #' if(requireNamespace("GGally")) {
-#' pm <- GGally::ggpairs(iris, column = 1:4, ggplot2::aes(colour=Species))
+#' pm <- GGally::ggpairs(iris, column = 1:4,
+#'                       ggplot2::aes(colour=Species))
 #' lg <- ggplot2loon(pm)
 #' }
+#'
+#' ########### patchwork to loon ###########
+#' if(requireNamespace("patchwork")) {
+#' p1 <- ggplot(mtcars) +
+#'    geom_point(aes(mpg, disp))
+#' p2 <- ggplot(mtcars) +
+#'    geom_boxplot(aes(gear, disp, group = gear))
+#' # place two plots side by side
+#' patchwork <- p1 + p2
+#' ggplot2loon(patchwork)
+#' # See vignette `ggplots --> loon plots` for more details
 #' }
-#'
-#'
+#' }
+#' }
 ggplot2loon <- function(ggObj, ..., activeGeomLayers = integer(0),
                         layerId = NULL, scaleToFun = NULL,
                         ggGuides = FALSE, parent = NULL, pack = TRUE,
@@ -234,12 +244,11 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
   } else {
     ifelse(plotInfo$FacetGrid & plotInfo$byCOLS, 1, 0)
   }
-  plotInfo$showLabels <- plotInfo$panelNum == 1
 
   if(is.null(parent)) {
     parent <- loon::l_toplevel()
     subwin <- loon::l_subwin(parent, 'ggplot')
-    tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
+    tcltk::tktitle(parent) <- paste("loon.ggplot", "--path:", subwin)
     parent <- as.character(tcltk::tcl('frame', subwin))
   }
 
@@ -287,9 +296,10 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
   plotInfo$plots <- plots
 
   # pack labels
-  if(pack) pack_loon_plots(plotInfo = plotInfo,
-                           ggObj = ggObj,
-                           parent = parent)
+  if(pack)
+    pack_loon_plots(plotInfo = plotInfo,
+                    ggObj = ggObj,
+                    parent = parent)
 
   plots
 }

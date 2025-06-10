@@ -4,7 +4,103 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
                                           showNearestColor = FALSE, ...) {
 
   widget <- loon::l_create_handle(attr(target, "widget"))
-  ggObj <- list(...)$ggObj
+  args <- list(...)
+  facets <- args$facets
+
+  if(is.null(facets)) {
+    ggObj <- ggHistogram(widget, asAes = asAes, selectedOnTop = selectedOnTop,
+                         showNearestColor = showNearestColor, ...)
+  } else {
+    ggObj <- ggHistogramFacets(widget, asAes = asAes, selectedOnTop = selectedOnTop,
+                               showNearestColor = showNearestColor, ...)
+  }
+  return(ggObj)
+}
+
+ggHistogramFacets <- function(widget, asAes = TRUE, selectedOnTop = TRUE,
+                              showNearestColor = FALSE, ...) {
+
+  args <- list(...)
+  facets <- args$facets
+  facetsLabels <- args$facetsLabels
+  levels <- args$levels
+  ggObj <- args$ggObj
+
+  facetNum <- nrow(facetsLabels)
+  facetsVar <- rownames(facetsLabels)
+
+  if(!asAes) {
+    stop("Once `asAes` is set as FALSE, the ggplot histogram is constructed via `geom_rect()`.",
+         "Therefore, facets are not allowed.", call. = FALSE)
+  }
+
+  color <- c()
+  values <- c()
+  states <- list()
+  for(i in seq_along(facets)) {
+    facet <- facets[[i]]
+    data <- histogramAsAesTRUE(facet, showNearestColor)
+    color <- c(color, data$color)
+    values <- c(values, data$values)
+    histData <- data.frame(
+      x = data$x, fill = data$fill
+    )
+    states <- c(states,
+                list(do.call(cbind,
+                             c(list(histData),
+                               stats::setNames(as.list(facetsLabels[, i]),
+                                               facetsVar),
+                               facetGroup = i)))
+    )
+  }
+  states <- do.call(rbind, states)
+  for (i in seq_along(facetsVar)) {
+    states[[facetsVar[i]]] <- factor(states[[facetsVar[i]]], levels = levels[[i]])
+  }
+
+  color <- na.omit(color)
+  if(len_unique(color) == 0L) {
+    color <- NA
+  } else if(len_unique(color) == 1L) {
+    color <- color[1L]
+  }
+
+  values <- unique(na.omit(values))
+
+  ggObj <- ggObj +
+    ggplot2::geom_histogram(
+      data = states,
+      mapping = if(widget['yshows'] == "frequency") {
+        ggplot2::aes(x = x, fill = fill)
+      } else {
+        ggplot2::aes(x = x, fill = fill,
+                     y = ..density..)
+        # the layout would be different from the loon one
+      },
+      color = color,
+      boundary = widget['origin'],
+      binwidth = widget['binwidth'],
+      inherit.aes = FALSE,
+      closed = "left"
+    ) +
+    ggplot2::scale_fill_manual(
+      values = values,
+      breaks = values,
+      labels = values)
+
+  fill <- states$fill
+  uniFill <- unique(fill[!is.na(fill)])
+  if(length(uniFill) <= 1)
+    ggObj <- ggObj + ggplot2::guides(color = "none", fill = "none")
+
+  return(ggObj)
+}
+
+ggHistogram <- function(widget, asAes = TRUE, selectedOnTop = TRUE,
+                        showNearestColor = FALSE, ...) {
+
+  args <- list(...)
+  ggObj <- args$ggObj
   n <- widget['n']
   if(n == 0) return(ggObj)
 
@@ -13,7 +109,9 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
     data <- histogramAsAesTRUE(widget, showNearestColor)
 
     fill <- data$fill
-    color <- data$colour
+    color <- data$color
+    if(len_unique(color) == 1L) color <- color[1L]
+
     x <- data$x
     values <- data$values
 
@@ -27,7 +125,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
                        y = ..density..)
           # the layout would be different from the loon one
         },
-        colour = color,
+        color = color,
         boundary = widget['origin'],
         binwidth = widget['binwidth'],
         inherit.aes = FALSE,
@@ -40,7 +138,7 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
 
     uniFill <- unique(fill[!is.na(fill)])
     if(length(uniFill) <= 1)
-      ggObj <- ggObj + ggplot2::guides(color = FALSE, fill = FALSE)
+      ggObj <- ggObj + ggplot2::guides(color = "none", fill = "none")
 
   } else {
 
@@ -50,8 +148,12 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
     ymin <- data$y
     xmax <- data$x + data$width
     ymax <- data$y + data$height
+
     fill <- data$fill
-    colour <- data$colour
+    if(len_unique(fill) == 1L) fill <- fill[1L]
+
+    color <- data$color
+    if(len_unique(color) == 1L) color <- color[1L]
 
     if(!selectedOnTop)
       warning("For histogram, if the `asAes` is set as FALSE, the plot will be created by adding layer `geom_rect()`. ",
@@ -69,19 +171,29 @@ loon2ggplot.l_layer_histogram <- function(target, asAes = TRUE, selectedOnTop = 
                                xmax = xmax,
                                ymax = ymax),
         fill = fill,
-        colour = colour,
+        color = color,
         inherit.aes = FALSE
       )
   }
+
   return(ggObj)
 }
 
 histogramAsAesTRUE <- function(widget, showNearestColor = FALSE) {
 
-  colorOutline <- if(widget['showOutlines']) as_hex6color(widget["colorOutline"]) else NA
+  if (widget['n'] == 0 || !any(widget['active'])) {
+    return(
+      list(
+        x = NA,
+        fill = NA,
+        color = NA,
+        values = NA
+      )
+    )
+  }
   states <- get_layer_states(widget, native_unit = FALSE)
-
   active <- states$active
+  colorOutline <- if(widget['showOutlines']) as_hex6color(widget["colorOutline"]) else NA
   activeSelected <- states$selected[active]
   activeColor <- if(widget['showStackedColors']) {
     states$color[active]
@@ -124,7 +236,7 @@ histogramAsAesTRUE <- function(widget, showNearestColor = FALSE) {
     list(
       x = activeX,
       fill = activeColor,
-      colour = colorOutline,
+      color = colorOutline,
       values = values
     )
   )
@@ -172,7 +284,7 @@ histogramAsAesFALSE <- function(widget) {
                               fills = bnames,
                               x = bin$x0,
                               width = bin$x1 - bin$x0,
-                              colour = colorOutline,
+                              color = colorOutline,
                               default_fill = default_fill)
                    })
 
@@ -193,7 +305,7 @@ bin_data <- function(count,
                      fills,
                      x,
                      width,
-                     colour,
+                     color,
                      default_fill = NULL) {
   y0 <- 0
   bin_dataFrame <- do.call(rbind,
@@ -217,7 +329,7 @@ bin_data <- function(count,
                                         width = width,
                                         height = height,
                                         fill = fill,
-                                        colour = colour
+                                        color = color
                                       )
                                     )
                                   })

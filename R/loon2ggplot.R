@@ -18,37 +18,44 @@
 #' which are the "nearest" of these hex codes.
 #' @param ... arguments used inside \code{loon2ggplot()}, not used by this method
 #'
-#' @return a \code{ggplot} object
+#' @return a \code{ggplot} object (or a \code{patchwork} object, a extension of \code{ggplot2})
 #'
 #' @details
-#' in \code{ggplot}, generally speaking, there are two ways to set the
-#' aesthetics attributes, either take it as variables \code{asAes = TRUE}
-#' (set in function \code{aes()}) or visual properties \code{asAes = FALSE}.
-#' The main benefits to consider it as variables are that 1. legend could be shown;
+#' In \code{ggplot2}, typically, there are two ways to set the
+#' aesthetic attributes, either take them as variables \code{asAes = TRUE}
+#' (set in the function \code{aes()}) or constants \code{asAes = FALSE}.
+#' The main benefits to consider them as variables are that 1. legend could be displayed;
 #' 2. convenient for further analysis.
 #'
-#' In \code{loon}, if the \code{selected} state is changed, the order of the points will be changed so that
-#' the highlighted points will be displayed on top. To turn it static, if \code{selectedOnTop = TRUE},
-#' the points will be partitioned into two
-#' groups, one group presents the un-selected (un-highlighted) points and
-#' the other group presents selected (highlighted) points.
-#' the un-selected group will be drawn first, then selected group will be displayed on top of it;
-#' if \code{selectedOnTop = FALSE}, no partition is applied so that the displayed order will be identical to
-#' the original data set order. This is very helpful when further analysis will be operated in ggplot
-#' graphical system, e.g. \code{+ facet_wrap(...)}. See examples.
+#' In \code{loon}, when points were \code{selected} (highlighted),
+#' the order would be changed so that
+#' the highlighted points would be displayed at the front.
+#' To turn the \code{loon} plot static, if \code{selectedOnTop = TRUE},
+#' the points would be partitioned into two
+#' groups -- one group representing the un-highlighted points,
+#' and the other group representing the highlighted points.
+#' The un-highlighted group would be drawn first,
+#' then the selected group;
+#' if \code{selectedOnTop = FALSE}, no partition would be applied so that
+#' the displayed order remained. However, the highlighted points could be
+#' displayed at the back. See examples.
 #'
 #' @export
 #' @examples
 #' if(interactive()) {
+#' ######## Basic ########
 #' lp <- l_plot(iris,
 #'              color = iris$Species,
 #'              glyph = "circle")
 #' gp <- loon2ggplot(lp)
 #' gp # a ggplot object
 #'
-#' # add smooth layer, grouped by color
+#' # Add a smooth layer
+#' # Reset initial plot object
+#' gp$data <- gp$layers[[1]]$data
+#' gp$mapping <- gp$layers[[1]]$mapping
 #' gp +
-#'   geom_smooth(aes(color = color)) +
+#'   geom_smooth() +
 #'   # give meaningful legend label names
 #'   scale_color_manual(
 #'     # make sure the order is correct
@@ -64,33 +71,60 @@
 #' # facet by `fill`
 #' gh0 + facet_wrap(~fill)
 #'
-#' # set `asAes = FALSE`
+#' ######## Argument `asAes` ########
 #' gh1 <- loon2ggplot(lh, asAes = FALSE)
-#' # Expect the legend, they both are identical
 #' gh1
 #' \dontrun{
-#' # ERROR
 #' # The bins are constructed by `ggplot2::geom_rect()`
-#' # Very limited operations can be made
+#' # Very limited manipulations can be made
+#' # ERROR will be returned
 #' gh1 + facet_wrap(~fill)
 #' }
 #'
-#' # Argument `selectedOnTop`
+#' ######## Argument `selectedOnTop` ########
 #' p <- l_plot(iris, color = iris$Species)
 #' p['selected'][iris$Petal.Length > 5] <- TRUE
 #' g <- loon.ggplot(p)
-#' # It looks correct.
 #' g
 #' # facet by "Species"
-#' \dontrun{
-#' g + facet_wrap(iris$Species)}
-#' # Something is wrong here. There is a pink point (at least one)
-#' # in species "versicolor"! The reason is because after points are
-#' # hightligthed, the displayed order has been changed. One way to
-#' # fix it is to set the `selectedOnTop` as FALSE.
+#' g + facet_wrap(iris$Species)
 #'
+#' # Something is wrong here. There is a pink point (at least one)
+#' # in species "versicolor"! It is because after points are
+#' # highlighted, the displayed order has been changed.
+#' # Set `selectedOnTop` as FALSE, as in
 #' loon.ggplot(p, selectedOnTop = FALSE) +
 #'   facet_wrap(iris$Species)
+#'
+#' \donttest{
+#' ######## l_patchwork --> ggplot ########
+#' library(patchwork)
+#' p1 <- ggplot(mtcars) + geom_point(aes(mpg, disp))
+#' p2 <- ggplot(mtcars) +
+#'    geom_boxplot(aes(gear, disp, group = gear))
+#' p3 <- ggplot(mtcars) + geom_smooth(aes(disp, qsec))
+#' design <- c(
+#'   area(1,1),
+#'   area(1,2),
+#'   area(2,1,2,2)
+#' )
+#' pp <- p1 + p2 + p3 + plot_layout(design = design)
+#'
+#' # turn a patchwork obj to a loon (l_compound)
+#' lp <- ggplot2loon(pp)
+#' # turn a loon (l_compound) back to a patchwork
+#' plp <- loon2ggplot(lp)
+#' plp # almost identical to pp
+#'
+#'
+#' ######## zneplots --> ggplot ########
+#' library(zenplots)
+#' stopifnot(packageVersion("zenplots") > "1.0.4")
+#' zen <- zenplots::zenplot(iris, plot1d = "density", pkg = "loon")
+#' ggzen <- loon.ggplot(zen)
+#' ggzen +
+#'   patchwork::plot_annotation(title = "This is a Patchwork!")
+#' }
 #' }
 loon2ggplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         showNearestColor = FALSE, ...) {
@@ -128,7 +162,8 @@ loon2ggplot.l_plot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                ggObj = loon2ggplot(rl,
                                    asAes = asAes,
                                    selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor))
+                                   showNearestColor = showNearestColor,
+                                   ...))
 }
 
 #' @rdname loon2ggplot
@@ -141,7 +176,7 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, selectedOnTop = TRUE,
 
   setLimits <- TRUE
   if(target['yshows'] == "density") {
-    if(length(unique(target['color'])) > 1 || length(unique(target['selected'])) > 1) {
+    if(len_unique(target['color']) > 1 || length(unique(target['selected'])) > 1) {
       setLimits <- FALSE
       message("In `ggplot` histogram, if `y` shows density, ",
               "the area of each category (grouped by color) is 1; ",
@@ -153,7 +188,7 @@ loon2ggplot.l_hist <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes,
                                    selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor),
+                                   showNearestColor = showNearestColor, ...),
                setLimits = setLimits)
 }
 
@@ -165,7 +200,7 @@ loon2ggplot.l_graph <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   rl <- loon::l_create_handle(c(target, 'root'))
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor))
+                                   showNearestColor = showNearestColor, ...))
 }
 
 #' @rdname loon2ggplot
@@ -198,7 +233,7 @@ loon2ggplot.l_plot3D <- function(target,  asAes = TRUE, selectedOnTop = TRUE,
 
   cartesian_gg(target = target,
                ggObj = loon2ggplot(rl, asAes = asAes, selectedOnTop = selectedOnTop,
-                                   showNearestColor = showNearestColor)) +
+                                   showNearestColor = showNearestColor, ...)) +
     ggplot2::geom_line(
       data = data.frame(
         x = x,
@@ -335,76 +370,15 @@ loon2ggplot.l_layer_group <- function(target, asAes = TRUE, selectedOnTop = TRUE
 
   widget <- l_create_handle(attr(target, "widget"))
   ggObj <- ggplot2::ggplot()
+  visibleChildrenLayers <- l_get_visible_children(widget)
 
-  children <- l_layer_getUngroupedChildren(widget = widget, target = widget)
-
-  l_children_layers <- lapply(
-    rev(children),
-    function(layerid) {
-
-      layer <- loon::l_create_handle(c(widget, layerid))
-
-      if(layerid == 'model') {
-
-        x <- widget['x']
-        if(length(x) > 0) {
-
-          ndimNames <- loon::l_nDimStateNames(widget)
-          # N dim names
-          data <- as.data.frame(
-            remove_null(
-              stats::setNames(
-                lapply(ndimNames,
-                       function(s) {
-                         if(s == "color") {
-                           l_colorName(widget[s], error = FALSE,
-                                       precise = !showNearestColor)
-                         } else if (s == "size") {
-                           as.numeric(widget[s])
-                         } else {
-                           state <- widget[s]
-                           if(length(state) == 0) return(NULL)
-                           state
-                         }
-                       }),
-                ndimNames
-              ), as_list = FALSE)
-          )
-
-          if(selectedOnTop) {
-            displayOrder <- suppressWarnings(get_model_display_order(widget))
-            data <- data[displayOrder, ]
-          }
-
-          if(inherits(widget, "l_hist")) {
-
-            # histogram
-            ggObj <<- ggplot2::ggplot(data = data,
-                                      mapping = ggplot2::aes(x = x))
-
-          } else {
-            ggObj <<- ggplot2::ggplot(data = data,
-                                      mapping = ggplot2::aes(x = x,
-                                                             y = y))
-          }
-        } else NULL
-      }
-
-      layer
-    })
-
-  l_visible_children_layer <- Filter(
-    function(layerid) {
-      loon::l_layer_isVisible(widget, layerid)
-    },
-    l_children_layers)
-  lapply(l_visible_children_layer,
+  lapply(visibleChildrenLayers,
          function(layer) {
 
            ggObj <<- loon2ggplot(layer, asAes = asAes,
                                  selectedOnTop = selectedOnTop,
                                  showNearestColor = showNearestColor,
-                                 ggObj = ggObj)
+                                 ggObj = ggObj, ...)
          })
 
   ggObj
@@ -419,26 +393,30 @@ loon2ggplot.l_layer_polygon <- function(target, asAes = TRUE, selectedOnTop = TR
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
-  ggObj <- list(...)$ggObj
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
 
-  if(length(states$x) > 0  & length(states$y) > 0) {
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
 
-    x <- if(swapAxes) states$y else states$x
-    y <- if(swapAxes) states$x else states$y
-
-    ggObj <- ggObj +
-      ggplot2::geom_polygon(
-        data = data.frame(
-          x = x, y = y
-        ),
-        mapping = ggplot2::aes(x = x, y = y),
-        fill = states$color,
-        colour = states$linecolor,
-        size =  as_ggplot_size(states$linewidth, "lines")
-      )
+  if(is.null(facets)) {
+    data <- flipxy(states, swapAxes = swapAxes)
+  } else {
+    data <- facets_layer_data(target, facets,
+                              facetsLabels = args$facetsLabels,
+                              levels = args$levels,
+                              swapAxes = swapAxes)
   }
 
-  ggObj
+  ggObj +
+    ggplot2::geom_polygon(
+      data = data,
+      mapping = ggplot2::aes(x = x, y = y),
+      fill = states$color,
+      colour = states$linecolor,
+      size =  as_ggplot_size(states$linewidth, "lines")
+    )
 }
 
 #' @export
@@ -449,26 +427,29 @@ loon2ggplot.l_layer_line <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
-  ggObj <- list(...)$ggObj
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
 
-  if(length(states$x) > 0  & length(states$y) > 0) {
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
 
-    x <- if(swapAxes) states$y else states$x
-    y <- if(swapAxes) states$x else states$y
-
-    ggObj <- ggObj +
-      ggplot2::geom_path(
-        data = data.frame(
-          x = x,
-          y = y
-        ),
-        mapping = ggplot2::aes(x = x, y = y),
-        colour = states$color,
-        size = as_ggplot_size(states$linewidth, "lines")
-      )
+  if(is.null(facets)) {
+    data <- flipxy(states, swapAxes = swapAxes)
+  } else {
+    data <- facets_layer_data(target, facets,
+                              facetsLabels = args$facetsLabels,
+                              levels = args$levels,
+                              swapAxes = swapAxes)
   }
 
-  ggObj
+  ggObj +
+    ggplot2::geom_path(
+      data = data,
+      mapping = ggplot2::aes(x = x, y = y),
+      colour = states$color,
+      size = as_ggplot_size(states$linewidth, "lines")
+    )
 }
 
 #' @export
@@ -479,28 +460,35 @@ loon2ggplot.l_layer_rectangle <- function(target, asAes = TRUE, selectedOnTop = 
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
-  ggObj <- list(...)$ggObj
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
 
-  if(length(states$x) > 0  & length(states$y) > 0) {
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
 
-    x <- if(swapAxes) states$y else states$x
-    y <- if(swapAxes) states$x else states$y
+  if(is.null(facets)) {
 
-    ggObj <- ggObj +
-      ggplot2::geom_rect(
-        data = data.frame(
-          x = x,
-          y = y
-        ),
-        mapping = ggplot2::aes(xmin = x[1], xmax = x[2],
-                               ymin = y[1], ymax = y[2]),
-        colour = states$linecolor,
-        fill = states$color,
-        size =  as_ggplot_size(states$linewidth, "lines")
-      )
+    data <- flipxy(states, swapAxes = swapAxes)
+
+  } else {
+
+    data <- facets_layer_data(target, facets,
+                              facetsLabels = args$facetsLabels,
+                              levels = args$levels,
+                              swapAxes = swapAxes)
+
   }
 
-  ggObj
+  ggObj +
+    ggplot2::geom_rect(
+      data = data,
+      mapping = ggplot2::aes(xmin = x[1], xmax = x[2],
+                             ymin = y[1], ymax = y[2]),
+      colour = states$linecolor,
+      fill = states$color,
+      size =  as_ggplot_size(states$linewidth, "lines")
+    )
 }
 #' @export
 loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -510,38 +498,46 @@ loon2ggplot.l_layer_oval <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
-  ggObj <- list(...)$ggObj
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
 
-  if(length(states$x) > 0  & length(states$y) > 0){
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
 
-    xcoords <- if(swapAxes) states$y else states$x
-    ycoords <- if(swapAxes) states$x else states$y
-
-    angle <- seq(0, 2*base::pi, length=101)
-
-    xCenter <- mean(xcoords)
-    yCenter <- mean(ycoords)
-
-    xRadius <- diff(range(xcoords))/2
-    yRadius <- diff(range(ycoords))/2
-
-    x <- mean(xcoords) + xRadius * cos(angle)
-    y <- mean(ycoords) + yRadius * sin(angle)
-
-    ggObj <- ggObj +
-      ggplot2::geom_polygon(
-        data = data.frame(
-          x = x,
-          y = y
-        ),
-        mapping = ggplot2::aes(x = x, y = y),
-        fill = states$color,
-        colour = states$linecolor,
-        size = as_ggplot_size(states$linewidth, "lines")
-      )
+  if(!is.null(facets)) {
+    # data <- facets_layer_data(target, facets, facetsLabels, levels, swapAxes)
+    warning("The settings of facets for `loon2ggplot.l_layer_oval()` are still in development.",
+            call. = FALSE)
   }
 
-  ggObj
+
+  data <- flipxy(states, swapAxes = swapAxes)
+  xcoords <- data$x
+  ycoords <- data$y
+
+  angle <- seq(0, 2*base::pi, length=101)
+
+  xCenter <- mean(xcoords)
+  yCenter <- mean(ycoords)
+
+  xRadius <- diff(range(xcoords))/2
+  yRadius <- diff(range(ycoords))/2
+
+  x <- mean(xcoords) + xRadius * cos(angle)
+  y <- mean(ycoords) + yRadius * sin(angle)
+
+  ggObj +
+    ggplot2::geom_polygon(
+      data = data.frame(
+        x = x,
+        y = y
+      ),
+      mapping = ggplot2::aes(x = x, y = y),
+      fill = states$color,
+      colour = states$linecolor,
+      size = as_ggplot_size(states$linewidth, "lines")
+    )
 }
 #' @export
 loon2ggplot.l_layer_text <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -550,32 +546,44 @@ loon2ggplot.l_layer_text <- function(target, asAes = TRUE, selectedOnTop = TRUE,
   widget <- l_create_handle(attr(target, "widget"))
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
-  textCoords <- get_textCoords(angle = states$angle, anchor = states$anchor, just = states$just)
+  textCoords <- get_textCoords(angle = states$angle,
+                               anchor = states$anchor,
+                               just = states$just)
 
-  ggObj <- list(...)$ggObj
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
 
-  if(length(states$x) > 0  & length(states$y) > 0){
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
 
-    x <- if(swapAxes) states$y else states$x
-    y <- if(swapAxes) states$x else states$y
-    label <- states$text
+  if(is.null(facets)) {
 
-    ggObj <- ggObj +
-      ggplot2::geom_text(
-        data = data.frame(
-          x = x + textCoords[1],
-          y = y + textCoords[2],
-          label =label
-        ),
-        mapping = ggplot2::aes(x = x, y = y, label = label),
-        angle = states$angle,
-        colour = states$color,
-        hjust = get_hjust(states$justify),
-        size = as_ggplot_size(states$size)
-      )
+    data <- flipxy(states, swapAxes = swapAxes)
+    data$label <- states$label %||% states$text
+
+  } else {
+
+    data <- facets_layer_data(target, facets,
+                              facetsLabels = args$facetsLabels,
+                              levels = args$levels,
+                              swapAxes = swapAxes,
+                              label = TRUE)
   }
 
-  ggObj
+  data$x <- data$x + textCoords[1]
+  data$y <- data$y + textCoords[2]
+
+  ggObj +
+    ggplot2::geom_text(
+      data = data,
+      mapping = ggplot2::aes(x = x, y = y,
+                             label = label),
+      angle = states$angle,
+      colour = states$color,
+      hjust = get_hjust(states$justify),
+      size = as_ggplot_size(states$size)
+    )
 }
 #' @export
 loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -585,51 +593,59 @@ loon2ggplot.l_layer_texts <- function(target, asAes = TRUE, selectedOnTop = TRUE
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
+
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
+
+  if(!is.null(facets)) {
+    warning("The settings of facets for `loon2ggplot.l_layer_texts()` are still in development.",
+            call. = FALSE)
+  }
+
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
   y <- if(swapAxes) states$x[active] else states$y[active]
 
-  ggObj <- list(...)$ggObj
+  label  <- states$text[active]
+  size  <- states$size[active]
+  angle  <- states$angle[active]
+  anchor  <- states$anchor[active]
+  justify  <- states$justify[active]
+  color <- states$color[active]
 
-  if(length(x) > 0  & length(y) > 0){
+  data <- lapply(seq(length(label)),
+                 function(i){
+                   textCoords <- get_textCoords(angle = angle[i],
+                                                anchor = anchor[i],
+                                                just = justify[i])
 
-    label  <- states$text[active]
-    size  <- states$size[active]
-    angle  <- states$angle[active]
-    anchor  <- states$anchor[active]
-    justify  <- states$justify[active]
-    color <- states$color[active]
+                   c(label = label[i],
+                     x = as.numeric(x[i] + textCoords[1]),
+                     y = as.numeric(y[i] + textCoords[2]))
+                 })
 
-    data <- lapply(1:length(label),
-                   function(i){
-                     textCoords <- get_textCoords(angle = angle[i],
-                                                  anchor = anchor[i],
-                                                  just = justify[i])
+  df <- as.data.frame(
+    do.call(rbind, data),
+    stringsAsFactors = FALSE
+  )
 
-                     c(label = label[i],
-                       x = x[i] + textCoords[1],
-                       y = y[i] + textCoords[2])
-                   })
+  if(len_unique(angle) == 1L) angle <- angle[1L]
+  if(len_unique(size) == 1L) size <- size[1L]
+  if(len_unique(justify) == 1L) justify <- justify[1L]
+  if(len_unique(color) == 1L) color <- color[1L]
 
-    df <- as.data.frame(
-      do.call(rbind, data),
-      stringsAsFactors = FALSE
+  ggObj +
+    ggplot2::geom_text(
+      data = df,
+      mapping = ggplot2::aes(x = x, y = y, label = label),
+      angle = angle,
+      colour = color,
+      hjust = get_hjust(justify),
+      size = as_ggplot_size(size)
     )
-    df$x <- as.numeric(df$x)
-    df$y <- as.numeric(df$y)
-
-    ggObj <- ggObj +
-      ggplot2::geom_text(
-        data = df,
-        mapping = ggplot2::aes(x = x, y = y, label = label),
-        angle = angle,
-        colour = color,
-        hjust = get_hjust(justify),
-        size = as_ggplot_size(size)
-      )
-  }
-
-  ggObj
 }
 #' @export
 loon2ggplot.l_layer_points <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -638,25 +654,34 @@ loon2ggplot.l_layer_points <- function(target, asAes = TRUE, selectedOnTop = TRU
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
+
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
+
+  if(!is.null(facets)) {
+    warning("The settings of facets for `loon2ggplot.l_layer_points()` are still in development.",
+            call. = FALSE)
+  }
+
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
   y <- if(swapAxes) states$x[active] else states$y[active]
+  color <- states$color[active]
+  if(len_unique(color) == 1L) color <- color[1L]
+  size <- as_ggplot_size(states$size[active])
+  if(len_unique(size) == 1L) size <- size[1L]
 
-  ggObj <- list(...)$ggObj
-
-  if(length(x) > 0  && length(y)  > 0) {
-
-    ggObj <- ggObj +
-      ggplot2::geom_point(
-        data = data.frame(x = x, y = y),
-        mapping = ggplot2::aes(x = x, y = y),
-        colour =  states$color[active],
-        size = as_ggplot_size(states$size[active]),
-        pch = 19
-      )
-  }
-
-  ggObj
+  ggObj +
+    ggplot2::geom_point(
+      data = data.frame(x = x, y = y),
+      mapping = ggplot2::aes(x = x, y = y),
+      colour =  color,
+      size = size,
+      pch = 19
+    )
 }
 #' @export
 loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -666,38 +691,59 @@ loon2ggplot.l_layer_polygons <- function(target, asAes = TRUE, selectedOnTop = T
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
+
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
+
+  if(!is.null(facets)) {
+    warning("The settings of facets for `loon2ggplot.l_layer_polygons()` are still in development.",
+            call. = FALSE)
+  }
+
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
   y <- if(swapAxes) states$x[active] else states$y[active]
+  len_x <- lengths(x)
 
-  ggObj <- list(...)$ggObj
-
-  if(length(x) > 0  & length(y) > 0){
-
-    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
-    linecolor <- states$linecolor[active]
-    fill <- states$color[active]
-
-    len_x <- lengths(x)
-
-    group <- as.factor(rep(1:length(len_x), times = len_x))
-    df <- data.frame(
-      x = as.numeric(unlist(x)),
-      y = as.numeric(unlist(y)),
-      group = group
-    )
-
-    ggObj <- ggObj +
-      ggplot2::geom_polygon(
-        data =df,
-        mapping = ggplot2::aes(x = x, y = y, group = group),
-        fill = rep(fill, times = len_x),
-        colour = rep(linecolor, times = len_x),
-        size = rep(linewidth, times = len_x)
-      )
+  linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
+  linewidth <- if(len_unique(linewidth) == 1L) {
+    linewidth[1L]
+  } else {
+    rep(linewidth, times = len_x)
   }
 
-  ggObj
+  linecolor <- states$linecolor[active]
+  linecolor <- if(len_unique(linecolor) == 1L) {
+    linecolor[1L]
+  } else {
+    rep(linecolor, times = len_x)
+  }
+
+  fill <- states$color[active]
+  fill <- if(len_unique(fill) == 1L) {
+    fill[1L]
+  } else {
+    rep(fill, times = len_x)
+  }
+
+  group <- as.factor(rep(1:length(len_x), times = len_x))
+  df <- data.frame(
+    x = as.numeric(unlist(x)),
+    y = as.numeric(unlist(y)),
+    group = group
+  )
+
+  ggObj +
+    ggplot2::geom_polygon(
+      data =df,
+      mapping = ggplot2::aes(x = x, y = y, group = group),
+      fill = fill,
+      colour = linecolor,
+      size = linewidth
+    )
 }
 #' @export
 loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -707,38 +753,52 @@ loon2ggplot.l_layer_rectangles <- function(target, asAes = TRUE, selectedOnTop =
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
+
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
+
+  if(!is.null(facets)) {
+    warning("The settings of facets for `loon2ggplot.l_layer_rectangles()` are still in development.",
+            call. = FALSE)
+  }
+
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
   y <- if(swapAxes) states$x[active] else states$y[active]
 
-  ggObj <- list(...)$ggObj
+  xmin <- as.numeric(sapply(x, function(xx) xx[1]))
+  xmax <- as.numeric(sapply(x, function(xx) xx[2]))
+  ymin <- as.numeric(sapply(y, function(yy) yy[1]))
+  ymax <- as.numeric(sapply(y, function(yy) yy[2]))
 
-  if(length(x) > 0  & length(y) > 0) {
+  df <- data.frame(
+    xmin = xmin,
+    xmax = xmax,
+    ymin = ymin,
+    ymax = ymax
+  )
 
-    xmin <- as.numeric(sapply(x, function(xx) xx[1]))
-    xmax <- as.numeric(sapply(x, function(xx) xx[2]))
-    ymin <- as.numeric(sapply(y, function(yy) yy[1]))
-    ymax <- as.numeric(sapply(y, function(yy) yy[2]))
+  fill <- states$color[active]
+  if(len_unique(fill) == 1L) fill <- fill[1L]
 
-    df <- data.frame(
-      xmin = xmin,
-      xmax = xmax,
-      ymin = ymin,
-      ymax = ymax
+  color <- states$linecolor[active]
+  if(len_unique(color) == 1L) color <- color[1L]
+
+  size <- as_ggplot_size(states$linewidth[active], "lines")
+  if(len_unique(size) == 1L) size <- size[1L]
+
+  ggObj +
+    ggplot2::geom_rect(
+      data =df,
+      mapping = ggplot2::aes(xmin = xmin, xmax = xmax,
+                             ymin = ymin, ymax = ymax),
+      fill = fill,
+      colour = color,
+      size = size
     )
-
-    ggObj <- ggObj +
-      ggplot2::geom_rect(
-        data =df,
-        mapping = ggplot2::aes(xmin = xmin, xmax = xmax,
-                               ymin = ymin, ymax = ymax),
-        fill = states$color[active],
-        colour = states$linecolor[active],
-        size = as_ggplot_size(states$linewidth[active], "lines")
-      )
-  }
-
-  ggObj
 }
 #' @export
 loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, selectedOnTop = TRUE,
@@ -748,36 +808,119 @@ loon2ggplot.l_layer_lines <- function(target, asAes = TRUE, selectedOnTop = TRUE
   swapAxes <- widget["swapAxes"]
   states <- get_layer_states(target, native_unit = FALSE)
 
+  args <- list(...)
+  ggObj <- args$ggObj
+  facets <- args$facets
+
+  if(length(states$x) == 0  || length(states$y) == 0)
+    return(ggObj)
+
+  if(!is.null(facets)) {
+    warning("The settings of facets for `loon2ggplot.l_layer_lines()` are still in development.",
+            call. = FALSE)
+  }
+
   active <- states$active
   x <- if(swapAxes) states$y[active] else states$x[active]
   y <- if(swapAxes) states$x[active] else states$y[active]
-
-  ggObj <- list(...)$ggObj
-
-  if(length(x) > 0  & length(y) > 0){
-
-    linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
-    linecolor <- states$color[active]
-
-    len_x <- lengths(x)
-
-    group <- as.factor(rep(seq(length(len_x)),
-                           times = len_x))
-
-    df <- data.frame(
-      x = as.numeric(unlist(x)),
-      y = as.numeric(unlist(y)),
-      group = group
-    )
-
-    ggObj <- ggObj +
-      ggplot2::geom_path(
-        data =df,
-        mapping = ggplot2::aes(x = x, y = y, group = group),
-        colour = rep(linecolor, times = len_x),
-        size = rep(linewidth, times = len_x)
-      )
+  len_x <- lengths(x)
+  linewidth  <- as_ggplot_size(states$linewidth[active], "lines")
+  linewidth <- if(len_unique(linewidth) == 1L) {
+    linewidth[1L]
+  } else {
+    rep(linewidth, times = len_x)
   }
 
-  ggObj
+  linecolor <- states$color[active]
+  linecolor <- if(len_unique(linecolor) == 1L) {
+    linecolor[1L]
+  } else {
+    rep(linecolor, times = len_x)
+  }
+
+  group <- as.factor(rep(seq(length(len_x)),
+                         times = len_x))
+
+  df <- data.frame(
+    x = as.numeric(unlist(x)),
+    y = as.numeric(unlist(y)),
+    group = group
+  )
+
+  ggObj +
+    ggplot2::geom_path(
+      data =df,
+      mapping = ggplot2::aes(x = x, y = y, group = group),
+      colour = linecolor,
+      size = linewidth
+    )
+}
+
+l_get_visible_children <- function(widget) {
+
+  children <- l_layer_getUngroupedChildren(widget = widget, target = widget)
+
+  childrenLayers <- lapply(
+    rev(children),
+    function(layerid) {
+      loon::l_create_handle(c(widget, layerid))
+    })
+
+  visibleChildrenLayers <- Filter(
+    function(layerid) {
+      loon::l_layer_isVisible(widget, layerid)
+    },
+    childrenLayers)
+
+  return(visibleChildrenLayers)
+}
+
+flipxy <- function(states, swapAxes = FALSE) {
+
+  if(swapAxes) {
+    data <- data.frame(
+      x = states$y,
+      y = states$x
+    )
+  } else {
+    data <- data.frame(
+      x = states$x,
+      y = states$y
+    )
+  }
+
+  data
+}
+
+facets_layer_data <- function(target, facets, facetsLabels, levels, swapAxes, label = FALSE) {
+
+  facetsVar <- rownames(facetsLabels)
+  data <- do.call(rbind,
+                  lapply(seq_along(facets),
+                         function(i) {
+
+                           facet <- facets[[i]]
+                           visibleChildrenLayers <- l_get_visible_children(facet)
+                           targeti <- Filter(function(x) x == target, visibleChildrenLayers)[[1L]]
+                           states <- get_layer_states(targeti, native_unit = FALSE)
+
+                           data <- flipxy(states, swapAxes = swapAxes)
+                           if(label) {
+                             data$label <- states$label %||% states$text
+                           }
+
+                           do.call(cbind,
+                                   c(list(data),
+                                     stats::setNames(as.list(facetsLabels[, i]),
+                                                     facetsVar),
+                                     facetGroup = i))
+                         })
+  )
+
+  for (i in seq_along(facetsVar)) {
+    data[[facetsVar[i]]] <- factor(data[[facetsVar[i]]],
+                                   levels = levels[[i]])
+  }
+
+  return(data)
 }

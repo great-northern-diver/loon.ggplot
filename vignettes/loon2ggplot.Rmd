@@ -12,7 +12,6 @@ vignette: >
   %\VignetteIndexEntry{loon plots --> ggplots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-  
 
 ---
 
@@ -155,7 +154,7 @@ include_graphics(file.path(imageDirectory,"loon_l_pairs_modification.png"))
 
 `loon.ggplot()` function in `loon.ggplot` package is an `S3` method and gathers features of both `loon2ggplot()` and `ggplot2loon()`. It can take either a `loon` widget or `gg` object and transform back and forth. 
 
-Loon to ggplot: `loon.ggplot(loon)` is equivalent to `loon2ggplot(loon)`.
+`Loon` to `ggplot`: `loon.ggplot(loon)` is equivalent to `loon2ggplot(loon)`.
 
 ---
 

@@ -37,7 +37,7 @@ would run before
 Hence, we need a function \code{gg_pipe()} to pack the \code{ggplot} object and force operations happen in order.
 }
 \examples{
-if(require(magrittr) && interactive()) {
+if(requireNamespace("magrittr") && interactive()) {
 \dontrun{
  # Error
  g <- mtcars \%>\%

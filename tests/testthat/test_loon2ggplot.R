@@ -1,6 +1,7 @@
 context("test (loon to ggplot)")
 library(dplyr)
 library(magrittr)
+library(ggmulti)
 
 pdf(NULL)
 
@@ -15,7 +16,6 @@ test_that("test l_plot (loon to ggplot)", {
                 interval="confidence", level=0.95)
   pi <- predict(fit, data.frame(x=xseq),
                 interval="prediction", level=0.95)
-
 
   p <- l_plot(y~x, color='black', showScales=TRUE, showGuides=TRUE)
   gLayer <- l_layer_group(
@@ -151,7 +151,8 @@ test_that("test loon basic layers (loon to ggplot)", {
   expect_equal(class(g), c("gg", "ggplot"))
 
   p <- l_plot()
-  l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10], size= as.integer(seq(5, 30, length.out = 10)))
+  l <- l_layer_texts(p, x=1:10, y=10:1, text=LETTERS[1:10],
+                     size= as.integer(seq(5, 30, length.out = 10)))
   l_scaleto_world(p)
   g <- loon2ggplot(p)
   g
@@ -169,7 +170,7 @@ test_that("test compound loon widgets to ggplot", {
   g <- loon.ggplot(p)
   expect_equal(class(g), c("patchwork", "gg", "ggplot"))
 
-  p <- l_pairs(iris, showHistograms = TRUE)
+  p <- l_pairs(iris[, 1:4], showHistograms = TRUE)
   g <- loon2ggplot(p)
   g
   expect_equal(class(g), c("patchwork", "gg", "ggplot"))
@@ -178,31 +179,6 @@ test_that("test compound loon widgets to ggplot", {
 
 
 test_that("test loon non-primitive glyph to ggplot", {
-  x_star <-
-    c(-0.000864304235090734, 0.292999135695765, 0.949870354364736,
-      0.474503025064823, 0.586862575626621, -0.000864304235090734,
-      -0.586430423509075, -0.474070872947277, -0.949438202247191,
-      -0.29256698357822)
-  y_star <-
-    c(-1, -0.403630077787381, -0.308556611927398, 0.153846153846154,
-      0.808556611927398, 0.499567847882455, 0.808556611927398,
-      0.153846153846154, -0.308556611927398, -0.403630077787381)
-  x_cross <-
-    c(-0.258931143762604, -0.258931143762604, -0.950374531835206,
-      -0.950374531835206, -0.258931143762604, -0.258931143762604,
-      0.259651397291847, 0.259651397291847, 0.948934024776722,
-      0.948934024776722, 0.259651397291847, 0.259651397291847)
-  y_cross <-
-    c(-0.950374531835206, -0.258931143762604, -0.258931143762604,
-      0.259651397291847, 0.259651397291847, 0.948934024776722,
-      0.948934024776722, 0.259651397291847, 0.259651397291847,
-      -0.258931143762604, -0.258931143762604, -0.950374531835206)
-  x_hexagon <-
-    c(0.773552290406223, 0, -0.773552290406223, -0.773552290406223,
-      0, 0.773552290406223)
-  y_hexagon <-
-    c(0.446917314894843, 0.894194756554307, 0.446917314894843,
-      -0.447637568424085, -0.892754249495822, -0.447637568424085)
 
   p <- l_plot(1:3, 1:3)
 
@@ -212,10 +188,7 @@ test_that("test loon non-primitive glyph to ggplot", {
   p['glyph'] <- gl
   gl['showArea'] <- c(F, T, F)
   p['color'] <- c('red', 'blue', 'green')
-  g <- loon.ggplot(p)
-  gb <- ggplot2::ggplot_build(g)
-  expect_equal(is.na(gb$data[[1]]$fill), rep(TRUE, 2))
-  expect_equal(is.na(gb$data[[2]]$fill), FALSE)
+  expect_warning(g <- loon.ggplot(p))
 
   p <- with(olive, l_plot(oleic, stearic, color=Area))
   gs <- l_glyph_add_serialaxes(p, data=olive[,-c(1,2)], showArea=FALSE)

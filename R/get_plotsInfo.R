@@ -88,7 +88,9 @@ get_plotInfo <- function(plotInfo = list(),
                                                       'byCOLS:', plotInfo$byCOLS, '-',
                                                       'byROWS:', plotInfo$byROWS, '-',
                                                       'x', layout[i,]$ROW,
-                                                      'y', layout[i,]$COL))),
+                                                      'y', layout[i,]$COL, '-',
+                                                      'drop:', ggObj$facet$params$drop, '-',
+                                                      'scales:', facet_scales(ggObj$facet$params$free)))),
                    text = colSubtitle,
                    bg = set_tkLabel()$labelBackground,
                    fg = set_tkLabel()$labelForeground,
@@ -114,6 +116,7 @@ get_plotInfo <- function(plotInfo = list(),
       if(theta == "y")  swapAxes <- TRUE
       showGuides <- FALSE
       showScales <- FALSE
+      showLabels <- FALSE
     } else {
       # if not polar coord
       # swap or not
@@ -122,11 +125,12 @@ get_plotInfo <- function(plotInfo = list(),
       if (ggGuides) {
         showGuides <- FALSE
         showScales <- FALSE
-
+        showLabels <- FALSE
       } else {
         # set panX, panY, deltaX, deltaY
         showGuides <- TRUE
         showScales <- get_showScales(ggObj$theme)
+        showLabels <- get_showLabels(ggObj$theme)
         x.range <- plot_range("x.range", ggplotPanelParams[[i]], swapAxes)
         y.range <- plot_range("y.range", ggplotPanelParams[[i]], swapAxes)
 
@@ -162,8 +166,10 @@ get_plotInfo <- function(plotInfo = list(),
                              numOfSubtitles = numOfSubtitles,
                              activeInfo = activeInfo,
                              modelLayers = modelLayers, index = index,
-                             parent = parent, showGuides = showGuides,
+                             parent = parent,
+                             showGuides = showGuides,
                              showScales = showScales,
+                             showLabels = showLabels,
                              swapAxes = swapAxes,
                              xlabel = xlabel,
                              ylabel = ylabel,
@@ -180,7 +186,7 @@ get_plotInfo <- function(plotInfo = list(),
       loonPlot <- loon::l_plot(parent = parent,
                                showGuides = showGuides,
                                showScales = showScales,
-                               showLabels = plotInfo$showLabels,
+                               showLabels = showLabels,
                                swapAxes = swapAxes,
                                xlabel = if(is.null(xlabel)) "" else xlabel,
                                ylabel = if(is.null(ylabel)) "" else ylabel,

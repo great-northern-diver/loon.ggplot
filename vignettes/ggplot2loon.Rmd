@@ -12,7 +12,6 @@ vignette: >
   %\VignetteIndexEntry{ggplots --> loon plots}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-  
 
 ---
 
@@ -38,6 +37,7 @@ library(ggplot2, quietly = TRUE)
 library(dplyr, quietly = TRUE)
 library(magrittr, quietly = TRUE)
 library(loon, quietly = TRUE)
+library(patchwork, quietly = TRUE)
 ```
 
 The `ggplot2` graphics package (part of the `tidyverse` package collection) uses the base `grid` graphics package to produce publication quality graphics for data analysis.  Based on a grammar for graphics, `ggplot2` also provides a lot of functionality (e.g. `facet`s) that can be extremely useful in data analysis.
@@ -508,6 +508,8 @@ l_pgps.23 <- ggplot2loon(pgps,
 
 ## Facets and `l_compound` Plots
 
+### Facets
+
 A significant data analytic feature in the `ggplot` pipeline is the notion of faceting the plots, for example, via `facet_wrap()`
 ```{r fwrap, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
 fwrap <- ggplot(mtcars, aes(x = wt, y = mpg)) +
@@ -549,6 +551,56 @@ l_getLocations(l_fwrap)
 expressed as a matrix of the location of the plots in the order in which they appear in `getPlots()`.
 
 Each plot in `l_fwrap` is an independent loon plot which can be interacted with either through the inspector or programmatically.
+
+### Patchwork
+
+A `patchwork` object extends `ggplot2` to multiple displays.
+```{r patchwork, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+library(patchwork)
+p1 <- ggplot(mtcars) + geom_point(aes(mpg, disp))
+p2 <- ggplot(mtcars) + geom_boxplot(aes(gear, disp, group = gear))
+patchwork <- p1 + p2 # two plots are placed side by side
+patchwork
+```
+
+A `patchwork` object can be turned to an `l_compound` object.
+```{r patchwork to loon, message = FALSE, eval = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+l_patchwork <- ggplot2loon(patchwork)
+class(l_patchwork)
+# [1] "l_patchwork"   "l_compound" "loon" 
+```
+
+By default, all plots in this `l_compound` object are linked with the default `linkingGroup` -- the unique path name (e.g., ".l0.patchwork"). Suppose users want all plots un-linked or linked with other `linkingGroup`, simply set,
+```{r patchwork linkingGroup, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+ggplot2loon(patchwork, linkingGroup = "none") # un-linked
+ggplot2loon(patchwork, linkingGroup = "Motor Trend 1974") # join another group
+```
+
+Currently, in this version, not all designs of a `patchwork` object can be transformed to an `l_compound` object, as in
+```{r patchwork complex design, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+p3 <- ggplot(mtcars) + geom_smooth(aes(disp, qsec))
+pp <- (p1 | p2) / p3
+pp
+```
+```{r patchwork fail, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+# ERROR
+ggplot2loon(pp) 
+```
+
+In this expression, `p1` and `p2`, placed side by side, are combined first as a `patchwork` object, then, `p3`, placed at the bottom, combines the `patchwork` object to become a new `patchwork`. Therefore, `pp` (a `patchwork` object) has two children, the first child is a `patchwork` (`p1` | `p2`) and the second is a `ggplot` (`p3`). So far, in this version, `ggplot2loon()` cannot transform a `patchwork` object whose children are nested `patchwork` objects.
+
+Alternatively, one can set `pp` by functions `plot_layout()` and `area()` (see [patchwork](https://patchwork.data-imaginist.com/articles/guides/layout.html)), as follow
+```{r patchwork success, eval = FALSE, message = FALSE, warning = FALSE, fig.width = 5, fig.height = 4, fig.align = "center", out.width = "70%"}
+design <- c(
+  area(1,1),
+  area(1,2),
+  area(2,1,2,2)
+)
+pp <- p1 + p2 + p3 + plot_layout(design = design)
+# Success!
+ggplot2loon(pp) 
+```
+In this way, `pp` is a `patchwork` object whose children are `ggplot` objects only.
 
 ## Function `loon.ggplot()`
 

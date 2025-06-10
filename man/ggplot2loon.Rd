@@ -53,22 +53,21 @@ This is translated to a row/column span = 1 / exteriorLabelProportion for the pl
 exterior labels (title, subtitle, xlabel or ylabel) using \code{tk.grid()}}
 }
 \value{
-a \code{loon} single or compound widget
+a \code{loon} single widget or a compound object
 }
 \description{
 Create an interactive `loon` widget from a \code{ggplot} object
 }
 \examples{
-
 if(interactive()) {
-  p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
-  g <- ggplot2loon(p)
+p <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+g <- ggplot2loon(p)
 
-  p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-     colour = factor(gear))) + facet_wrap(~am)
-  g1 <- ggplot2loon(p)
-}
-
+p1 <- ggplot(mtcars) +
+        geom_point(aes(x = wt, y = mpg,
+                       colour = factor(gear))) +
+        facet_wrap(~am)
+g1 <- ggplot2loon(p1)
 \donttest{
 df <- data.frame(
   x = rnorm(120, c(0, 2, 4)),
@@ -81,33 +80,44 @@ scatterplots <- ggplot(df, aes(x, y)) +
   geom_point(aes(colour = z)) +
   facet_wrap(~z)
 
-# We can select the first geom_point layer to be
-# the active layer as in
+# The first point layer is set as the model layer
 suppressWarnings(
   lp_scatterplots_active1 <- ggplot2loon(scatterplots,
                                activeGeomLayers = 1,
                                linkingGroup = "test")
 )
-# Here the grey points are linked (not the coloured ones)
+# Here, the gray points are interactive (not the colourful ones)
 
-# We can select the second geom_point layer to be
-# the active layer as in
-lp_scatterplots_active2 <- ggplot2loon(scatterplots, activeGeomLayers = 2)
-# Here the colour points are linked
+# The second point layer is set as the model layer
+lp_scatterplots_active2 <- ggplot2loon(scatterplots,
+                                       activeGeomLayers = 2)
+# Here, the colourful points are interactive
 
-# We can also select the both geom_point layers to be
-# the active layer as in
+# Both point layers could be interactive
 suppressWarnings(
- lp_scatterplots_active12 <- ggplot2loon(scatterplots, activeGeomLayers = c(1,2))
+ lp_scatterplots_active12 <- ggplot2loon(scatterplots,
+                                         activeGeomLayers = c(1,2))
 )
-# Here the colour points and grey points are both linked
+# Here, all points are interactive
 
 ########### ggmatrix to loon ###########
 if(requireNamespace("GGally")) {
-pm <- GGally::ggpairs(iris, column = 1:4, ggplot2::aes(colour=Species))
+pm <- GGally::ggpairs(iris, column = 1:4,
+                      ggplot2::aes(colour=Species))
 lg <- ggplot2loon(pm)
 }
+
+########### patchwork to loon ###########
+if(requireNamespace("patchwork")) {
+p1 <- ggplot(mtcars) +
+   geom_point(aes(mpg, disp))
+p2 <- ggplot(mtcars) +
+   geom_boxplot(aes(gear, disp, group = gear))
+# place two plots side by side
+patchwork <- p1 + p2
+ggplot2loon(patchwork)
+# See vignette `ggplots --> loon plots` for more details
 }
-
-
+}
+}
 }
