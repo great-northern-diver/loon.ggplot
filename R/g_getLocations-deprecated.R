@@ -7,7 +7,7 @@
 #' is an \code{nrow} by \code{ncol} matrix whose entries identify the location
 #' of each plot in \code{g_getPlots()} by their index.
 #'
-#' @seealso \code{\link{l_getLocations}}, \code{\link{g_getPlots}}
+#' @seealso \code{\link{loon::l_getLocations}}, \code{\link{g_getPlots}}
 g_getLocations <- function(target) {
   UseMethod('g_getLocations', target)
 }

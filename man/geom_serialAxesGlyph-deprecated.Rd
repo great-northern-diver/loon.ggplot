@@ -99,6 +99,6 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
-use \code{\link{geom_serialaxes_glyph}}, rather than \code{geom_serialAxesGlyph}.
+use \code{\link{ggmulti::geom_serialaxes_glyph}}, rather than \code{geom_serialAxesGlyph}.
 }
 \keyword{internal}

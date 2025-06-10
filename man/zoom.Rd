@@ -27,18 +27,18 @@ else one can use \code{scaleToFun} to modify the region of the layer.
 The \code{scaleToFun} is a function to scale the region.
 If it is \code{NULL} (default), based on different layers, different scale functions
 will be applied. For example, if the layer is the main graphic model, i.e. \code{l_plot}
-\code{l_hist}, then the default \code{scaleToFun} is \code{\link{l_scaleto_plot}}; else
+\code{l_hist}, then the default \code{scaleToFun} is \code{\link{loon::l_scaleto_plot}}; else
  if the layer is a general \code{l_layer} widget, the default \code{scaleToFun} would be
- \code{\link{l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
+ \code{\link{loon::l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
 
 If it is not \code{NULL}, users can select one that precisely tailor their own
 problems. The table shows the available \code{scaleToFun} functions
 \tabular{ll}{\strong{scale to} \tab \strong{Subfunction}\cr
-  plot \tab  \code{\link{l_scaleto_plot}}\cr
-  world \tab \code{\link{l_scaleto_world}}\cr
-  active \tab \code{\link{l_scaleto_active}}\cr
-  selected \tab \code{\link{l_scaleto_selected}}\cr
-  layer \tab \code{\link{l_scaleto_layer}}\cr}
+  plot \tab  \code{\link{loon::l_scaleto_plot}}\cr
+  world \tab \code{\link{loon::l_scaleto_world}}\cr
+  active \tab \code{\link{loon::l_scaleto_active}}\cr
+  selected \tab \code{\link{loon::l_scaleto_selected}}\cr
+  layer \tab \code{\link{loon::l_scaleto_layer}}\cr}
 Users can also supply their own function, providing its arguments match those
 of the functions shown in the above table.
 }

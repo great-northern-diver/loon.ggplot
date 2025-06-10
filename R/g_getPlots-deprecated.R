@@ -7,7 +7,7 @@
 #'
 #' @return a list of \code{ggplot}s.
 #'
-#' @seealso \code{\link{l_getPlots}}, \code{\link{g_getLocations}}
+#' @seealso \code{\link{loon::l_getPlots}}, \code{\link{g_getLocations}}
 #'
 #' @export
 g_getPlots <- function(target, asAes = TRUE, selectedOnTop = TRUE,

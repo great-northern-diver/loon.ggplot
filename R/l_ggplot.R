@@ -7,7 +7,7 @@
 #' If not specified, must be supplied in each layer added to the plot.
 #' @param ... Other arguments passed on to methods. Not currently used.
 #' @param environment DEPRECATED. Used prior to tidy evaluation.
-#' @seealso \code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.l_ggplot}}
+#' @seealso \code{\link{ggplot2::ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.l_ggplot}}
 #' @export
 #' @return It will return an \code{l_ggplot} object with class \code{c("l_ggplot", "gg", "ggplot")}.
 #' Then print a \code{loon} plot automatically.

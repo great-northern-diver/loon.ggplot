@@ -73,7 +73,7 @@ l_ggplot(mtcars,
 }
 }
 \seealso{
-\code{\link{ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.l_ggplot}}
+\code{\link{ggplot2::ggplot}}, \code{\link{ggplot2loon}}, \code{\link{print.l_ggplot}}
 
 \code{\link{loon.ggplot}}
 }

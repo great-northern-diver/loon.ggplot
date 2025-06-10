@@ -51,5 +51,5 @@ For the target compound loon plot, determines all the \code{ggplot}s based on
 the compound \code{loon} plot.
 }
 \seealso{
-\code{\link{l_getPlots}}, \code{\link{g_getLocations}}
+\code{\link{loon::l_getPlots}}, \code{\link{g_getLocations}}
 }
