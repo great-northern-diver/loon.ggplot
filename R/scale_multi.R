@@ -97,7 +97,7 @@ scale_multi <- function(trans = scaleBox(center = TRUE), ...) {
 #' x, where 'numeric-alike' means that \code{as.numeric(.)} will be applied successfully
 #' if \code{is.numeric(.)} is not true.
 #' @return A \code{trans} object
-#' @seealso \code{\link{l_scale3D}}
+#' @seealso \code{\link{loon::l_scale3D}}
 #' @export
 scaleBox <- function(center = TRUE) {
   scales::trans_new(

@@ -25,5 +25,5 @@ of each plot in \code{g_getPlots()} by their index.
 For the target compound \code{loon} plot, determines location in \code{ggmatrix}
 }
 \seealso{
-\code{\link{l_getLocations}}, \code{\link{g_getPlots}}
+\code{\link{loon::l_getLocations}}, \code{\link{g_getPlots}}
 }

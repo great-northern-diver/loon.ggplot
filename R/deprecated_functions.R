@@ -44,7 +44,7 @@ itemLabel <- function(itemLabel = NULL,
 }
 
 #' geom_imageGlyph (deprecated)
-#' @description use \code{\link{geom_image_glyph}}, rather than \code{geom_imageGlyph}.
+#' @description use \code{\link{ggmulti::geom_image_glyph}}, rather than \code{geom_imageGlyph}.
 #' @export
 #' @inheritParams ggmulti::geom_image_glyph
 #' @param width Numerical; width of image
@@ -74,7 +74,7 @@ geom_imageGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
 }
 
 #' geom_polygonGlyph (deprecated)
-#' @description use \code{\link{geom_polygon_glyph}}, rather than \code{geom_polygonGlyph}.
+#' @description use \code{\link{ggmulti::geom_polygon_glyph}}, rather than \code{geom_polygonGlyph}.
 #' @export
 #' @inheritParams ggmulti::geom_polygon_glyph
 #' @param showArea show area; deprecated now, please set `fill` or `colour` to control the shown area.
@@ -105,7 +105,7 @@ geom_polygonGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
 }
 
 #' geom_serialAxesGlyph (deprecated)
-#' @description use \code{\link{geom_serialaxes_glyph}}, rather than \code{geom_serialAxesGlyph}.
+#' @description use \code{\link{ggmulti::geom_serialaxes_glyph}}, rather than \code{geom_serialAxesGlyph}.
 #' @export
 #' @inheritParams ggmulti::geom_serialaxes_glyph
 #' @param serialAxesData a serial axes numerical data set. If not provided, `geom_point()` will be called.
@@ -181,7 +181,7 @@ geom_pointrangeGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
 }
 
 #' geom_textGlyph (deprecated)
-#' @description use \code{\link{geom_text}}, rather than \code{geom_textGlyph}.
+#' @description use \code{\link{ggplot2::geom_text}}, rather than \code{geom_textGlyph}.
 #' @export
 #' @inheritParams ggplot2::geom_text
 #' @param text The test to display
@@ -210,7 +210,7 @@ geom_textGlyph <- function(mapping = NULL, data = NULL, stat = 'identity',
 
 #' @title ggplot serialaxes (deprecated)
 #'
-#' @description For \code{ggSerialAxes}, use \code{\link{coord_serialaxes}}.
+#' @description For \code{ggSerialAxes}, use \code{\link{ggmulti::coord_serialaxes}}.
 #'
 #' @param ggObj A `ggplot` object
 #' @param data A data frame for serialaxes. If `NULL`, data must be set in `ggObj`

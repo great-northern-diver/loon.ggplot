@@ -102,8 +102,8 @@ If not provided, a point visual (\code{geom_point()}) will be displayed.}
 \item{linewidth}{line width of the "glyph" object}
 }
 \description{
-use \code{\link{geom_image_glyph}}, rather than \code{geom_imageGlyph}.
+use \code{\link{ggmulti::geom_image_glyph}}, rather than \code{geom_imageGlyph}.
 
-use \code{\link{geom_polygon_glyph}}, rather than \code{geom_polygonGlyph}.
+use \code{\link{ggmulti::geom_polygon_glyph}}, rather than \code{geom_polygonGlyph}.
 }
 \keyword{internal}

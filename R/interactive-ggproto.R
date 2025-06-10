@@ -6,7 +6,7 @@
 #' @param layerId numerical; which layer to scale to
 #' @param scaleToFun scale to function. See \code{\link{zoom}}.
 #' @inheritParams hover
-#' @param ... named arguments to modify \code{loon} plot states. See \code{\link{l_info_states}}
+#' @param ... named arguments to modify \code{loon} plot states. See \code{\link{loon::l_info_states}}
 #'
 #' @return a \code{ggproto} object
 #' @details
@@ -197,7 +197,7 @@ interactivity <- function(linkingGroup = NULL,
 #'
 #' @seealso \code{\link{active}}, \code{\link{selection}}, \code{\link{zoom}},
 #' \code{\link{hover}}, \code{\link{interactivity}},
-#' \code{\link{l_getLinkedStates}}, \code{\link{l_setLinkedStates}}, \code{\link{l_configure}}
+#' \code{\link{loon::l_getLinkedStates}}, \code{\link{loon::l_setLinkedStates}}, \code{\link{loon::l_configure}}
 #'
 #' @examples
 #' if(interactive() && requireNamespace("dplyr")) {
@@ -266,7 +266,7 @@ active <- function(active = NULL,
 
 #' @title Modify the \code{selected} component
 #' @description Set which elements (i.e., observations) are "selected".  These will be shown as highlighted in the
-#' plot using the current "highlight" colour (see \code{\link{l_userOptions}}).
+#' plot using the current "highlight" colour (see \code{\link{loon::l_userOptions}}).
 #' @param selected a logical or a logical vector of length \code{n} that determines which observations
 #' are selected (\code{TRUE} and hence appear highlighted in the plot) and which are not.
 #' Default is \code{FALSE} and no points are highlit.
@@ -285,7 +285,7 @@ active <- function(active = NULL,
 #'
 #' @return a \code{ggproto} object
 #' @seealso \code{\link{active}}, \code{\link{linking}}, \code{\link{zoom}},
-#' \code{\link{hover}}, \code{\link{interactivity}}, \code{\link{l_userOptions}}
+#' \code{\link{hover}}, \code{\link{interactivity}}, \code{\link{loon::l_userOptions}}
 #' @examples
 #' if(interactive()) {
 #'
@@ -322,18 +322,18 @@ selection <- function(selected = NULL,
 #' The \code{scaleToFun} is a function to scale the region.
 #' If it is \code{NULL} (default), based on different layers, different scale functions
 #' will be applied. For example, if the layer is the main graphic model, i.e. \code{l_plot}
-#' \code{l_hist}, then the default \code{scaleToFun} is \code{\link{l_scaleto_plot}}; else
+#' \code{l_hist}, then the default \code{scaleToFun} is \code{\link{loon::l_scaleto_plot}}; else
 #'  if the layer is a general \code{l_layer} widget, the default \code{scaleToFun} would be
-#'  \code{\link{l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
+#'  \code{\link{loon::l_scaleto_layer}} (see \code{\link{get_activeGeomLayers}}).
 #'
 #' If it is not \code{NULL}, users can select one that precisely tailor their own
 #' problems. The table shows the available \code{scaleToFun} functions
 #' \tabular{ll}{\strong{scale to} \tab \strong{Subfunction}\cr
-#'   plot \tab  \code{\link{l_scaleto_plot}}\cr
-#'   world \tab \code{\link{l_scaleto_world}}\cr
-#'   active \tab \code{\link{l_scaleto_active}}\cr
-#'   selected \tab \code{\link{l_scaleto_selected}}\cr
-#'   layer \tab \code{\link{l_scaleto_layer}}\cr}
+#'   plot \tab  \code{\link{loon::l_scaleto_plot}}\cr
+#'   world \tab \code{\link{loon::l_scaleto_world}}\cr
+#'   active \tab \code{\link{loon::l_scaleto_active}}\cr
+#'   selected \tab \code{\link{loon::l_scaleto_selected}}\cr
+#'   layer \tab \code{\link{loon::l_scaleto_layer}}\cr}
 #' Users can also supply their own function, providing its arguments match those
 #' of the functions shown in the above table.
 #'

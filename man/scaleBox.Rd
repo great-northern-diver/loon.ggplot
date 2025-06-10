@@ -19,5 +19,5 @@ the variable is scaled to have equal ranges and,
 when \code{center = TRUE}, to be centred by the average of the min and max.
 }
 \seealso{
-\code{\link{l_scale3D}}
+\code{\link{loon::l_scale3D}}
 }

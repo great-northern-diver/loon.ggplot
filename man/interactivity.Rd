@@ -67,7 +67,7 @@ mouse hovers above that element.}
 \item{showItemLabels}{A single logical value: \code{TRUE} if pop up labels are to appear on hover,
 \code{FALSE} (the default) if they are not.}
 
-\item{...}{named arguments to modify \code{loon} plot states. See \code{\link{l_info_states}}}
+\item{...}{named arguments to modify \code{loon} plot states. See \code{\link{loon::l_info_states}}}
 }
 \value{
 a \code{ggproto} object

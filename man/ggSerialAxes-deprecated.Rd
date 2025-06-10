@@ -56,7 +56,7 @@ specify how the data is scaled. See Details for more information}
 a ggplot object
 }
 \description{
-For \code{ggSerialAxes}, use \code{\link{coord_serialaxes}}.
+For \code{ggSerialAxes}, use \code{\link{ggmulti::coord_serialaxes}}.
 }
 \examples{
 \dontrun{
