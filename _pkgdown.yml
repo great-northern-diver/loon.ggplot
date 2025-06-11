@@ -1,5 +1,11 @@
+url: https://great-northern-diver.github.io/loon.ggplot/
 home:
+  title: Extending ggplot2 to a grammar for interactive graphics with loon
+  description: Provides a bridge between the 'loon' and  'ggplot2' packages.  Extends the grammar of ggplot to add clauses to create interactive 'loon' plots. Existing ggplot(s) can be turned into interactive 'loon' plots and 'loon' plots into static ggplot(s); the function 'loon.ggplot()' is the bridge from one plot structure to the other.
   strip_header: true
+
+template:
+  bootstrap: 5
 
 navbar:
   type: default
@@ -28,6 +34,7 @@ navbar:
   right:
     - icon: fa-github fa-lg
       href: https://github.com/great-northern-diver/loon.ggplot
+      aria-label: "GitHub repository for loon.ggplot"
 
 development:
   mode: release

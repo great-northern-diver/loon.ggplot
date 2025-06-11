@@ -1,201 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/ggplot2loon.html</loc>
-  </url>
-  <url>
-    <loc>/articles/grammarOfInteractiveGraphics.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/linking.html</loc>
-  </url>
-  <url>
-    <loc>/articles/loon2ggplot.html</loc>
-  </url>
-  <url>
-    <loc>/articles/pipes.html</loc>
-  </url>
-  <url>
-    <loc>/articles/thereAndBackAgain.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Cartesianxy2Polarxy.html</loc>
-  </url>
-  <url>
-    <loc>/reference/active.html</loc>
-  </url>
-  <url>
-    <loc>/reference/add_serialaxes_layers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/coord_serialaxes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/g_getLocations.html</loc>
-  </url>
-  <url>
-    <loc>/reference/g_getPlots.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_imageGlyph-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_imageGlyph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_pointrangeGlyph-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_pointrangeGlyph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_polygonGlyph-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_polygonGlyph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_serialAxesGlyph-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_serialAxesGlyph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_textGlyph-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/geom_textGlyph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_activeGeomLayers.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_scaledData.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ggSerialAxes-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ggSerialAxes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gg_color_hue.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gg_pipe.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ggplot2loon.html</loc>
-  </url>
-  <url>
-    <loc>/reference/glyphGeoms.html</loc>
-  </url>
-  <url>
-    <loc>/reference/hover.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/interactivity.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.CoordPolar.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is.l_ggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/itemLabel-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/itemLabel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/l_getSubtitles.html</loc>
-  </url>
-  <url>
-    <loc>/reference/l_ggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/layout_coords.html</loc>
-  </url>
-  <url>
-    <loc>/reference/layout_matrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lggplot-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/lggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/linking.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loon.ggplot-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loon.ggplot-deprecated.r.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loon.ggplot-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loon.ggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loon2ggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/loonLayer.html</loc>
-  </url>
-  <url>
-    <loc>/reference/polygonGlyph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.l_ggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.lggplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reexports.html</loc>
-  </url>
-  <url>
-    <loc>/reference/scaleBox.html</loc>
-  </url>
-  <url>
-    <loc>/reference/scaleTo.html</loc>
-  </url>
-  <url>
-    <loc>/reference/scale_multi.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selecting-deprecated.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selecting.html</loc>
-  </url>
-  <url>
-    <loc>/reference/selection.html</loc>
-  </url>
-  <url>
-    <loc>/reference/zoom.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/404.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/ggplot2loon.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/grammarOfInteractiveGraphics.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/index.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/linking.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/loon2ggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/pipes.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/articles/thereAndBackAgain.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/authors.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/index.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/news/index.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/Cartesianxy2Polarxy.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/active.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/add_serialaxes_layers.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/coord_serialaxes.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/g_getLocations.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/g_getPlots.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/geom_imageGlyph-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/geom_pointrangeGlyph-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/geom_polygonGlyph-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/geom_serialAxesGlyph-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/geom_textGlyph-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/get_activeGeomLayers.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/get_scaledData.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/ggSerialAxes-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/gg_color_hue.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/gg_pipe.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/ggplot2loon.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/glyphGeoms.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/hover.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/index.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/interactivity.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/is.CoordPolar.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/is.l_ggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/itemLabel-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/l_getSubtitles.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/l_ggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/layout_coords.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/layout_matrix.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/lggplot-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/linking.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/loon.ggplot-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/loon.ggplot-deprecated.r.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/loon.ggplot-package.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/loon.ggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/loon2ggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/loonLayer.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/polygonGlyph.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/print.l_ggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/print.lggplot.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/reexports.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/scaleBox.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/scaleTo.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/scale_multi.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/selecting-deprecated.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/selection.html</loc></url>
+<url><loc>https://great-northern-diver.github.io/loon.ggplot/reference/zoom.html</loc></url>
 </urlset>
+

@@ -129,7 +129,7 @@
 loon2ggplot <- function(target, asAes = TRUE, selectedOnTop = TRUE,
                         showNearestColor = FALSE, ...) {
 
-  if(ggplot2::is.ggplot(target) || is.ggmatrix(target)) {
+  if(ggplot2::is_ggplot(target) || is.ggmatrix(target)) {
     error_info <- deparse(substitute(target))
     stop(
       "Target should be a loon object. Maybe you want to call `ggplot2loon(",
