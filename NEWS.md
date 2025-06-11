@@ -1,6 +1,16 @@
+# loon.ggplot 1.3.5
+
+1. update external doc \link{bar} to include package names \link{foo:bar}
+
+2. Updated DESCRIPTION to requiere ggplot2 >= 3.5.0 and made necessary changes
+   - argument changes (trans -> transform, scale_name -> deprecated, palette is new) 
+     for calls to ggplot2::continuous_scale()
+   - is.ggplot() -> is_ggplot()
+   
 # loon.ggplot 1.3.4
 
-1. The recently released ggplot2 version 3.5.0 introduces coord_radial as a new function, which conflicts with the function we utilized, leading to the package check failure.
+1. The recently released ggplot2 version 3.5.0 introduces coord_radial as a new function, 
+   which conflicts with the function we utilized, leading to the package check failure.
 
 2. Review all examples to ensure they execute flawlessly.
 

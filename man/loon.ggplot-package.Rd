@@ -12,6 +12,7 @@ Provides a bridge between the 'loon' and 'ggplot2' packages. Extends the grammar
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://great-northern-diver.github.io/loon.ggplot/}
   \item Report bugs at \url{https://github.com/great-northern-diver/loon.ggplot/issues}
 }
 

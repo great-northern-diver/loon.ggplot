@@ -2,7 +2,7 @@
 title: "A Grammar Of Interactive Graphics"
 subtitle: "`loon.ggplot`"
 author: "R. W. Oldford and Zehao Xu"
-date: "`r Sys.Date()`"
+date: "November 12, 2022"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -504,6 +504,6 @@ plot(l_ggp)
 loon.ggplot(l_ggp)
 ```
 
-The **final trick** is that either `l_ggplot()` or `ggplot()` cam be produce interactive plots using the `ggplot` grammar.  
+The **final trick** is that either `l_ggplot()` or `ggplot()` can produce interactive plots using the `ggplot` grammar.  
 
 It's largely a matter of taste.

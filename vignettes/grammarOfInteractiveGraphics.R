@@ -56,7 +56,7 @@ plot(lgp)
 lp <- loon.ggplot(lgp)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lgp                   # or print(lgp)
+# lgp                   # or print(lgp)
 
 ## ----echo = FALSE-------------------------------------------------------------
 plot(lp)
@@ -65,16 +65,16 @@ plot(lp)
 as.character(lp)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lp <- l_getFromPath(".lXX.ggplot.plot")  # replace XX by whatever number appeared
+# lp <- l_getFromPath(".lXX.ggplot.plot")  # replace XX by whatever number appeared
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lp <- l_getFromPath(".lXX.ggplot")  # replace XX by whatever number appeared
+# lp <- l_getFromPath(".lXX.ggplot")  # replace XX by whatever number appeared
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lp <- print(lgp)
+# lp <- print(lgp)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lp <- loon.ggplot(lgp)
+# lp <- loon.ggplot(lgp)
 
 ## -----------------------------------------------------------------------------
 plot(lgp + geom_smooth())
@@ -131,7 +131,7 @@ plot(lgp)
 plot(lp)   
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  lp <- loon.ggplot(lgp)
+# lp <- loon.ggplot(lgp)
 
 ## -----------------------------------------------------------------------------
 loon.ggplot(lp)
@@ -148,12 +148,12 @@ new_lp <- loon.ggplot(gp + geom_smooth())
 loon.ggplot(new_lp)
 
 ## ----eval = FALSE-------------------------------------------------------------
-#  + interactivity(linkingGroup, linkingKey, linkedStates, sync,  # linking
-#                  active, activeGeomLayers,                      # active
-#                  selected, selectBy, selectionLogic,            # selection
-#                  layerId, scaleToFun,                           # zoom
-#                  itemLabel,  showItemLabels,                    # hover
-#                  ... )
+# + interactivity(linkingGroup, linkingKey, linkedStates, sync,  # linking
+#                 active, activeGeomLayers,                      # active
+#                 selected, selectBy, selectionLogic,            # selection
+#                 layerId, scaleToFun,                           # zoom
+#                 itemLabel,  showItemLabels,                    # hover
+#                 ... )
 
 ## ----ordinary ggplot----------------------------------------------------------
 ggp <- ggplot(airquality, mapping = aes(Solar.R, Temp)) +
@@ -174,14 +174,14 @@ lggp
 plot(lggp)
 
 ## ----print the interactive plot, eval = FALSE---------------------------------
-#  l_ggp <- l_getFromPath(".l3.ggplot")
-#  # Alternatively, the loon plot could have been captured when first
-#  # created by using loon.ggplot(lggp) in stead of print(lggp) as follows
-#  #
-#  # l_ggp <- loon.ggplot(lggp)
-#  #
-#  # Either way, it will look like the following as a grid graphics plot
-#  plot(l_ggp)
-#  # and as below when presented as a ggplot
-#  loon.ggplot(l_ggp)
+# l_ggp <- l_getFromPath(".l3.ggplot")
+# # Alternatively, the loon plot could have been captured when first
+# # created by using loon.ggplot(lggp) in stead of print(lggp) as follows
+# #
+# # l_ggp <- loon.ggplot(lggp)
+# #
+# # Either way, it will look like the following as a grid graphics plot
+# plot(l_ggp)
+# # and as below when presented as a ggplot
+# loon.ggplot(l_ggp)
 

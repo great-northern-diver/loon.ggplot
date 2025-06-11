@@ -1,5 +1,5 @@
-pandoc: 2.19.2
-pkgdown: 2.0.6
+pandoc: '3.2'
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   ggplot2loon: ggplot2loon.html
@@ -8,5 +8,7 @@ articles:
   loon2ggplot: loon2ggplot.html
   pipes: pipes.html
   thereAndBackAgain: thereAndBackAgain.html
-last_built: 2022-11-12T20:57Z
-
+last_built: 2025-06-11T20:25Z
+urls:
+  reference: https://great-northern-diver.github.io/loon.ggplot/reference
+  article: https://great-northern-diver.github.io/loon.ggplot/articles

@@ -130,7 +130,7 @@ ggplot2loon.ggplot <- function(ggObj, ..., activeGeomLayers = integer(0),
   layerId <- layerId %||% 0L
 
   # check arguments
-  if(!ggplot2::is.ggplot(ggObj)) {
+  if(!ggplot2::is_ggplot(ggObj)) {
     stop(deparse(substitute(ggObj)), " is not a ggplot object.", call. = FALSE)
   }
   if(!is.numeric(activeGeomLayers) || !is.vector(activeGeomLayers)) {

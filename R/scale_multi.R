@@ -128,10 +128,18 @@ scale_z_continuous <- function(name = ggplot2::waiver(), breaks = ggplot2::waive
   sc <- ggplot2::continuous_scale(c("z", "zmin", "zmax",
                                     "zend", "zintercept", "zmin_final",
                                     "zmax_final", "zlower", "zmiddle",
-                                    "zupper", "z0"), "position_c", identity,
+                                    "zupper", "z0"),
+                                  # scale_name argument is deprecated as of ggplot2 3.5.0.
+                                  # "position_c",
+                                  #
+                                  # The `trans` argument of `continuous_scale()` is
+                                  # deprecated as of ggplot2 3.5.0.-- use the `transform` argument instead.
+                                  # transform = identity,
+                                  # Palette argument now required
+                                  palette = scales::pal_area(),
                                   name = name, breaks = breaks, n.breaks = n.breaks, minor_breaks = minor_breaks,
                                   labels = labels, limits = limits, expand = expand, oob = oob,
-                                  na.value = na.value, trans = trans, guide = guide, position = position,
+                                  na.value = na.value, guide = guide, position = position,
                                   super = ggplot2::ScaleContinuousPosition)
   set_sec_axis(sec.axis, sc)
 }

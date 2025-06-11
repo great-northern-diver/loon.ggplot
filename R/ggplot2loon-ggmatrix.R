@@ -35,7 +35,7 @@ ggplot2loon.ggmatrix <- function(ggObj, ..., activeGeomLayers = integer(0),
   # modify ggplot
   ggplots <- lapply(ggplots,
                     function(plot){
-                      if(ggplot2::is.ggplot(plot)) {
+                      if(ggplot2::is_ggplot(plot)) {
                         plot
                       } else if(is.ggmatrix_plot_obj(plot)) {
                         plot$fn(ggObj$data, plot$mapping)

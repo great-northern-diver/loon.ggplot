@@ -264,7 +264,7 @@ ggSerialAxes <- function(ggObj,
   .Deprecated("coord_serialaxes", package= "loon.ggplot")
 
   # check arguments
-  if(!ggplot2::is.ggplot(ggObj)) {
+  if(!ggplot2::is_ggplot(ggObj)) {
     stop(paste(deparse(substitute(ggObj)), "is not a ggplot object"), call. = FALSE)
   }
 
@@ -334,7 +334,7 @@ ggParallelAes <- function(ggObj,
       is.logical(showAxesLabels)
       is.logical(showGuides)
       is.logical(showAxes)
-      ggplot2::is.ggplot(ggObj)
+      ggplot2::is_ggplot(ggObj)
     }
   )
 
@@ -406,7 +406,7 @@ ggParallelSerialAxes <- function(ggObj,
   stopifnot(
     exprs = {
       is.logical(showArea)
-      ggplot2::is.ggplot(ggObj)
+      ggplot2::is_ggplot(ggObj)
     }
   )
 
@@ -524,7 +524,7 @@ ggRadialAes <- function(ggObj,
       is.logical(showAxesLabels)
       is.logical(showGuides)
       is.logical(showAxes)
-      ggplot2::is.ggplot(ggObj)
+      ggplot2::is_ggplot(ggObj)
     }
   )
 
@@ -644,7 +644,7 @@ ggRadialSerialAxes <- function(ggObj,
   stopifnot(
     exprs = {
       is.logical(showArea)
-      ggplot2::is.ggplot(ggObj)
+      ggplot2::is_ggplot(ggObj)
     }
   )
 

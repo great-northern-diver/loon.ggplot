@@ -1,7 +1,7 @@
 ---
 title: "ggplots --> loon plots"
 author: "Wayne Oldford and Zehao Xu"
-date: "`r Sys.Date()`"
+date: "November 12, 2022"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -10,9 +10,8 @@ urlcolor: blue
 graphics: yes
 vignette: >
   %\VignetteIndexEntry{ggplots --> loon plots}
-  %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
-
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 
@@ -87,6 +86,8 @@ grid.loon(l_p1)
 ```
 
 ```{r grid_version_of_l_p1_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "70%"}
+#| fig.alt: >
+#|   Static plot of l_p1 after transformation to a ggplot
 include_graphics(file.path(imageDirectory, "l_plot_l_p1.png"))
 ```
 
@@ -96,6 +97,9 @@ plot(l_h1)   # equivalent to grid.loon(l_h1)
 ```
 
 ```{r grid_version_of_l_h1_graph, echo = FALSE, message = FALSE, warning = FALSE, fig.width = 5.5, fig.height = 6, fig.align = "center", fig.caption = "Loon inspector Layers tab for l_p_fit`", out.width = "70%"}
+#| fig.alt: >
+#|   Histogram of the horsepower (hp) of cars from the mtcars
+#|   Printed fron calling plot on the loon plot l_h1
 include_graphics(file.path(imageDirectory, "l_hist_l_h1.png"))
 ```
 
